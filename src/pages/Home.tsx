@@ -26,7 +26,11 @@ const Home: React.FC = () => {
             <IonTitle size="large">Home</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <QuestionForm onNext={handleNext} />
+        {!showAgeForm ? (
+          <QuestionForm onNext={handleNext} />
+        ) : (
+          <AgeForm />
+        )}
       </IonContent>
     </IonPage>
   );
