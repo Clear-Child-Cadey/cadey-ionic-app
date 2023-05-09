@@ -9,10 +9,20 @@ import {
 import './Results.css';
 
 interface ResultsProps {
-  results: any; // Get the results from the main Concerns component
+  // Type the Results object properly
+  results: {
+    action_content: {
+      title: string;
+      body: {
+        [key: string]: string[];
+      };
+    };
+  };
   onRestart: () => void;
 }
 
+// Define the Results component
+// The results data originates in the AgeForm component and is passed to the main Concerns component, then here
 const Results: React.FC<ResultsProps> = ({ results, onRestart }) => {
   return (
     <div>

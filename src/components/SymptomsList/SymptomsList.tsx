@@ -32,7 +32,7 @@ const SymptomsList: React.FC<SymptomsListProps> = ({ concern, onNext, onRestart 
 
   return (
     <div className="container">
-      <IonText color="primary" padding>
+      <IonText color="primary">
         <p>Select Symptoms</p>
       </IonText>
       {concern.symptoms.map((symptom, index) => (
