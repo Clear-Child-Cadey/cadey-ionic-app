@@ -4,32 +4,89 @@ import {
   IonLabel,
   IonInput,
   IonButton,
+  IonLoading,
+  IonRow,
 } from '@ionic/react';
+import Results from '../Results/Results';
 import './AgeForm.css';
 
-const AgeForm: React.FC = () => {
-  const [age, setAge] = useState('');
+interface AgeFormProps {
+  concerns: string[];
+  onAgeFormShown: () => void;
+  onRestart: () => void;
+  onResultsReceived: (response: any) => void; // Callback that will send the response back to the parent component
+}
 
-  // LEFT OFF HERE, AND ALSO HAVEN'T UPDATED THE App.tsx FILE TO INCLUDE THE ROUTING
-  // ASK CHATGPT WHY WE NEED TO ADD THE AGE ROUTE TO THE App.tsx FILE IF WE'RE ONLY SHOWING ROUTING FOR HOME AND PAST QUERIES IN THAT VIEW
-  // Move handleSubmit from QuestionForm to AgeForm and remove age-related parts from QuestionForm
-  const handleSubmit = () => {
-    //...
+const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
+  const [age, setAge] = useState('');
+  const [response, setResponse] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { concerns, onAgeFormShown, onRestart, onResultsReceived } = props;
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+
+    const url = 'https://wruaigpff6432iw6mamzxargz40rfkty.lambda-url.us-west-2.on.aws/';
+    const bodyObject = {
+      client_id: '127001',
+      concerns: concerns,
+      age: age
+    };
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(bodyObject),
+    };
+
+    console.log('Request:', bodyObject);
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      setResponse(data);
+
+      // Use the callback to send the response to the parent component
+      onResultsReceived(data);
+
+      console.log('Response:', data);
+
+      // Invoke the callback when the response is received
+      onAgeFormShown();
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error:', error);
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
-      <IonItem>
-        <IonLabel position="floating">Age</IonLabel>
-        <IonInput
-          type="number"
-          value={age}
-          onIonChange={(e) => setAge(e.detail.value!)}
-        ></IonInput>
-      </IonItem>
-      <IonButton expand="block" onClick={handleSubmit}>
-        Submit
-      </IonButton>
+      {/* {!response.action_content && ( */}
+        <>
+          <IonItem>
+            <IonLabel position="floating">Age</IonLabel>
+            <IonInput
+              type="number"
+              value={age}
+              onIonInput={(e) => setAge(e.detail.value!)}
+            ></IonInput>
+          </IonItem>
+          
+          <IonRow>
+            <IonButton expand="block" onClick={onRestart} color="secondary">
+              Start Over
+            </IonButton>
+            <IonButton expand="block" onClick={handleSubmit}>
+              Submit
+            </IonButton>
+          </IonRow>
+          <IonLoading isOpen={isLoading} message={'Please wait...'} />
+        </>
+      {/* )}
+      {response.action_content && <Results response={response} />} */}
     </>
   );
 };
