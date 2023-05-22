@@ -1,0 +1,41 @@
+.recommendation {
+    padding: 0 16px;
+    width: 100%;
+}
+
+/* Make sure the last rec isn't overlapped by the Restart button */
+.recommendation:last-child {
+    padding-bottom: 50px;
+}
+
+.recommendations hr {
+    height: 0;
+    border-width: 1px;
+    border-color: #E0E0E0;
+    opacity: 20%;
+}
+
+.recommendation h2 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: #484443;
+}
+
+.recommendation h3 {
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 16px;
+    color: #958D89;
+}
+
+.recommendation ul {
+    padding: 0 0 0 15px;
+}
+
+.recommendation li {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #625A56;
+}

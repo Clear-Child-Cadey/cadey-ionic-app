@@ -1,4 +1,4 @@
-package co.cadey.app;
+package co.cadey.liteapp;
 
 import com.getcapacitor.BridgeActivity;
 

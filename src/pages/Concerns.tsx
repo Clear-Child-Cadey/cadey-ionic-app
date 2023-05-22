@@ -3,6 +3,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 import './Concerns.css';
 import ConcernsList from '../components/ConcernsList/ConcernsList';
 import SymptomsList from '../components/SymptomsList/SymptomsList';
+import { Symptom } from '../components/ConcernsList/ConcernsList';
 import AgeForm from '../components/AgeForm/AgeForm';
 import Results from '../components/Results/Results';
 
@@ -14,29 +15,29 @@ const Concerns: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
 
   // State variables for storing data
-  const [selectedConcern, setSelectedConcern] = useState<{ concern: string; symptoms: string[] } | null>(null);
-  const [concerns, setConcerns] = useState<Array<string>>([]);
+  const [selectedConcern, setSelectedConcern] = useState<{ concern: string; symptoms: Symptom[] } | null>(null);
+  const [symptoms, setSymptoms] = useState<Array<Symptom>>([]);
   const [pageTitle, setPageTitle] = useState("Concerns");
   const [results, setResults] = useState<any | null>(null);
 
   // Handler for when the user proceeds from the ConcernsList
-  const handleConcernsNext = (choice: { concern: string; symptoms: string[] }) => {
+  const handleConcernsNext = (choice: { concern: string; symptoms: Symptom[] }) => {
     setSelectedConcern(choice);
     setPageTitle("Symptoms");
     setShowSymptomsList(true);
   };
 
   // Handler for when the user proceeds from the SymptomsList
-  const handleSymptomsNext = (symptoms: string[]) => {
+  const handleSymptomsNext = (symptoms: Symptom[]) => {
     setShowSymptomsList(false);
     setShowAgeForm(true);
-    setConcerns(symptoms);
+    setSymptoms(symptoms);
     setPageTitle("Age");
   };
 
   // Handler for when the AgeForm is submitted
   const handleSubmit = () => {
-    setPageTitle("Results");
+    setPageTitle("Recommendations");
   };
 
   // Handler for when the user starts over
@@ -44,7 +45,7 @@ const Concerns: React.FC = () => {
     setShowAgeForm(false);
     setShowSymptomsList(false);
     setShowResults(false)
-    setConcerns([]);
+    setSymptoms([]);
     setSelectedConcern(null);
     setResults(null);
     setPageTitle("Concerns");
@@ -81,15 +82,34 @@ const handleResultsReceived = (response: any) => {
   // Return the correct component depending on the state
   function renderComponent() {
     if (showResults) {
-      return <Results results={results} onRestart={handleRestart} />;
+      return (
+        <Results 
+          results={results} 
+          selectedConcern={selectedConcern ? selectedConcern.concern : ''} 
+          onRestart={handleRestart} 
+        />
+      );
     } else if (showAgeForm) {
-      return <AgeForm concerns={concerns} onAgeFormShown={handleSubmit} onRestart={handleRestart} onResultsReceived={handleResultsReceived} />;
+      return (
+        <AgeForm 
+          symptoms={symptoms} 
+          onAgeFormShown={handleSubmit} 
+          onRestart={handleRestart} 
+          onResultsReceived={handleResultsReceived} 
+        />
+      );
     } else if (showSymptomsList) {
-      return <SymptomsList concern={selectedConcern} onNext={handleSymptomsNext} onRestart={handleRestart} />;
+      return (
+        <SymptomsList 
+          concern={selectedConcern} 
+          onNext={handleSymptomsNext} 
+          onRestart={handleRestart} 
+        />
+      );
     } else {
       return <ConcernsList onNext={handleConcernsNext} />;
     }
   }
-};
+}
 
 export default Concerns;
