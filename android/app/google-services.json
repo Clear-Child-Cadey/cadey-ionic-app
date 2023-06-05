@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "743363017370",
+    "project_id": "cadeylite",
+    "storage_bucket": "cadeylite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743363017370:android:fabc0c01d04bf78b73bd23",
+        "android_client_info": {
+          "package_name": "co.cadey.liteapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743363017370-bcbt4dprnjf7ub5094kiogvj4so7sakh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.cadey.liteapp",
+            "certificate_hash": "52ca123b125d6e45159418892eb41ef95804d56e"
+          }
+        },
+        {
+          "client_id": "743363017370-9rsa7293hp3bskufme8jbtfsusp7mp5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbP5T-HoRr0UkOkcWZUMQo0pe7xkAg3Uw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743363017370-9rsa7293hp3bskufme8jbtfsusp7mp5h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

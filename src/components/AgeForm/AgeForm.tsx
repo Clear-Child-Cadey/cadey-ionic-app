@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import {
   IonItem,
   IonInput,
@@ -12,6 +12,7 @@ import Results from '../Results/Results';
 import './AgeForm.css';
 import { refresh } from 'ionicons/icons';
 import UserIdContext from '../../context/UserIdContext';
+import ApiUrlContext from '../../context/ApiUrlContext';
 import { Symptom } from '../ConcernsList/ConcernsList';
 
 interface AgeFormProps {
@@ -27,6 +28,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   const [isLoading, setIsLoading] = useState(false);
   const { symptoms, onAgeFormShown, onRestart, onResultsReceived } = props;
   const user_id = React.useContext(UserIdContext);
+  const apiUrl = useContext(ApiUrlContext);
 
   let ageGroup: number;
 
@@ -130,7 +132,8 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
     await postLogSubmitEvent();
 
     // Get recommendations from the API
-    const url = `https://capi.clear-cade.com/api/cadeydata/getrecommendations?ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
+    const url = `${apiUrl}/api/cadeydata/getrecommendations?ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
+
     const requestOptions = {
       method: 'GET',
       headers: {

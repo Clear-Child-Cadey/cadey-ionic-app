@@ -10,6 +10,7 @@ import {
 } from '@ionic/react';
 import './ConcernsList.css';
 import UserIdContext from '../../context/UserIdContext';
+import ApiUrlContext from '../../context/ApiUrlContext';
 
 // Define a TypeScript interface for the ConcernsList component's props
 interface ConcernsListProps {
@@ -26,6 +27,7 @@ export interface Symptom {
 const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
         // Get the UserID from the context
         const user_id = React.useContext(UserIdContext);
+        const apiUrl = React.useContext(ApiUrlContext);
         
         const [isLoading, setIsLoading] = useState(false);
         const [concernsList, setConcernsList] = useState<any>(null);
@@ -33,8 +35,11 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
         // Fetch data from API
         useEffect(() => {
                 setIsLoading(true);  // Start the loader here
-        
-                fetch('https://capi.clear-cade.com/api/cadeydata/getconcerns', {
+                
+                // Get the concerns and symptoms from the API
+                const url = `${apiUrl}/api/cadeydata/getconcerns`;
+
+                fetch(url, {
                 method: 'GET',
                 headers: {
                         'accept': 'text/plain',

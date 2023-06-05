@@ -1,7 +1,7 @@
 {
-  "name": "Cadey",
+  "name": "CadeyLite",
   "private": true,
-  "version": "0.1.1",
+  "version": "1.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,9 +25,12 @@
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.4.0",
+    "firebase": "^9.22.1",
     "ionicons": "^7.0.0",
+    "onesignal-cordova-plugin": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-player": "^2.12.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
     "uuid": "^9.0.0"
@@ -50,5 +53,5 @@
     "vite": "^4.1.0",
     "vitest": "^0.29.2"
   },
-  "description": "An Ionic project"
+  "description": "CadeyLite offers advice and ‘show-me-how’ videos. The app addresses your child's emotional and behavioral challenges. Improve your child's well-being in just two weeks!"
 }

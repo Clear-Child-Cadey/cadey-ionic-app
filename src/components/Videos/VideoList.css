@@ -1,0 +1,28 @@
+.video-list {
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.video-item {
+    flex: 0 0 auto;
+    width: 65%; /* Limits the width of the video player to 65% of the viewport width */
+    margin-right: 20px;
+}
+
+.video-item p {
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.2px;
+    color: #958D89;
+    margin-bottom: 0;
+}
+
+.video-item h3 {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: -0.2px;
+    color: #484443;
+    margin-top: 0;
+}

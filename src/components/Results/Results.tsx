@@ -8,13 +8,22 @@ import {
 } from '@ionic/react';
 import './Results.css';
 import { refresh } from 'ionicons/icons';
+import VideoList from '../Videos/VideoList';
 
 // Define the ResultsProps interface
 interface ResultsProps {
   results: {
     recommendations: {
       title: string;
-      showMeHow: any[]; // adjust this type when video content becomes available
+      showMeHow: {
+        audience: string;
+        mediaType: number;
+        title: string;
+        description: string | null;
+        sourceUrl: string | null;
+        thumbnail: string | null;
+        sourceId: string;
+      }[];
       tellMeHow: {
         text: string;
       }[];
@@ -24,8 +33,33 @@ interface ResultsProps {
   onRestart: () => void;
 }
 
+// TODO: Replace with an API call to get the video IDs
+// const videos = [
+//   {
+//     videoId: '824105229/68feae4566',
+//     title: 'Lists and Lines for Homework Organization',
+//     tag: 'Education',
+//   },{
+//     videoId: '824102840/39a57cdeec',
+//     title: 'Second Video',
+//     tag: 'For Parents',
+//   },{
+//     videoId: '824100882/8cebb364bf',
+//     title: 'Third Video',
+//     tag: 'Education',
+//   },{
+//     videoId: '822097592/44878cd162',
+//     title: 'Fourth Video',
+//     tag: 'Parenting',
+//   },{
+//     videoId: '822073557/a9efd31aab',
+//     title: 'Fifth Video',
+//     tag: 'For Kids',
+//   }
+// ];
+
 // Define the Results component
-// The results data originates in the AgeForm component and is passed to the main Concerns component, then here
+// The results data originates in the AgeForm component and is passed to the main Concerns page, then here
 const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }) => {
   return (
     <div className="container recommendations">
@@ -37,6 +71,16 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
             <div key={index} className="recommendation">
               <hr />
               <h2>{recommendation.title}</h2>
+              {recommendation.showMeHow.length > 0 && (
+                <>
+                  <h3>Show Me How</h3>
+                  <VideoList videos={recommendation.showMeHow.map(video => ({
+                    title: video.title,
+                    audience: video.audience || 'No Description',
+                    videoId: video.sourceId,
+                  }))} />
+                </>
+              )}
               <h3>Tell Me How</h3>
               <ul>
                 {recommendation.tellMeHow.map((item, index) => (

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Concerns.css';
-import ConcernsList from '../components/ConcernsList/ConcernsList';
-import SymptomsList from '../components/SymptomsList/SymptomsList';
-import { Symptom } from '../components/ConcernsList/ConcernsList';
-import AgeForm from '../components/AgeForm/AgeForm';
-import Results from '../components/Results/Results';
+import ConcernsList from '../../components/ConcernsList/ConcernsList';
+import SymptomsList from '../../components/SymptomsList/SymptomsList';
+import { Symptom } from '../../components/ConcernsList/ConcernsList';
+import AgeForm from '../../components/AgeForm/AgeForm';
+import Results from '../../components/Results/Results';
 
 // Define the Concerns component
-const Concerns: React.FC = () => {
+const ConcernsPage: React.FC = () => {
   // State variable flags to indicate which component to display
   const [showAgeForm, setShowAgeForm] = useState(false);
   const [showSymptomsList, setShowSymptomsList] = useState(false);
@@ -112,4 +112,4 @@ const handleResultsReceived = (response: any) => {
   }
 }
 
-export default Concerns;
+export default ConcernsPage;

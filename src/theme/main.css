@@ -161,3 +161,8 @@ ion-button {
 .subcopy {
   padding: 10px 16px 30px 16px;
 }
+
+/* Style the main headline on Material Design devices (Android, Chrome) */
+.md.title-default {
+  padding-inline: 16px;
+}
