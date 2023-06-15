@@ -1,0 +1,33 @@
+#root .modal-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    text-align: center;
+    --padding-top: 105px;
+  }
+  
+  .falseDoorIcon {
+    margin-bottom: 40px;
+  }
+  
+  .modal-container p {
+    font-size: 25px;
+    line-height: 30px;
+    color: #384F5F;
+    margin-top: 0;
+  }
+
+  .modal-container ion-button {
+    font-size: 14px;
+    --border-radius: 100px;
+  }
+
+  .modal-button-container {
+    position: absolute;
+    bottom: 120px;
+    width: calc(100% - 32px);
+    left: 16px;
+  }

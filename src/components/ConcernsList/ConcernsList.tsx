@@ -1,5 +1,5 @@
 // Import our dependencies & styles
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   IonButton,
   IonGrid,
@@ -9,8 +9,9 @@ import {
   IonLoading,
 } from '@ionic/react';
 import './ConcernsList.css';
-import UserIdContext from '../../context/UserIdContext';
+import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { CadeyUserContext } from '../../main';
 
 // Define a TypeScript interface for the ConcernsList component's props
 interface ConcernsListProps {
@@ -25,9 +26,9 @@ export interface Symptom {
 
 // Define the ConcernsList functional component
 const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
-        // Get the UserID from the context
-        const user_id = React.useContext(UserIdContext);
+        const device_id = React.useContext(DeviceIdContext);
         const apiUrl = React.useContext(ApiUrlContext);
+        const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
         
         const [isLoading, setIsLoading] = useState(false);
         const [concernsList, setConcernsList] = useState<any>(null);
@@ -69,7 +70,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
         const postLogEvent = async () => {
                 const url = 'https://a47vhkjc3cup25cpotv37xvcj40depdu.lambda-url.us-west-2.on.aws/';
                 const bodyObject = {
-                  user_id: user_id,
+                  user_id: cadeyUserId,
                   log_event: 'ENTRY',
                   data: ''
                 };
@@ -115,6 +116,9 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
                                                 </IonButton>
                                         </IonCol>
                                 ))}
+                        </IonRow>
+                        <IonRow className='privacy'>
+                                <a href="https://clearchildpsychology.com/privacy/" target="_blank" rel="noopener noreferrer" style={{ margin: 'auto' }}>Privacy Policy</a>
                         </IonRow>
                 </IonGrid>
         );

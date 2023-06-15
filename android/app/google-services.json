@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:743363017370:android:fabc0c01d04bf78b73bd23",
+        "mobilesdk_app_id": "1:743363017370:android:a2df0faaa1378f9673bd23",
         "android_client_info": {
           "package_name": "co.cadey.liteapp"
         }
@@ -37,6 +37,14 @@
             {
               "client_id": "743363017370-9rsa7293hp3bskufme8jbtfsusp7mp5h.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "743363017370-j2h6ruvslt8k4nk7d2gh20fg9cuqstap.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.cadey.liteapp",
+                "app_store_id": "6449231819"
+              }
             }
           ]
         }

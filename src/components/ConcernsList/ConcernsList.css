@@ -16,3 +16,8 @@
     word-wrap: break-word;
     letter-spacing: -0.2px;
   }
+
+  .privacy {
+    font-size: 12px;
+    margin-top: 20px;
+  }

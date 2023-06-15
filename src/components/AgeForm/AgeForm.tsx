@@ -11,8 +11,9 @@ import {
 import Results from '../Results/Results';
 import './AgeForm.css';
 import { refresh } from 'ionicons/icons';
-import UserIdContext from '../../context/UserIdContext';
+import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { CadeyUserContext } from '../../main';
 import { Symptom } from '../ConcernsList/ConcernsList';
 
 interface AgeFormProps {
@@ -27,8 +28,10 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   const [response, setResponse] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { symptoms, onAgeFormShown, onRestart, onResultsReceived } = props;
-  const user_id = React.useContext(UserIdContext);
+  const device_id = React.useContext(DeviceIdContext);
   const apiUrl = useContext(ApiUrlContext);
+  const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
+
 
   let ageGroup: number;
 
@@ -48,7 +51,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
     const symptomIds = symptoms.map((symptom) => symptom.id);
     
     const logSubmitBodyObject = {
-      user_id: user_id,
+      user_id: cadeyUserId,
       log_event: 'SUBMIT',
       data: {
         'Symptom IDs': symptomIds,
@@ -78,7 +81,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
     const symptomIds = symptoms.map((symptom) => symptom.id);
     
     const logResponseBodyObject = {
-      user_id: user_id,
+      user_id: cadeyUserId,
       log_event: 'RESPONSE',
       data: {
         'UserInput': {
@@ -132,7 +135,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
     await postLogSubmitEvent();
 
     // Get recommendations from the API
-    const url = `${apiUrl}/api/cadeydata/getrecommendations?ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
+    const url = `${apiUrl}/api/cadeydata/v2/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
 
     const requestOptions = {
       method: 'GET',
