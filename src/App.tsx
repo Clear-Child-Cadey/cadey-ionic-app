@@ -13,18 +13,22 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import ConcernsPage from './pages/Concerns/Concerns';
+import HomePage from './pages/Home/Home';
 import VideoPage from './pages/Videos/Videos';
 import PushNotification from './pages/PushNotification/PushNotification';
-import { videocamOutline, helpCircleOutline, mailUnreadOutline } from 'ionicons/icons';
+import { homeOutline, gridOutline } from 'ionicons/icons';
 import AppUpdateModal from './components/Modals/AppUpdateModal';
 import { CadeyUserContext } from './main';
+import { VideoContext } from './main';
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  // Get the user's current videos from the context
+  const videos = useContext(VideoContext);
 
   // Ensure user is on the latest version of the app
-  const appVersion = '2.0';
+  const appVersion = '2.1';
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
@@ -73,22 +77,27 @@ const App: React.FC = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route path="/Concerns" component={ConcernsPage} exact />
+            <Route path="/Home" component={HomePage} exact />
             <Route path="/Videos" component={VideoPage} exact />
-            <Route path="/Message" component={PushNotification} exact />
+            <Route path="/Messages" component={PushNotification} exact />
             <Route exact path="/">
-              <Redirect to="/Concerns" />
+              {videos.length > 0 ? <Redirect to="/Home" /> : <Redirect to="/Concerns" />}
             </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
+            <IonTabButton tab="Home" href="/Home">
+              <IonIcon icon={homeOutline} />
+              <IonLabel>Home</IonLabel>
+            </IonTabButton>
             <IonTabButton tab="Concerns" href="/Concerns">
-              <IonIcon icon={helpCircleOutline} />
+              <IonIcon icon={gridOutline} />
               <IonLabel>Concerns</IonLabel>
             </IonTabButton>
             <IonTabButton tab="Videos" href="/Videos">
               <IonIcon icon={videocamOutline} />
               <IonLabel>Videos</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="Message" href="/Message">
+            <IonTabButton tab="Messages" href="/Messages">
               <IonIcon icon={mailUnreadOutline} />
               <IonLabel>Messages</IonLabel>
             </IonTabButton>

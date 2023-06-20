@@ -1,8 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { isPlatform } from '@ionic/react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext from './context/ApiUrlContext';
+import { appOpenedLambda } from './api/LambdaLogging';
+import getAppData from './api/AppOpen';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -45,37 +48,7 @@ export const CadeyUserContext = createContext<{
   minimumSupportedVersion: "",
 });
 
-// call API to get user details and app version info
-const getAppData = async (setCadeyUserId: any, setMinimumSupportedVersion: any, apiUrl: any) => {
-  const url = `${apiUrl}/api/cadeydata/appopened`;
-
-  const bodyObject = {
-    cadeyUserId: 0,
-    cadeyUserDeviceId: cadeyUserDeviceId,
-    cadeyMinimumSupportedAppVersion: "",
-    cadeyLatestAppVersion: "",
-  };
-  const requestOptions = {
-    method: 'POST',
-    headers: { 
-      'accept': 'text/plain', 
-      'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(bodyObject)
-  };
-
-  try {
-    const response = await fetch(url, requestOptions);
-    const data = await response.json();
-    setCadeyUserId(data.cadeyUserId);
-    setMinimumSupportedVersion(data.cadeyMinimumSupportedAppVersion);
-    // API logging (database)call to indicate a user has opened the app
-    postLogEvent(data.cadeyUserId);
-  } catch (error) {
-    console.error('Error during API call', error);
-  }
-};
+export const VideoContext = createContext([]);
 
 // --------------------------------------------------
 // Initialize Firebase
@@ -171,35 +144,16 @@ const androidAnalytics = getAnalytics(androidApp);
 // }
 // --------------------------------------------------
 
-// API logging (lambda) call to indicate a user has opened the app
-const postLogEvent = async (userId: any) => {
-  const url = 'https://a47vhkjc3cup25cpotv37xvcj40depdu.lambda-url.us-west-2.on.aws/';
-  const bodyObject = {
-    user_id: userId,
-    log_event: 'OPEN',
-    data: ''
-  };
-  const requestOptions = {
-    method: 'POST',
-    headers: { 
-      Accept: 'application/json', 
-    },
-    body: JSON.stringify(bodyObject)
-  };
-
-  try {
-    const response = await fetch(url, requestOptions);
-  } catch (error) {
-    console.error('Error during API call', error);
-  }
-};
-
 function MainComponent() {
   const apiUrl = React.useContext(ApiUrlContext);
 
   const [cadeyUserId, setCadeyUserId] = useState("");
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
 
+  // State variable for holding the list of videos (if any) after calling getAppData
+  const [videos, setVideos] = useState([]);
+
+  // call API to get user details and app version info the first time the app loads
   useEffect(() => {
     getAppData(setCadeyUserId, setMinimumSupportedVersion, apiUrl);
   }, []);

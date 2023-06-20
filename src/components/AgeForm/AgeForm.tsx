@@ -8,13 +8,13 @@ import {
   IonText,
   IonIcon
 } from '@ionic/react';
-import Results from '../Results/Results';
 import './AgeForm.css';
 import { refresh } from 'ionicons/icons';
 import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 import { Symptom } from '../ConcernsList/ConcernsList';
+import { SubmitQueryLambda, ReceivedResponseLambda   } from '../../api/LambdaLogging';
 
 interface AgeFormProps {
   symptoms: Symptom[];
@@ -32,7 +32,6 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   const apiUrl = useContext(ApiUrlContext);
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
 
-
   let ageGroup: number;
 
   // Create a ref to the age input field
@@ -42,69 +41,6 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   useEffect(() => {
     setTimeout(() => inputRef.current?.setFocus(),150);
   }, []);
-
-  // Logging request to indicate that the user has submitted their age
-  const postLogSubmitEvent = async () => {
-    const logSubmitUrl = 'https://a47vhkjc3cup25cpotv37xvcj40depdu.lambda-url.us-west-2.on.aws/';
-    
-    // Extract the symptom IDs from the symptoms array
-    const symptomIds = symptoms.map((symptom) => symptom.id);
-    
-    const logSubmitBodyObject = {
-      user_id: cadeyUserId,
-      log_event: 'SUBMIT',
-      data: {
-        'Symptom IDs': symptomIds,
-        'Age Group': ageGroup
-      }
-    };
-    const logSubmitRequestOptions = {
-      method: 'POST',
-      headers: { 
-        Accept: 'application/json', 
-      },
-      body: JSON.stringify(logSubmitBodyObject)
-    };
-
-    try {
-      const logSubmitResponse = await fetch(logSubmitUrl, logSubmitRequestOptions);
-    } catch (error) {
-      console.error('Error during API call', error);
-    }
-  };
-
-  // Send logging request to log the response received
-  const postLogResponseEvent = async (recommendationsResponse: any) => {
-    const logResponseUrl = 'https://a47vhkjc3cup25cpotv37xvcj40depdu.lambda-url.us-west-2.on.aws/';
-    
-    // Extract the symptom IDs from the symptoms array
-    const symptomIds = symptoms.map((symptom) => symptom.id);
-    
-    const logResponseBodyObject = {
-      user_id: cadeyUserId,
-      log_event: 'RESPONSE',
-      data: {
-        'UserInput': {
-          'Symptom IDs': symptomIds,
-          'Age Group': ageGroup
-        },
-        'Recommendations': recommendationsResponse
-      }
-    };
-    const logResponseRequestOptions = {
-      method: 'POST',
-      headers: { 
-        Accept: 'application/json', 
-      },
-      body: JSON.stringify(logResponseBodyObject)
-    };
-
-    try {
-      const logResponseResponse = await fetch(logResponseUrl, logResponseRequestOptions);
-    } catch (error) {
-      console.error('Error during API call', error);
-    }
-  };
   
   // Handle submission of the age form
   const handleSubmit = async () => {
@@ -132,7 +68,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
     }
 
     // Send the log event
-    await postLogSubmitEvent();
+    await SubmitQueryLambda(cadeyUserId, symptoms.map(symptom => symptom.id), ageGroup);
 
     // Get recommendations from the API
     const url = `${apiUrl}/api/cadeydata/v2/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
@@ -159,7 +95,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
       setIsLoading(false);
 
       // Log the response
-      await postLogResponseEvent(data);
+      await ReceivedResponseLambda(cadeyUserId, symptoms.map(symptom => symptom.id), ageGroup, data);
 
     } catch (error) {
       console.error('Error:', error);

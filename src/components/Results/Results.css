@@ -13,6 +13,8 @@
     border-width: 1px;
     border-color: #E0E0E0;
     opacity: 20%;
+    margin-top: 0;
+    margin-bottom: 20px;
 }
 
 .recommendation h2 {

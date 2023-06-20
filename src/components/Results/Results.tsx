@@ -9,7 +9,6 @@ import {
 import './Results.css';
 import { refresh } from 'ionicons/icons';
 import VideoList from '../Videos/VideoList';
-import FalseDoorModal from '../Modals/FalseDoorModal/FalseDoorModal';
 
 // Define the ResultsProps interface
 interface ResultsProps {
@@ -17,6 +16,7 @@ interface ResultsProps {
     recommendations: {
       title: string;
       showMeHow: {
+        mediaId: string;
         audience: string;
         mediaType: number;
         title: string;
@@ -36,26 +36,6 @@ interface ResultsProps {
 // Define the Results component
 // The results data originates in the AgeForm component and is passed to the main Concerns page, then here
 const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
-  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false); // Control the visibility of the confirmation message
-  const [userResponse, setUserResponse] = useState<'yes' | 'no' | null>(null); // Store the user's response
-  
-  const handleVideoPause = () => {
-    // setIsModalOpen(true); // Open the modal when the video is paused
-  };
-
-  const handleVideoEnd = () => {
-    // setIsModalOpen(true); // Open the modal when the video ends
-  };
-
-  const handleUserResponse = (userResponse: boolean) => {
-    console.log('User response is', userResponse);
-    // TODO: Update this to send data to the API with the following:
-    // - User ID
-    // - False Door ID
-    // - User response (true/false)
-  };
-
   return (
     <div className="container recommendations">
       <IonRow>
@@ -74,9 +54,8 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
                     title: video.title,
                     audience: video.audience || 'No Description',
                     videoId: video.sourceId,
+                    mediaId: video.mediaId,
                   }))}
-                  onVideoPause={handleVideoPause}
-                  onVideoEnd={handleVideoEnd}
                 />
               </>
             )}
@@ -95,23 +74,6 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
           Restart
         </IonButton>
       </IonRow>
-      <FalseDoorModal 
-        iconUrl="https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
-        copy="Question goes here"
-        yesResponse="Yes, sign me up!"
-        noResponse="No thanks, not interested"
-        thankYouIconUrl="https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg"
-        thankYouCopy="Thank you for your interest in the Two Week Challenge!"
-        thankYouButtonText="Back to Recommendations"
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        onUserResponse={handleUserResponse}
-      />
-      {isConfirmationVisible && (
-        <div className="confirmation-message">
-          You selected: {userResponse}
-        </div>
-      )}
     </div>
   );
 };

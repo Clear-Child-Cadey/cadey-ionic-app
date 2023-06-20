@@ -1,0 +1,23 @@
+.home .video-list-row {
+    padding-left: 16px;
+}
+
+.home .video-item {
+    width: 80%;
+}
+
+.home .divider {
+    height: 0;
+    border-width: 1px;
+    border-color: #E0E0E0;
+    opacity: 20%;
+    margin: 0 16px;
+}
+
+.home h2 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: #484443;
+    width: 100%;
+}

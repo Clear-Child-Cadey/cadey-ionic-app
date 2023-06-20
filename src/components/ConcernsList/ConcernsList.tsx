@@ -12,6 +12,7 @@ import './ConcernsList.css';
 import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
+import { UserActivityLambda } from '../../api/LambdaLogging';
 
 // Define a TypeScript interface for the ConcernsList component's props
 interface ConcernsListProps {
@@ -66,32 +67,9 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
                         symptoms: item.symptoms.map((symptom: any) => ({ id: symptom.id, name: symptom.name })),                };
         });
 
-        // Method to indicate a user has interacted with the app (notably selected a concern)
-        const postLogEvent = async () => {
-                const url = 'https://a47vhkjc3cup25cpotv37xvcj40depdu.lambda-url.us-west-2.on.aws/';
-                const bodyObject = {
-                  user_id: cadeyUserId,
-                  log_event: 'ENTRY',
-                  data: ''
-                };
-                const requestOptions = {
-                  method: 'POST',
-                  headers: { 
-                    Accept: 'application/json', 
-                  },
-                  body: JSON.stringify(bodyObject)
-                };
-            
-                try {
-                  const response = await fetch(url, requestOptions);
-                } catch (error) {
-                  console.error('Error during API call', error);
-                }
-        };
-
         // Call the postLogEvent function whenever a button is clicked and proceed to the next screen
         const handleOnClick = (choice: { concern: string; symptoms: Symptom[] }) => {
-                postLogEvent();
+                UserActivityLambda(cadeyUserId);
                 onNext(choice);
         }
 
