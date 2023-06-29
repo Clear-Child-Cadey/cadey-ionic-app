@@ -11,8 +11,14 @@ if (!cadeyUserDeviceId) {
 }
 
 // Define a function to fetch application data
-export const getAppData = async (setCadeyUserId: any, setMinimumSupportedVersion: any, apiUrl: any) => {
-  // Define the url for the request
+export const getAppData = async (
+    setCadeyUserId: any, 
+    setMinimumSupportedVersion: any, 
+    apiUrl: any,
+    setIsHomeTabVisible: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+  
+    // Define the url for the request
   const url = `${apiUrl}/api/cadeydata/appopened`;
 
   // Determine the platform on which the app is running
@@ -52,6 +58,20 @@ export const getAppData = async (setCadeyUserId: any, setMinimumSupportedVersion
 
     setCadeyUserId(data.cadeyUserId); // Update the Cadey User ID state
     setMinimumSupportedVersion(data.cadeyMinimumSupportedAppVersion); // Update the Minimum Supported Version state
+    
+    // Set the visibility of the Home tab based on the response data
+    console.log('First Page: ', data.firstPageToShow);
+    if (data.firstPageToShow === "home") {
+      setIsHomeTabVisible(true);
+      console.log('Home tab is visible');
+    }
+
+    const mapVideos = (videos: any) => videos.map((video: { sourceId: any; mediaId: any; title: any; audience: any; }) => ({
+      videoId: video.sourceId,
+      mediaId: String(video.mediaId), // Convert the mediaId to a string
+      title: video.title,
+      audience: video.audience
+    }));
     
     // Log in the database that a user has opened the app
     appOpenedLambda(data.cadeyUserId);

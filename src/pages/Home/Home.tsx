@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import VideoList from '../../components/Videos/VideoList';
+import getHomeVideos from '../../api/HomeVideos';
 import { 
     IonPage, 
     IonHeader,
@@ -8,46 +9,43 @@ import {
     IonTitle,
     IonContent,
     IonRow,
-    IonText
+    IonText,
+    IonLoading,
 } from '@ionic/react';
 
-const HomePage: React.FC = () => {
-  // Create a mock video array
-  // TODO: Replace with an API call to get the video IDs every time this component is rendered
-  const videos = [
-    {
-      videoId: '824105229/68feae4566',
-      mediaId: '1',
-      title: 'Lists and Lines for Homework Organization',
-      audience: 'For Parents',
-    },{
-      videoId: '824102840/39a57cdeec',
-      mediaId: '1',
-      title: 'Second Video',
-      audience: 'For Kids',
-    },{
-      videoId: '824100882/8cebb364bf',
-      mediaId: '1',
-      title: 'Third Video',
-      audience: 'For Parents',
-    },{
-      videoId: '822097592/44878cd162',
-      mediaId: '1',
-      title: 'Fourth Video',
-      audience: 'For Kids',
-    },{
-      videoId: '822073557/a9efd31aab',
-      mediaId: '1',
-      title: 'Fifth Video',
-      audience: 'For Parents',
-    },
-    {
-      videoId: '831615340/777d84f4b8',
-      mediaId: '1',
-      title: 'Our Test Analytics Video',
-      audience: 'For Analytics',
+const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [newVideos, setNewVideos] = useState([]);
+  const [playedVideos, setPlayedVideos] = useState([]);
+
+  // Get the latest set of videos from the API
+  const { getHomeVideoData } = getHomeVideos();
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const { newVideos, playedVideos } = await getHomeVideoData();
+      setNewVideos(newVideos);
+      setPlayedVideos(playedVideos);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
-];
+  };
+
+  // This runs once on component mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // This runs every time currentTab changes
+  useEffect(() => {
+    if (currentTab === 'Home') {
+      fetchData();
+    }
+  }, [currentTab]);
 
   return (
     <IonPage className="home">
@@ -68,11 +66,11 @@ const HomePage: React.FC = () => {
         <hr className="divider" />
         <IonRow className="video-list-row">
             <h2>New Videos</h2>
-            <VideoList videos={videos} />
+            <VideoList videos={newVideos} />
         </IonRow>
         <IonRow className="video-list-row">
             <h2>Recently Viewed</h2>
-            <VideoList videos={videos} />
+            <VideoList videos={playedVideos} />
         </IonRow>
       </IonContent>
     </IonPage>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Concerns.css';
 import ConcernsList from '../../components/ConcernsList/ConcernsList';
@@ -6,6 +6,8 @@ import SymptomsList from '../../components/SymptomsList/SymptomsList';
 import { Symptom } from '../../components/ConcernsList/ConcernsList';
 import AgeForm from '../../components/AgeForm/AgeForm';
 import Results from '../../components/Results/Results';
+// Contexts
+import { HomeTabVisibilityContext } from '../../context/TabContext';
 
 // Define the Concerns component
 const ConcernsPage: React.FC = () => {
@@ -20,6 +22,10 @@ const ConcernsPage: React.FC = () => {
   const [pageTitle, setPageTitle] = useState("Concerns");
   const [results, setResults] = useState<any | null>(null);
 
+  // Home tab visibility context
+  const { isHomeTabVisible } = useContext(HomeTabVisibilityContext);
+  const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
+  
   // Handler for when the user proceeds from the ConcernsList
   const handleConcernsNext = (choice: { concern: string; symptoms: Symptom[] }) => {
     setSelectedConcern(choice);
@@ -57,6 +63,7 @@ const handleResultsReceived = (response: any) => {
   setShowResults(true);
   setShowAgeForm(false);
   setShowSymptomsList(false);
+  setHomeTabVisibility(true); // Show the Home tab when results are received
 };
   
   // Render the screen

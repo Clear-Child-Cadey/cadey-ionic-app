@@ -1,9 +1,12 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { isPlatform } from '@ionic/react';
+import { IonLoading, isPlatform } from '@ionic/react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+// Contexts
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext from './context/ApiUrlContext';
+import { HomeTabVisibilityContext } from './context/TabContext';
+// Functions
 import { appOpenedLambda } from './api/LambdaLogging';
 import getAppData from './api/AppOpen';
 
@@ -47,8 +50,6 @@ export const CadeyUserContext = createContext<{
   cadeyUserId: "",
   minimumSupportedVersion: "",
 });
-
-export const VideoContext = createContext([]);
 
 // --------------------------------------------------
 // Initialize Firebase
@@ -149,19 +150,34 @@ function MainComponent() {
 
   const [cadeyUserId, setCadeyUserId] = useState("");
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
+  const [newVideos, setNewVideos] = useState<any[]>([]);
+  const [playedVideos, setPlayedVideos] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isHomeTabVisible, setIsHomeTabVisible] = useState(false);
 
-  // State variable for holding the list of videos (if any) after calling getAppData
-  const [videos, setVideos] = useState([]);
-
-  // call API to get user details and app version info the first time the app loads
+  // call API to get user details, app version info and video data the first time the app loads
   useEffect(() => {
-    getAppData(setCadeyUserId, setMinimumSupportedVersion, apiUrl);
+    const fetchData = async () => {
+      await getAppData(setCadeyUserId, setMinimumSupportedVersion, apiUrl, setIsHomeTabVisible);
+      setIsLoading(false);
+    };
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log('Home Tab Visibility: ', isHomeTabVisible);
+  }, [isHomeTabVisible]);
+
+  if (isLoading) {
+    return <IonLoading isOpen={true} message="Loading" />; 
+  }
 
   return (
     <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
-        <App />
+        <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
+          <App />
+        </HomeTabVisibilityContext.Provider>
       </DeviceIdContext.Provider>
     </CadeyUserContext.Provider>
   );

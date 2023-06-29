@@ -10,10 +10,13 @@ import {
 } from '@ionic/react';
 import './AgeForm.css';
 import { refresh } from 'ionicons/icons';
+// Contexts
 import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
+// Symptoms
 import { Symptom } from '../ConcernsList/ConcernsList';
+// API
 import { SubmitQueryLambda, ReceivedResponseLambda   } from '../../api/LambdaLogging';
 
 interface AgeFormProps {

@@ -12,25 +12,25 @@ import {
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+// Pages
 import ConcernsPage from './pages/Concerns/Concerns';
 import HomePage from './pages/Home/Home';
-import VideoPage from './pages/Videos/Videos';
-import PushNotification from './pages/PushNotification/PushNotification';
-import { homeOutline, gridOutline } from 'ionicons/icons';
+// Components
 import AppUpdateModal from './components/Modals/AppUpdateModal';
+import RouterTabs from './components/RouterTabs/RouterTabs';
+// Contexts
 import { CadeyUserContext } from './main';
-import { VideoContext } from './main';
+import { HomeTabVisibilityContext } from './context/TabContext';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  // Get the user's current videos from the context
-  const videos = useContext(VideoContext);
-
   // Ensure user is on the latest version of the app
   const appVersion = '2.1';
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const homeTabVisibility = useContext(HomeTabVisibilityContext);
+  const isHomeTabVisible = homeTabVisibility?.isHomeTabVisible ?? false;
 
   const getStoreLink = () => {
     const userAgent = window.navigator.userAgent;
@@ -65,45 +65,15 @@ const App: React.FC = () => {
       />
 
       {/* Basic setup only showing the Concerns page */}
-      <IonReactRouter>
+      {/* <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/Concerns" component={ConcernsPage} />
           <Route exact path="/" render={() => <Redirect to="/Concerns" />} />
         </IonRouterOutlet>
-      </IonReactRouter>
+      </IonReactRouter> */}
 
       {/* Tab bar setup */}
-      {/* <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route path="/Concerns" component={ConcernsPage} exact />
-            <Route path="/Home" component={HomePage} exact />
-            <Route path="/Videos" component={VideoPage} exact />
-            <Route path="/Messages" component={PushNotification} exact />
-            <Route exact path="/">
-              {videos.length > 0 ? <Redirect to="/Home" /> : <Redirect to="/Concerns" />}
-            </Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="Home" href="/Home">
-              <IonIcon icon={homeOutline} />
-              <IonLabel>Home</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="Concerns" href="/Concerns">
-              <IonIcon icon={gridOutline} />
-              <IonLabel>Concerns</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="Videos" href="/Videos">
-              <IonIcon icon={videocamOutline} />
-              <IonLabel>Videos</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="Messages" href="/Messages">
-              <IonIcon icon={mailUnreadOutline} />
-              <IonLabel>Messages</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </IonReactRouter> */}
+      <RouterTabs />
     </IonApp>
   );
 };
