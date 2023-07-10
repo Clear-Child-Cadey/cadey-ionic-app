@@ -26,7 +26,7 @@ setupIonicReact();
 
 const App: React.FC = () => {
   // Ensure user is on the latest version of the app
-  const appVersion = '2.1';
+  const appVersion = '2.2';
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const homeTabVisibility = useContext(HomeTabVisibilityContext);
