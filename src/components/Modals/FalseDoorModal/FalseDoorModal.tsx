@@ -31,7 +31,7 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
   const [userChoice, setUserChoice] = useState<boolean | null>(null); // Store the user's choice
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-  const apiUrl = useContext(ApiUrlContext); // Get the API URL from the context
+  const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
 
   const location = useLocation(); // Get the route

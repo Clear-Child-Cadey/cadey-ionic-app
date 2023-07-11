@@ -14,6 +14,7 @@ import { homeOutline, gridOutline } from 'ionicons/icons';
 // Pages
 import ConcernsPage from '../../pages/Concerns/Concerns';
 import HomePage from '../../pages/Home/Home';
+import AdminPage from '../../pages/Admin/Admin';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
 
@@ -39,6 +40,7 @@ const RouterTabs: React.FC = () => {
               <Redirect to="/Concerns" />
             )}
           </Route>
+          <Route exact path="/admin" component={AdminPage} />
         </IonRouterOutlet>
         {/* Tab Bar */}
         <IonTabBar slot="bottom">

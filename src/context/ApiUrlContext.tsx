@@ -1,29 +1,45 @@
-import React from 'react';
+// import React from 'react';
 
-// TODO: Setup .env files for different environments
+// // TODO: Setup .env files for different environments
 
-// Production API URL
-// export const API_BASE_URL = 'https://capi.clear-cade.com';
+// // Production API URL
+// // export const API_BASE_URL = 'https://capi.clear-cade.com';
 
-// Stage API URL
-export const API_BASE_URL = 'https://capi-stage.clear-cade.com';
+// // Stage API URL
+// export const API_BASE_URL = 'https://capi-stage.clear-cade.com';
 
-var NEW_API_BASE_URL = '';
+// const ApiUrlContext = React.createContext(API_BASE_URL);
 
-// Define the API URL based on the environment
-if (window.location.hostname === 'cadey-stage.web.app') { 
-    NEW_API_BASE_URL = 'https://capi-stage.clear-cade.com';
-} else if (window.location.hostname === 'cadey.web.app') {
-    NEW_API_BASE_URL = 'https://capi.clear-cade.com';
-} else {
-    // This handles the app, and unfortunately needs to be hardcoded and swapped for each build
-    // Production API URL
-    NEW_API_BASE_URL = 'https://capi.clear-cade.com';
+// export default ApiUrlContext
 
-    // Stage API URL
-    NEW_API_BASE_URL = 'https://capi-stage.clear-cade.co';
-}
+// ------------------------------
 
-const ApiUrlContext = React.createContext(API_BASE_URL);
+import React, { useState } from 'react';
 
-export default ApiUrlContext
+// API URLs
+const PRODUCTION_API_URL = 'https://capi.clear-cade.com';
+const STAGING_API_URL = 'https://capi-stage.clear-cade.com';
+const EDGE_API_URL = 'https://capi-edge.clear-cade.com';
+
+type ApiUrlContextType = {
+    apiUrl: string;
+    setApiUrl: (value: string) => void;
+  };
+
+const ApiUrlContext = React.createContext<ApiUrlContextType>({
+    apiUrl: STAGING_API_URL, 
+    setApiUrl: () => {},
+});
+
+export const ApiUrlProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+  const [apiUrl, setApiUrl] = useState(STAGING_API_URL);
+
+  return (
+    <ApiUrlContext.Provider value={{ apiUrl, setApiUrl }}>
+      {children}
+    </ApiUrlContext.Provider>
+  );
+};
+
+export default ApiUrlContext;
+export { EDGE_API_URL, STAGING_API_URL, PRODUCTION_API_URL };

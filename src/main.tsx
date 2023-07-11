@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
-import ApiUrlContext from './context/ApiUrlContext';
+import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
 import { HomeTabVisibilityContext } from './context/TabContext';
 // Functions
 import getAppData from './api/AppOpen';
@@ -145,7 +145,7 @@ const androidAnalytics = getAnalytics(androidApp);
 // --------------------------------------------------
 
 function MainComponent() {
-  const apiUrl = React.useContext(ApiUrlContext);
+  const { apiUrl } = React.useContext(ApiUrlContext);
 
   const [cadeyUserId, setCadeyUserId] = useState("");
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
@@ -161,7 +161,7 @@ function MainComponent() {
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  }, [apiUrl]);
 
   if (isLoading) {
     return <IonLoading isOpen={true} message="Loading" />; 
@@ -171,7 +171,7 @@ function MainComponent() {
     <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
-          <App />
+            <App />
         </HomeTabVisibilityContext.Provider>
       </DeviceIdContext.Provider>
     </CadeyUserContext.Provider>
@@ -182,6 +182,8 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
   <React.StrictMode>
-    <MainComponent />
+    <ApiUrlProvider>
+      <MainComponent />
+    </ApiUrlProvider>
   </React.StrictMode>
 );

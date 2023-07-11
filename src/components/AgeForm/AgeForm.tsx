@@ -30,7 +30,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   const [isLoading, setIsLoading] = useState(false);
   const { symptoms, onAgeFormShown, onRestart, onResultsReceived } = props;
   const device_id = React.useContext(DeviceIdContext);
-  const apiUrl = useContext(ApiUrlContext);
+  const { apiUrl } = useContext(ApiUrlContext);
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
 
   let ageGroup: number;

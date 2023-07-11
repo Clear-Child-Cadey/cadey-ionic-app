@@ -3,7 +3,7 @@ import ApiUrlContext from '../context/ApiUrlContext';
 import { CadeyUserContext } from '../main';
 
 const getHomeVideos = () => {  
-    const apiUrl = useContext(ApiUrlContext);
+    const { apiUrl } = useContext(ApiUrlContext);
     const { cadeyUserId } = useContext(CadeyUserContext);
 
     const getHomeVideoData = async () => {

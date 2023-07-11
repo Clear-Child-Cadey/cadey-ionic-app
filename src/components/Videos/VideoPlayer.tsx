@@ -22,7 +22,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
   const [buttonText, setButtonText] = useState(''); // State to update the button text dynamically
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-  const apiUrl = useContext(ApiUrlContext); // Get the API URL from the context
+  const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
 
   const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility

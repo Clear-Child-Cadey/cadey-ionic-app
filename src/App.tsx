@@ -14,8 +14,7 @@ setupIonicReact();
 
 const App: React.FC = () => {
   // Ensure user is on the latest version of the app
-  const oldAppVersion = '2.2';
-  const appVersion = '2.2.0';
+  const appVersion = '2.3.0';
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 

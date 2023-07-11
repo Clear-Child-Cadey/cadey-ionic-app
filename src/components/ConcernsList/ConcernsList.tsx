@@ -27,7 +27,7 @@ export interface Symptom {
 // Define the ConcernsList functional component
 const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
         const device_id = React.useContext(DeviceIdContext);
-        const apiUrl = React.useContext(ApiUrlContext);
+        const { apiUrl } = React.useContext(ApiUrlContext);
         const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
         
         const [isLoading, setIsLoading] = useState(false);
