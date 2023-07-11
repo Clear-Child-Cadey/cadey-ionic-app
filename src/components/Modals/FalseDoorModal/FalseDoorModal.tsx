@@ -4,6 +4,7 @@ import {
   IonButton, 
   IonContent 
 } from '@ionic/react';
+import { useLocation } from 'react-router';
 import './FalseDoorModal.css';
 import { logFalseDoorResponse } from '../../../api/UserFacts';
 import { CadeyUserContext } from '../../../main';
@@ -33,6 +34,8 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
   const apiUrl = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
 
+  const location = useLocation(); // Get the route
+
   const handleUserResponse = (userChoice: boolean) => {
     setUserChoice(userChoice); // Store the user's choice in state
     setShowConfirmation(true); // Show the confirmation screen
@@ -40,7 +43,7 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
     // Log the user's response
     const userChoiceStr = userChoice ? 'yes' : 'no';
     const falseDoorQuestionIdStr = String(falseDoorQuestionId);
-    logFalseDoorResponse(cadeyUserId, userFactUrl, falseDoorQuestionIdStr, userChoiceStr);
+    logFalseDoorResponse(cadeyUserId, userFactUrl, falseDoorQuestionIdStr, userChoiceStr, location.pathname);
   };
 
   const handleClose = () => {
