@@ -54,7 +54,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
   };
 
   const onPause = async () => {
-    const response = await logVideoPause(cadeyUserId, userFactUrl, mediaIdStr, String(videoProgress).substring(0, 4));
+    const response = await logVideoPause(cadeyUserId, userFactUrl, mediaIdStr, String(videoProgress).substring(0, 4), location.pathname);
 
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
@@ -63,7 +63,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
   };
 
   const onEnded = async () => {
-    const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr);
+    const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr, location.pathname);
 
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
@@ -72,22 +72,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
   };
 
   const onClickPreview = () => {
-    logVideoPlay(cadeyUserId, userFactUrl, mediaIdStr);
+    logVideoPlay(cadeyUserId, userFactUrl, mediaIdStr, location.pathname);
   }
 
   const onProgress = (progress: any) => {
     setVideoProgress(progress.played);
     if (progress.played >= 1 && !logged100) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "1.00");
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "1.00", location.pathname);
       setLogged100(true);
     } else if (progress.played >= 0.75 && !logged75) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.75");
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.75", location.pathname);
       setLogged75(true);
     } else if (progress.played >= 0.5 && !logged50) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.5");
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.5", location.pathname);
       setLogged50(true);
     } else if (progress.played >= 0.25 && !logged25) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25");
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25", location.pathname);
       setLogged25(true);
     }
 };

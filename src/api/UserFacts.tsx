@@ -1,4 +1,4 @@
-export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: string) => {
+export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: string, route: string) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -9,9 +9,16 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "StartedMedia",
+            appPage: route,
             detail1: mediaId,
             detail2: "",
             detail3: "",
+            detail4: "",
+            detail5: "",
+            detail6: "",
+            detail7: "",
+            detail8: "",
+            detail9: "",
         }),
       };
   
@@ -25,7 +32,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       }
   }
 
-  export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string) => {
+  export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string, route: string) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -36,9 +43,16 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "PausedMedia",
+            appPage: route,
             detail1: mediaId,
             detail2: mediaProgress,
             detail3: "",
+            detail4: "",
+            detail5: "",
+            detail6: "",
+            detail7: "",
+            detail8: "",
+            detail9: "",
         }),
       };
   
@@ -52,7 +66,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       }
   }
 
-  export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string) => {
+  export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string, route: string) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -63,9 +77,16 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "InProgressMedia",
+            appPage: route,
             detail1: mediaId,
             detail2: progress,
             detail3: "",
+            detail4: "",
+            detail5: "",
+            detail6: "",
+            detail7: "",
+            detail8: "",
+            detail9: "",
         }),
       };
   
@@ -79,7 +100,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       }
   }
 
-  export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: string) => {
+  export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: string, route: string) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -90,9 +111,16 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "FinishedMedia",
+            appPage: route,
             detail1: mediaId,
             detail2: "",
             detail3: "",
+            detail4: "",
+            detail5: "",
+            detail6: "",
+            detail7: "",
+            detail8: "",
+            detail9: "",
         }),
       };
   
@@ -107,7 +135,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
   }
   
   // Log user response to false door question
-  export const logFalseDoorResponse = async (cadeyUserId: string, url: string, falseDoorQuestionId: string, userResponse: string) => {
+  export const logFalseDoorResponse = async (cadeyUserId: string, url: string, falseDoorQuestionId: string, userResponse: string, route: string) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -118,9 +146,16 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "FalseDoorQuestionResponse",
+            appPage: route,
             detail1: falseDoorQuestionId, 
             detail2: userResponse,
             detail3: "",
+            detail4: "",
+            detail5: "",
+            detail6: "",
+            detail7: "",
+            detail8: "",
+            detail9: "",
         }),
       };
   

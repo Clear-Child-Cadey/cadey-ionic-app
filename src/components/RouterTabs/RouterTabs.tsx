@@ -24,6 +24,7 @@ const RouterTabs: React.FC = () => {
 
   return (
     <IonReactRouter>
+      {/* Handle routing */}
       <IonTabs onIonTabsDidChange={(e: CustomEvent) => setCurrentTab(e.detail.tab)}>
         <IonRouterOutlet>
           {/* Establish routes */}
@@ -39,6 +40,7 @@ const RouterTabs: React.FC = () => {
             )}
           </Route>
         </IonRouterOutlet>
+        {/* Tab Bar */}
         <IonTabBar slot="bottom">
           {/* Show the Home tab if it should be visible */}
           {isHomeTabVisible && (
