@@ -12,7 +12,6 @@ import './ConcernsList.css';
 import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
-import { UserActivityLambda } from '../../api/LambdaLogging';
 
 // Define a TypeScript interface for the ConcernsList component's props
 interface ConcernsListProps {
@@ -69,7 +68,6 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
 
         // Call the postLogEvent function whenever a button is clicked and proceed to the next screen
         const handleOnClick = (choice: { concern: string; symptoms: Symptom[] }) => {
-                UserActivityLambda(cadeyUserId);
                 onNext(choice);
         }
 

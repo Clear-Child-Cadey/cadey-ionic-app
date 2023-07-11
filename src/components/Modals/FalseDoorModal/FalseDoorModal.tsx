@@ -23,10 +23,9 @@ interface ModalProps {
 
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
-  onUserResponse: (userResponse: boolean) => void;
 }
 
-const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, copy, yesResponse, noResponse, thankYouIconUrlYes, thankYouIconUrlNo, thankYouCopyYes, thankYouCopyNo, thankYouButtonText, isOpen, setIsOpen, onUserResponse }) => {
+const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, copy, yesResponse, noResponse, thankYouIconUrlYes, thankYouIconUrlNo, thankYouCopyYes, thankYouCopyNo, thankYouButtonText, isOpen, setIsOpen }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [userChoice, setUserChoice] = useState<boolean | null>(null); // Store the user's choice
 
@@ -37,9 +36,6 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
   const handleUserResponse = (userChoice: boolean) => {
     setUserChoice(userChoice); // Store the user's choice in state
     setShowConfirmation(true); // Show the confirmation screen
-    
-    // Invoke the 'onUserResponse' callback passed from the parent component for whatever it needs to do
-    onUserResponse(userChoice); 
     
     // Log the user's response
     const userChoiceStr = userChoice ? 'yes' : 'no';

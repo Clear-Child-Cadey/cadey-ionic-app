@@ -5,7 +5,6 @@ import { CadeyUserContext } from '../main';
 const getHomeVideos = () => {  
     const apiUrl = useContext(ApiUrlContext);
     const { cadeyUserId } = useContext(CadeyUserContext);
-    console.log("User ID: ", cadeyUserId);
 
     const getHomeVideoData = async () => {
         const url = `${apiUrl}/api/cadeydata/homepage/${cadeyUserId}`;

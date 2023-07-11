@@ -23,7 +23,6 @@ const ConcernsPage: React.FC = () => {
   const [results, setResults] = useState<any | null>(null);
 
   // Home tab visibility context
-  const { isHomeTabVisible } = useContext(HomeTabVisibilityContext);
   const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
   
   // Handler for when the user proceeds from the ConcernsList

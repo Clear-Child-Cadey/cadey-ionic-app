@@ -1,7 +1,6 @@
 // Import necessary libraries
 import { isPlatform } from '@ionic/react'; // Helps to identify the platform (iOS, Android, Web) the app is running on
 import { v4 as uuidv4 } from 'uuid'; // Used for generating unique ids
-import { appOpenedLambda } from './LambdaLogging'; // Import logging method
 
 // Try to retrieve a previously stored device id, if not available then generate a new unique id for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
@@ -60,10 +59,8 @@ export const getAppData = async (
     setMinimumSupportedVersion(data.cadeyMinimumSupportedAppVersion); // Update the Minimum Supported Version state
     
     // Set the visibility of the Home tab based on the response data
-    console.log('First Page: ', data.firstPageToShow);
     if (data.firstPageToShow === "home") {
       setIsHomeTabVisible(true);
-      console.log('Home tab is visible');
     }
 
     const mapVideos = (videos: any) => videos.map((video: { sourceId: any; mediaId: any; title: any; audience: any; }) => ({
@@ -72,9 +69,6 @@ export const getAppData = async (
       title: video.title,
       audience: video.audience
     }));
-    
-    // Log in the database that a user has opened the app
-    appOpenedLambda(data.cadeyUserId);
 
   } catch (error) { // Handle any errors during the request
     console.error('Error during API call', error);

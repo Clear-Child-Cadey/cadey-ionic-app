@@ -66,7 +66,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
     const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr);
 
     if (response.falseDoorQuestionId !== 0) {
-      console.log('False door detected');
       setFalseDoorData(response);
       setIsModalOpen(true);
     }
@@ -95,14 +94,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
 
   const onError = (error: any) => {
     // Currently unused
-  };
-
-  const handleUserResponse = (userResponse: boolean) => {
-    console.log('User response is', userResponse);
-    // TODO: Update this to send data to the API with the following:
-    // - User ID
-    // - False Door ID
-    // - User response (true/false)
   };
 
   return (
@@ -137,7 +128,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
         thankYouButtonText={buttonText}
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
-        onUserResponse={handleUserResponse}
       />
     </div>
   );

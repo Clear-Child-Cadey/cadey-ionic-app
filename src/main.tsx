@@ -7,7 +7,6 @@ import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext from './context/ApiUrlContext';
 import { HomeTabVisibilityContext } from './context/TabContext';
 // Functions
-import { appOpenedLambda } from './api/LambdaLogging';
 import getAppData from './api/AppOpen';
 
 /* Core CSS required for Ionic components to work properly */
@@ -163,10 +162,6 @@ function MainComponent() {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log('Home Tab Visibility: ', isHomeTabVisible);
-  }, [isHomeTabVisible]);
 
   if (isLoading) {
     return <IonLoading isOpen={true} message="Loading" />; 

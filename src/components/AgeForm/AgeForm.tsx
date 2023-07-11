@@ -16,8 +16,6 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 // Symptoms
 import { Symptom } from '../ConcernsList/ConcernsList';
-// API
-import { SubmitQueryLambda, ReceivedResponseLambda   } from '../../api/LambdaLogging';
 
 interface AgeFormProps {
   symptoms: Symptom[];
@@ -70,9 +68,6 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
       ageGroup = 3;
     }
 
-    // Send the log event
-    await SubmitQueryLambda(cadeyUserId, symptoms.map(symptom => symptom.id), ageGroup);
-
     // Get recommendations from the API
     const url = `${apiUrl}/api/cadeydata/v2/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
 
@@ -96,9 +91,6 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
       onAgeFormShown();
 
       setIsLoading(false);
-
-      // Log the response
-      await ReceivedResponseLambda(cadeyUserId, symptoms.map(symptom => symptom.id), ageGroup, data);
 
     } catch (error) {
       console.error('Error:', error);

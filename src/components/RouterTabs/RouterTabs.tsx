@@ -29,6 +29,7 @@ const RouterTabs: React.FC = () => {
           {/* Establish routes */}
           <Route path="/Concerns" component={ConcernsPage} exact />
           <Route path="/Home" render={() => <HomePage currentTab={currentTab} />} exact />
+          {/* On app open, route user to Concerns if they don't have a Home tab */}
           <Route exact path="/">
             {isHomeTabVisible && (
               <Redirect to="/Home" />

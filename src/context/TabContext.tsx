@@ -1,12 +1,3 @@
-// import React, { useContext } from 'react';
-
-// type HomeTabVisibilityContextType = {
-//     isHomeTabVisible: boolean;
-//     setIsHomeTabVisible: React.Dispatch<React.SetStateAction<boolean>>;
-// };
-
-// export const HomeTabVisibilityContext = React.createContext<HomeTabVisibilityContextType | undefined>(undefined);
-
 import React, { useContext, useState, ReactNode } from 'react';
 
 type HomeTabVisibilityContextType = {
