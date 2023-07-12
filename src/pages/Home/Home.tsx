@@ -35,11 +35,6 @@ const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     }
   };
 
-  // This runs once on component mount
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   // This runs every time currentTab changes
   useEffect(() => {
     if (currentTab === 'Home') {
