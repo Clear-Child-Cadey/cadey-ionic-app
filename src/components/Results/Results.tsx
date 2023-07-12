@@ -69,9 +69,9 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
         ))}
       </IonRow>
       <IonRow class="bottom-row single-button">
-        <IonButton expand="block" onClick={onRestart} color="primary" aria-label="Add Concern">
+        <IonButton expand="block" onClick={onRestart} color="primary" aria-label="New Concern">
           <IonIcon icon={refresh} slot="start" />
-          Add Concern
+          New Concern
         </IonButton>
       </IonRow>
     </div>
