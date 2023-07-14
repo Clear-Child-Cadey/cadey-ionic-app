@@ -35,8 +35,13 @@ const App: React.FC = () => {
     return url;
   };
 
-  // Set the external user ID for OneSignal
-  setExternalUserId(cadeyUserId.toString());
+  // Check if the app is running in a browser or on a device
+  if (window.cordova) {
+    // Set the external user ID for OneSignal
+    setExternalUserId(cadeyUserId.toString());
+  } else {
+    // Don't interact with OneSignal (which relies on Cordova)
+  }
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {

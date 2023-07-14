@@ -23,16 +23,20 @@ const AdminPage: React.FC = () => {
   
   // Set the state of the push notification toggle on mount. If the user hasNotificationPermission, we can determine the correct value.
   useEffect(() => {
-    OneSignal.getDeviceState((deviceState) => {
-      if (deviceState.hasNotificationPermission) {
-        if (deviceState.pushDisabled === true) {
-          setPushEnabled(false);
-        } else if (deviceState.pushDisabled === false) {
-          setPushEnabled(true);
+    if (window.cordova) {
+      OneSignal.getDeviceState((deviceState) => {
+        if (deviceState.hasNotificationPermission) {
+          if (deviceState.pushDisabled === true) {
+            setPushEnabled(false);
+          } else if (deviceState.pushDisabled === false) {
+            setPushEnabled(true);
+          }
         }
-      }
-      console.log(deviceState);
-    });
+        console.log(deviceState);
+      });
+    } else {
+      // Don't interact with OneSignal (which relies on Cordova)
+    }
   }, []);
 
   const handleUrlChange = (event: any) => {
@@ -40,17 +44,22 @@ const AdminPage: React.FC = () => {
   };
 
   const togglePushNotifications = () => {
-    OneSignal.getDeviceState((deviceState) => {
-      if (deviceState.hasNotificationPermission) {
-        OneSignal.disablePush(pushEnabled);
-        setPushEnabled(!pushEnabled);
-        OneSignal.getDeviceState((deviceState) => {
-          console.log(deviceState);
-        });
-      } else {
-        requestNotificationPermission();
-      }
-    });
+    // Check if the app is running in a browser or on a device
+    if (window.cordova) {
+      OneSignal.getDeviceState((deviceState) => {
+        if (deviceState.hasNotificationPermission) {
+          OneSignal.disablePush(pushEnabled);
+          setPushEnabled(!pushEnabled);
+          OneSignal.getDeviceState((deviceState) => {
+            console.log(deviceState);
+          });
+        } else {
+          requestNotificationPermission();
+        }
+      });
+    } else {
+      // Don't interact with OneSignal (which relies on Cordova)
+    }
   };
 
   return (

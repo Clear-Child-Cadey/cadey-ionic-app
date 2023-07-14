@@ -56,10 +56,10 @@ const RouterTabs: React.FC = () => {
             <IonIcon icon={gridOutline} />
             <IonLabel>Concerns</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="Admin" href="/admin">
+          {/* <IonTabButton tab="Admin" href="/admin">
             <IonIcon icon={gridOutline} />
             <IonLabel>Admin</IonLabel>
-          </IonTabButton>
+          </IonTabButton> */}
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
