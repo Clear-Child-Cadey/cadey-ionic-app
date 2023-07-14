@@ -9,6 +9,8 @@ import AppUpdateModal from './components/Modals/AppUpdateModal';
 import RouterTabs from './components/RouterTabs/RouterTabs';
 // Contexts
 import { CadeyUserContext } from './main';
+// API
+import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 
 setupIonicReact();
 
@@ -32,6 +34,9 @@ const App: React.FC = () => {
   
     return url;
   };
+
+  // Set the external user ID for OneSignal
+  setExternalUserId(cadeyUserId.toString());
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {

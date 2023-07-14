@@ -7,7 +7,8 @@ import {
   IonTabBar, 
   IonTabButton, 
   IonIcon, 
-  IonLabel 
+  IonLabel, 
+  IonTab
 } from '@ionic/react';
 // Ionicons
 import { homeOutline, gridOutline } from 'ionicons/icons';
@@ -54,6 +55,10 @@ const RouterTabs: React.FC = () => {
           <IonTabButton tab="Concerns" href="/Concerns">
             <IonIcon icon={gridOutline} />
             <IonLabel>Concerns</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="Admin" href="/admin">
+            <IonIcon icon={gridOutline} />
+            <IonLabel>Admin</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

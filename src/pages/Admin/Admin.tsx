@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ApiUrlContext, { EDGE_API_URL, STAGING_API_URL, PRODUCTION_API_URL } from '../../context/ApiUrlContext';
+import OneSignal from 'onesignal-cordova-plugin';
 import { 
     IonButton,
     IonLabel,
@@ -11,13 +12,45 @@ import {
     IonToolbar,
     IonTitle,
     IonContent,
+    IonToggle,
 } from '@ionic/react';
+// API
+import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
 
 const AdminPage: React.FC = () => {
   const { apiUrl, setApiUrl } = useContext(ApiUrlContext);
+  const [pushEnabled, setPushEnabled] = useState(false);
   
+  // Set the state of the push notification toggle on mount. If the user hasNotificationPermission, we can determine the correct value.
+  useEffect(() => {
+    OneSignal.getDeviceState((deviceState) => {
+      if (deviceState.hasNotificationPermission) {
+        if (deviceState.pushDisabled === true) {
+          setPushEnabled(false);
+        } else if (deviceState.pushDisabled === false) {
+          setPushEnabled(true);
+        }
+      }
+      console.log(deviceState);
+    });
+  }, []);
+
   const handleUrlChange = (event: any) => {
     setApiUrl(event.detail.value);
+  };
+
+  const togglePushNotifications = () => {
+    OneSignal.getDeviceState((deviceState) => {
+      if (deviceState.hasNotificationPermission) {
+        OneSignal.disablePush(pushEnabled);
+        setPushEnabled(!pushEnabled);
+        OneSignal.getDeviceState((deviceState) => {
+          console.log(deviceState);
+        });
+      } else {
+        requestNotificationPermission();
+      }
+    });
   };
 
   return (
@@ -41,6 +74,10 @@ const AdminPage: React.FC = () => {
               <IonSelectOption value={STAGING_API_URL}>Staging</IonSelectOption>
               <IonSelectOption value={PRODUCTION_API_URL}>Production</IonSelectOption>
             </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonLabel>Push Notifications:</IonLabel>
+            <IonToggle checked={pushEnabled} onIonChange={togglePushNotifications} />
           </IonItem>
         </form>
       </IonContent>

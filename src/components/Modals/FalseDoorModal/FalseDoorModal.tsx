@@ -6,7 +6,10 @@ import {
 } from '@ionic/react';
 import { useLocation } from 'react-router';
 import './FalseDoorModal.css';
+// api
 import { logFalseDoorResponse } from '../../../api/UserFacts';
+import { requestNotificationPermission } from '../../../api/OneSignal/RequestPermission';
+// Contexts
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
 
@@ -44,6 +47,13 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
     const userChoiceStr = userChoice ? 'yes' : 'no';
     const falseDoorQuestionIdStr = String(falseDoorQuestionId);
     logFalseDoorResponse(cadeyUserId, userFactUrl, falseDoorQuestionIdStr, userChoiceStr, location.pathname);
+
+    // If the user chose "yes", request notification permission
+    // Note that the prompt will only appear once; 
+    // If the user declines, they will need to manually change their notification settings to allow notifications from the app.
+    if (userChoice) {
+      requestNotificationPermission();
+    }
   };
 
   const handleClose = () => {

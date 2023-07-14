@@ -29,7 +29,8 @@ import '@ionic/react/css/display.css';
 import './theme/main.css';
 
 // OneSignal Library (Used for Push Notifications)
-import OneSignal from 'onesignal-cordova-plugin';
+// import OneSignal from 'onesignal-cordova-plugin';
+import { initializeOneSignal } from './api/OneSignal/InitOneSignal';
 
 // UUID Library (Used to generate a unique ID for the device)
 import { v4 as uuidv4 } from 'uuid';
@@ -50,7 +51,7 @@ export const CadeyUserContext = createContext<{
   minimumSupportedVersion: "",
 });
 
-// --------------------------------------------------
+// -------------------FIREBASE------------------------------
 // Initialize Firebase
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -111,38 +112,18 @@ const androidAnalytics = getAnalytics(androidApp);
 // Best link I've found so far: https://github.com/capacitor-community/firebase-crashlytics
 // Ran into dependency issues with the above link though
 
-// --------------------------------------------------
+// -------------------/FIREBASE-------------------------------
 
-// --------------------------------------------------
-// // OneSignal Library (Used for Push Notifications)
-// // Check if the app is running in a browser or on a device
-// if (window.cordova) {
-//   // Cordova plugins are ready
-//   // Initialize OneSignal (Push Notifications Platform)
-//   OneSignalInit();
-
-//   // Call this function when your app starts
-//   function OneSignalInit(): void {
-//     // Uncomment to set OneSignal device logging to VERBOSE  
-//     // OneSignal.setLogLevel(6, 0);
-
-//     OneSignal.setAppId("9e338438-0d42-44e8-b8f4-3ae40f3665e0");
-//     OneSignal.setNotificationOpenedHandler(function(jsonData) {
-//         console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
-//     });
-
-//     // Prompts the user for notification permissions.
-//     // TODO: Since this shows a generic native prompt, we recommend instead 
-//     // using an In-App Message to prompt for notification permission (See step 7) 
-//     // to better communicate to your users what notifications they will get.
-//     OneSignal.promptForPushNotificationsWithUserResponse(function(accepted) {
-//         console.log("User accepted notifications: " + accepted);
-//     });
-//   }
-// } else {
-//   // Don't load OneSignal (which relies on Cordova)
-// }
-// --------------------------------------------------
+// -------------------ONESIGNAL-------------------------------
+// Check if the app is running in a browser or on a device
+if (window.cordova) {
+  // Cordova plugins are ready
+  // Initialize OneSignal (Push Notifications Platform)
+  initializeOneSignal();
+} else {
+  // Don't load OneSignal (which relies on Cordova)
+}
+// -------------------/ONESIGNAL------------------------------
 
 function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);
