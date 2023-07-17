@@ -12,7 +12,32 @@ PODS:
     - Capacitor
   - CordovaPluginsStatic (5.0.4):
     - CapacitorCordova
+    - FBSDKCoreKit (= 11.1.0)
+    - FBSDKLoginKit (= 11.1.0)
+    - FBSDKShareKit (= 11.1.0)
     - OneSignalXCFramework (= 3.12.4)
+  - FBAEMKit (11.1.0):
+    - FBAEMKit/AEM (= 11.1.0)
+  - FBAEMKit/AEM (11.1.0):
+    - FBSDKCoreKit_Basics (~> 11.1.0)
+  - FBSDKCoreKit (11.1.0):
+    - FBSDKCoreKit/Core (= 11.1.0)
+  - FBSDKCoreKit/Core (11.1.0):
+    - FBAEMKit (~> 11.1.0)
+    - FBSDKCoreKit_Basics (~> 11.1.0)
+  - FBSDKCoreKit_Basics (11.1.0):
+    - FBSDKCoreKit_Basics/Basics (= 11.1.0)
+  - FBSDKCoreKit_Basics/Basics (11.1.0)
+  - FBSDKLoginKit (11.1.0):
+    - FBSDKLoginKit/Login (= 11.1.0)
+  - FBSDKLoginKit/Login (11.1.0):
+    - FBSDKCoreKit (~> 11.1.0)
+    - FBSDKCoreKit_Basics (~> 11.1.0)
+  - FBSDKShareKit (11.1.0):
+    - FBSDKShareKit/Share (= 11.1.0)
+  - FBSDKShareKit/Share (11.1.0):
+    - FBSDKCoreKit (~> 11.1.0)
+    - FBSDKCoreKit_Basics (~> 11.1.0)
   - OneSignalXCFramework (3.12.4):
     - OneSignalXCFramework/OneSignalCore (= 3.12.4)
     - OneSignalXCFramework/OneSignalExtension (= 3.12.4)
@@ -36,6 +61,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - FBAEMKit
+    - FBSDKCoreKit
+    - FBSDKCoreKit_Basics
+    - FBSDKLoginKit
+    - FBSDKShareKit
     - OneSignalXCFramework
 
 EXTERNAL SOURCES:
@@ -61,7 +91,12 @@ SPEC CHECKSUMS:
   CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
   CapacitorKeyboard: e628d4e66d621c69e449945ebabded17c5b9c2e8
   CapacitorStatusBar: 48f2899f6846cc7d8431b251ebfc58e1c10e3d58
-  CordovaPluginsStatic: af99904c0243da8af971650a0657125ae1d9688d
+  CordovaPluginsStatic: 37efe9462febb611ed42d9cde75ba1c511608672
+  FBAEMKit: 5c8a8d08e5b2c79628490784883e0fcc75b12615
+  FBSDKCoreKit: 7ccb8b4bb2b5ee2ad94327b774dc23f03509675d
+  FBSDKCoreKit_Basics: 8f978bce195845f609b0ec6b425949d0d24f525b
+  FBSDKLoginKit: d65eb587a9eaa89295338fb0bb3b358bde0b7ae4
+  FBSDKShareKit: b2142706d3f2410fb0ea76ad5a63238c71307117
   OneSignalXCFramework: 087934ab0d4d7445fcf1c015c7c782359e26c020
 
 PODFILE CHECKSUM: 20f1d1ceddbab1069c7781a0c369dd77230c3b0b
