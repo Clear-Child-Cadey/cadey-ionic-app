@@ -13,7 +13,6 @@ dependencies {
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-status-bar')
-    implementation "com.facebook.android:facebook-android-sdk:11.3.0"
     implementation "com.onesignal:OneSignal:4.8.5"
 }
 apply from: "../../node_modules/onesignal-cordova-plugin/build-extras-onesignal.gradle"
