@@ -12,6 +12,7 @@ import {
     IonText,
     IonLoading,
 } from '@ionic/react';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
@@ -31,7 +32,8 @@ const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Stop the loader after data has been fetched
+      SplashScreen.hide(); // Hide the splash screen after data has been fetched
     }
   };
 

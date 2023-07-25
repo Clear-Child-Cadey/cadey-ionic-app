@@ -9,6 +9,8 @@ import {
   IonLoading,
 } from '@ionic/react';
 import './ConcernsList.css';
+import { SplashScreen } from '@capacitor/splash-screen';
+// Contexts
 import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
@@ -51,6 +53,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
                 .then(data => {
                         setConcernsList(data);
                         setIsLoading(false);  // Stop the loader after data has been fetched
+                        SplashScreen.hide();  // Hide the splash screen after data has been fetched
                 })
                 .catch(error => {
                         console.error('Error:', error);
