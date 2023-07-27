@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Concerns.css';
+// Components
 import ConcernsList from '../../components/ConcernsList/ConcernsList';
 import SymptomsList from '../../components/SymptomsList/SymptomsList';
 import { Symptom } from '../../components/ConcernsList/ConcernsList';
