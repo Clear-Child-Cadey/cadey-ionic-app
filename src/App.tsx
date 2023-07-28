@@ -17,7 +17,7 @@ setupIonicReact();
 const App: React.FC = () => {
   // Ensure user is on the latest version of the app
   const appVersion = '2.5.0';
-  const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
+  const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const getStoreLink = () => {
@@ -38,7 +38,7 @@ const App: React.FC = () => {
   // Check if the app is running in a browser or on a device
   if (window.cordova) {
     // Set the external user ID for OneSignal
-    setExternalUserId(cadeyUserId.toString());
+    setExternalUserId(oneSignalId.toString());
   } else {
     // Don't interact with OneSignal (which relies on Cordova)
   }

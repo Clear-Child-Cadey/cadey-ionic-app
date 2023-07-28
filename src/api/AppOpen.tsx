@@ -13,6 +13,7 @@ if (!cadeyUserDeviceId) {
 export const getAppData = async (
     setCadeyUserId: any, 
     setMinimumSupportedVersion: any, 
+    setOneSignalId: any,
     apiUrl: any,
     setIsHomeTabVisible: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
@@ -57,6 +58,7 @@ export const getAppData = async (
 
     setCadeyUserId(data.cadeyUserId); // Update the Cadey User ID state
     setMinimumSupportedVersion(data.cadeyMinimumSupportedAppVersion); // Update the Minimum Supported Version state
+    setOneSignalId(data.oneSignalId); // Update the OneSignal ID state
     
     // Set the visibility of the Home tab based on the response data
     if (data.firstPageToShow === "home") {

@@ -1,19 +1,3 @@
-// import React from 'react';
-
-// // TODO: Setup .env files for different environments
-
-// // Production API URL
-// // export const API_BASE_URL = 'https://capi.clear-cade.com';
-
-// // Stage API URL
-// export const API_BASE_URL = 'https://capi-stage.clear-cade.com';
-
-// const ApiUrlContext = React.createContext(API_BASE_URL);
-
-// export default ApiUrlContext
-
-// ------------------------------
-
 import React, { useState } from 'react';
 
 // API URLs
@@ -27,12 +11,12 @@ type ApiUrlContextType = {
   };
 
 const ApiUrlContext = React.createContext<ApiUrlContextType>({
-    apiUrl: PRODUCTION_API_URL, 
+    apiUrl: STAGING_API_URL, 
     setApiUrl: () => {},
 });
 
 export const ApiUrlProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const [apiUrl, setApiUrl] = useState(PRODUCTION_API_URL);
+  const [apiUrl, setApiUrl] = useState(STAGING_API_URL);
 
   return (
     <ApiUrlContext.Provider value={{ apiUrl, setApiUrl }}>

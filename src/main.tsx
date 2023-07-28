@@ -46,9 +46,11 @@ if (!cadeyUserDeviceId) {
 export const CadeyUserContext = createContext<{
   cadeyUserId: string;
   minimumSupportedVersion: string;
+  oneSignalId: string;
 }>({
   cadeyUserId: "",
   minimumSupportedVersion: "",
+  oneSignalId: "",
 });
 
 // -------------------FIREBASE------------------------------
@@ -130,6 +132,7 @@ function MainComponent() {
 
   const [cadeyUserId, setCadeyUserId] = useState("");
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
+  const [oneSignalId, setOneSignalId] = useState("");
   const [newVideos, setNewVideos] = useState<any[]>([]);
   const [playedVideos, setPlayedVideos] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -138,7 +141,7 @@ function MainComponent() {
   // call API to get user details, app version info and video data the first time the app loads
   useEffect(() => {
     const fetchData = async () => {
-      await getAppData(setCadeyUserId, setMinimumSupportedVersion, apiUrl, setIsHomeTabVisible);
+      await getAppData(setCadeyUserId, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
       setIsLoading(false);
     };
     fetchData();
@@ -149,7 +152,7 @@ function MainComponent() {
   }
 
   return (
-    <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion }}>
+    <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion, oneSignalId }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
             <App />
