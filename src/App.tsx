@@ -16,7 +16,7 @@ setupIonicReact();
 
 const App: React.FC = () => {
   // Ensure user is on the latest version of the app
-  const appVersion = '2.5.0';
+  const appVersion = '2.6.0';
   const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
