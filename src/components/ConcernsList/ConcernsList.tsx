@@ -14,6 +14,8 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
+// Functions
+import { logConcernClick } from '../../api/UserFacts';
 
 // Define a TypeScript interface for the ConcernsList component's props
 interface ConcernsListProps {
@@ -31,6 +33,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
         const device_id = React.useContext(DeviceIdContext);
         const { apiUrl } = React.useContext(ApiUrlContext);
         const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
+        const userFactUrl = `${apiUrl}/api/cadeydata/userfact`;
         
         const [isLoading, setIsLoading] = useState(false);
         const [concernsList, setConcernsList] = useState<any>(null);
@@ -71,6 +74,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
 
         // Call the postLogEvent function whenever a button is clicked and proceed to the next screen
         const handleOnClick = (choice: { concern: string; symptoms: Symptom[] }) => {
+                logConcernClick(cadeyUserId, userFactUrl, choice.concern, location.pathname);
                 onNext(choice);
         }
 

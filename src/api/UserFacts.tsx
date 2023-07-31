@@ -23,8 +23,8 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       };
   
       try {
-        const recommendationsResponse = await fetch(url, requestOptions);
-        const data = await recommendationsResponse.json();
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
         return data;
       } catch (error) {
         console.error('Error:', error);
@@ -57,8 +57,8 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       };
   
       try {
-        const recommendationsResponse = await fetch(url, requestOptions);
-        const data = await recommendationsResponse.json();
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
         return data;
       } catch (error) {
         console.error('Error:', error);
@@ -91,8 +91,8 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       };
   
       try {
-        const recommendationsResponse = await fetch(url, requestOptions);
-        const data = await recommendationsResponse.json();
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
         return data;
       } catch (error) {
         console.error('Error:', error);
@@ -125,8 +125,8 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       };
   
       try {
-        const recommendationsResponse = await fetch(url, requestOptions);
-        const data = await recommendationsResponse.json();
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
         return data;
       } catch (error) {
         console.error('Error:', error);
@@ -160,8 +160,76 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       };
   
       try {
-        const recommendationsResponse = await fetch(url, requestOptions);
-        const data = await recommendationsResponse.json();
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Error:', error);
+        throw error;
+      }
+  }
+
+  export const logShareClick = async (cadeyUserId: string, url: string, mediaId: string, route: string) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+          'accept': 'text/plain',
+          'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            userid: cadeyUserId,
+            userFactTypeName: "ShareClick",
+            appPage: route,
+            detail1: mediaId,
+            detail2: "",
+            detail3: "",
+            detail4: "",
+            detail5: "",
+            detail6: "",
+            detail7: "",
+            detail8: "",
+            detail9: "",
+        }),
+      };
+  
+      try {
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Error:', error);
+        throw error;
+      }
+  }
+
+  export const logConcernClick = async (cadeyUserId: string, url: string, concern: string, route: string) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+          'accept': 'text/plain',
+          'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            userid: cadeyUserId,
+            userFactTypeName: "ConcernClick",
+            appPage: route,
+            detail1: concern,
+            detail2: "",
+            detail3: "",
+            detail4: "",
+            detail5: "",
+            detail6: "",
+            detail7: "",
+            detail8: "",
+            detail9: "",
+        }),
+      };
+  
+      try {
+        const response = await fetch(url, requestOptions);
+        const data = await response.json();
         return data;
       } catch (error) {
         console.error('Error:', error);

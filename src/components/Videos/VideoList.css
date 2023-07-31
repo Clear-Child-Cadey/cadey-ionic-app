@@ -5,6 +5,7 @@
 }
 
 .video-item {
+    position: relative;
     flex: 0 0 auto;
     width: 65vw; /* Limits the width of the video player to 65% of the viewport width */
     margin-right: 20px;
@@ -15,7 +16,7 @@
     line-height: 16px;
     letter-spacing: -0.2px;
     color: #958D89;
-    margin-bottom: 0;
+    margin: 0;
 }
 
 .video-item h3 {
@@ -26,3 +27,35 @@
     color: #484443;
     margin-top: 0;
 }
+
+.tag-share {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 13px;
+  }  
+
+.share-button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background: black;
+    color: white;
+    font-size: 0.8em;
+    white-space: nowrap;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 9999;
+}
+  
