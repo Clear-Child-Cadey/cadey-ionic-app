@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import VideoPlayer from '../../components/Videos/VideoPlayer';
 import './VideoList.css';
-import { Clipboard } from '@capacitor/clipboard';
+import { Share } from '@capacitor/share';
 // Icons
 import { IonIcon } from '@ionic/react';
-import { shareOutline } from 'ionicons/icons';
-// import { useLocation } from 'react-router';
+import { arrowRedoOutline } from 'ionicons/icons';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -24,28 +23,26 @@ interface VideoListProps {
 }
 
 const VideoList: React.FC<VideoListProps> = ({ videos }) => {
-  // Local state for showing/hiding the tooltip
-  const [showTooltip, setShowTooltip] = useState<{videoId: string} | null>(null);
-  
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
+  const [canShare, setCanShare] = useState(false);
+
+  // Check if the user's device has sharing capabilities
+  useEffect(() => {
+    Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));
+  }, []);
 
 
   // Function to copy the shareable link to clipboard
   const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string) => {
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    
-    await Clipboard.write({
-      string: `https://vimeo.com/${videoId}`,
-    });
-
+    // Log a user fact that the user tapped on Share
     logShareClick(cadeyUserId, userFactUrl, mediaId, location.pathname)
-  
-    setShowTooltip({ videoId }); // Show the tooltip above the share button
-    setTimeout(() => {
-      setShowTooltip(null);
-    }, 2000);
+
+    // Share the Vimeo URL
+    await Share.share({
+      url: `https://vimeo.com/${videoId}`,
+    });
   }
 
   return (
@@ -55,12 +52,14 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
           <VideoPlayer videoId={video.videoId} mediaId={video.mediaId} />
           <div className="tag-share">
             <p>{video.audience}</p>  
-            <div className="share-button">
-            <IonIcon icon={shareOutline} onClick={(event) => handleShare(event, video.videoId, video.mediaId)} />
-            {showTooltip && showTooltip.videoId === video.videoId &&
-                <div className="tooltip">Link copied to clipboard</div>
-            }
-            </div>
+            {canShare && (
+              <div className="share" onClick={(event) => handleShare(event, video.videoId, video.mediaId)}>
+                <p>Share </p>
+                <div className="share-button">
+                  <IonIcon icon={arrowRedoOutline} />
+                </div>
+              </div>
+            )}
           </div>
           <h3>{video.title}</h3>
         </div>
