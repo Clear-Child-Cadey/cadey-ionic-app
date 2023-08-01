@@ -179,7 +179,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         },
         body: JSON.stringify({ 
             userid: cadeyUserId,
-            userFactTypeName: "ShareClick",
+            userFactTypeName: "MediaShared",
             appPage: route,
             detail1: mediaId,
             detail2: "",
@@ -203,7 +203,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       }
   }
 
-  export const logConcernClick = async (cadeyUserId: string, url: string, concern: string, route: string) => {
+  export const logConcernClick = async (cadeyUserId: string, url: string, concernId: string, route: string) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -213,9 +213,9 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         },
         body: JSON.stringify({ 
             userid: cadeyUserId,
-            userFactTypeName: "ConcernClick",
+            userFactTypeName: "ConcernChosen",
             appPage: route,
-            detail1: concern,
+            detail1: concernId,
             detail2: "",
             detail3: "",
             detail4: "",

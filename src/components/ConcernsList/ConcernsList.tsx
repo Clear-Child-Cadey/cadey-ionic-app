@@ -69,12 +69,13 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
         const concerns = concernsList?.concerns.map((item: any) => {
                 return {
                         concern: item.name,
+                        concernId: item.id,
                         symptoms: item.symptoms.map((symptom: any) => ({ id: symptom.id, name: symptom.name })),                };
         });
 
         // Call the postLogEvent function whenever a button is clicked and proceed to the next screen
-        const handleOnClick = (choice: { concern: string; symptoms: Symptom[] }) => {
-                logConcernClick(cadeyUserId, userFactUrl, choice.concern, location.pathname);
+        const handleOnClick = (choice: { concern: string; concernId: number; symptoms: Symptom[] }) => {
+                logConcernClick(cadeyUserId, userFactUrl, choice.concernId.toString(), location.pathname);
                 onNext(choice);
         }
 
@@ -86,7 +87,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
                         </IonRow>
                         <IonRow>
                                 {/* Iterate over the choices and create a button for each concern */}
-                                {concerns?.map((choice: { concern: string; symptoms: Symptom[] }, index: number) => (
+                                {concerns?.map((choice: { concern: string; concernId: number; symptoms: Symptom[] }, index: number) => (
                                         <IonCol size="6" key={index}>
                                                 {/* When a button is clicked, call the onNext function with the chosen concern */}
                                                 <IonButton
