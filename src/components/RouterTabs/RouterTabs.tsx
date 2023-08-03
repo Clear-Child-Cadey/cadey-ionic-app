@@ -16,6 +16,7 @@ import { homeOutline, gridOutline } from 'ionicons/icons';
 import ConcernsPage from '../../pages/Concerns/Concerns';
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
+import VideoDetailPage from '../../pages/Videos/VideoDetail';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
 
@@ -42,6 +43,7 @@ const RouterTabs: React.FC = () => {
             )}
           </Route>
           <Route exact path="/admin" component={AdminPage} />
+          <Route path="/VideoDetail/:id1/:id2" component={VideoDetailPage} />
         </IonRouterOutlet>
         {/* Tab Bar */}
         <IonTabBar slot="bottom">
