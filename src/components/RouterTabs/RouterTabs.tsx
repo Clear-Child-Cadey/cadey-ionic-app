@@ -11,12 +11,13 @@ import {
   IonTab
 } from '@ionic/react';
 // Ionicons
-import { homeOutline, gridOutline } from 'ionicons/icons';
+import { homeOutline, gridOutline, mailOutline } from 'ionicons/icons';
 // Pages
 import ConcernsPage from '../../pages/Concerns/Concerns';
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
 import VideoDetailPage from '../../pages/Videos/VideoDetail';
+import MessagesPage from '../../pages/Messages/Messages';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
 
@@ -43,6 +44,7 @@ const RouterTabs: React.FC = () => {
             )}
           </Route>
           <Route exact path="/admin" component={AdminPage} />
+          <Route exact path="/Messages" component={MessagesPage} />
           <Route path="/VideoDetail/:id1/:id2" component={VideoDetailPage} />
         </IonRouterOutlet>
         {/* Tab Bar */}
@@ -57,6 +59,10 @@ const RouterTabs: React.FC = () => {
           <IonTabButton tab="Concerns" href="/Concerns">
             <IonIcon icon={gridOutline} />
             <IonLabel>Concerns</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="Messages" href="/Messages">
+            <IonIcon icon={mailOutline} />
+            <IonLabel>Messages</IonLabel>
           </IonTabButton>
           {/* <IonTabButton tab="Admin" href="/admin">
             <IonIcon icon={gridOutline} />
