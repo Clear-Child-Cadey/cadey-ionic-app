@@ -21,7 +21,7 @@ const VideoDetailPage: React.FC = () => {
       videoId: id1 + '/' + id2,
       mediaId: '1',
       title: 'Lists and Lines for Homework Organization',
-      description: 'This is a description of the video',
+      description: 'Take a walk with your child today. Listen to the sounds. Afterwards talk about what you each heard.',
       audience: 'For Parents',
     },
   ];
@@ -30,13 +30,13 @@ const VideoDetailPage: React.FC = () => {
     <IonPage className="video-detail">
         <IonHeader>
             <IonToolbar>
-                <IonTitle>{videos[0].title}</IonTitle>
+                <IonTitle>Show Me How</IonTitle>
             </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
             <IonHeader collapse="condense">
             <IonToolbar>
-                <IonTitle size="large">{videos[0].title}</IonTitle>
+                <IonTitle size="large">Show Me How</IonTitle>
             </IonToolbar>
             </IonHeader>
             <IonRow>
@@ -44,6 +44,9 @@ const VideoDetailPage: React.FC = () => {
             </IonRow>
             <IonRow className="video-list-row">
                 <VideoList videos={videos} />
+            </IonRow>
+            <IonRow>
+                <IonText className="subcopy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tempor lorem vitae quam gravida, in aliquet nisl porttitor. Proin consectetur dolor nibh, nec tincidunt mauris pulvinar a. Suspendisse vitae arcu at lectus accumsan ultrices in in erat. Donec in sollicitudin nisl. In vehicula eget dui.</IonText>
             </IonRow>
         </IonContent>
     </IonPage>

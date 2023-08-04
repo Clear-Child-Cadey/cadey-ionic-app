@@ -82,7 +82,7 @@ const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         </IonRow>
         <hr className="divider" />
         <IonRow className="video-list-row">
-            <h2>Featured Videos</h2>
+            <h2>Watch Now</h2>
             {/* TODO: Display the Featured Videos from the API here */}
             <VideoList videos={featuredVideos} /> 
         </IonRow>
