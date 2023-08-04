@@ -29,8 +29,11 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     // TODO: Replace with an API call
 
     const dummyData = [
-        { title: "Title 1", description: "Description 1", path: "/VideoDetail/824105229/68feae4566", visibility: "unread" },
-        { title: "Title 2", description: "Description 2", path: "/VideoDetail/824102840/39a57cdeec", visibility: "read" },
+        { title: "Video 1", description: "Description 1 lorem ipsum dolor", path: "/VideoDetail/824105229/68feae4566", visibility: "unread" },
+        { title: "Video 2", description: "Description 2 consectetur sit amet", path: "/VideoDetail/824102840/39a57cdeec", visibility: "read" },
+        { title: "Video 3", description: "Description 3 lorem ipsum dolor", path: "/VideoDetail/824100882/8cebb364bf", visibility: "read" },
+        { title: "Video 4", description: "Description 4 consectetur sit amet", path: "/VideoDetail/822097592/44878cd162", visibility: "read" },
+        { title: "Video 5", description: "Description 5 lorem ipsum dolor", path: "/VideoDetail/822073557/a9efd31aab", visibility: "read" },
         // Add more dummy data as needed
     ];
 

@@ -8,8 +8,11 @@ import {
   IonTabButton, 
   IonIcon, 
   IonLabel, 
-  IonTab
+  IonTab,
+  IonBadge,
 } from '@ionic/react';
+// CSS
+import './RouterTabs.css';
 // Ionicons
 import { homeOutline, gridOutline, mailOutline } from 'ionicons/icons';
 // Pages
@@ -25,6 +28,9 @@ const RouterTabs: React.FC = () => {
   const [currentTab, setCurrentTab] = useState('Home');
   const homeTabVisibility = useContext(HomeTabVisibilityContext);
   const isHomeTabVisible = homeTabVisibility?.isHomeTabVisible;
+
+  // TODO: Replace with actual API call
+  const unreadMessages = 5;
 
   return (
     <IonReactRouter>
@@ -63,6 +69,9 @@ const RouterTabs: React.FC = () => {
           <IonTabButton tab="Messages" href="/Messages">
             <IonIcon icon={mailOutline} />
             <IonLabel>Messages</IonLabel>
+            {unreadMessages > 0 && (
+              <IonBadge color="danger" className="unread-messages">{unreadMessages}</IonBadge>
+            )}
           </IonTabButton>
           {/* <IonTabButton tab="Admin" href="/admin">
             <IonIcon icon={gridOutline} />
