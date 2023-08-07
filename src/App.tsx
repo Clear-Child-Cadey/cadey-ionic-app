@@ -5,6 +5,7 @@ import {
 } from '@ionic/react';
 import semver from 'semver';
 // Components
+import { SplashScreen } from '@capacitor/splash-screen';
 import AppUpdateModal from './components/Modals/AppUpdateModal';
 import RouterTabs from './components/RouterTabs/RouterTabs';
 // Contexts
@@ -16,7 +17,7 @@ setupIonicReact();
 
 const App: React.FC = () => {
   // Ensure user is on the latest version of the app
-  const appVersion = '2.6.0';
+  const appVersion = '2.7.0';
   const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
@@ -46,6 +47,7 @@ const App: React.FC = () => {
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
     if (semver.lt(appVersion, minimumSupportedVersion)) {
+      SplashScreen.hide();  // Hide the splash screen
       setShowUpgradeModal(true);
     }
   }, [minimumSupportedVersion, appVersion]);

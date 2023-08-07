@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   bundledWebRuntime: false,
   plugins: {
     SplashScreen: {
-      launchAutoHide: false,
+      launchAutoHide: true,
       launchFadeOutDuration: 1000,
       showSpinner: true,
       iosSpinnerStyle: 'large',
