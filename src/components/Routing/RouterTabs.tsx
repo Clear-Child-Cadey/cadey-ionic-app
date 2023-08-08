@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { 
   IonTabs, 
   IonRouterOutlet, 
@@ -23,6 +23,7 @@ import VideoDetailPage from '../../pages/Videos/VideoDetail';
 import MessagesPage from '../../pages/Messages/Messages';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
+import RedirectToWeb from './RedirectToWeb';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
 
@@ -40,43 +41,46 @@ const RouterTabs: React.FC = () => {
       <AppUrlListener></AppUrlListener>
       <IonTabs onIonTabsDidChange={(e: CustomEvent) => setCurrentTab(e.detail.tab)}>
         <IonRouterOutlet>
-          {/* Establish routes */}
-          <Route path="/Concerns" component={ConcernsPage} exact />
-          <Route path="/Home" render={() => <HomePage currentTab={currentTab} />} exact />
-          {/* On app open, route user to Concerns if they don't have a Home tab */}
-          <Route exact path="/">
-            {isHomeTabVisible && (
-              <Redirect to="/Home" />
-            )}
-            {!isHomeTabVisible && (
-              <Redirect to="/Concerns" />
-            )}
-          </Route>
-          <Route exact path="/admin" component={AdminPage} />
-          <Route exact path="/Messages" component={MessagesPage} />
-          <Route path="/VideoDetail/:id1/:id2" component={VideoDetailPage} />
+        <Switch>
+            {/* Define all of the specific routes */}
+            <Route exact path="/App/Concerns" component={ConcernsPage} />
+            <Route exact path="/App/Home" render={() => <HomePage currentTab={currentTab} />} />
+            <Route exact path="/">
+              {isHomeTabVisible ? (
+                <Redirect to="/App/Home" />
+              ) : (
+                <Redirect to="/App/Concerns" />
+              )}
+            </Route>
+            <Route exact path="/App/Admin" component={AdminPage} />
+            <Route exact path="/App/Messages" component={MessagesPage} />
+            <Route path="/App/VideoDetail/:id1/:id2" component={VideoDetailPage} />
+            
+            {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
+            <Route component={RedirectToWeb} />
+          </Switch>
         </IonRouterOutlet>
         {/* Tab Bar */}
         <IonTabBar slot="bottom">
           {/* Show the Home tab if it should be visible */}
           {isHomeTabVisible && (
-            <IonTabButton tab="Home" href="/Home">
+            <IonTabButton tab="Home" href="/App/Home">
               <IonIcon icon={homeOutline} />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
           )}
-          <IonTabButton tab="Concerns" href="/Concerns">
+          <IonTabButton tab="Concerns" href="/App/Concerns">
             <IonIcon icon={gridOutline} />
             <IonLabel>Concerns</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="Messages" href="/Messages">
+          <IonTabButton tab="Messages" href="/App/Messages">
             <IonIcon icon={mailOutline} />
             <IonLabel>Messages</IonLabel>
             {unreadMessages > 0 && (
               <IonBadge color="danger" className="unread-messages">{unreadMessages}</IonBadge>
             )}
           </IonTabButton>
-          {/* <IonTabButton tab="Admin" href="/admin">
+          {/* <IonTabButton tab="Admin" href="/App/Admin">
             <IonIcon icon={gridOutline} />
             <IonLabel>Admin</IonLabel>
           </IonTabButton> */}
