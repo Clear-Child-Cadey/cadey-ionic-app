@@ -7,7 +7,7 @@ import semver from 'semver';
 // Components
 import { SplashScreen } from '@capacitor/splash-screen';
 import AppUpdateModal from './components/Modals/AppUpdateModal';
-import RouterTabs from './components/RouterTabs/RouterTabs';
+import RouterTabs from './components/Routing/RouterTabs';
 // Contexts
 import { CadeyUserContext } from './main';
 // API

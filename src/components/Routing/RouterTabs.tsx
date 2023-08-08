@@ -21,6 +21,8 @@ import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
 import VideoDetailPage from '../../pages/Videos/VideoDetail';
 import MessagesPage from '../../pages/Messages/Messages';
+// Components
+import AppUrlListener from '../Routing/AppUrlListener';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
 
@@ -35,6 +37,7 @@ const RouterTabs: React.FC = () => {
   return (
     <IonReactRouter>
       {/* Handle routing */}
+      <AppUrlListener></AppUrlListener>
       <IonTabs onIonTabsDidChange={(e: CustomEvent) => setCurrentTab(e.detail.tab)}>
         <IonRouterOutlet>
           {/* Establish routes */}
