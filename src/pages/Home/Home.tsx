@@ -17,28 +17,9 @@ import { SplashScreen } from '@capacitor/splash-screen';
 const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
   const [playedVideos, setPlayedVideos] = useState([]);
-
-  // TODO: Replace with an API call
-  const featuredVideos = [
-    {
-      videoId: '824105229/68feae4566',
-      mediaId: '1',
-      title: 'Lists and Lines for Homework Organization',
-      audience: 'For Parents',
-    },{
-      videoId: '824102840/39a57cdeec',
-      mediaId: '1',
-      title: 'Second Video',
-      audience: 'For Kids',
-    },{
-      videoId: '824100882/8cebb364bf',
-      mediaId: '1',
-      title: 'Third Video',
-      audience: 'For Parents',
-    },
-  ];
 
   // Get the latest set of videos from the API
   const { getHomeVideoData } = getHomeVideos();
@@ -46,7 +27,8 @@ const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const { newVideos, playedVideos } = await getHomeVideoData();
+      const { featuredVideos, newVideos, playedVideos } = await getHomeVideoData();
+      setFeaturedVideos(featuredVideos);
       setNewVideos(newVideos);
       setPlayedVideos(playedVideos);
     } catch (error) {
@@ -81,19 +63,28 @@ const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             <IonText className="subcopy">Here are a few suggestions, based on your concerns about your child.</IonText>
         </IonRow>
         <hr className="divider" />
-        <IonRow className="video-list-row">
-            <h2>Watch Now</h2>
-            {/* TODO: Display the Featured Videos from the API here */}
-            <VideoList videos={featuredVideos} /> 
-        </IonRow>
-        <IonRow className="video-list-row">
-            <h2>New Videos</h2>
-            <VideoList videos={newVideos} />
-        </IonRow>
-        <IonRow className="video-list-row">
-            <h2>Recently Viewed</h2>
-            <VideoList videos={playedVideos} />
-        </IonRow>
+        {/* If user has featured videos, show this. Else, skip it */}
+        {featuredVideos.length > 0 && (
+          <IonRow className="video-list-row">
+              <h2>Watch Now</h2>
+              <VideoList videos={featuredVideos} /> 
+              {/* <VideoList videos={featuredVideosTest} />  */}
+          </IonRow>
+        )}
+        {/* If user has new videos, show this. Else, skip it */}
+        {newVideos.length > 0 && (
+          <IonRow className="video-list-row">
+              <h2>New Videos</h2>
+              <VideoList videos={newVideos} />
+          </IonRow>
+        )}
+        {/* If user has watched videos, show this. Else, skip it */}
+        {playedVideos.length > 0 && (
+          <IonRow className="video-list-row">
+              <h2>Recently Viewed</h2>
+              <VideoList videos={playedVideos} />
+          </IonRow>
+        )}
       </IonContent>
     </IonPage>
   );

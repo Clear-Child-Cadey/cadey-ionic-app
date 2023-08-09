@@ -30,7 +30,7 @@ const getHomeVideos = () => {
             audience: video.audience
           }));
 
-        return { newVideos: mapVideos(data.newVideos), playedVideos: mapVideos(data.playedVideos) };
+        return { featuredVideos: mapVideos(data.featuredVideos), newVideos: mapVideos(data.newVideos), playedVideos: mapVideos(data.playedVideos) };
     };
 
     return { getHomeVideoData };
