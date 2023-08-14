@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './VideoDetail.css';
 import { useParams } from 'react-router-dom';
 import VideoList from '../../components/Videos/VideoList';
@@ -25,6 +25,11 @@ const VideoDetailPage: React.FC = () => {
       audience: 'For Parents',
     },
   ];
+
+    // Set the page title when the component mounts
+    useEffect(() => {
+        document.title = 'Video Detail';
+    } , []);
 
   return (
     <IonPage className="video-detail">

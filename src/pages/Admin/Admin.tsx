@@ -23,6 +23,7 @@ const AdminPage: React.FC = () => {
   
   // Set the state of the push notification toggle on mount. If the user hasNotificationPermission, we can determine the correct value.
   useEffect(() => {
+    document.title = 'Admin';
     if (window.cordova) {
       OneSignal.getDeviceState((deviceState) => {
         if (deviceState.hasNotificationPermission) {

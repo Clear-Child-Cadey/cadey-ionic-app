@@ -45,6 +45,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             console.error('Error:', error);
         } finally {
             setIsLoading(false); // Stop the loader after data has been fetched
+            document.title = 'Messages';
         }
     }, []);
 

@@ -46,6 +46,12 @@ const HomePage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     }
   }, [currentTab]);
 
+  // Set the title when the component mounts
+  useEffect(() => {
+    document.title = 'Home';
+  }
+  , []);
+
   return (
     <IonPage className="home">
       <IonHeader>

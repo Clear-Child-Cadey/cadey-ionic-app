@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Concerns.css';
 // Components
@@ -28,10 +28,16 @@ const ConcernsPage: React.FC = () => {
   // Home tab visibility context
   const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
   
+  // Set the title when the component mounts
+  useEffect(() => {
+    document.title = "Concerns";
+}, []);
+
   // Handler for when the user proceeds from the ConcernsList
   const handleConcernsNext = (choice: { concern: string; symptoms: Symptom[] }) => {
     setSelectedConcern(choice);
     setPageTitle("Symptoms");
+    document.title = "Symptoms";
     setShowSymptomsList(true);
   };
 
@@ -41,11 +47,13 @@ const ConcernsPage: React.FC = () => {
     setShowAgeForm(true);
     setSymptoms(symptoms);
     setPageTitle("Age");
+    document.title = "Age";
   };
 
   // Handler for when the AgeForm is submitted
   const handleSubmit = () => {
     setPageTitle("Recommendations");
+    document.title = "Recommendations";
   };
 
   // Handler for when the user starts over
@@ -57,6 +65,7 @@ const ConcernsPage: React.FC = () => {
     setSelectedConcern(null);
     setResults(null);
     setPageTitle("Concerns");
+    document.title = "Concerns";
   };
 
   // Handler for when the results are received from the API

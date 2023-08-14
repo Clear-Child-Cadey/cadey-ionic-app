@@ -9,7 +9,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "StartedMedia",
-            appPage: route,
+            appPage: document.title,
             detail1: mediaId,
             detail2: "",
             detail3: "",
@@ -43,7 +43,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "PausedMedia",
-            appPage: route,
+            appPage: document.title,
             detail1: mediaId,
             detail2: mediaProgress,
             detail3: "",
@@ -77,7 +77,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "InProgressMedia",
-            appPage: route,
+            appPage: document.title,
             detail1: mediaId,
             detail2: progress,
             detail3: "",
@@ -111,7 +111,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "FinishedMedia",
-            appPage: route,
+            appPage: document.title,
             detail1: mediaId,
             detail2: "",
             detail3: "",
@@ -146,7 +146,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "FalseDoorQuestionResponse",
-            appPage: route,
+            appPage: document.title,
             detail1: falseDoorQuestionId, 
             detail2: userResponse,
             detail3: "",
@@ -180,7 +180,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "MediaShared",
-            appPage: route,
+            appPage: document.title,
             detail1: mediaId,
             detail2: "",
             detail3: "",
@@ -214,7 +214,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         body: JSON.stringify({ 
             userid: cadeyUserId,
             userFactTypeName: "ConcernChosen",
-            appPage: route,
+            appPage: document.title,
             detail1: concernId,
             detail2: "",
             detail3: "",
