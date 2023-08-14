@@ -69,6 +69,12 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         <IonList>
             {messages.map((message, index) => (
                 <IonItem key={index} href={message.path} className={message.visibility}>
+                    {/* Render the unread indicator dot if the message is unread, otherwise render a placeholder */}
+                    {message.visibility === "unread" ? 
+                        <div className="unread-indicator"></div> : 
+                        <div className="read-placeholder"></div>
+                    }
+
                     <IonLabel>
                         <h2>{message.title}</h2>
                         <p>{message.description}</p>

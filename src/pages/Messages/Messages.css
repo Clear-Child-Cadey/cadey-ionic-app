@@ -1,3 +1,14 @@
-.read {
-    opacity: 0.4;
+.unread-indicator, .read-placeholder {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%; 
+    margin-right: 10px;
+}
+
+.unread-indicator {
+    background-color: #51adef;
+}
+
+.read-placeholder {
+    opacity: 0; /* Make it invisible, but it still occupies space */
 }
