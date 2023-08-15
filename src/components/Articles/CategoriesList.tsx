@@ -40,7 +40,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ onSelectCategory }) => 
         fetchCategories();
     }, []);
 
-    // Call the postLogEvent function whenever a button is clicked and proceed to the next screen
+    // Log a user fact and proceed to the next screen
     const handleOnClick = (category: WP_Category) => {
         // TODO: Log user fact
         onSelectCategory(category);
