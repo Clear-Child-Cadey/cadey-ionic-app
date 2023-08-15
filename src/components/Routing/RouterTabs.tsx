@@ -14,13 +14,14 @@ import {
 // CSS
 import './RouterTabs.css';
 // Ionicons
-import { homeOutline, gridOutline, mailOutline } from 'ionicons/icons';
+import { homeOutline, gridOutline, mailOutline, newspaperOutline } from 'ionicons/icons';
 // Pages
 import ConcernsPage from '../../pages/Concerns/Concerns';
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
 import VideoDetailPage from '../../pages/Videos/VideoDetail';
 import MessagesPage from '../../pages/Messages/Messages';
+import ArticlesPage from '../../pages/Articles/Articles';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -55,6 +56,7 @@ const RouterTabs: React.FC = () => {
             <Route exact path="/App/Admin" component={AdminPage} />
             <Route exact path="/App/Messages" component={MessagesPage} />
             <Route path="/App/VideoDetail/:id1/:id2" component={VideoDetailPage} />
+            <Route exact path="/App/Articles" component={ArticlesPage} />
             
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
@@ -80,10 +82,10 @@ const RouterTabs: React.FC = () => {
               <IonBadge color="danger" className="unread-messages">{unreadMessages}</IonBadge>
             )}
           </IonTabButton>
-          {/* <IonTabButton tab="Admin" href="/App/Admin">
-            <IonIcon icon={gridOutline} />
-            <IonLabel>Admin</IonLabel>
-          </IonTabButton> */}
+          <IonTabButton tab="Articles" href="/App/Articles">
+            <IonIcon icon={newspaperOutline} />
+            <IonLabel>Articles</IonLabel>
+          </IonTabButton>
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
