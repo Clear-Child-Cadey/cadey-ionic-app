@@ -10,7 +10,7 @@ export interface WP_Article {
 
 export const getArticlesByCategory = async (categoryId: number): Promise<WP_Article[]> => {
     try {
-        const response = await fetch(`${API_URL}/articles?categories=${categoryId}&_embed`);
+        const response = await fetch(`${API_URL}/articles?categories=${categoryId}&_embed&per_page=100`);
         const fetchedDataArray = await response.json();
 
         // Map the fetched data to match the WP_Article interface
