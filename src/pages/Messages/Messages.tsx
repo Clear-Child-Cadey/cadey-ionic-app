@@ -30,7 +30,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     const dummyData = [
         { title: "Lists and Lines for Homework Organization", description: "Take a walk with your child today. Listen to the sounds. Afterwards talk about what you each heard.", path: "/App/VideoDetail/824105229/68feae4566", visibility: "unread" },
-        { title: "Video 2", description: "Push notification 2 consectetur sit amet", path: "/App/VideoDetail/824102840/39a57cdeec", visibility: "read" },
+        { title: "Real Video ID", description: "This one should work", path: "/App/VideoDetail/851688703/0cf6b8e9ef", visibility: "read" },
         { title: "Video 3", description: "Push notification 3 lorem ipsum dolor", path: "/App/VideoDetail/824100882/8cebb364bf", visibility: "read" },
         { title: "Video 4", description: "Push notification 4 consectetur sit amet", path: "/App/VideoDetail/822097592/44878cd162", visibility: "read" },
         { title: "Video 5", description: "Push notification 5 lorem ipsum dolor", path: "/App/VideoDetail/822073557/a9efd31aab", visibility: "read" },

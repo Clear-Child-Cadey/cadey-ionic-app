@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './VideoDetail.css';
 import { useParams } from 'react-router-dom';
 import VideoList from '../../components/Videos/VideoList';
@@ -11,47 +11,70 @@ import {
     IonRow,
     IonText,
  } from '@ionic/react';
+//  Contexts
+import ApiUrlContext from '../../context/ApiUrlContext';
+//  API
+import { getVideoDetailData } from '../../api/VideoDetail';
 
 const VideoDetailPage: React.FC = () => {
 
-  // TODO: Replace with an API call to get the video IDs
   const { id1, id2 } = useParams<{ id1: string, id2: string }>();
-  const videos = [
-    {
-      videoId: id1 + '/' + id2,
-      mediaId: '1',
-      title: 'Lists and Lines for Homework Organization',
-      description: 'Take a walk with your child today. Listen to the sounds. Afterwards talk about what you each heard.',
-      audience: 'For Parents',
-    },
-  ];
+  const vimeoId = id1 + "/" + id2;
+  const { apiUrl } = useContext(ApiUrlContext);
 
-    // Set the page title when the component mounts
-    useEffect(() => {
-        document.title = 'Video Detail';
-    } , []);
+  interface VideoDetailData {
+    mediaId: string;
+    sourceId: string;
+    title: string;
+    description: string;
+    featuredMessage: string;
+    audience: string;
+  }
+
+  const [videoData, setVideoData] = useState<VideoDetailData>();
+
+  useEffect(() => {
+    const fetchVideoData = async () => {
+        try {
+          // Getting data for VideoDetailPage
+          const data = await getVideoDetailData(apiUrl, id1, id2);
+          setVideoData(data);
+        } catch (error) {
+            console.error("Error fetching video details:", error);
+        }
+    };
+
+    fetchVideoData(); // Get data when the component mounts
+    document.title = 'Video Detail'; // Set the page title when the component mounts
+  }, []);
 
   return (
     <IonPage className="video-detail">
         <IonHeader>
             <IonToolbar>
-                <IonTitle>Show Me How</IonTitle>
+              <IonTitle>{videoData?.title || "Loading..."}</IonTitle>
             </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
             <IonHeader collapse="condense">
             <IonToolbar>
-                <IonTitle size="large">Show Me How</IonTitle>
+              <IonTitle size="large">{videoData?.title}</IonTitle>
             </IonToolbar>
             </IonHeader>
-            <IonRow>
-                <IonText className="subcopy">{videos[0].description}</IonText>
-            </IonRow>
             <IonRow className="video-list-row">
-                <VideoList videos={videos} />
+              {/* Only pass the necessary properties to VideoList */}
+              <VideoList videos={videoData ? [{
+                  mediaId: videoData.mediaId,
+                  videoId: videoData.sourceId,
+                  title: videoData.title,
+                  audience: videoData.audience
+              }] : []} />
             </IonRow>
             <IonRow>
-                <IonText className="subcopy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tempor lorem vitae quam gravida, in aliquet nisl porttitor. Proin consectetur dolor nibh, nec tincidunt mauris pulvinar a. Suspendisse vitae arcu at lectus accumsan ultrices in in erat. Donec in sollicitudin nisl. In vehicula eget dui.</IonText>
+                <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
+            </IonRow>
+            <IonRow>
+                <IonText className="subcopy">{videoData?.description}</IonText>
             </IonRow>
         </IonContent>
     </IonPage>

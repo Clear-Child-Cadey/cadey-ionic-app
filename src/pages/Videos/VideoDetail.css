@@ -5,3 +5,7 @@
 .video-detail .video-item {
     width: 91vw;
 }
+
+.video-detail .featured-message {
+    padding: 0 16px;
+}
