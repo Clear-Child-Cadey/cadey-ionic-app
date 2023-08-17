@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './Messages.css';
 import { 
     IonPage, 
@@ -13,40 +13,41 @@ import {
     IonItem,
     IonLabel,
 } from '@ionic/react';
+// Contexts
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
+// API
+import { getUserMessages } from '../../api/UserMessages';
 
 interface Message {
-    title: string;
-    description: string;
-    path: string;
-    visibility: string;
+  mediaId: number;
+  mediaSourceId: string;
+  title: string;
+  featuredMessage: string;
+  isRead: boolean;
 }
 
 const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
-
     const [isLoading, setIsLoading] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
+    const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
+    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
-    // TODO: Replace with an API call
-
-    const dummyData = [
-        { title: "Lists and Lines for Homework Organization", description: "Take a walk with your child today. Listen to the sounds. Afterwards talk about what you each heard.", path: "/App/VideoDetail/824105229/68feae4566", visibility: "unread" },
-        { title: "Real Video ID", description: "This one should work", path: "/App/VideoDetail/851688703/0cf6b8e9ef", visibility: "read" },
-        { title: "Video 3", description: "Push notification 3 lorem ipsum dolor", path: "/App/VideoDetail/824100882/8cebb364bf", visibility: "read" },
-        { title: "Video 4", description: "Push notification 4 consectetur sit amet", path: "/App/VideoDetail/822097592/44878cd162", visibility: "read" },
-        { title: "Video 5", description: "Push notification 5 lorem ipsum dolor", path: "/App/VideoDetail/822073557/a9efd31aab", visibility: "read" },
-        // Add more dummy data as needed
-    ];
-
+    // On component mount: 
+    // - Set the page title
+    // - Get the user's messages
     useEffect(() => {
-        setIsLoading(true);
-        try {
-            setMessages(dummyData);
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            setIsLoading(false); // Stop the loader after data has been fetched
-            document.title = 'Messages';
-        }
+      const fetchMessages = async () => {
+          try {
+            // Getting messages
+            const data = await getUserMessages(apiUrl, cadeyUserId);
+            setMessages(data);
+          } catch (error) {
+              console.error("Error fetching video details:", error);
+          }
+      };
+      document.title = 'Messages'; // Set the page title when the component mounts
+      fetchMessages(); // Get data when the component mounts
     }, []);
 
   return (
@@ -68,16 +69,20 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         <IonLoading isOpen={isLoading} message={'Loading Messages...'} />
         <IonList>
             {messages.map((message, index) => (
-                <IonItem key={index} href={message.path} className={message.visibility}>
+                <IonItem 
+                  key={index} 
+                  href={`/App/VideoDetail/${message.mediaSourceId}`}
+                  className={message.isRead ? "read" : "unread"}
+                >
                     {/* Render the unread indicator dot if the message is unread, otherwise render a placeholder */}
-                    {message.visibility === "unread" ? 
-                        <div className="unread-indicator"></div> : 
-                        <div className="read-placeholder"></div>
+                    {message.isRead ? 
+                        <div className="read-placeholder"></div> :
+                        <div className="unread-indicator"></div> 
                     }
 
                     <IonLabel>
                         <h2>{message.title}</h2>
-                        <p>{message.description}</p>
+                        <p>{message.featuredMessage}</p>
                     </IonLabel>
                 </IonItem>
             ))}

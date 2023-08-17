@@ -13,14 +13,18 @@ import {
  } from '@ionic/react';
 //  Contexts
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { CadeyUserContext } from '../../main';
 //  API
 import { getVideoDetailData } from '../../api/VideoDetail';
+import { logFeaturedVideoNotificationClicked } from '../../api/UserFacts';
 
 const VideoDetailPage: React.FC = () => {
 
   const { id1, id2 } = useParams<{ id1: string, id2: string }>();
   const vimeoId = id1 + "/" + id2;
   const { apiUrl } = useContext(ApiUrlContext);
+  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
+  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
   interface VideoDetailData {
     mediaId: string;
@@ -33,19 +37,34 @@ const VideoDetailPage: React.FC = () => {
 
   const [videoData, setVideoData] = useState<VideoDetailData>();
 
+  // On component mount:
+  // - Get the video data
+  // - Set the page title
+  // - Log a user fact that the user saw this "message" (video)
   useEffect(() => {
     const fetchVideoData = async () => {
         try {
           // Getting data for VideoDetailPage
           const data = await getVideoDetailData(apiUrl, id1, id2);
           setVideoData(data);
+
+          if(data && data.mediaId) {
+            // Log user fact that the user saw this "message" (video)
+            logFeaturedVideoNotificationClicked(
+              cadeyUserId, 
+              userFactUrl, 
+              String(data.mediaId), 
+              vimeoId, 
+              location.pathname
+            );
+          }
         } catch (error) {
             console.error("Error fetching video details:", error);
         }
     };
 
-    fetchVideoData(); // Get data when the component mounts
     document.title = 'Video Detail'; // Set the page title when the component mounts
+    fetchVideoData(); // Get data when the component mounts
   }, []);
 
   return (
