@@ -14,6 +14,7 @@ import {
 //  Contexts
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
+import UnreadCountContext from '../../context/UnreadCountContext';
 //  API
 import { getVideoDetailData } from '../../api/VideoDetail';
 import { logFeaturedVideoNotificationClicked } from '../../api/UserFacts';
@@ -25,6 +26,7 @@ const VideoDetailPage: React.FC = () => {
   const { apiUrl } = useContext(ApiUrlContext);
   const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  const unreadCount = useContext(UnreadCountContext); // Get the current unread count
 
   interface VideoDetailData {
     mediaId: string;
@@ -57,6 +59,8 @@ const VideoDetailPage: React.FC = () => {
               vimeoId, 
               location.pathname
             );
+            // Decrement the unread counter
+            unreadCount.setUnreadCount?.(prevCount => prevCount - 1);
           }
         } catch (error) {
             console.error("Error fetching video details:", error);

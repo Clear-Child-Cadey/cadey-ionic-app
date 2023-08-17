@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { 
@@ -26,14 +26,40 @@ import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
+import ApiUrlContext from '../../context/ApiUrlContext';
+import { CadeyUserContext } from '../../main';
+import UnreadCountContext from '../../context/UnreadCountContext';
+// API
+import { getUserMessages } from '../../api/UserMessages';
+// Interfaces
+import { Message } from '../../pages/Messages/Messages';
 
 const RouterTabs: React.FC = () => {
   const [currentTab, setCurrentTab] = useState('Home');
   const homeTabVisibility = useContext(HomeTabVisibilityContext);
   const isHomeTabVisible = homeTabVisibility?.isHomeTabVisible;
+  const unreadCount = useContext(UnreadCountContext); // Get the current unread count
 
-  // TODO: Replace with actual API call
-  const unreadMessages = 5;
+  const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
+  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+
+  // On component mount: 
+  // - Set the page title
+  // - Get the user's messages
+  useEffect(() => {
+    const fetchMessages = async () => {
+        try {
+          // Getting messages
+          const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+          const unread = data.filter(data => !data.isRead).length;
+          unreadCount.setUnreadCount?.(unread);
+        } catch (error) {
+            console.error("Error fetching video details:", error);
+        }
+    };
+    document.title = 'Messages'; // Set the page title when the component mounts
+    fetchMessages(); // Get data when the component mounts
+  }, []);
 
   return (
     <IonReactRouter>
@@ -76,14 +102,10 @@ const RouterTabs: React.FC = () => {
           <IonTabButton tab="Messages" href="/App/Messages">
             <IonIcon icon={mailOutline} />
             <IonLabel>Messages</IonLabel>
-            {unreadMessages > 0 && (
-              <IonBadge color="danger" className="unread-messages">{unreadMessages}</IonBadge>
+            {unreadCount.unreadCount > 0 && (
+              <IonBadge color="danger" className="unread-messages">{unreadCount.unreadCount}</IonBadge>
             )}
           </IonTabButton>
-          {/* <IonTabButton tab="Admin" href="/App/Admin">
-            <IonIcon icon={gridOutline} />
-            <IonLabel>Admin</IonLabel>
-          </IonTabButton> */}
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>

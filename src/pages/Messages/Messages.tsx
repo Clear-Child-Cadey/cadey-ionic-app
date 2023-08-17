@@ -19,7 +19,7 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 
-interface Message {
+export interface Message {
   mediaId: number;
   mediaSourceId: string;
   title: string;

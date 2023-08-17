@@ -6,6 +6,7 @@ import App from './App';
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
 import { HomeTabVisibilityContext } from './context/TabContext';
+import UnreadCountContext from './context/UnreadCountContext';
 // Functions
 import getAppData from './api/AppOpen';
 
@@ -137,6 +138,7 @@ function MainComponent() {
   const [playedVideos, setPlayedVideos] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHomeTabVisible, setIsHomeTabVisible] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   // call API to get user details, app version info and video data the first time the app loads
   useEffect(() => {
@@ -155,7 +157,9 @@ function MainComponent() {
     <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion, oneSignalId }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
+          <UnreadCountContext.Provider value={{ unreadCount, setUnreadCount }}>
             <App />
+          </UnreadCountContext.Provider>
         </HomeTabVisibilityContext.Provider>
       </DeviceIdContext.Provider>
     </CadeyUserContext.Provider>
