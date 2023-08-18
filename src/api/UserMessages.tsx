@@ -5,6 +5,7 @@ export const getUserMessages = async (apiUrl: string, userId: string) => {
 
     const response = await fetch(url, {
         method: 'GET',
+        cache: 'no-cache',
         headers: {
             'accept': 'text/plain',
             'apiKey': API_KEY,

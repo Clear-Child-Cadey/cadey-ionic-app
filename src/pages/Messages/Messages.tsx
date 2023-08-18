@@ -16,6 +16,7 @@ import {
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import UnreadCountContext from '../../context/UnreadCountContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 
@@ -32,6 +33,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const unreadCount = useContext(UnreadCountContext); // Get the current unread count
 
     // On component mount: 
     // - Set the page title
@@ -40,8 +42,10 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       const fetchMessages = async () => {
           try {
             // Getting messages
-            const data = await getUserMessages(apiUrl, cadeyUserId);
+            const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
             setMessages(data);
+            const unread = data.filter(data => !data.isRead).length;
+            unreadCount.setUnreadCount?.(unread);
           } catch (error) {
               console.error("Error fetching video details:", error);
           }

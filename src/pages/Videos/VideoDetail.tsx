@@ -18,6 +18,9 @@ import UnreadCountContext from '../../context/UnreadCountContext';
 //  API
 import { getVideoDetailData } from '../../api/VideoDetail';
 import { logFeaturedVideoNotificationClicked } from '../../api/UserFacts';
+import { getUserMessages } from '../../api/UserMessages';
+// Interfaces
+import { Message } from '../Messages/Messages';
 
 const VideoDetailPage: React.FC = () => {
 
@@ -39,6 +42,17 @@ const VideoDetailPage: React.FC = () => {
 
   const [videoData, setVideoData] = useState<VideoDetailData>();
 
+  const fetchMessages = async () => {
+    try {
+      // Getting messages
+      const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+      const unread = data.filter(data => !data.isRead).length;
+      unreadCount.setUnreadCount?.(unread);
+    } catch (error) {
+      console.error("Error fetching video details:", error);
+    }
+  };
+
   // On component mount:
   // - Get the video data
   // - Set the page title
@@ -59,8 +73,10 @@ const VideoDetailPage: React.FC = () => {
               vimeoId, 
               location.pathname
             );
-            // Decrement the unread counter
-            unreadCount.setUnreadCount?.(prevCount => prevCount - 1);
+            // Get Messages when the user visits the Video Detail page
+            // We use this to decrement the unread counter
+            fetchMessages(); 
+            // unreadCount.setUnreadCount?.(prevCount => prevCount - 1);
           }
         } catch (error) {
             console.error("Error fetching video details:", error);
@@ -75,13 +91,13 @@ const VideoDetailPage: React.FC = () => {
     <IonPage className="video-detail">
         <IonHeader>
             <IonToolbar>
-              <IonTitle>{videoData?.title || "Loading..."}</IonTitle>
+              <IonTitle>Watch Now</IonTitle>
             </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
             <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">{videoData?.title}</IonTitle>
+              <IonTitle size="large">Watch Now</IonTitle>
             </IonToolbar>
             </IonHeader>
             <IonRow className="video-list-row">
@@ -95,9 +111,6 @@ const VideoDetailPage: React.FC = () => {
             </IonRow>
             <IonRow>
                 <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
-            </IonRow>
-            <IonRow>
-                <IonText className="subcopy">{videoData?.description}</IonText>
             </IonRow>
         </IonContent>
     </IonPage>

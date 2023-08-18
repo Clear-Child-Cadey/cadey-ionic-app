@@ -99,13 +99,22 @@ const RouterTabs: React.FC = () => {
             <IonIcon icon={gridOutline} />
             <IonLabel>Concerns</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="Messages" href="/App/Messages">
-            <IonIcon icon={mailOutline} />
-            <IonLabel>Messages</IonLabel>
-            {unreadCount.unreadCount > 0 && (
-              <IonBadge color="danger" className="unread-messages">{unreadCount.unreadCount}</IonBadge>
-            )}
-          </IonTabButton>
+          {/* Show the messages tab if it should be visible (same check as home tab) */}
+          {isHomeTabVisible && (
+            <IonTabButton tab="Messages" href="/App/Messages">
+              <IonIcon icon={mailOutline} />
+              <IonLabel>Messages</IonLabel>
+              {unreadCount.unreadCount > 0 && (
+                <IonBadge 
+                  color="danger" 
+                  className="unread-messages"
+                  key={unreadCount.unreadCount}
+                >
+                  {unreadCount.unreadCount}
+                </IonBadge>
+              )}
+            </IonTabButton>
+          )}
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
