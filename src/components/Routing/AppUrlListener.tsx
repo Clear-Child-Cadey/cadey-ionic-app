@@ -50,7 +50,7 @@ const AppUrlListener: React.FC<any> = () => {
                 // Redirect traffic to the Home screen if the route doesn't match an App route
                 // This will happen when the user opens a link to the website in the app, then closes the app browser
                 if (!location.pathname.includes("/App/")) {
-                    history.push('/App/Home');
+                    // history.push('/App/Home');
                 }
             }
         };
