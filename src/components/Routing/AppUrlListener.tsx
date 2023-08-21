@@ -23,10 +23,15 @@ const AppUrlListener: React.FC<any> = () => {
             console.log('App opened with URL: ', event.url);
             const urlObject = new URL(event.url);
             const host = urlObject.hostname;
-            const path = urlObject.pathname.replace(/^\/\//, '/'); // Filter double slash to single
-            const fullSlug = `/${host}${path}`;
-
+            const path = urlObject.pathname;
+            var fullSlug = `/${host}${path}`;
+            
             if (fullSlug) {
+                while (fullSlug.startsWith('//')) {
+                    // iOS and Android handle these differently
+                    console.log('Removing extra slash: ' + fullSlug);
+                    fullSlug = fullSlug.replace('//', '/');
+                }
                 console.log('Redirecting to: ', fullSlug);
                 history.push(fullSlug);
             }
