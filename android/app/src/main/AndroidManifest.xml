@@ -9,6 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- Ensure Android push notifications don't open a browser (they should open the app instead) -->
+        <meta-data android:name="com.onesignal.suppressLaunchURLs" android:value="true"/>
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
             android:name=".MainActivity"
