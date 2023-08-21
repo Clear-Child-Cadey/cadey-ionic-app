@@ -22,11 +22,13 @@ const AppUrlListener: React.FC<any> = () => {
         App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
             console.log('App opened with URL: ', event.url);
             const urlObject = new URL(event.url);
-            const slug = urlObject.pathname.replace(/^\/\//, '/');  // Filter double slash to single
+            const host = urlObject.hostname;
+            const path = urlObject.pathname.replace(/^\/\//, '/'); // Filter double slash to single
+            const fullSlug = `/${host}${path}`;
 
-            if (slug) {
-                console.log('Redirecting to: ', slug);
-                history.push(slug);
+            if (fullSlug) {
+                console.log('Redirecting to: ', fullSlug);
+                history.push(fullSlug);
             }
         });
 
