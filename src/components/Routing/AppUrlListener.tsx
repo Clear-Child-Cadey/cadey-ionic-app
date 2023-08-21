@@ -20,10 +20,12 @@ const AppUrlListener: React.FC<any> = () => {
     useEffect(() => {
         // Listener for detecting URL on app open
         App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+            console.log('App opened with URL: ', event.url);
             const urlObject = new URL(event.url);
-            const slug = urlObject.pathname;
-        
+            const slug = urlObject.pathname.replace(/^\/\//, '/');  // Filter double slash to single
+
             if (slug) {
+                console.log('Redirecting to: ', slug);
                 history.push(slug);
             }
         });
