@@ -26,13 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Separate intent filter for the custom URL scheme to open the app (Ex: cadeylite://Concerns) -->
+            <!-- Separate intent filter for the custom URI scheme to open the app (Ex: cadeylite://Concerns) -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <!--The BROWSABLE category ensures that the link can be opened from web browsers and other apps.-->
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="cadeylite" />
+                <data android:scheme="cadeylite" android:host="app" android:pathPattern="/.*" />
             </intent-filter>
 
             <!-- Intent filter to recognize incoming links from cadey.co -->
