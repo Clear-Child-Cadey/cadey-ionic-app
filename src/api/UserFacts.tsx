@@ -270,3 +270,37 @@ export const logFeaturedVideoNotificationClicked = async (cadeyUserId: string, u
       throw error;
     }
 }
+
+export const logAgeScreenReached = async (cadeyUserId: string, url: string, route: string) => {
+  const requestOptions = {
+      method: 'POST',
+      headers: {
+        'accept': 'text/plain',
+        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+          userid: cadeyUserId,
+          userFactTypeName: "AgePageEntered",
+          appPage: document.title,
+          detail1: "",
+          detail2: "",
+          detail3: "",
+          detail4: "",
+          detail5: "",
+          detail6: "",
+          detail7: "",
+          detail8: "",
+          detail9: "",
+      }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+}
