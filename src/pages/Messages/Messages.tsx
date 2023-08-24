@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import './Messages.css';
 import { 
     IonPage, 
@@ -19,6 +20,7 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import UnreadCountContext from '../../context/UnreadCountContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
+import { logMessageOnMessagesPageClicked } from '../../api/UserFacts';
 
 export interface Message {
   mediaId: number;
@@ -33,7 +35,9 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
+    const history = useHistory(); // Initialize the useHistory hook here
 
     // On component mount: 
     // - Set the page title
@@ -53,6 +57,14 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       document.title = 'Messages'; // Set the page title when the component mounts
       fetchMessages(); // Get data when the component mounts
     }, []);
+
+    const handleMessageClick = (mediaSourceId: string, mediaId: string)  => {
+      // Log a user fact that the user clicked a message from the messages page
+      console.log('User clicked a message from the messages page. Media ID: ' + mediaId);
+      logMessageOnMessagesPageClicked(cadeyUserId, userFactUrl, mediaId, location.pathname);
+      // Redirect to the video detail page
+      history.push(`/App/VideoDetail/${mediaSourceId}`);
+    }
 
   return (
     <IonPage className="messages">
@@ -75,7 +87,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             {messages.map((message, index) => (
                 <IonItem 
                   key={index} 
-                  href={`/App/VideoDetail/${message.mediaSourceId}`}
+                  onClick={() => handleMessageClick(message.mediaSourceId, message.mediaId.toString())}
                   className={message.isRead ? "read" : "unread"}
                 >
                     {/* Render the unread indicator dot if the message is unread, otherwise render a placeholder */}

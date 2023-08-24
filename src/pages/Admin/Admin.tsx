@@ -16,10 +16,13 @@ import {
 } from '@ionic/react';
 // API
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
+// Contexts
+import { CadeyUserContext } from '../../main';
 
 const AdminPage: React.FC = () => {
   const { apiUrl, setApiUrl } = useContext(ApiUrlContext);
   const [pushEnabled, setPushEnabled] = useState(false);
+  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   
   // Set the state of the push notification toggle on mount. If the user hasNotificationPermission, we can determine the correct value.
   useEffect(() => {
@@ -77,6 +80,10 @@ const AdminPage: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <form>
+          <IonItem>
+            <IonLabel>Cadey User ID:</IonLabel>
+            <IonLabel slot="end" className="ion-text-end">{cadeyUserId}</IonLabel>
+          </IonItem>
           <IonItem>
             <IonLabel>API URL:</IonLabel>
             <IonSelect value={apiUrl} onIonChange={handleUrlChange}>
