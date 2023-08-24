@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 import { IonLoading, isPlatform } from '@ionic/react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { useHistory } from 'react-router-dom';
+
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
@@ -28,10 +30,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/main.css';
-
-// OneSignal Library (Used for Push Notifications)
-// import OneSignal from 'onesignal-cordova-plugin';
-import { initializeOneSignal } from './api/OneSignal/InitOneSignal';
 
 // UUID Library (Used to generate a unique ID for the device)
 import { v4 as uuidv4 } from 'uuid';
@@ -116,17 +114,6 @@ const androidAnalytics = getAnalytics(androidApp);
 // Ran into dependency issues with the above link though
 
 // -------------------/FIREBASE-------------------------------
-
-// -------------------ONESIGNAL-------------------------------
-// Check if the app is running in a browser or on a device
-if (window.cordova) {
-  // Cordova plugins are ready
-  // Initialize OneSignal (Push Notifications Platform)
-  initializeOneSignal();
-} else {
-  // Don't load OneSignal (which relies on Cordova)
-}
-// -------------------/ONESIGNAL------------------------------
 
 function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);

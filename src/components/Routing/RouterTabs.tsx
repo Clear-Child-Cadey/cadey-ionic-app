@@ -24,6 +24,7 @@ import MessagesPage from '../../pages/Messages/Messages';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
+import OneSignalInitializer from '../../api/OneSignal/OneSignalInitializerComponent';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -63,8 +64,11 @@ const RouterTabs: React.FC = () => {
 
   return (
     <IonReactRouter>
-      {/* Handle routing */}
+      {/* Listen for App URLs */}
       <AppUrlListener></AppUrlListener>
+      {/* Initialize OneSignal and listen for OneSignal callbacks */}
+      <OneSignalInitializer></OneSignalInitializer>
+      {/* Handle routing */}
       <IonTabs onIonTabsDidChange={(e: CustomEvent) => setCurrentTab(e.detail.tab)}>
         <IonRouterOutlet>
         <Switch>
