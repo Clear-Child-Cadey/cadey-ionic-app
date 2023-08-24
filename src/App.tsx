@@ -37,12 +37,12 @@ const App: React.FC = () => {
   };
 
   // Check if the app is running in a browser or on a device
-  if (window.cordova) {
-    // Set the external user ID for OneSignal
-    setExternalUserId(oneSignalId.toString());
-  } else {
-    // Don't interact with OneSignal (which relies on Cordova)
-  }
+  // if (window.cordova) {
+  //   // Set the external user ID for OneSignal
+  //   setExternalUserId(oneSignalId.toString());
+  // } else {
+  //   // Don't interact with OneSignal (which relies on Cordova)
+  // }
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
