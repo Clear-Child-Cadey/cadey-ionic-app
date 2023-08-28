@@ -58,10 +58,10 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       fetchMessages(); // Get data when the component mounts
     }, []);
 
-    const handleMessageClick = (mediaSourceId: string, mediaId: string)  => {
+    const handleMessageClick = (mediaId: string, mediaSourceId: string)  => {
       // Log a user fact that the user clicked a message from the messages page
       console.log('User clicked a message from the messages page. Media ID: ' + mediaId);
-      logMessageOnMessagesPageClicked(cadeyUserId, userFactUrl, mediaId, location.pathname);
+      logMessageOnMessagesPageClicked(cadeyUserId, userFactUrl, mediaId, mediaSourceId, location.pathname);
       // Redirect to the video detail page
       history.push(`/App/VideoDetail/${mediaSourceId}`);
     }
@@ -87,7 +87,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             {messages.map((message, index) => (
                 <IonItem 
                   key={index} 
-                  onClick={() => handleMessageClick(message.mediaSourceId, message.mediaId.toString())}
+                  onClick={() => handleMessageClick(message.mediaId.toString(), message.mediaSourceId,)}
                   className={message.isRead ? "read" : "unread"}
                 >
                     {/* Render the unread indicator dot if the message is unread, otherwise render a placeholder */}

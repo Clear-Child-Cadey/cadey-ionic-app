@@ -305,7 +305,7 @@ export const logAgeScreenReached = async (cadeyUserId: string, url: string, rout
     }
 }
 
-export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: string, mediaSourceId: string, route: string) => {
+export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: string, mediaId: string, mediaSourceId: string, route: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -317,8 +317,8 @@ export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: 
           userid: cadeyUserId,
           userFactTypeName: "MessageClickedOnMessagesPage",
           appPage: document.title,
-          detail1: mediaSourceId,
-          detail2: "",
+          detail1: mediaId,
+          detail2: mediaSourceId,
           detail3: "",
           detail4: "",
           detail5: "",
