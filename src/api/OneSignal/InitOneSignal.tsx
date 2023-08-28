@@ -12,7 +12,7 @@ export function initializeOneSignal(onNotificationOpened: (data: any) => void): 
     // Handler for when a user taps on a notification
     if (window.cordova) {
         OneSignal.setNotificationOpenedHandler(function(jsonData) {
-            console.log('notificationOpenedCallback: ', JSON.stringify(jsonData));
+            console.log('notificationOpenedCallback in InitOneSignal.tsx: ', JSON.stringify(jsonData));
             onNotificationOpened(jsonData);
         });
     }

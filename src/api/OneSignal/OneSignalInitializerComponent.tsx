@@ -7,19 +7,19 @@ const OneSignalInitializer: React.FC = () => {
 
     useEffect(() => {
         const handleNotificationOpened = (jsonData: any) => {
-            console.log('notificationOpenedCallback in OneSignalInitializer.tsx: ', JSON.stringify(jsonData));
+            // console.log('notificationOpenedCallback in OneSignalInitializer.tsx: ', JSON.stringify(jsonData));
             const launchURL = jsonData?.notification?.launchURL;
 
             if (launchURL) {
                 const urlObject = new URL(launchURL);
                 const host = urlObject.hostname;
                 const path = urlObject.pathname;
-                let fullSlug = `/${host}${path}`;
-
+                let fullSlug = `/${host}${path}`; // Have to add the extra slash for iOS
+ 
+                // iOS and Android build the URL differently, this trims the extra slashes on Android
                 while (fullSlug.startsWith('//')) {
                     fullSlug = fullSlug.replace('//', '/');
                 }
-                console.log('Redirecting to: ', fullSlug);
                 history.push(fullSlug);
             }
         };

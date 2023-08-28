@@ -36,13 +36,13 @@
             </intent-filter>
 
             <!-- Intent filter to recognize incoming links from cadey.co -->
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="cadey.co" />
-
-            </intent-filter>
+            <!-- Commented out as we don't want cadey.co links to open the app currently -->
+<!--            <intent-filter android:autoVerify="true">-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data android:scheme="https" android:host="cadey.co" />-->
+<!--            </intent-filter>-->
 
         </activity>
 

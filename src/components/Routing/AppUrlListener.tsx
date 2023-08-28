@@ -19,37 +19,6 @@ const AppUrlListener: React.FC<any> = () => {
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
     useEffect(() => {
-        // OneSignal Notification Clicked Listener
-        if (window.cordova) {
-            OneSignal.setNotificationOpenedHandler(function(jsonData) {
-                console.log('notificationOpenedCallback: ', JSON.stringify(jsonData));
-        
-                // If you're within a React functional component, you can directly use `useHistory`
-                // Let's use it here for demonstration, but you might have to adjust this based on your app's structure.
-                const history = useHistory();
-                
-                // Extract the launchURL from the notification data
-                const launchURL = jsonData?.notification?.launchURL;
-                console.log('launchURL: ', launchURL);
-                if (launchURL) {
-                    console.log('launchURL statement entered: ', launchURL);
-                    const urlObject = new URL(launchURL);
-                    const host = urlObject.hostname;
-                    console.log('host: ', host);
-                    const path = urlObject.pathname;
-                    console.log('path: ', path);
-                    var fullSlug = `/${path}`;
-                    console.log('fullSlug: ', fullSlug);
-        
-                    while (fullSlug.startsWith('//')) {
-                        fullSlug = fullSlug.replace('//', '/');
-                    }
-                    console.log('Redirecting to: ', fullSlug);
-                    history.push(fullSlug);
-                }
-            });
-        }
-        
         // Listener for detecting URL on app open
         App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
             console.log('App opened with URL: ', event.url);
@@ -84,15 +53,7 @@ const AppUrlListener: React.FC<any> = () => {
                         console.error("Error fetching video details:", error);
                     }
                 };
-                document.title = 'Messages'; // Set the page title when the component mounts
                 fetchMessages(); // Get data when the component mounts
-                
-
-                // Redirect traffic to the Home screen if the route doesn't match an App route
-                // This will happen when the user opens a link to the website in the app, then closes the app browser
-                if (!location.pathname.includes("/App/")) {
-                    // history.push('/App/Home');
-                }
             }
         };
         
