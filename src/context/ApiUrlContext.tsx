@@ -11,12 +11,12 @@ type ApiUrlContextType = {
   };
 
 const ApiUrlContext = React.createContext<ApiUrlContextType>({
-    apiUrl: PRODUCTION_API_URL, 
+    apiUrl: STAGING_API_URL, 
     setApiUrl: () => {},
 });
 
 export const ApiUrlProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const [apiUrl, setApiUrl] = useState(PRODUCTION_API_URL);
+  const [apiUrl, setApiUrl] = useState(STAGING_API_URL);
 
   return (
     <ApiUrlContext.Provider value={{ apiUrl, setApiUrl }}>
