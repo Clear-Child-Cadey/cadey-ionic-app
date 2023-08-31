@@ -10,6 +10,11 @@ import {
   IonLabel, 
   IonTab,
   IonBadge,
+  IonTitle,
+  IonItem,
+  IonRow,
+  IonLoading,
+  IonRouterLink,
 } from '@ionic/react';
 // CSS
 import './RouterTabs.css';
@@ -30,6 +35,7 @@ import { HomeTabVisibilityContext } from '../../context/TabContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 import UnreadCountContext from '../../context/UnreadCountContext';
+import { useSpotlight } from '../../context/SpotlightContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 // Interfaces
@@ -43,6 +49,9 @@ const RouterTabs: React.FC = () => {
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+
+  const { showSpotlight } = useSpotlight();
+  const [tutorialStep, setTutorialStep] = useState(0);
 
   // On component mount: 
   // - Set the page title
@@ -58,7 +67,6 @@ const RouterTabs: React.FC = () => {
             console.error("Error fetching video details:", error);
         }
     };
-    document.title = 'Messages'; // Set the page title when the component mounts
     fetchMessages(); // Get data when the component mounts
   }, []);
 
@@ -68,13 +76,25 @@ const RouterTabs: React.FC = () => {
       <AppUrlListener></AppUrlListener>
       {/* Initialize OneSignal and listen for OneSignal callbacks */}
       {window.cordova && <OneSignalInitializer />}
+      {/* Conditionally show the spotlight */}
+      {showSpotlight && 
+        <div className="spotlight">
+          <p>You can take a personalized assessment anytime by tapping here</p>
+        </div>
+      }
       {/* Handle routing */}
-      <IonTabs onIonTabsDidChange={(e: CustomEvent) => setCurrentTab(e.detail.tab)}>
+      <IonTabs onIonTabsDidChange={(e: CustomEvent) => setCurrentTab(e.detail.tab)} className={showSpotlight ? "dim-overlay" : ""}>
         <IonRouterOutlet>
-        <Switch>
+          <Switch>
             {/* Define all of the specific routes */}
             <Route exact path="/App/Concerns" component={ConcernsPage} />
-            <Route exact path="/App/Home" render={() => <HomePage currentTab={currentTab} />} />
+            <Route exact path="/App/Home" render={() => 
+              <HomePage 
+                currentTab={currentTab} 
+                tutorialStep={tutorialStep} 
+                setTutorialStep={setTutorialStep} 
+              />
+            } />
             <Route exact path="/">
               {isHomeTabVisible ? (
                 <Redirect to="/App/Home" />
@@ -91,7 +111,7 @@ const RouterTabs: React.FC = () => {
           </Switch>
         </IonRouterOutlet>
         {/* Tab Bar */}
-        <IonTabBar slot="bottom">
+        <IonTabBar slot="bottom" className={showSpotlight ? "spotlight-bar" : ""}>
           {/* Show the Home tab if it should be visible */}
           {isHomeTabVisible && (
             <IonTabButton tab="Home" href="/App/Home">
@@ -99,7 +119,7 @@ const RouterTabs: React.FC = () => {
               <IonLabel>Home</IonLabel>
             </IonTabButton>
           )}
-          <IonTabButton tab="Concerns" href="/App/Concerns">
+          <IonTabButton tab="Concerns" href="/App/Concerns" className={showSpotlight ? "spotlight-tab" : ""}>
             <IonIcon icon={gridOutline} />
             <IonLabel>Concerns</IonLabel>
           </IonTabButton>

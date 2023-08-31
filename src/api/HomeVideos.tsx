@@ -30,9 +30,15 @@ const getHomeVideos = () => {
             audience: video.audience
           }));
 
-        return { featuredVideos: mapVideos(data.featuredVideos), newVideos: mapVideos(data.newVideos), playedVideos: mapVideos(data.playedVideos) };
+        return { 
+            featuredVideos: mapVideos(data.featuredVideos), 
+            newVideos: mapVideos(data.newVideos), 
+            playedVideos: mapVideos(data.playedVideos),
+            trendingVideos: mapVideos(data.trendingVideos),
+        };
     };
 
+    console.log("getHomeVideos.tsx: getHomeVideoData() called");
     return { getHomeVideoData };
 };
 
