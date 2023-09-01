@@ -132,18 +132,18 @@ const HomePage: React.FC<{
               <VideoList videos={newVideos} />
           </IonRow>
         )}
-        {/* If user has watched videos, show this. Else, skip it */}
-        {playedVideos.length > 0 && (
-          <IonRow className="video-list-row recently-viewed">
-              <h2>Recently Viewed</h2>
-              <VideoList videos={playedVideos} />
-          </IonRow>
-        )}
         {/* If user has trending videos, show this. Else, skip it */}
         {trendingVideos.length > 0 && (
           <IonRow className="video-list-row trending">
               <h2>Trending Now</h2>
               <VideoList videos={trendingVideos} />
+          </IonRow>
+        )}
+        {/* If user has watched videos, show this. Else, skip it */}
+        {playedVideos.length > 0 && (
+          <IonRow className="video-list-row recently-viewed">
+              <h2>Recently Viewed</h2>
+              <VideoList videos={playedVideos} />
           </IonRow>
         )}
       </IonContent>
