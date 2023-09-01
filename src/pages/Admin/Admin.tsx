@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import ApiUrlContext, { EDGE_API_URL, STAGING_API_URL, PRODUCTION_API_URL } from '../../context/ApiUrlContext';
 import OneSignal from 'onesignal-cordova-plugin';
 import { 
-    IonButton,
     IonLabel,
     IonItem,
     IonSelect,
@@ -18,11 +17,14 @@ import {
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
 // Contexts
 import { CadeyUserContext } from '../../main';
+// Variables
+import { AppVersion } from '../../variables/AppVersion';
 
 const AdminPage: React.FC = () => {
   const { apiUrl, setApiUrl } = useContext(ApiUrlContext);
   const [pushEnabled, setPushEnabled] = useState(false);
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  const [oneSignalExternalId, setOneSignalExternalId] = useState<string | null>(null);
   
   // Set the state of the push notification toggle on mount. If the user hasNotificationPermission, we can determine the correct value.
   useEffect(() => {
@@ -30,6 +32,7 @@ const AdminPage: React.FC = () => {
     if (window.cordova) {
       OneSignal.getDeviceState((deviceState) => {
         if (deviceState.hasNotificationPermission) {
+          setOneSignalExternalId(deviceState.userId);
           if (deviceState.pushDisabled === true) {
             setPushEnabled(false);
           } else if (deviceState.pushDisabled === false) {
@@ -38,8 +41,6 @@ const AdminPage: React.FC = () => {
         }
         console.log(deviceState);
       });
-    } else {
-      // Don't interact with OneSignal (which relies on Cordova)
     }
   }, []);
 
@@ -85,6 +86,10 @@ const AdminPage: React.FC = () => {
             <IonLabel slot="end" className="ion-text-end">{cadeyUserId}</IonLabel>
           </IonItem>
           <IonItem>
+            <IonLabel>Current App Version:</IonLabel>
+            <IonLabel slot="end" className="ion-text-end">{AppVersion}</IonLabel>
+          </IonItem>
+          <IonItem>
             <IonLabel>API URL:</IonLabel>
             <IonSelect value={apiUrl} onIonChange={handleUrlChange}>
               <IonSelectOption value={EDGE_API_URL}>Edge</IonSelectOption>
@@ -95,6 +100,12 @@ const AdminPage: React.FC = () => {
           <IonItem>
             <IonLabel>Push Notifications:</IonLabel>
             <IonToggle checked={pushEnabled} onIonChange={togglePushNotifications} />
+          </IonItem>
+          <IonItem>
+            <IonLabel>OneSignal ID:</IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel slot="end" className="ion-text-end one-signal-id">{oneSignalExternalId || 'Unknown'}</IonLabel>
           </IonItem>
         </form>
       </IonContent>

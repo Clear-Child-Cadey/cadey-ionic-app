@@ -71,7 +71,7 @@ const HomePage: React.FC<{
       timerRef.current = window.setTimeout(() => {
         setShowSpotlight(true);
         setTutorialStep(1);
-      }, 5000); 
+      }, 8000); 
     }
 
     // This is to ensure if for some reason the component gets unmounted, we clear the timer

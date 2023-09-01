@@ -10,14 +10,14 @@ import AppUpdateModal from './components/Modals/AppUpdateModal';
 import RouterTabs from './components/Routing/RouterTabs';
 // Contexts
 import { CadeyUserContext } from './main';
+// Variables
+import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  // Ensure user is on the latest version of the app
-  const appVersion = '2.7.2';
   const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
@@ -46,11 +46,11 @@ const App: React.FC = () => {
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
-    if (semver.lt(appVersion, minimumSupportedVersion)) {
+    if (semver.lt(AppVersion, minimumSupportedVersion)) {
       SplashScreen.hide();  // Hide the splash screen
       setShowUpgradeModal(true);
     }
-  }, [minimumSupportedVersion, appVersion]);
+  }, [minimumSupportedVersion, AppVersion]);
 
   return (
     <IonApp>
