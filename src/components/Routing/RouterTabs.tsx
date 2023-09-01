@@ -79,7 +79,7 @@ const RouterTabs: React.FC = () => {
       {/* Conditionally show the spotlight */}
       {showSpotlight && 
         <div className="spotlight">
-          <p>You can take a personalized assessment anytime by tapping here</p>
+          <p>You can get personalized videos anytime by tapping here</p>
         </div>
       }
       {/* Handle routing */}
