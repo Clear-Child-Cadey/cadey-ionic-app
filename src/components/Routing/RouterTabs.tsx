@@ -38,6 +38,7 @@ import UnreadCountContext from '../../context/UnreadCountContext';
 import { useSpotlight } from '../../context/SpotlightContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
+import { logTapBarClick } from '../../api/UserFacts';
 // Interfaces
 import { Message } from '../../pages/Messages/Messages';
 
@@ -48,10 +49,19 @@ const RouterTabs: React.FC = () => {
   const unreadCount = useContext(UnreadCountContext); // Get the current unread count
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
+  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`;
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
   const { showSpotlight } = useSpotlight();
   const [tutorialStep, setTutorialStep] = useState(0);
+
+  const handleTabClick = async (tabName: string) => {
+    try {
+        await logTapBarClick(cadeyUserId, userFactUrl, tabName, window.location.pathname);
+    } catch (error) {
+        console.error("Error logging tab bar click: ", error);
+    }
+};
 
   // On component mount: 
   // - Set the page title
@@ -114,18 +124,31 @@ const RouterTabs: React.FC = () => {
         <IonTabBar slot="bottom" className={showSpotlight ? "spotlight-bar" : ""}>
           {/* Show the Home tab if it should be visible */}
           {isHomeTabVisible && (
-            <IonTabButton tab="Home" href="/App/Home">
+            <IonTabButton 
+              tab="Home" 
+              href="/App/Home"
+              onClick={() => handleTabClick('Home')}
+            >
               <IonIcon icon={homeOutline} />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
           )}
-          <IonTabButton tab="Concerns" href="/App/Concerns" className={showSpotlight ? "spotlight-tab" : ""}>
+          <IonTabButton 
+            tab="Concerns" 
+            href="/App/Concerns" 
+            className={showSpotlight ? "spotlight-tab" : ""}
+            onClick={() => handleTabClick('Concerns')}
+          >
             <IonIcon icon={gridOutline} />
             <IonLabel>Concerns</IonLabel>
           </IonTabButton>
           {/* Show the messages tab if it should be visible (same check as home tab) */}
           {isHomeTabVisible && (
-            <IonTabButton tab="Messages" href="/App/Messages">
+            <IonTabButton 
+              tab="Messages" 
+              href="/App/Messages"
+              onClick={() => handleTabClick('Messages')}
+            >
               <IonIcon icon={mailOutline} />
               <IonLabel>Messages</IonLabel>
               {unreadCount.unreadCount > 0 && (

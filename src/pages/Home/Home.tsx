@@ -114,7 +114,12 @@ const HomePage: React.FC<{
           </IonToolbar>
         </IonHeader>
         <IonRow>
-            <IonText className="subcopy">Here are a few suggestions, based on your concerns about your child.</IonText>
+          <IonText className="subcopy">
+            {trendingVideos.length > 0 
+              ? "Browse popular topics or tap Concerns to get more personalized results."
+              : "Here are a few suggestions, based on your concerns about your child."
+            }
+          </IonText>
         </IonRow>
         <hr className="divider" />
         {/* If user has featured videos, show this. Else, skip it */}
