@@ -31,10 +31,10 @@ const getHomeVideos = () => {
           }));
 
         return { 
-            featuredVideos: mapVideos(data.featuredVideos), 
-            newVideos: mapVideos(data.newVideos), 
-            playedVideos: mapVideos(data.playedVideos),
-            trendingVideos: mapVideos(data.trendingVideos),
+            featuredVideos: data.featuredVideos ? mapVideos(data.featuredVideos) : [], 
+            newVideos: data.newVideos ? mapVideos(data.newVideos) : [], 
+            playedVideos: data.playedVideos ? mapVideos(data.playedVideos) : [],
+            trendingVideos: data.trendingVideos ? mapVideos(data.trendingVideos) : [],
         };
     };
 
