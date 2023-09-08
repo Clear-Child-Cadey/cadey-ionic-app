@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'co.cadey.liteapp',
-  appName: 'CadeyLite',
+  appName: 'Cadey',
   webDir: 'dist',
   bundledWebRuntime: false,
   plugins: {
