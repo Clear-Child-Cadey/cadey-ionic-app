@@ -9,6 +9,7 @@ import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
 import { HomeTabVisibilityContext } from './context/TabContext';
 import UnreadCountContext from './context/UnreadCountContext';
+import { TabBarSpotlightProvider } from './context/SpotlightContext';
 // Functions
 import getAppData from './api/AppOpen';
 
@@ -145,7 +146,9 @@ function MainComponent() {
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
           <UnreadCountContext.Provider value={{ unreadCount, setUnreadCount }}>
-            <App />
+            <TabBarSpotlightProvider>
+              <App />
+            </TabBarSpotlightProvider>
           </UnreadCountContext.Provider>
         </HomeTabVisibilityContext.Provider>
       </DeviceIdContext.Provider>

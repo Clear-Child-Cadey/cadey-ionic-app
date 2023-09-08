@@ -4,11 +4,22 @@
     overflow-y: hidden;
 }
 
+/* Trending videos should display in a 2-column grid, not in a horizontal scroll */
+.trending .video-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0px; /* This creates space between the grid items */
+}
+
 .video-item {
     position: relative;
     flex: 0 0 auto;
     width: 65vw; /* Limits the width of the video player to 65% of the viewport width */
     margin-right: 20px;
+}
+
+.trending .video-list .video-item {
+    width: 43vw;
 }
 
 .video-item p {

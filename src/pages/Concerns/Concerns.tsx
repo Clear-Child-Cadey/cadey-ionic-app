@@ -1,5 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonPage, 
+  IonTitle, 
+  IonToolbar,
+  IonProgressBar,
+  IonIcon,
+} from '@ionic/react';
+// Icons
+import { checkmarkOutline } from 'ionicons/icons';
+// CSS
 import './Concerns.css';
 // Components
 import ConcernsList from '../../components/ConcernsList/ConcernsList';
@@ -24,6 +35,7 @@ const ConcernsPage: React.FC = () => {
   const [symptoms, setSymptoms] = useState<Array<Symptom>>([]);
   const [pageTitle, setPageTitle] = useState("Concerns");
   const [results, setResults] = useState<any | null>(null);
+  const [progress, setProgress] = useState(0);
 
   // Home tab visibility context
   const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
@@ -69,14 +81,28 @@ const ConcernsPage: React.FC = () => {
   };
 
   // Handler for when the results are received from the API
-const handleResultsReceived = (response: any) => {
-  setResults(response);
-  setShowResults(true);
-  setShowAgeForm(false);
-  setShowSymptomsList(false);
-  setHomeTabVisibility(true); // Show the Home tab when results are received
-};
-  
+  const handleResultsReceived = (response: any) => {
+    setResults(response);
+    setShowResults(true);
+    setShowAgeForm(false);
+    setShowSymptomsList(false);
+    setHomeTabVisibility(true); // Show the Home tab when results are received
+  };
+
+  // Determine the progress bar value
+  const determineProgress = () => {
+    if (showResults) {
+      return 1; // 100%, but unused. We hide the progress bar when results are visible
+    } else if (showAgeForm) {
+      return 1; // 100%
+    } else if (showSymptomsList) {
+      return 0.50; // 50%
+    } else {
+      return 0; // 0%
+    }
+  };
+
+
   // Render the screen
   return (
     <IonPage>
@@ -85,6 +111,31 @@ const handleResultsReceived = (response: any) => {
           <IonTitle>{pageTitle}</IonTitle>
         </IonToolbar>
       </IonHeader>
+      {/* Display the progress bar only if showResults is false */}
+      {!showResults && (
+        <div className="progress-container">
+          <IonProgressBar value={determineProgress()}></IonProgressBar>
+          <div 
+            className="progress-step" 
+            style={{ left: 'calc(0% + 28px)' }}
+          >
+            {showSymptomsList || showAgeForm || showResults ? <IonIcon icon={checkmarkOutline} /> : '1'}
+          </div>
+          <div 
+            className={`progress-step ${!showAgeForm && !showResults && !showSymptomsList ? "incomplete" : ""}`} 
+            style={{ left: '50%' }}
+          >
+            {showAgeForm || showResults ? <IonIcon icon={checkmarkOutline} /> : '2'}
+          </div>
+          <div 
+            className={`progress-step ${!showResults && !showAgeForm ? "incomplete" : ""}`} 
+            style={{ left: 'calc(100% - 28px)' }}
+          >
+            {showResults ? <IonIcon icon={checkmarkOutline} /> : '3'}
+          </div>
+        </div>
+      )}
+
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>

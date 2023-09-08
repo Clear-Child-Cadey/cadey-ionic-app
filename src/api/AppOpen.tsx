@@ -65,13 +65,6 @@ export const getAppData = async (
       setIsHomeTabVisible(true);
     }
 
-    const mapVideos = (videos: any) => videos.map((video: { sourceId: any; mediaId: any; title: any; audience: any; }) => ({
-      videoId: video.sourceId,
-      mediaId: String(video.mediaId), // Convert the mediaId to a string
-      title: video.title,
-      audience: video.audience
-    }));
-
   } catch (error) { // Handle any errors during the request
     console.error('Error during API call', error);
   }
