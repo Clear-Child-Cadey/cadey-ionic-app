@@ -134,7 +134,7 @@ ion-button {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px 10px 40px;
+  padding: 10px;
   background-color: #F9F6EF;
   z-index: 1000;
   border-top: 1px solid #EDE7DA;
