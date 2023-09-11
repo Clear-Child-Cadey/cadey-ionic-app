@@ -27,6 +27,7 @@ import AdminPage from '../../pages/Admin/Admin';
 import VideoDetailPage from '../../pages/Videos/VideoDetail';
 import MessagesPage from '../../pages/Messages/Messages';
 import ArticlesPage from '../../pages/Articles/Articles';
+import ArticleDetailPage from '../../pages/Articles/ArticleDetail';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -117,7 +118,9 @@ const RouterTabs: React.FC = () => {
             <Route exact path="/App/Messages" component={MessagesPage} />
             <Route path="/App/VideoDetail/:id1/:id2" component={VideoDetailPage} />
             <Route exact path="/App/Articles" component={ArticlesPage} />
-            
+            <Route path="/App/ArticleDetail/:id" render={({ match }) => 
+              <ArticleDetailPage articleId={Number(match.params.id)} />
+            } />            
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
           </Switch>

@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Home.css';
-import VideoList from '../../components/Videos/VideoList';
-import getHomeVideos from '../../api/HomeVideos';
 import { 
     IonPage, 
     IonHeader,
@@ -12,15 +10,26 @@ import {
     IonText,
     IonLoading,
 } from '@ionic/react';
+import { useHistory } from 'react-router';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
 import { useSpotlight } from '../../context/SpotlightContext';
+// Components
+import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
+import VideoList from '../../components/Videos/VideoList';
+// API
+import getHomeVideos from '../../api/HomeVideos';
+// Interfaces
+import { WP_Article } from '../../api/WordPress/GetArticles';
 
 const HomePage: React.FC<{ 
   currentTab: string, 
   tutorialStep: number, 
   setTutorialStep: React.Dispatch<React.SetStateAction<number>> 
 }> = ({ currentTab, tutorialStep, setTutorialStep }) => {
+  // Initialize the useHistory hook
+  const history = useHistory();
+  
   const [isLoading, setIsLoading] = useState(false);
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
@@ -29,6 +38,11 @@ const HomePage: React.FC<{
 
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
+
+  const handleArticleSelect = (selectedArticle: WP_Article) => {
+    // TODO: Log a user fact
+    history.push(`/App/ArticleDetail/${selectedArticle.id}`);
+  };
 
   // Get the latest set of videos from the API
   const { getHomeVideoData } = getHomeVideos();
@@ -130,6 +144,13 @@ const HomePage: React.FC<{
               {/* <VideoList videos={featuredVideosTest} />  */}
           </IonRow>
         )}
+        {/* If user has articles, show this. Else, skip it */}
+        {/* TODO: Add the conditional check once articles are available via the API */}
+        {/* TODO: Get articles from the API */}
+        <IonRow className="article-list-row">
+          <h2>Read Now</h2>
+          <ArticlesListHorizontal articleIds={[861, 779, 774]} onSelectArticle={handleArticleSelect} />
+        </IonRow>
         {/* If user has new videos, show this. Else, skip it */}
         {newVideos.length > 0 && (
           <IonRow className="video-list-row new">
