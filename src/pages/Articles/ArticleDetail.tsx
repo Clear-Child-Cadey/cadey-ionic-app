@@ -14,6 +14,11 @@ import {
 import { refresh } from 'ionicons/icons';
 // CSS
 import './ArticleDetail.css';
+// API
+import { logOpenedArticle } from '../../api/UserFacts';
+// Contexts
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
 
 // Setup the interface
 interface ArticleDetailProps {
@@ -24,6 +29,10 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
     const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const { cadeyUserId } = React.useContext(CadeyUserContext);
+    const { apiUrl } = React.useContext(ApiUrlContext);
+    const userFactUrl = `${apiUrl}/api/cadeydata/userfact`;
+
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {
         const fetchArticleDetail = async () => {
@@ -31,6 +40,8 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
                 const detail = await getArticleDetail(articleId);
                 detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
                 setArticle(detail);
+                // Log a user fact
+                logOpenedArticle(cadeyUserId, userFactUrl, articleId, location.pathname);
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {

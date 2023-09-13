@@ -106,7 +106,8 @@ const VideoDetailPage: React.FC = () => {
                   mediaId: videoData.mediaId,
                   videoId: videoData.sourceId,
                   title: videoData.title,
-                  audience: videoData.audience
+                  audience: videoData.audience,
+                  videoType: "videoDetail",
               }] : []} />
             </IonRow>
             <IonRow>
