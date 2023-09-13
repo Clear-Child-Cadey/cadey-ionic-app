@@ -18,7 +18,7 @@ import { useSpotlight } from '../../context/SpotlightContext';
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
 // API
-import getHomeVideos from '../../api/HomeVideos';
+import getHomeData from '../../api/HomeData';
 // Interfaces
 import { WP_Article } from '../../api/WordPress/GetArticles';
 
@@ -35,6 +35,7 @@ const HomePage: React.FC<{
   const [newVideos, setNewVideos] = useState([]);
   const [playedVideos, setPlayedVideos] = useState([]);
   const [trendingVideos, setTrendingVideos] = useState([]);
+  const [articleIds, setArticleIds] = useState<number[]>([]);
 
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
@@ -44,17 +45,20 @@ const HomePage: React.FC<{
     history.push(`/App/ArticleDetail/${selectedArticle.id}`);
   };
 
-  // Get the latest set of videos from the API
-  const { getHomeVideoData } = getHomeVideos();
+  // Get the latest data from the API
+  const { getHomeDataFromApi } = getHomeData();
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const { featuredVideos, newVideos, playedVideos, trendingVideos } = await getHomeVideoData();
+      const { featuredVideos, newVideos, playedVideos, trendingVideos, articleIds } = await getHomeDataFromApi();
       setFeaturedVideos(featuredVideos);
       setNewVideos(newVideos);
       setPlayedVideos(playedVideos);
       setTrendingVideos(trendingVideos);
+      setArticleIds(articleIds);
+      console.log('Home data fetched: ', featuredVideos, newVideos, playedVideos, trendingVideos, articleIds);
+      console.log('ArticleIds: ', articleIds);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -145,12 +149,12 @@ const HomePage: React.FC<{
           </IonRow>
         )}
         {/* If user has articles, show this. Else, skip it */}
-        {/* TODO: Add the conditional check once articles are available via the API */}
-        {/* TODO: Get articles from the API */}
-        <IonRow className="article-list-row">
-          <h2>Read Now</h2>
-          <ArticlesListHorizontal articleIds={[861, 779, 774]} onSelectArticle={handleArticleSelect} />
-        </IonRow>
+        {articleIds.length > 0 && (
+          <IonRow className="article-list-row">
+            <h2>Read Now</h2>
+            <ArticlesListHorizontal articleIds={articleIds} onSelectArticle={handleArticleSelect} />
+          </IonRow>
+        )}
         {/* If user has new videos, show this. Else, skip it */}
         {newVideos.length > 0 && (
           <IonRow className="video-list-row new">

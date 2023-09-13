@@ -1,4 +1,4 @@
-export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: string, route: string) => {
+export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, route: string) => {
   const requestOptions = {
     method: 'POST',
       headers: {
@@ -11,7 +11,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
         userFactTypeName: "StartedMedia",
         appPage: document.title,
         detail1: mediaId,
-        detail2: "",
+        detail2: mediaType,
         detail3: "",
         detail4: "",
         detail5: "",
@@ -32,7 +32,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
   }
 }
 
-export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string, route: string) => {
+export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string, mediaType: string, route: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -46,7 +46,7 @@ export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: s
           appPage: document.title,
           detail1: mediaId,
           detail2: mediaProgress,
-          detail3: "",
+          detail3: mediaType,
           detail4: "",
           detail5: "",
           detail6: "",
@@ -66,7 +66,7 @@ export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: s
     }
 }
 
-export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string, route: string) => {
+export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string, videoType: string, route: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -80,7 +80,7 @@ export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId
           appPage: document.title,
           detail1: mediaId,
           detail2: progress,
-          detail3: "",
+          detail3: videoType,
           detail4: "",
           detail5: "",
           detail6: "",
@@ -100,7 +100,7 @@ export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId
     }
 }
 
-export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: string, route: string) => {
+export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, route: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -113,7 +113,7 @@ export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: 
           userFactTypeName: "FinishedMedia",
           appPage: document.title,
           detail1: mediaId,
-          detail2: "",
+          detail2: mediaType,
           detail3: "",
           detail4: "",
           detail5: "",
@@ -169,7 +169,7 @@ export const logFalseDoorResponse = async (cadeyUserId: string, url: string, fal
     }
 }
 
-export const logShareClick = async (cadeyUserId: string, url: string, mediaId: string, route: string) => {
+export const logShareClick = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, route: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -182,7 +182,7 @@ export const logShareClick = async (cadeyUserId: string, url: string, mediaId: s
           userFactTypeName: "MediaShared",
           appPage: document.title,
           detail1: mediaId,
-          detail2: "",
+          detail2: mediaType,
           detail3: "",
           detail4: "",
           detail5: "",

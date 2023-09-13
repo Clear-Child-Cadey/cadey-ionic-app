@@ -16,6 +16,7 @@ interface VideoItem {
   videoId: string;
   title: string;
   audience: string;
+  videoType: string;
 }
 
 interface VideoListProps {
@@ -35,9 +36,9 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
 
 
   // Function to copy the shareable link to clipboard
-  const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string) => {
+  const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string, videoType: string) => {
     // Log a user fact that the user tapped on Share
-    logShareClick(cadeyUserId, userFactUrl, mediaId, location.pathname)
+    logShareClick(cadeyUserId, userFactUrl, mediaId, videoType, location.pathname)
 
     // Share the Vimeo URL
     await Share.share({
@@ -49,11 +50,11 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
     <div className="video-list">
       {videos.map((video) => (
         <div className="video-item" key={video.videoId}>
-          <VideoPlayer videoId={video.videoId} mediaId={video.mediaId} />
+          <VideoPlayer videoId={video.videoId} mediaId={video.mediaId} videoType={video.videoType} />
           <div className="tag-share">
             <p>{video.audience}</p>  
             {canShare && (
-              <div className="share" onClick={(event) => handleShare(event, video.videoId, video.mediaId)}>
+              <div className="share" onClick={(event) => handleShare(event, video.videoId, video.mediaId, video.videoType)}>
                 <p>Share </p>
                 <div className="share-button">
                   <IonIcon icon={arrowRedoOutline} />
