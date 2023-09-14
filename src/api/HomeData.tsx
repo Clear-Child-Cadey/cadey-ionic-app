@@ -7,7 +7,7 @@ const getHomeData = () => {
     const { cadeyUserId } = useContext(CadeyUserContext);
 
     const getHomeDataFromApi = async () => {
-        const url = `${apiUrl}/api/cadey290/homepage/${cadeyUserId}`;
+        const url = `${apiUrl}/homepage/${cadeyUserId}`;
 
         const response = await fetch(url, {
         method: 'GET',

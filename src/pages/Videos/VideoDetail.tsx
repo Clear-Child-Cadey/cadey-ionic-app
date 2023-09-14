@@ -27,7 +27,7 @@ const VideoDetailPage: React.FC = () => {
   const { id1, id2 } = useParams<{ id1: string, id2: string }>();
   const vimeoId = id1 + "/" + id2;
   const { apiUrl } = useContext(ApiUrlContext);
-  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
+  const userFactUrl = `${apiUrl}/userfact`
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const unreadCount = useContext(UnreadCountContext); // Get the current unread count
 

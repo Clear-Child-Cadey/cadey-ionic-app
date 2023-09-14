@@ -31,7 +31,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
-    const userFactUrl = `${apiUrl}/api/cadeydata/userfact`;
+    const userFactUrl = `${apiUrl}/userfact`;
 
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {

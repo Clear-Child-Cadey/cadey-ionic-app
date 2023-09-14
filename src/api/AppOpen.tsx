@@ -19,7 +19,7 @@ export const getAppData = async (
   ) => {
   
     // Define the url for the request
-  const url = `${apiUrl}/api/cadeydata/appopened`;
+  const url = `${apiUrl}/appopened`;
 
   // Determine the platform on which the app is running
   let devicePlatform;

@@ -1,0 +1,51 @@
+[debug] [2023-09-14T16:00:04.514Z] ----------------------------------------------------------------------
+[debug] [2023-09-14T16:00:04.514Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2023-09-14T16:00:04.515Z] CLI Version:   12.2.1
+[debug] [2023-09-14T16:00:04.515Z] Platform:      darwin
+[debug] [2023-09-14T16:00:04.515Z] Node Version:  v18.16.0
+[debug] [2023-09-14T16:00:04.518Z] Time:          Thu Sep 14 2023 10:00:04 GMT-0600 (Mountain Daylight Time)
+[debug] [2023-09-14T16:00:04.519Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-09-14T16:00:04.547Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-09-14T16:00:04.547Z] > authorizing via signed-in user (austin@bounddigital.com)
+[debug] [2023-09-14T16:00:04.547Z] [iam] checking project cadeylite for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-09-14T16:00:04.548Z] > refreshing access token with scopes: []
+[debug] [2023-09-14T16:00:04.548Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-09-14T16:00:04.549Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-09-14T16:00:04.735Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-09-14T16:00:04.735Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-09-14T16:00:04.745Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions [none]
+[debug] [2023-09-14T16:00:04.745Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions x-goog-quota-user=projects/cadeylite
+[debug] [2023-09-14T16:00:04.746Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-09-14T16:00:05.009Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions 200
+[debug] [2023-09-14T16:00:05.009Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-09-14T16:00:05.010Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/cadeylite [none]
+[debug] [2023-09-14T16:00:05.291Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/cadeylite 200
+[debug] [2023-09-14T16:00:05.292Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/cadeylite {"projectId":"cadeylite","projectNumber":"743363017370","displayName":"CadeyLite","name":"projects/cadeylite","resources":{"hostingSite":"cadeylite"},"state":"ACTIVE","etag":"1_61360c10-f077-4a29-a0ac-7b9ea8f4f574"}
+[info] 
+[info] === Deploying to 'cadeylite'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2023-09-14T16:00:05.299Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test [none]
+[debug] [2023-09-14T16:00:05.299Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test [omitted]
+[debug] [2023-09-14T16:00:05.517Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test 200
+[debug] [2023-09-14T16:00:05.517Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test {}
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2023-09-14T16:00:05.520Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions [none]
+[debug] [2023-09-14T16:00:05.520Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2023-09-14T16:00:06.184Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions 200
+[debug] [2023-09-14T16:00:06.184Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions {"name":"projects/743363017370/sites/cadeylite/versions/23bb29ed435cb47c","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  firestore: deploying indexes... 
+[debug] [2023-09-14T16:00:06.185Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/releases pageSize=10&pageToken=
+[debug] [2023-09-14T16:00:06.187Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2023-09-14T16:00:06.351Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/releases 200
+[debug] [2023-09-14T16:00:06.351Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/releases {"releases":[{"name":"projects/cadeylite/releases/cloud.firestore","rulesetName":"projects/cadeylite/rulesets/fc379b6a-1037-4c4c-a0b2-f0829b682097","createTime":"2023-06-01T20:34:24.506497Z","updateTime":"2023-09-13T21:48:50.190080Z"}]}
+[debug] [2023-09-14T16:00:06.351Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/rulesets/fc379b6a-1037-4c4c-a0b2-f0829b682097 [none]
+[debug] [2023-09-14T16:00:06.551Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/rulesets/fc379b6a-1037-4c4c-a0b2-f0829b682097 200
+[debug] [2023-09-14T16:00:06.552Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/rulesets/fc379b6a-1037-4c4c-a0b2-f0829b682097 [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[debug] [2023-09-14T16:00:08.391Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2023-09-14T16:00:08.391Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2023-09-14T16:00:08.392Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]

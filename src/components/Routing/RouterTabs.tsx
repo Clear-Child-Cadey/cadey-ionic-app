@@ -51,7 +51,7 @@ const RouterTabs: React.FC = () => {
   const unreadCount = useContext(UnreadCountContext); // Get the current unread count
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`;
+  const userFactUrl = `${apiUrl}/userfact`;
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
   const { showSpotlight } = useSpotlight();

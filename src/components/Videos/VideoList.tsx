@@ -26,7 +26,7 @@ interface VideoListProps {
 const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
+  const userFactUrl = `${apiUrl}/userfact`
   const [canShare, setCanShare] = useState(false);
 
   // Check if the user's device has sharing capabilities

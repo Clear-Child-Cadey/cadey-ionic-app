@@ -24,7 +24,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
+  const userFactUrl = `${apiUrl}/userfact`
 
   const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
   const [userResponse, setUserResponse] = useState<'yes' | 'no' | null>(null); // Store the user's response
