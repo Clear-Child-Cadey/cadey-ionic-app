@@ -42,6 +42,11 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ articleId, onRestart }) =
         return doc.body.textContent || "";
     }
 
+    function decodeHtmlEntities(str: string): string {
+        let text = new DOMParser().parseFromString(`<!doctype html><body>${str}`, 'text/html').body.textContent;
+        return text || "";
+    }
+
     return (
         <IonContent>
             <IonLoading isOpen={isLoading} message={'Loading Article...'} />
@@ -49,7 +54,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ articleId, onRestart }) =
                 <div className="article-detail">
                     <h2>{article.title.rendered}</h2>
                     {article.featured_image_url && (
-                        <img src={article.featured_image_url} alt={article.title.rendered} className="featured-image" />
+                        <img src={article.featured_image_url} alt={decodeHtmlEntities(article.title.rendered)} className="featured-image" />
                     )}
                     <div className="article-detail-content" dangerouslySetInnerHTML={{ __html: article.content.rendered }}></div>
                 </div>

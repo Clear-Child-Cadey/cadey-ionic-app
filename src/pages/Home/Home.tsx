@@ -57,8 +57,6 @@ const HomePage: React.FC<{
       setPlayedVideos(playedVideos);
       setTrendingVideos(trendingVideos);
       setArticleIds(articleIds);
-      console.log('Home data fetched: ', featuredVideos, newVideos, playedVideos, trendingVideos, articleIds);
-      console.log('ArticleIds: ', articleIds);
     } catch (error) {
       console.error('Error:', error);
     } finally {

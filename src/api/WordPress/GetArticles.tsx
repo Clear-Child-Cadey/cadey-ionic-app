@@ -8,8 +8,6 @@ export interface WP_Article {
     featured_image_url: string;
 }
 
-
-
 export const getArticlesByCategory = async (categoryId: number): Promise<WP_Article[]> => {
     try {
         const response = await fetch(`${API_URL}/articles?categories=${categoryId}&_embed&per_page=100`);
@@ -26,7 +24,7 @@ export const getArticlesByCategory = async (categoryId: number): Promise<WP_Arti
 
         return articlesArray;
     } catch (error) {
-        console.error("Error fetching articles:", error);
+        console.error("Error fetching articles (by category):", error);
         throw error;
     }
 };
@@ -35,8 +33,9 @@ export const getArticlesByIds = async (articleIds: number[]): Promise<WP_Article
     try {
         // Convert the array of IDs into a comma-separated string
         const idsString = articleIds.join(',');
+        const getArticlesUrl = `${API_URL}/articles?include=${idsString}&_embed`;
 
-        const response = await fetch(`${API_URL}/articles?include=${idsString}&_embed`);
+        const response = await fetch(getArticlesUrl);
         const fetchedDataArray = await response.json();
 
         // Map the fetched data to match the WP_Article interface
@@ -50,7 +49,7 @@ export const getArticlesByIds = async (articleIds: number[]): Promise<WP_Article
 
         return articlesArray;
     } catch (error) {
-        console.error("Error fetching article details:", error);
+        console.error("Error fetching articles (by IDs):", error);
         throw error;
     }
 };

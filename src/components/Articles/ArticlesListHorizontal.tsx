@@ -55,7 +55,6 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ articleIds, onSelectArticle
         return text || "";
     }
     
-
     return (
         <div>
             <IonLoading isOpen={isLoading} message={'Loading Articles...'} />
