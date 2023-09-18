@@ -25,7 +25,8 @@ const AppUrlListener: React.FC<any> = () => {
             const urlObject = new URL(event.url);
             const host = urlObject.hostname;
             const path = urlObject.pathname;
-            var fullSlug = `/${host}${path}`;
+            const queryString = urlObject.search; // Grabs the query string
+            var fullSlug = `/${host}${path}${queryString}`;
             
             if (fullSlug) {
                 while (fullSlug.startsWith('//')) {

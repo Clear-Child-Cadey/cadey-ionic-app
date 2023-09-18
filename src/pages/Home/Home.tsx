@@ -27,8 +27,9 @@ import { WP_Article } from '../../api/WordPress/GetArticles';
 const HomePage: React.FC<{ 
   currentTab: string, 
   tutorialStep: number, 
-  setTutorialStep: React.Dispatch<React.SetStateAction<number>> 
-}> = ({ currentTab, tutorialStep, setTutorialStep }) => {
+  setTutorialStep: React.Dispatch<React.SetStateAction<number>>, 
+  vimeoIdFromUrl?: string,
+}> = ({ currentTab, tutorialStep, setTutorialStep, vimeoIdFromUrl }) => {
   // Initialize the useHistory hook
   const history = useHistory();
   
@@ -119,6 +120,14 @@ const HomePage: React.FC<{
   }
   , []);
 
+  // Show the modal if a vimeoId is passed in via query string
+  useEffect(() => {
+    if (vimeoIdFromUrl) {
+      console.log('vimeoIdFromUrl: ', vimeoIdFromUrl);
+      setShowModal(true);
+    }
+  }, [vimeoIdFromUrl]);
+
   return (
     <IonPage className="home">
       <IonHeader>
@@ -143,6 +152,16 @@ const HomePage: React.FC<{
         <hr className="divider" />
         {/* If user has featured videos, show this. Else, skip it */}
         
+
+        {/* Conditionally render a modal based on whether the query string contains a vimeoId */}
+        {vimeoIdFromUrl && (
+          <VideoDetailModal 
+            vimeoId={vimeoIdFromUrl} 
+            isOpen={showModal} 
+            onClose={() => setShowModal(false)} 
+          />
+        )}
+
         <IonRow>
           <h2>Test Video Modal</h2>
           <button onClick={() => setShowModal(true)}>Show Video</button>

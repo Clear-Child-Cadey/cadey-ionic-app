@@ -1,5 +1,6 @@
 .article-detail {
     padding: 0 16px;
+    max-width: 100vw;
 }
 
 .article-detail h2 {
