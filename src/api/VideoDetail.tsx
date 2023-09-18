@@ -1,7 +1,7 @@
 const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 
-export const getVideoDetailData = async (apiUrl: string, sourceId1: string, sourceId2: string) => {
-    const url = `${apiUrl}/videodetails/${sourceId1}/${sourceId2}`;
+export const getVideoDetailData = async (apiUrl: string, vimeoId: string) => {
+    const url = `${apiUrl}/videodetails/${vimeoId}`;
 
     const response = await fetch(url, {
         method: 'GET',

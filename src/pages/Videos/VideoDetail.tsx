@@ -61,7 +61,7 @@ const VideoDetailPage: React.FC = () => {
     const fetchVideoData = async () => {
         try {
           // Getting data for VideoDetailPage
-          const data = await getVideoDetailData(apiUrl, id1, id2);
+          const data = await getVideoDetailData(apiUrl, vimeoId);
           setVideoData(data);
 
           if(data && data.mediaId) {

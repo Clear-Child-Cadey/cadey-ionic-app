@@ -17,6 +17,8 @@ import { useSpotlight } from '../../context/SpotlightContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
+// Modals
+import VideoDetailModal from '../../components/Modals/VideoDetailModal/VideoDetailModal';
 // API
 import getHomeData from '../../api/HomeData';
 // Interfaces
@@ -36,6 +38,7 @@ const HomePage: React.FC<{
   const [playedVideos, setPlayedVideos] = useState([]);
   const [trendingVideos, setTrendingVideos] = useState([]);
   const [articleIds, setArticleIds] = useState<number[]>([]);
+  const [showModal, setShowModal] = useState(false);
 
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
@@ -139,6 +142,13 @@ const HomePage: React.FC<{
         </IonRow>
         <hr className="divider" />
         {/* If user has featured videos, show this. Else, skip it */}
+        
+        <IonRow>
+          <h2>Test Video Modal</h2>
+          <button onClick={() => setShowModal(true)}>Show Video</button>
+          <VideoDetailModal vimeoId="863639649/3b331c50c7" isOpen={showModal} onClose={() => setShowModal(false)} />
+        </IonRow>
+
         {featuredVideos.length > 0 && (
           <IonRow className="video-list-row featured">
               <h2>Watch Now</h2>
