@@ -66,26 +66,31 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
         return html.replace(regex, '');
     }
 
+    function decodeHtmlEntities(str: string): string {
+        let text = new DOMParser().parseFromString(`<!doctype html><body>${str}`, 'text/html').body.textContent;
+        return text || "";
+    }
+
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>{article ? article.title.rendered : "Article Detail"}</IonTitle>
+                    <IonTitle>{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
                 <IonHeader collapse="condense">
                     <IonToolbar>
-                        <IonTitle size="large">{article ? article.title.rendered : "Article Detail"}</IonTitle>
+                        <IonTitle size="large">{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonRow>
                     <IonLoading isOpen={isLoading} message={'Loading Article...'} />
                     {article && (
                         <div className="article-detail">
-                            <h2>{article.title.rendered}</h2>
+                            <h2>{decodeHtmlEntities(article.title.rendered)}</h2>
                             {article.featured_image_url && (
-                                <img src={article.featured_image_url} alt={article.title.rendered} className="featured-image" />
+                                <img src={article.featured_image_url} alt={decodeHtmlEntities(article.title.rendered)} className="featured-image" />
                             )}
                             <div className="article-detail-content" dangerouslySetInnerHTML={{ __html: article.content.rendered }}></div>
                         </div>
