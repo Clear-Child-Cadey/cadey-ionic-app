@@ -113,7 +113,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }
           controls={true}
           light={false} // Set to true to show just the video thumbnail, which loads the full player on click
           playIcon={<IonIcon icon={playCircleOutline} className="playIcon" />}
-          playing={false} // Set to true to autoplay the video
+          playing={true} // Set to true to autoplay the video
           playsInline={true}
           width='100%'
           height='100%'

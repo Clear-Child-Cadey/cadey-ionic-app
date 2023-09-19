@@ -30,8 +30,9 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, isOpen, on
 
   const { apiUrl } = useContext(ApiUrlContext);
   const userFactUrl = `${apiUrl}/userfact`
-  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-  const unreadCount = useContext(UnreadCountContext); // Get the current unread count
+
+  const [currentVimeoId, setCurrentVimeoId] = useState(vimeoId);
+  const [currentMediaId, setCurrentMediaId] = useState(vimeoId);
 
   interface VideoDetailData {
     mediaId: string;
@@ -56,7 +57,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, isOpen, on
     };
 
     fetchVideoData(); // Get data when the component mounts
-  }, []);
+  }, [vimeoId, currentVimeoId]);
 
   return (
     <IonModal isOpen={isOpen} onDidDismiss={onClose}>
@@ -70,7 +71,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, isOpen, on
             <IonRow className="video-player-row">
               {videoData && (
                 <VideoPlayer 
-                  videoId={videoData.sourceId} 
+                  videoId={currentVimeoId}
                   mediaId={videoData.mediaId}
                   videoType="videoDetail from modal" 
                 />
@@ -78,6 +79,13 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, isOpen, on
             </IonRow>
             <IonRow>
                 <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
+            </IonRow>
+            <IonRow className="suggested-video-row">
+              <img 
+                src="https://i.vimeocdn.com/video/1711321134-fd2aedff2fe7e8753719c6d9d050293090466b8432a8798c05ba5b13a79a23a4-d?mw=1600&mh=900"
+                alt="New Video Title" 
+                onClick={() => setCurrentVimeoId("855048900/c5036cbce8")} 
+              />
             </IonRow>
         </IonContent>
     </IonModal>

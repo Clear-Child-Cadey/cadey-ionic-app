@@ -162,17 +162,10 @@ const HomePage: React.FC<{
           />
         )}
 
-        <IonRow>
-          <h2>Test Video Modal</h2>
-          <button onClick={() => setShowModal(true)}>Show Video</button>
-          <VideoDetailModal vimeoId="863639649/3b331c50c7" isOpen={showModal} onClose={() => setShowModal(false)} />
-        </IonRow>
-
         {featuredVideos.length > 0 && (
           <IonRow className="video-list-row featured">
               <h2>Watch Now</h2>
               <VideoList videos={featuredVideos} /> 
-              {/* <VideoList videos={featuredVideosTest} />  */}
           </IonRow>
         )}
         {/* If user has articles, show this. Else, skip it */}
