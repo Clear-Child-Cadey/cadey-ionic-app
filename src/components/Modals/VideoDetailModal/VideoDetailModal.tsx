@@ -18,7 +18,7 @@ import { getVideoDetailData } from '../../../api/VideoDetail';
 // CSS
 import './VideoDetailModal.css';
 // Components
-import VideoList from '../../../components/Videos/VideoList';
+import VideoPlayer from '../../../components/Videos/VideoPlayer';
 
 interface VideoDetailModalProps {
     vimeoId: string;
@@ -67,14 +67,14 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, isOpen, on
             </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-            <IonRow className="video-list-row">
-              <VideoList videos={videoData ? [{
-                  mediaId: videoData.mediaId,
-                  videoId: videoData.sourceId,
-                  title: videoData.title,
-                  audience: videoData.audience,
-                  videoType: "videoDetail",
-              }] : []} />
+            <IonRow className="video-player-row">
+              {videoData && (
+                <VideoPlayer 
+                  videoId={videoData.sourceId} 
+                  mediaId={videoData.mediaId}
+                  videoType="videoDetail from modal" 
+                />
+              )}
             </IonRow>
             <IonRow>
                 <IonText className="featured-message">{videoData?.featuredMessage}</IonText>

@@ -28,6 +28,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/userfact`
   const [canShare, setCanShare] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
   // Check if the user's device has sharing capabilities
   useEffect(() => {
@@ -46,11 +47,20 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
     });
   }
 
+  const handleThumbnailClick = (video: VideoItem) => {
+    setSelectedVideo(video);
+  }
+
   return (
     <div className="video-list">
       {videos.map((video) => (
         <div className="video-item" key={video.videoId}>
-          <VideoPlayer videoId={video.videoId} mediaId={video.mediaId} videoType={video.videoType} />
+          {/* <VideoPlayer videoId={video.videoId} mediaId={video.mediaId} videoType={video.videoType} /> */}
+          <img 
+            src={`https://i.vimeocdn.com/video/${video.videoId}_640.jpg`} 
+            alt={video.title} 
+            onClick={() => handleThumbnailClick(video)} 
+          />
           <div className="tag-share">
             <p>{video.audience}</p>  
             {canShare && (

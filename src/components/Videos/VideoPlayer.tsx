@@ -105,38 +105,41 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }
   };
 
   return (
-    <div className='player-wrapper'>
-      <Player
-        className='react-player'
-        url={`https://vimeo.com/${videoId}`}
-        controls={true}
-        light={true}
-        playIcon={<IonIcon icon={playCircleOutline} className="playIcon" />}
-        playing={false}
-        width='100%'
-        height='100%'
-        progressInterval={5000}
-        onPlay={onPlay}
-        onPause={onPause}
-        onEnded={onEnded}
-        onClickPreview={onClickPreview}
-        onError={onError}
-        onProgress={onProgress}
-      />
-      <FalseDoorModal 
-        falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
-        iconUrl={falseDoorData?.questionIcon || ''}
-        copy={falseDoorData?.questionText || ''}
-        yesResponse="Yes, sign me up!"
-        noResponse="No thanks, not interested"
-        thankYouIconUrlYes={falseDoorData?.questionResponseYesIcon || ''}
-        thankYouIconUrlNo={falseDoorData?.questionResponseNoIcon || ''}
-        thankYouCopyYes={falseDoorData?.questionResponseYesText || ''}
-        thankYouCopyNo={falseDoorData?.questionResponseNoText || ''}
-        thankYouButtonText={buttonText}
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-      />
+    <div className="video-item" key={videoId}>
+      <div className='player-wrapper'>
+        <Player
+          className='react-player'
+          url={`https://vimeo.com/${videoId}`}
+          controls={true}
+          light={false} // Set to true to show just the video thumbnail, which loads the full player on click
+          playIcon={<IonIcon icon={playCircleOutline} className="playIcon" />}
+          playing={false} // Set to true to autoplay the video
+          playsInline={true}
+          width='100%'
+          height='100%'
+          progressInterval={5000}
+          onPlay={onPlay}
+          onPause={onPause}
+          onEnded={onEnded}
+          onClickPreview={onClickPreview}
+          onError={onError}
+          onProgress={onProgress}
+        />
+        <FalseDoorModal 
+          falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
+          iconUrl={falseDoorData?.questionIcon || ''}
+          copy={falseDoorData?.questionText || ''}
+          yesResponse="Yes, sign me up!"
+          noResponse="No thanks, not interested"
+          thankYouIconUrlYes={falseDoorData?.questionResponseYesIcon || ''}
+          thankYouIconUrlNo={falseDoorData?.questionResponseNoIcon || ''}
+          thankYouCopyYes={falseDoorData?.questionResponseYesText || ''}
+          thankYouCopyNo={falseDoorData?.questionResponseNoText || ''}
+          thankYouButtonText={buttonText}
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+        />
+      </div>
     </div>
   );
 };
