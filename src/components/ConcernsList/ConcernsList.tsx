@@ -33,7 +33,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
         const device_id = React.useContext(DeviceIdContext);
         const { apiUrl } = React.useContext(ApiUrlContext);
         const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
-        const userFactUrl = `${apiUrl}/api/cadeydata/userfact`;
+        const userFactUrl = `${apiUrl}/userfact`;
         
         const [isLoading, setIsLoading] = useState(false);
         const [concernsList, setConcernsList] = useState<any>(null);
@@ -43,7 +43,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
                 setIsLoading(true);  // Start the loader here
                 
                 // Get the concerns and symptoms from the API
-                const url = `${apiUrl}/api/cadeydata/getconcerns`;
+                const url = `${apiUrl}/getconcerns`;
 
                 fetch(url, {
                 method: 'GET',

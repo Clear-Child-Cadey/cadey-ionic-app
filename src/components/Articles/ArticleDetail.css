@@ -1,0 +1,18 @@
+.article-detail {
+    padding: 0 16px;
+    max-width: 100vw;
+}
+
+.article-detail h2 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: #484443;
+}
+
+.article-detail-content {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #625A56;
+}

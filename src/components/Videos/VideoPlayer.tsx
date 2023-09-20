@@ -12,9 +12,10 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 interface VideoPlayerProps {
   videoId: string;
   mediaId: string;
+  videoType: string;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }) => {
 
   const mediaIdStr = String(mediaId);
 
@@ -23,7 +24,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
+  const userFactUrl = `${apiUrl}/userfact`
 
   const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
   const [userResponse, setUserResponse] = useState<'yes' | 'no' | null>(null); // Store the user's response
@@ -54,7 +55,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
   };
 
   const onPause = async () => {
-    const response = await logVideoPause(cadeyUserId, userFactUrl, mediaIdStr, String(videoProgress).substring(0, 4), location.pathname);
+    const response = await logVideoPause(
+        cadeyUserId, 
+        userFactUrl, 
+        mediaIdStr, 
+        String(videoProgress).substring(0, 4), 
+        videoType, 
+        location.pathname
+      );
 
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
@@ -63,7 +71,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
   };
 
   const onEnded = async () => {
-    const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr, location.pathname);
+    const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr, videoType, location.pathname);
 
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
@@ -72,22 +80,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId }) => {
   };
 
   const onClickPreview = () => {
-    logVideoPlay(cadeyUserId, userFactUrl, mediaIdStr, location.pathname);
+    logVideoPlay(cadeyUserId, userFactUrl, mediaIdStr, videoType, location.pathname);
   }
 
   const onProgress = (progress: any) => {
     setVideoProgress(progress.played);
     if (progress.played >= 1 && !logged100) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "1.00", location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "1.00", videoType, location.pathname);
       setLogged100(true);
     } else if (progress.played >= 0.75 && !logged75) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.75", location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.75", videoType, location.pathname);
       setLogged75(true);
     } else if (progress.played >= 0.5 && !logged50) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.5", location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.5", videoType, location.pathname);
       setLogged50(true);
     } else if (progress.played >= 0.25 && !logged25) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25", location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25", videoType, location.pathname);
       setLogged25(true);
     }
 };

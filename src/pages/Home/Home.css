@@ -2,7 +2,11 @@
     padding-left: 16px;
 }
 
-.home .video-item {
+.home .article-list-row{
+    padding-left: 16px;
+}
+
+.home .video-item, .home .article-item {
     width: 80vw;
 }
 
@@ -20,4 +24,8 @@
     line-height: 21px;
     color: #484443;
     width: 100%;
+}
+
+.home .article-list-row {
+    display: block;
 }

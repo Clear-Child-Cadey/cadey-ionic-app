@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Home.css';
-import VideoList from '../../components/Videos/VideoList';
-import getHomeVideos from '../../api/HomeVideos';
 import { 
     IonPage, 
     IonHeader,
@@ -12,35 +10,53 @@ import {
     IonText,
     IonLoading,
 } from '@ionic/react';
+import { useHistory } from 'react-router';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
 import { useSpotlight } from '../../context/SpotlightContext';
+// Components
+import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
+import VideoList from '../../components/Videos/VideoList';
+// API
+import getHomeData from '../../api/HomeData';
+// Interfaces
+import { WP_Article } from '../../api/WordPress/GetArticles';
 
 const HomePage: React.FC<{ 
   currentTab: string, 
   tutorialStep: number, 
   setTutorialStep: React.Dispatch<React.SetStateAction<number>> 
 }> = ({ currentTab, tutorialStep, setTutorialStep }) => {
+  // Initialize the useHistory hook
+  const history = useHistory();
+  
   const [isLoading, setIsLoading] = useState(false);
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
   const [playedVideos, setPlayedVideos] = useState([]);
   const [trendingVideos, setTrendingVideos] = useState([]);
+  const [articleIds, setArticleIds] = useState<number[]>([]);
 
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
 
-  // Get the latest set of videos from the API
-  const { getHomeVideoData } = getHomeVideos();
+  const handleArticleSelect = (selectedArticle: WP_Article) => {
+    // TODO: Log a user fact
+    history.push(`/App/ArticleDetail/${selectedArticle.id}`);
+  };
+
+  // Get the latest data from the API
+  const { getHomeDataFromApi } = getHomeData();
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const { featuredVideos, newVideos, playedVideos, trendingVideos } = await getHomeVideoData();
+      const { featuredVideos, newVideos, playedVideos, trendingVideos, articleIds } = await getHomeDataFromApi();
       setFeaturedVideos(featuredVideos);
       setNewVideos(newVideos);
       setPlayedVideos(playedVideos);
       setTrendingVideos(trendingVideos);
+      setArticleIds(articleIds);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -128,6 +144,13 @@ const HomePage: React.FC<{
               <h2>Watch Now</h2>
               <VideoList videos={featuredVideos} /> 
               {/* <VideoList videos={featuredVideosTest} />  */}
+          </IonRow>
+        )}
+        {/* If user has articles, show this. Else, skip it */}
+        {articleIds.length > 0 && (
+          <IonRow className="article-list-row">
+            <h2>Read Now</h2>
+            <ArticlesListHorizontal articleIds={articleIds} onSelectArticle={handleArticleSelect} />
           </IonRow>
         )}
         {/* If user has new videos, show this. Else, skip it */}

@@ -35,7 +35,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-    const userFactUrl = `${apiUrl}/api/cadeydata/userfact`
+    const userFactUrl = `${apiUrl}/userfact`
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
     const history = useHistory(); // Initialize the useHistory hook here
 

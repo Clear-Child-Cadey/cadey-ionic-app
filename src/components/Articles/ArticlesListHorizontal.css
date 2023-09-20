@@ -1,0 +1,40 @@
+.article-list {
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 1rem 0;
+    white-space: nowrap;
+}
+
+.article-item {
+    position: relative;
+    flex: 0 0 auto;
+    width: 80vw;
+    margin-right: 20px;
+}
+
+.article-image-wrapper {
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    overflow: hidden;  /* This ensures the image inside takes the rounded corners */
+}
+
+.article-image {
+    width: 100%;
+    display: block;   /* Ensure it's a block element */
+}
+
+
+.article-item .article-title {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: -0.2px;
+    color: #484443;
+    margin-top: 0;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

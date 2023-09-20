@@ -33,7 +33,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   const { symptoms, onAgeFormShown, onRestart, onResultsReceived } = props;
   const device_id = React.useContext(DeviceIdContext);
   const { apiUrl } = useContext(ApiUrlContext);
-  const userFactUrl = `${apiUrl}/api/cadeydata/userfact`;
+  const userFactUrl = `${apiUrl}/userfact`;
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
 
   let ageGroup: number;
@@ -74,7 +74,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
     }
 
     // Get recommendations from the API
-    const url = `${apiUrl}/api/cadeydata/v2/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
+    const url = `${apiUrl}/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
 
     const requestOptions = {
       method: 'GET',
