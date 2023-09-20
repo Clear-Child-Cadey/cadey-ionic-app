@@ -1,4 +1,4 @@
-export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, route: string) => {
+export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, source: string) => {
   const requestOptions = {
     method: 'POST',
       headers: {
@@ -9,7 +9,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
       body: JSON.stringify({ 
         userid: cadeyUserId,
         userFactTypeName: "StartedMedia",
-        appPage: document.title,
+        appPage: source,
         detail1: mediaId,
         detail2: mediaType,
         detail3: "",
@@ -32,7 +32,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
   }
 }
 
-export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string, mediaType: string, route: string) => {
+export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string, mediaType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -43,7 +43,7 @@ export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: s
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "PausedMedia",
-          appPage: document.title,
+          appPage: source,
           detail1: mediaId,
           detail2: mediaProgress,
           detail3: mediaType,
@@ -66,7 +66,7 @@ export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: s
     }
 }
 
-export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string, videoType: string, route: string) => {
+export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string, videoType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -77,7 +77,7 @@ export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "InProgressMedia",
-          appPage: document.title,
+          appPage: source,
           detail1: mediaId,
           detail2: progress,
           detail3: videoType,
@@ -100,7 +100,7 @@ export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId
     }
 }
 
-export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, route: string) => {
+export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -111,7 +111,7 @@ export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: 
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "FinishedMedia",
-          appPage: document.title,
+          appPage: source,
           detail1: mediaId,
           detail2: mediaType,
           detail3: "",
@@ -135,7 +135,7 @@ export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: 
 }
 
 // Log user response to false door question
-export const logFalseDoorResponse = async (cadeyUserId: string, url: string, falseDoorQuestionId: string, userResponse: string, route: string) => {
+export const logFalseDoorResponse = async (cadeyUserId: string, url: string, falseDoorQuestionId: string, userResponse: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -146,7 +146,7 @@ export const logFalseDoorResponse = async (cadeyUserId: string, url: string, fal
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "FalseDoorQuestionResponse",
-          appPage: document.title,
+          appPage: source,
           detail1: falseDoorQuestionId, 
           detail2: userResponse,
           detail3: "",
@@ -169,7 +169,7 @@ export const logFalseDoorResponse = async (cadeyUserId: string, url: string, fal
     }
 }
 
-export const logShareClick = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, route: string) => {
+export const logShareClick = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -180,7 +180,7 @@ export const logShareClick = async (cadeyUserId: string, url: string, mediaId: s
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "MediaShared",
-          appPage: document.title,
+          appPage: source,
           detail1: mediaId,
           detail2: mediaType,
           detail3: "",
@@ -203,7 +203,7 @@ export const logShareClick = async (cadeyUserId: string, url: string, mediaId: s
     }
 }
 
-export const logConcernClick = async (cadeyUserId: string, url: string, concernId: string, route: string) => {
+export const logConcernClick = async (cadeyUserId: string, url: string, concernId: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -214,7 +214,7 @@ export const logConcernClick = async (cadeyUserId: string, url: string, concernI
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "ConcernChosen",
-          appPage: document.title,
+          appPage: source,
           detail1: concernId,
           detail2: "",
           detail3: "",
@@ -237,7 +237,7 @@ export const logConcernClick = async (cadeyUserId: string, url: string, concernI
     }
 }
 
-export const logFeaturedVideoNotificationClicked = async (cadeyUserId: string, url: string, mediaId: string, sourceId: string, route: string) => {
+export const logFeaturedVideoNotificationClicked = async (cadeyUserId: string, url: string, mediaId: string, sourceId: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -248,7 +248,7 @@ export const logFeaturedVideoNotificationClicked = async (cadeyUserId: string, u
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "FeaturedVideoNotificationClicked",
-          appPage: document.title,
+          appPage: source,
           detail1: mediaId,
           detail2: sourceId,
           detail3: "",
@@ -271,7 +271,7 @@ export const logFeaturedVideoNotificationClicked = async (cadeyUserId: string, u
     }
 }
 
-export const logAgeScreenReached = async (cadeyUserId: string, url: string, route: string) => {
+export const logAgeScreenReached = async (cadeyUserId: string, url: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -282,7 +282,7 @@ export const logAgeScreenReached = async (cadeyUserId: string, url: string, rout
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "AgePageEntered",
-          appPage: document.title,
+          appPage: source,
           detail1: "",
           detail2: "",
           detail3: "",
@@ -305,7 +305,7 @@ export const logAgeScreenReached = async (cadeyUserId: string, url: string, rout
     }
 }
 
-export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: string, mediaId: string, mediaSourceId: string, route: string) => {
+export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: string, mediaId: string, mediaSourceId: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -316,7 +316,7 @@ export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: 
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "MessageClickedOnMessagesPage",
-          appPage: document.title,
+          appPage: source,
           detail1: mediaId,
           detail2: mediaSourceId,
           detail3: "",
@@ -339,7 +339,7 @@ export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: 
     }
 }
 
-export const logTapBarClick = async (cadeyUserId: string, url: string, tabName: string, route: string) => {
+export const logTapBarClick = async (cadeyUserId: string, url: string, tabName: string, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -350,7 +350,7 @@ export const logTapBarClick = async (cadeyUserId: string, url: string, tabName: 
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "TapBarNavClick",
-          appPage: document.title,
+          appPage: source,
           detail1: tabName,
           detail2: "",
           detail3: "",
@@ -373,7 +373,7 @@ export const logTapBarClick = async (cadeyUserId: string, url: string, tabName: 
     }
 }
 
-export const logOpenedArticle = async (cadeyUserId: string, url: string, wordpressArticleId: number, route: string) => {
+export const logOpenedArticle = async (cadeyUserId: string, url: string, wordpressArticleId: number, source: string) => {
   const requestOptions = {
       method: 'POST',
       headers: {
@@ -384,7 +384,7 @@ export const logOpenedArticle = async (cadeyUserId: string, url: string, wordpre
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "OpenedArticle",
-          appPage: document.title,
+          appPage: source,
           detail1: wordpressArticleId.toString(),
           detail2: "",
           detail3: "",

@@ -71,7 +71,7 @@ const VideoDetailPage: React.FC = () => {
               userFactUrl, 
               String(data.mediaId), 
               vimeoId, 
-              location.pathname
+              document.title
             );
             // Get Messages when the user visits the Video Detail page
             // We use this to decrement the unread counter

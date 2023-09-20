@@ -67,7 +67,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   // Function to copy the shareable link to clipboard
   const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string, videoType: string) => {
     // Log a user fact that the user tapped on Share
-    logShareClick(cadeyUserId, userFactUrl, mediaId, videoType, location.pathname)
+    logShareClick(cadeyUserId, userFactUrl, mediaId, videoType, document.title)
 
     // Share the Vimeo URL
     await Share.share({
@@ -108,6 +108,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
       {selectedVideo && (
         <VideoDetailModal 
           vimeoId={selectedVideo.videoId} 
+          videoType={selectedVideo.videoType}
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)}
         />

@@ -75,7 +75,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
 
         // Call the postLogEvent function whenever a button is clicked and proceed to the next screen
         const handleOnClick = (choice: { concern: string; concernId: number; symptoms: Symptom[] }) => {
-                logConcernClick(cadeyUserId, userFactUrl, choice.concernId.toString(), location.pathname);
+                logConcernClick(cadeyUserId, userFactUrl, choice.concernId.toString(), document.title);
                 onNext(choice);
         }
 

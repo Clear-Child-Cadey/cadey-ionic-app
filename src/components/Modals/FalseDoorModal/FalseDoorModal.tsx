@@ -46,7 +46,7 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
     // Log the user's response
     const userChoiceStr = userChoice ? 'yes' : 'no';
     const falseDoorQuestionIdStr = String(falseDoorQuestionId);
-    logFalseDoorResponse(cadeyUserId, userFactUrl, falseDoorQuestionIdStr, userChoiceStr, location.pathname);
+    logFalseDoorResponse(cadeyUserId, userFactUrl, falseDoorQuestionIdStr, userChoiceStr, document.title);
 
     // If the user chose "yes", request notification permission
     // Note that the prompt will only appear once; 

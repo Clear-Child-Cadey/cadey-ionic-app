@@ -45,7 +45,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   useEffect(() => {
     setTimeout(() => inputRef.current?.setFocus(),150);
     // Log user fact that the user reached the age screen
-    logAgeScreenReached(cadeyUserId, userFactUrl, location.pathname);
+    logAgeScreenReached(cadeyUserId, userFactUrl, document.title);
   }, []);
   
   // Handle submission of the age form

@@ -156,7 +156,8 @@ const HomePage: React.FC<{
         {/* Conditionally render a modal based on whether the query string contains a vimeoId */}
         {vimeoIdFromUrl && (
           <VideoDetailModal 
-            vimeoId={vimeoIdFromUrl} 
+            vimeoId={vimeoIdFromUrl}
+            videoType={"Deep link"}
             isOpen={showModal} 
             onClose={() => setShowModal(false)} 
           />

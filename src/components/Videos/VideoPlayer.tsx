@@ -13,9 +13,10 @@ interface VideoPlayerProps {
   videoId: string;
   mediaId: string;
   videoType: string;
+  source: string;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, source }) => {
 
   const mediaIdStr = String(mediaId);
 
@@ -39,19 +40,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }
   const [videoProgress, setVideoProgress] = useState(0);
 
   useEffect(() => {
-    if (location.pathname === '/Home' || location.pathname === '/' || location.pathname === '/home') {
-      setButtonText('Back to Home');
-    } else if (location.pathname === '/Concerns' || location.pathname === '/concerns') {
-      setButtonText('Back to Concerns');
-    } else {
       setButtonText('Close');
-    }
   }, [location]);
   
   const Player = ReactPlayer as any;
 
   const onPlay = () => {
-    // Unused currently
+    logVideoPlay(cadeyUserId, userFactUrl, mediaIdStr, videoType, source);
   };
 
   const onPause = async () => {
@@ -61,7 +56,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }
         mediaIdStr, 
         String(videoProgress).substring(0, 4), 
         videoType, 
-        location.pathname
+        source
       );
 
     if (response.falseDoorQuestionId !== 0) {
@@ -71,7 +66,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }
   };
 
   const onEnded = async () => {
-    const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr, videoType, location.pathname);
+    const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr, videoType, source);
 
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
@@ -80,22 +75,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType }
   };
 
   const onClickPreview = () => {
-    logVideoPlay(cadeyUserId, userFactUrl, mediaIdStr, videoType, location.pathname);
+    // Unused currently
   }
 
   const onProgress = (progress: any) => {
     setVideoProgress(progress.played);
     if (progress.played >= 1 && !logged100) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "1.00", videoType, location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "1.00", videoType, source);
       setLogged100(true);
     } else if (progress.played >= 0.75 && !logged75) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.75", videoType, location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.75", videoType, source);
       setLogged75(true);
     } else if (progress.played >= 0.5 && !logged50) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.5", videoType, location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.5", videoType, source);
       setLogged50(true);
     } else if (progress.played >= 0.25 && !logged25) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25", videoType, location.pathname);
+      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25", videoType, source);
       setLogged25(true);
     }
 };

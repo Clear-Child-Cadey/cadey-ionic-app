@@ -59,7 +59,7 @@ const RouterTabs: React.FC = () => {
 
   const handleTabClick = async (tabName: string) => {
     try {
-        await logTapBarClick(cadeyUserId, userFactUrl, tabName, window.location.pathname);
+        await logTapBarClick(cadeyUserId, userFactUrl, tabName, document.title);
     } catch (error) {
         console.error("Error logging tab bar click: ", error);
     }

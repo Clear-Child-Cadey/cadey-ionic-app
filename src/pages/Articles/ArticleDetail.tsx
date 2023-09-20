@@ -41,7 +41,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
                 detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
                 setArticle(detail);
                 // Log a user fact
-                logOpenedArticle(cadeyUserId, userFactUrl, articleId, location.pathname);
+                logOpenedArticle(cadeyUserId, userFactUrl, articleId, document.title);
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {
