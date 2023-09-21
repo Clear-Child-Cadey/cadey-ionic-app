@@ -118,11 +118,11 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
   }
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onClose}>
+    <IonModal className="video-detail" isOpen={isOpen} onDidDismiss={onClose}>
         <IonHeader>
             <IonToolbar>
-                <IonTitle>Watch Now</IonTitle>
-                <IonButton slot="end" onClick={onClose}>Close</IonButton>
+                <IonTitle style={{ textAlign: 'left', paddingLeft: 0 }}>Watch Now</IonTitle>
+                <IonButton className="close-button" slot="end" onClick={onClose}>Close</IonButton>
             </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
@@ -135,30 +135,37 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                   videoType={videoType}
                   source={source}
                 />
-                <div className="tag-share">
-                  <p>{videoData.audience}</p>  
-                  {canShare && (
-                    <div className="share" onClick={(event) => handleShare(event, videoData.sourceId, videoData.mediaId, "Video Modal Type")}>
-                      <p>Share </p>
-                      <div className="share-button">
-                        <IonIcon icon={arrowRedoOutline} />
+                <div className="video-metadata">
+                  <div className="tag-share">
+                    <p>{videoData.audience}</p>  
+                    {canShare && (
+                      <div className="share" onClick={(event) => handleShare(event, videoData.sourceId, videoData.mediaId, "Video Modal Type")}>
+                        <p>Share </p>
+                        <div className="share-button">
+                          <IonIcon icon={arrowRedoOutline} />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                  <h3>{videoData.title}</h3>
                 </div>
-                <h3>{videoData.title}</h3>
               </div>
             </IonRow>
           )}
             <IonRow>
                 <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
             </IonRow>
-            <IonRow className="suggested-video-row">
-              <img 
-                src="https://i.vimeocdn.com/video/1711321134-fd2aedff2fe7e8753719c6d9d050293090466b8432a8798c05ba5b13a79a23a4-d?mw=1600&mh=900"
-                alt="New Video Title" 
-                onClick={() => handleRelatedVideoClick("855048900/c5036cbce8")}
-              />
+            
+            <IonRow className="suggested-content">
+              <hr />
+              <h3>Also Recommended</h3>
+              <IonRow className="suggested-video-row">
+                <img 
+                  src="https://i.vimeocdn.com/video/1711321134-fd2aedff2fe7e8753719c6d9d050293090466b8432a8798c05ba5b13a79a23a4-d?mw=1600&mh=900"
+                  alt="New Video Title" 
+                  onClick={() => handleRelatedVideoClick("855048900/c5036cbce8")}
+                />
+              </IonRow>
             </IonRow>
         </IonContent>
     </IonModal>

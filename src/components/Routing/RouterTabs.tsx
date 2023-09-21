@@ -24,7 +24,6 @@ import { homeOutline, gridOutline, mailOutline, newspaperOutline } from 'ionicon
 import ConcernsPage from '../../pages/Concerns/Concerns';
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
-import VideoDetailPage from '../../pages/Videos/VideoDetail';
 import MessagesPage from '../../pages/Messages/Messages';
 import ArticlesPage from '../../pages/Articles/Articles';
 import ArticleDetailPage from '../../pages/Articles/ArticleDetail';
@@ -122,7 +121,6 @@ const RouterTabs: React.FC = () => {
             </Route>
             <Route exact path="/App/Admin" component={AdminPage} />
             <Route exact path="/App/Messages" component={MessagesPage} />
-            <Route path="/App/VideoDetail/:id1/:id2" component={VideoDetailPage} />
             <Route exact path="/App/Articles" component={ArticlesPage} />
             <Route path="/App/ArticleDetail/:id" render={({ match }) => 
               <ArticleDetailPage articleId={Number(match.params.id)} />

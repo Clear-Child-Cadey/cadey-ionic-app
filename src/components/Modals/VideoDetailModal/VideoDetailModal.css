@@ -1,0 +1,34 @@
+.close-button {
+    --border-radius: 20px;
+}
+
+.video-detail .video-item {
+    width: 100vw;
+}
+
+.video-detail .video-metadata, 
+.video-detail .featured-message, 
+.video-detail .suggested-content {
+    padding: 0 16px;
+}
+
+.video-detail-title {
+    text-align: left;
+    --padding-left: 0;
+}
+
+.suggested-content hr {
+    display: block;
+    width: 100%;
+    height: 0;
+    border-width: 1px;
+    border-color: #E0E0E0;
+    opacity: 20%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.suggested-content h3 {
+    margin-top: 0;
+    font-size: 15px;
+}
