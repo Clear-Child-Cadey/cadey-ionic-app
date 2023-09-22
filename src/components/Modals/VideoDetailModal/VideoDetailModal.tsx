@@ -25,7 +25,7 @@ import { logShareClick } from '../../../api/UserFacts';
 import './VideoDetailModal.css';
 // Components
 import VideoPlayer from '../../../components/Videos/VideoPlayer';
-import RelatedArticle from '../../Articles/RelatedArticle';
+import ArticleItem from '../../Articles/ArticleItem';
 import { WP_Article } from '../../../api/WordPress/GetArticles';
 
 interface VideoDetailModalProps {
@@ -220,7 +220,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                           )}
                           {/* Articles */}
                           {item.mediaType === 2 && (
-                            <RelatedArticle 
+                            <ArticleItem 
                               articleId={item.mediaId}
                               onSelectArticle={handleArticleSelect}
                             />
