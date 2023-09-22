@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
 import {
-    IonList,
-    IonItem,
-    IonLabel,
     IonLoading,
-    IonThumbnail,
-    IonImg
+    IonImg,
+    IonIcon,
 } from '@ionic/react';
 // CSS
 import './ArticlesListHorizontal.css';
+// Icons
+import { readerOutline } from 'ionicons/icons';
+// API
+import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
 
 // Setup the interface
 interface ArticlesListProps {
@@ -72,11 +72,12 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ articleIds, onSelectArticle
                                     alt={article.title.rendered} 
                                     className="article-image"
                                 />
+                                <IonIcon icon={readerOutline} className="article-icon" />
                             </div>
                         )}
-                        <div>
-                            <h2 className='article-title'>{decodeHtmlEntities(article.title.rendered)}</h2>
-                            {/* <p>{stripHtml(article.excerpt.rendered)}</p> */}
+                        <div className="article-metadata">
+                            <p>Article</p>
+                            <h3 className='article-title'>{decodeHtmlEntities(article.title.rendered)}</h3>
                         </div>
                     </div>
                 ))}

@@ -124,7 +124,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, 
           url={`https://vimeo.com/${videoId}`}
           controls={true}
           light={false} // Set to true to show just the video thumbnail, which loads the full player on click
-          playIcon={<IonIcon icon={playCircleOutline} className="playIcon" />}
+          playIcon={<IonIcon icon={playCircleOutline} className="play-icon" />}
           playing={true} // Set to true to autoplay the video
           playsInline={true}
           width='100%'

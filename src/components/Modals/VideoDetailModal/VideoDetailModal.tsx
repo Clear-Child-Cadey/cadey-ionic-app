@@ -176,8 +176,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                 />
                 <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
                   <div className="tag-share">
-                    {/* <p>{videoData.audience}</p>   */}
-                    <p>Video</p>
                     {canShare && videoData.sourceId && (
                       <div className="share" onClick={(event) => handleShare(event, videoData.sourceId!, videoData.mediaId.toString(), "Video Modal Type")}>
                         <p>Share </p>
@@ -216,8 +214,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                                 <img src={item.thumbnail || ''} alt={item.title || ''} />
                                 <IonIcon icon={playCircleOutline} className="play-icon" />
                               </div>
-                              
-                              {/* <p>{item.audience}</p> */}
                               <p>Video</p>
                               <h3>{item.title}</h3>
                             </div>

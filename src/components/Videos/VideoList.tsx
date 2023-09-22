@@ -70,7 +70,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
             <IonIcon icon={playCircleOutline} className="play-icon" />
           </div>
           <div className="tag-share">
-            <p>{video.audience}</p>  
+            <p>Video</p>  
             {canShare && (
               <div className="share" onClick={(event) => handleShare(event, video.videoId, video.mediaId, video.videoType)}>
                 <p>Share </p>

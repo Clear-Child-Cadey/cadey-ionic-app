@@ -1,38 +1,19 @@
-.article-list {
-    display: flex;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    padding: 1rem 0;
-    white-space: nowrap;
-}
-
-.related-article .article-item {
-    width: calc(100vw - 32px);
-    margin-right: 0;
+.article-metadata p {
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.2px;
+    color: #958D89;
+    margin: 0;
 }
 
 .article-image-wrapper {
-    width: 100%;
-    height: auto;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    overflow: hidden;  /* This ensures the image inside takes the rounded corners */
+    position: relative;
 }
 
-.article-image {
-    width: 100%;
-    display: block;   /* Ensure it's a block element */
-}
-
-
-.article-item .article-title {
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    letter-spacing: -0.2px;
-    color: #484443;
-    margin-top: 0;
-    white-space: normal;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+.article-image-wrapper .article-icon {
+    color: #fff;
+    font-size: 35px;
+    position: absolute; /* Position the icon absolutely within the player-wrapper */
+    bottom: 10px;
+    right: 10px;
 }
