@@ -39,6 +39,10 @@
     margin-top: 0;
 }
 
+.video-list .video-item img {
+    border-radius: 10px;
+}
+
 .tag-share {
     display: flex;
     justify-content: space-between;
@@ -58,4 +62,15 @@
     vertical-align: text-top;
     color: #000;
 }
-  
+ 
+.video-thumb-play-container {
+    position: relative;
+}
+
+.video-thumb-play-container .play-icon {
+    color: #fff;
+    font-size: 35px;
+    position: absolute; /* Position the icon absolutely within the  */
+    bottom: 10px;
+    right: 10px;
+}

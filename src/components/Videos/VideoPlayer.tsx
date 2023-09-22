@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ReactPlayer from 'react-player';
 import { useLocation } from 'react-router-dom';
+// CSS
 import './VideoPlayer.css';
+// Icons
 import { IonIcon } from '@ionic/react';
 import { playCircleOutline } from 'ionicons/icons';
+// Components
 import FalseDoorModal from '../Modals/FalseDoorModal/FalseDoorModal';
+// API
 import { logVideoFinish, logVideoPause, logVideoPlay, logVideoProgress } from '../../api/UserFacts';
+// Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 

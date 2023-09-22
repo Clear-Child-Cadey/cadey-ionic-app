@@ -10,19 +10,14 @@ import {
     IonRow,
     IonText,
     IonIcon,
-    IonImg,
-    IonThumbnail,
-    IonLabel,
-    IonItem,
     IonList,
  } from '@ionic/react';
  import { useHistory } from 'react-router';
  //  Icons
-import { arrowRedoOutline } from 'ionicons/icons';
+import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
 //  Contexts
 import ApiUrlContext from '../../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../../main';
-import UnreadCountContext from '../../../context/UnreadCountContext';
 //  API
 import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logShareClick } from '../../../api/UserFacts';
@@ -181,7 +176,8 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                 />
                 <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
                   <div className="tag-share">
-                    <p>{videoData.audience}</p>  
+                    {/* <p>{videoData.audience}</p>   */}
+                    <p>Video</p>
                     {canShare && videoData.sourceId && (
                       <div className="share" onClick={(event) => handleShare(event, videoData.sourceId!, videoData.mediaId.toString(), "Video Modal Type")}>
                         <p>Share </p>
@@ -216,8 +212,13 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                               onClick={() => handleRelatedVideoClick(item.sourceId!)}
                               className="related video-item"
                             >
-                              <img src={item.thumbnail || ''} alt={item.title || ''} />
-                              <p>{item.audience}</p>
+                              <div className="video-thumb-play-container">
+                                <img src={item.thumbnail || ''} alt={item.title || ''} />
+                                <IonIcon icon={playCircleOutline} className="play-icon" />
+                              </div>
+                              
+                              {/* <p>{item.audience}</p> */}
+                              <p>Video</p>
                               <h3>{item.title}</h3>
                             </div>
                           )}

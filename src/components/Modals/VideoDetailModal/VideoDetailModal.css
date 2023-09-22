@@ -45,6 +45,10 @@
     --padding-left: 0;
 }
 
+.suggested-content {
+    background-color: #F9F6EF;
+}
+
 .suggested-content hr {
     display: block;
     width: 100%;

@@ -55,6 +55,8 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
                     audience: video.audience || 'No Description',
                     videoId: video.sourceId,
                     mediaId: video.mediaId,
+                    videoType: "Recommendation",
+                    thumbnail: video.thumbnail || '',
                   }))}
                 />
               </>
