@@ -14,9 +14,10 @@ interface VideoPlayerProps {
   mediaId: string;
   videoType: string;
   source: string;
+  onVideoHeightChange?: (height: number) => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, source }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, source, onVideoHeightChange }) => {
 
   const mediaIdStr = String(mediaId);
 
@@ -38,6 +39,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, 
   const [logged100, setLogged100] = useState(false);
   
   const [videoProgress, setVideoProgress] = useState(0);
+
+  const handleVideoReady = () => {
+    const videoElement = document.querySelector('.react-player');
+    if (videoElement) {
+      const videoHeight = videoElement.clientHeight;
+      console.log('Video height: ', videoHeight);
+      if (onVideoHeightChange) {
+        onVideoHeightChange(videoHeight);
+      }
+    }
+  };
 
   useEffect(() => {
       setButtonText('Close');
@@ -119,6 +131,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, 
           onClickPreview={onClickPreview}
           onError={onError}
           onProgress={onProgress}
+          onReady={handleVideoReady}
         />
         <FalseDoorModal 
           falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}

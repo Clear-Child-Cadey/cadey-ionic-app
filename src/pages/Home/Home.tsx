@@ -45,7 +45,6 @@ const HomePage: React.FC<{
   const timerRef = useRef<number | undefined>();
 
   const handleArticleSelect = (selectedArticle: WP_Article) => {
-    // TODO: Log a user fact
     history.push(`/App/ArticleDetail/${selectedArticle.id}`);
   };
 

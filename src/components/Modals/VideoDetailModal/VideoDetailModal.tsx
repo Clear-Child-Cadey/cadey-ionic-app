@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Share } from '@capacitor/share';
 import { 
     IonModal,
@@ -10,8 +10,14 @@ import {
     IonRow,
     IonText,
     IonIcon,
+    IonImg,
+    IonThumbnail,
+    IonLabel,
+    IonItem,
+    IonList,
  } from '@ionic/react';
-//  Icons
+ import { useHistory } from 'react-router';
+ //  Icons
 import { arrowRedoOutline } from 'ionicons/icons';
 //  Contexts
 import ApiUrlContext from '../../../context/ApiUrlContext';
@@ -24,6 +30,8 @@ import { logShareClick } from '../../../api/UserFacts';
 import './VideoDetailModal.css';
 // Components
 import VideoPlayer from '../../../components/Videos/VideoPlayer';
+import RelatedArticle from '../../Articles/RelatedArticle';
+import { WP_Article } from '../../../api/WordPress/GetArticles';
 
 interface VideoDetailModalProps {
     vimeoId: string;
@@ -33,6 +41,8 @@ interface VideoDetailModalProps {
 }
 
 const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType, isOpen, onClose }) => {
+
+  const history = useHistory(); // Initialize the useHistory hook
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
@@ -44,18 +54,42 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
   const [canShare, setCanShare] = useState(false);
 
   // By default, use the route as the source
-  const [source, setSource] = useState('');
+  const [source, setSource] = useState(''); 
 
-  interface VideoDetailData {
-    mediaId: string;
-    sourceId: string;
-    title: string;
-    description: string;
-    featuredMessage: string;
-    audience: string;
-  }
+  // Ref for the video container element
+  const videoRef = useRef<HTMLDivElement | null>(null);
+
+  // State to store the calculated height for the video
+  const [videoHeight, setVideoHeight] = useState<number | null>(null);
 
   const [videoData, setVideoData] = useState<VideoDetailData>();
+  
+  interface RelatedMediaItem {
+    mediaType: number;        // 1 = video, 2 = article
+    mediaId: number;          // Our media item database ID
+    sourceId: string | null;  // Vimeo ID for videos, null for articles
+    thumbnail: string | null; // Vimeo thumbnail for videos, null for articles
+    title: string | null;     // Title of the video, null for articles
+    description: string | null; // Description of the video, null for articles
+    featuredMessage: string | null; // Featured message for the video, null for articles
+    audience: string | null;  // Audience for the video, null for articles
+  }
+  
+  interface RelatedMedia {
+    relatedMediaItems: RelatedMediaItem[];
+  }
+  
+  interface VideoDetailData {
+    mediaType: number;                  // 1 = video, 2 = article
+    mediaId: number;                    // Our media item database ID
+    sourceId: string | null;            // Vimeo ID for videos, null for articles
+    thumbnail: string | null;           // Vimeo thumbnail for videos, null for articles
+    title: string | null;               // Title of the video, null for articles
+    description: string | null;         // Description of the video, null for articles
+    featuredMessage: string | null;     // Featured message for the video, null for articles
+    audience: string | null;            // Audience for the video, null for articles
+    relatedMedia: RelatedMedia[];       // Array of related media items
+  }
 
   // Check if the user's device has sharing capabilities
   useEffect(() => {
@@ -65,9 +99,8 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
   useEffect(() => {
     if (isOpen && !source) {
       setSource(document.title);
-      console.log("Setting source to: ", document.title);
     }
-}, [isOpen]);
+  }, [isOpen]);
 
   // Whenever the modal is opened, set the currentVimeoId to the vimeoId prop
   useEffect(() => {
@@ -80,7 +113,16 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
     const fetchVideoData = async () => {
         try {
           const data = await getVideoDetailData(apiUrl, currentVimeoId);
-          setVideoData(data);
+
+          // Ensure relatedMedia is always an array
+        if (data && data.relatedMedia) {
+          if (!Array.isArray(data.relatedMedia)) {
+            data.relatedMedia = [data.relatedMedia]; // Wrap in an array
+          }
+        }
+
+        setVideoData(data);
+        console.log("Fetched video data: ", data);
 
         } catch (error) {
             console.error("Error fetching video details:", error);
@@ -94,8 +136,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
       setCurrentVimeoId('');
       setVideoData(undefined);
       setSource('');
-      console.log("Setting source to empty string");
-
     }
 
   }, [isOpen, currentVimeoId]);
@@ -113,9 +153,12 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
 
   const handleRelatedVideoClick = (videoId: string) => {
     setSource('Related Video');
-    console.log("Setting source to: Related Video");
     setCurrentVimeoId(videoId);
   }
+
+  const handleArticleSelect = (selectedArticle: WP_Article) => {
+    history.push(`/App/ArticleDetail/${selectedArticle.id}`);
+  };
 
   return (
     <IonModal className="video-detail" isOpen={isOpen} onDidDismiss={onClose}>
@@ -128,18 +171,19 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
         <IonContent fullscreen>
           {videoData && (
             <IonRow className="video-player-row">
-              <div className="video-item" key={videoData.sourceId}>
+              <div className="current" key={videoData.sourceId} ref={videoRef}>
                 <VideoPlayer 
                   videoId={currentVimeoId}
-                  mediaId={videoData.mediaId}
+                  mediaId={videoData.mediaId.toString()}
                   videoType={videoType}
                   source={source}
+                  onVideoHeightChange={(height) => setVideoHeight(height)}
                 />
-                <div className="video-metadata">
+                <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
                   <div className="tag-share">
                     <p>{videoData.audience}</p>  
-                    {canShare && (
-                      <div className="share" onClick={(event) => handleShare(event, videoData.sourceId, videoData.mediaId, "Video Modal Type")}>
+                    {canShare && videoData.sourceId && (
+                      <div className="share" onClick={(event) => handleShare(event, videoData.sourceId!, videoData.mediaId.toString(), "Video Modal Type")}>
                         <p>Share </p>
                         <div className="share-button">
                           <IonIcon icon={arrowRedoOutline} />
@@ -155,17 +199,42 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
             <IonRow>
                 <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
             </IonRow>
-            
             <IonRow className="suggested-content">
               <hr />
               <h3>Also Recommended</h3>
-              <IonRow className="suggested-video-row">
-                <img 
-                  src="https://i.vimeocdn.com/video/1711321134-fd2aedff2fe7e8753719c6d9d050293090466b8432a8798c05ba5b13a79a23a4-d?mw=1600&mh=900"
-                  alt="New Video Title" 
-                  onClick={() => handleRelatedVideoClick("855048900/c5036cbce8")}
-                />
-              </IonRow>
+              
+              {/* ---------- */}
+              {videoData?.relatedMedia && Array.isArray(videoData.relatedMedia) && (
+                <IonList className="related-items-list">
+                  {videoData.relatedMedia.map((relatedMedia, index) => (
+                    <div key={index}>
+                      {relatedMedia.relatedMediaItems.map((item, itemIndex) => (
+                        <div className='related-item' key={itemIndex}>
+                          {/* Videos */}
+                          {item.mediaType === 1 && item.sourceId && (
+                            <div
+                              onClick={() => handleRelatedVideoClick(item.sourceId!)}
+                              className="related video-item"
+                            >
+                              <img src={item.thumbnail || ''} alt={item.title || ''} />
+                              <p>{item.audience}</p>
+                              <h3>{item.title}</h3>
+                            </div>
+                          )}
+                          {/* Articles */}
+                          {item.mediaType === 2 && (
+                            <RelatedArticle 
+                              articleId={item.mediaId}
+                              onSelectArticle={handleArticleSelect}
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </IonList>
+              )}
+              {/* ---------- */}
             </IonRow>
         </IonContent>
     </IonModal>
