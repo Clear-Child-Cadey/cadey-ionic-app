@@ -13,6 +13,7 @@ import { logVideoFinish, logVideoPause, logVideoPlay, logVideoProgress } from '.
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { useLoadingState } from '../../context/LoadingStateContext';
 
 interface VideoPlayerProps {
   videoId: string;
@@ -45,6 +46,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, 
   
   const [videoProgress, setVideoProgress] = useState(0);
 
+  const { state: loadingState, dispatch } = useLoadingState();
+
   const handleVideoReady = () => {
     const videoElement = document.querySelector('.react-player');
     if (videoElement) {
@@ -54,6 +57,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, 
         onVideoHeightChange(videoHeight);
       }
     }
+    // Dismiss the loader when the player is ready
+    dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: false } });
   };
 
   useEffect(() => {

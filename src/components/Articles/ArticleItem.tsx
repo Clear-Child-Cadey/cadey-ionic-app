@@ -10,6 +10,8 @@ import './ArticleItem.css';
 import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
 // Icons
 import { readerOutline } from 'ionicons/icons';
+// Contexts
+import { useLoadingState } from '../../context/LoadingStateContext';
 
 // Setup the interface
 interface ArticlesListProps {
@@ -19,13 +21,14 @@ interface ArticlesListProps {
 
 const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }) => {
     const [article, setArticle] = useState<WP_Article>();
-    const [isLoading, setIsLoading] = useState(false);
+    // Load the loading state from the context
+    const { state: loadingState, dispatch } = useLoadingState();
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes
     useEffect(() => {
         const fetchArticle = async () => {
             try {
-                setIsLoading(true);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
                 const fetchedArticles = await getArticlesByIds([articleId]);
                 setArticle(fetchedArticles[0]);
                 console.log("Fetched article: ", article);
@@ -33,7 +36,7 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }
             } catch (error) {
                 console.error("Error fetching article ID: ", articleId, " error: ", error);
             } finally {
-                setIsLoading(false);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
             }
         };
 
@@ -52,7 +55,6 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }
     
     return (
         <div>
-            <IonLoading isOpen={isLoading} message={'Loading Articles...'} />
             {article && (
                 <div className='related-article'>
                     <div 

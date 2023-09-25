@@ -8,6 +8,8 @@ import {
     IonThumbnail,
     IonImg
 } from '@ionic/react';
+// Contexts
+import { useLoadingState } from '../../context/LoadingStateContext';
 
 // Setup the interface
 interface ArticlesListProps {
@@ -17,20 +19,21 @@ interface ArticlesListProps {
 
 const ArticlesList: React.FC<ArticlesListProps> = ({ categoryId, onSelectArticle }) => {
     const [articles, setArticles] = useState<WP_Article[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    // Load the loading state from the context
+    const { state: loadingState, dispatch } = useLoadingState();
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                setIsLoading(true);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
                 const fetchedArticles = await getArticlesByCategory(categoryId);
                 setArticles(fetchedArticles);
                 console.log("Fetched articles:", fetchedArticles); 
             } catch (error) {
                 console.error("Error fetching articles:", error);
             } finally {
-                setIsLoading(false);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
             }
         };
 
@@ -50,7 +53,6 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ categoryId, onSelectArticle
 
     return (
         <div>
-            <IonLoading isOpen={isLoading} message={'Loading Articles...'} />
             <IonList>
                 {articles.map((article, index) => (
                     <IonItem 

@@ -19,6 +19,7 @@ import { logOpenedArticle } from '../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { useLoadingState } from '../../context/LoadingStateContext';
 
 // Setup the interface
 interface ArticleDetailProps {
@@ -27,7 +28,7 @@ interface ArticleDetailProps {
 
 const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
     const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const { state: loadingState, dispatch } = useLoadingState();
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
@@ -37,6 +38,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
     useEffect(() => {
         const fetchArticleDetail = async () => {
             try {
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
                 const detail = await getArticleDetail(articleId);
                 detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
                 setArticle(detail);
@@ -45,7 +47,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {
-                setIsLoading(false);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
             }
         };
 
@@ -85,7 +87,6 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
                     </IonToolbar>
                 </IonHeader>
                 <IonRow>
-                    <IonLoading isOpen={isLoading} message={'Loading Article...'} />
                     {article && (
                         <div className="article-detail">
                             <h2>{decodeHtmlEntities(article.title.rendered)}</h2>

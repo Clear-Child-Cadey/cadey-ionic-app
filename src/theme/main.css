@@ -166,3 +166,7 @@ ion-button {
 .md.title-default {
   padding-inline: 16px;
 }
+
+.ion-page .header-md {
+  margin-bottom: 0;
+}

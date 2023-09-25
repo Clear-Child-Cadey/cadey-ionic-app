@@ -6,6 +6,7 @@ import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { useLoadingState } from '../../context/LoadingStateContext';
 // Functions
 import { logShareClick } from '../../api/UserFacts';
 // CSS
@@ -33,6 +34,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   const [canShare, setCanShare] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { state: loadingState, dispatch } = useLoadingState();
 
   // Check if the user's device has sharing capabilities
   useEffect(() => {
@@ -51,6 +53,8 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   }
 
   const handleThumbnailClick = (video: VideoItem) => {
+    // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
+    dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: true } });
     setSelectedVideo(video);
     setIsModalOpen(true);
   }

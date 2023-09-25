@@ -45,7 +45,7 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ articleIds, onSelectArticle
     
     return (
         <div>
-            <IonLoading isOpen={isLoading} message={'Loading Articles...'} />
+            {/* <IonLoading isOpen={isLoading} message={'Loading Articles...'} /> */}
             <div className='article-list'>
                 {articles.map((article, index) => (
                     <ArticleItem 

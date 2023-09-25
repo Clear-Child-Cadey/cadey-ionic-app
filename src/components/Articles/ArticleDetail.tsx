@@ -10,6 +10,8 @@ import {
 import { refresh } from 'ionicons/icons';
 // CSS
 import './ArticleDetail.css';
+// Contexts
+import { useLoadingState } from '../../context/LoadingStateContext';
 
 // Setup the interface
 interface ArticleDetailProps {
@@ -19,18 +21,20 @@ interface ArticleDetailProps {
 
 const ArticleDetail: React.FC<ArticleDetailProps> = ({ articleId, onRestart }) => {
     const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    // Load the loading state from the context
+    const { state: loadingState, dispatch } = useLoadingState();
 
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {
         const fetchArticleDetail = async () => {
             try {
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
                 const detail = await getArticleDetail(articleId);
                 setArticle(detail);
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {
-                setIsLoading(false);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
             }
         };
 
@@ -49,7 +53,6 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ articleId, onRestart }) =
 
     return (
         <IonContent>
-            <IonLoading isOpen={isLoading} message={'Loading Article...'} />
             {article && (
                 <div className="article-detail">
                     <h2>{article.title.rendered}</h2>

@@ -60,14 +60,14 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
   const [videoData, setVideoData] = useState<VideoDetailData>();
   
   interface RelatedMediaItem {
-    mediaType: number;        // 1 = video, 2 = article
-    mediaId: number;          // Our media item database ID
-    sourceId: string | null;  // Vimeo ID for videos, null for articles
-    thumbnail: string | null; // Vimeo thumbnail for videos, null for articles
-    title: string | null;     // Title of the video, null for articles
-    description: string | null; // Description of the video, null for articles
-    featuredMessage: string | null; // Featured message for the video, null for articles
-    audience: string | null;  // Audience for the video, null for articles
+    mediaType: number;                // 1 = video, 2 = article
+    mediaId: number;                  // Our media item database ID
+    sourceId: string | null;          // Vimeo ID for videos, null for articles
+    thumbnail: string | null;         // Vimeo thumbnail for videos, null for articles
+    title: string | null;             // Title of the video, null for articles
+    description: string | null;       // Description of the video, null for articles
+    featuredMessage: string | null;   // Featured message for the video, null for articles
+    audience: string | null;          // Audience for the video, null for articles
   }
   
   interface RelatedMedia {
@@ -115,9 +115,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
             data.relatedMedia = [data.relatedMedia]; // Wrap in an array
           }
         }
-
         setVideoData(data);
-        console.log("Fetched video data: ", data);
 
         } catch (error) {
             console.error("Error fetching video details:", error);

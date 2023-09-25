@@ -10,6 +10,7 @@ import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
 import { HomeTabVisibilityContext } from './context/TabContext';
 import UnreadCountContext from './context/UnreadCountContext';
 import { TabBarSpotlightProvider } from './context/SpotlightContext';
+import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
 // Functions
 import getAppData from './api/AppOpen';
 
@@ -122,8 +123,6 @@ function MainComponent() {
   const [cadeyUserId, setCadeyUserId] = useState("");
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
   const [oneSignalId, setOneSignalId] = useState("");
-  const [newVideos, setNewVideos] = useState<any[]>([]);
-  const [playedVideos, setPlayedVideos] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isHomeTabVisible, setIsHomeTabVisible] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -137,9 +136,10 @@ function MainComponent() {
     fetchData();
   }, [apiUrl]);
 
+  // If homepage data is loading, show the loader
   if (isLoading) {
-    return <IonLoading isOpen={true} message="Loading" />; 
-  }
+    return <IonLoading isOpen={true} message="Loading..." />;
+  }  
 
   return (
     <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion, oneSignalId }}>
@@ -147,7 +147,9 @@ function MainComponent() {
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
           <UnreadCountContext.Provider value={{ unreadCount, setUnreadCount }}>
             <TabBarSpotlightProvider>
-              <App />
+              <LoadingStateProvider>
+                <App />
+              </LoadingStateProvider>
             </TabBarSpotlightProvider>
           </UnreadCountContext.Provider>
         </HomeTabVisibilityContext.Provider>

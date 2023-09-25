@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
   IonApp,
   setupIonicReact,
+  IonLoading,
 } from '@ionic/react';
 import semver from 'semver';
 // Components
@@ -10,6 +11,7 @@ import AppUpdateModal from './components/Modals/AppUpdateModal';
 import RouterTabs from './components/Routing/RouterTabs';
 // Contexts
 import { CadeyUserContext } from './main';
+import { useLoadingState } from './context/LoadingStateContext';
 // Variables
 import { AppVersion } from './variables/AppVersion';
 // API
@@ -20,6 +22,7 @@ setupIonicReact();
 const App: React.FC = () => {
   const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const { state: loadingState, dispatch } = useLoadingState();
 
   const getStoreLink = () => {
     const userAgent = window.navigator.userAgent;
@@ -62,6 +65,10 @@ const App: React.FC = () => {
         buttonText="Upgrade"
         buttonUrl={getStoreLink()}
       />
+      {/* Show a loading state if anything is loading */}
+      {Object.values(loadingState).some(Boolean) && (
+        <IonLoading isOpen={true} message={'Please wait...'} />
+      )}
       <RouterTabs />
     </IonApp>
   );

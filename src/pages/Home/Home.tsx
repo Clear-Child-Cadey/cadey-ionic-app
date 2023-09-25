@@ -14,6 +14,7 @@ import { useHistory } from 'react-router';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
 import { useSpotlight } from '../../context/SpotlightContext';
+import { useLoadingState } from '../../context/LoadingStateContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
@@ -33,7 +34,7 @@ const HomePage: React.FC<{
   // Initialize the useHistory hook
   const history = useHistory();
   
-  const [isLoading, setIsLoading] = useState(false);
+  const { state: loadingState, dispatch } = useLoadingState();
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
   const [playedVideos, setPlayedVideos] = useState([]);
@@ -52,7 +53,8 @@ const HomePage: React.FC<{
   const { getHomeDataFromApi } = getHomeData();
 
   const fetchData = async () => {
-    setIsLoading(true);
+    // Start loader
+    dispatch({ type: 'SET_LOADING', payload: { key: 'homepageData', value: true } });
     try {
       const { featuredVideos, newVideos, playedVideos, trendingVideos, articleIds } = await getHomeDataFromApi();
       setFeaturedVideos(featuredVideos);
@@ -63,7 +65,7 @@ const HomePage: React.FC<{
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setIsLoading(false); // Stop the loader after data has been fetched
+      dispatch({ type: 'SET_LOADING', payload: { key: 'homepageData', value: false } });
       SplashScreen.hide(); // Hide the splash screen after data has been fetched
     }
   };
