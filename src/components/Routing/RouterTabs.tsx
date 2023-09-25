@@ -101,7 +101,6 @@ const RouterTabs: React.FC = () => {
             <Route exact path="/App/Concerns" component={ConcernsPage} />
             <Route exact path="/App/Home" render={(routeProps) => {
               const vimeoId = routeProps.location.search.split('video=')[1];
-              console.log('Extracted vimeoId:', vimeoId); // Log the extracted vimeoId
 
               return (
                   <HomePage 

@@ -23,7 +23,6 @@ import { HomeTabVisibilityContext } from '../../context/TabContext';
 
 // Define the Concerns component
 const ConcernsPage: React.FC = () => {
-  console.log("ConcernsPage");
 
   // State variable flags to indicate which component to display
   const [showAgeForm, setShowAgeForm] = useState(false);

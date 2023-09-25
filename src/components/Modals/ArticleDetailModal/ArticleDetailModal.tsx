@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { WP_ArticleDetail, getArticleDetail } from '../../../api/WordPress/GetArticleDetail';
 import {
     IonContent,
-    IonLoading,
     IonRow,
-    IonButton,
-    IonIcon,
-    IonPage,
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonModal,
+    IonButton,
 } from '@ionic/react';
-import { refresh } from 'ionicons/icons';
 // CSS
-import './ArticleDetail.css';
+import './ArticleDetailModal.css';
 // API
 import { logOpenedArticle } from '../../../api/UserFacts';
 // Contexts
@@ -24,26 +21,38 @@ import { useLoadingState } from '../../../context/LoadingStateContext';
 // Setup the interface
 interface ArticleDetailProps {
     articleId: number;
+    isOpen: boolean;
+    onClose: () => void;
 }
 
-const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
+const ArticleDetailModal: React.FC<ArticleDetailProps> = ({ articleId, isOpen, onClose }) => {
     const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
+    const [currentArticleId, setCurrentArticleId] = useState<number | null>(null);
     const { state: loadingState, dispatch } = useLoadingState();
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
     const userFactUrl = `${apiUrl}/userfact`;
 
-    // Fetch the article detail when the component loads or the articleId changes
+    // Whenever the modal is opened, set the currentVimeoId to the vimeoId prop
+    useEffect(() => {
+        if (isOpen) {
+        setCurrentArticleId(articleId);
+        }
+    }, [isOpen, articleId]);  
+
+    // Fetch the article detail when the component loads or the currentArticleId changes
     useEffect(() => {
         const fetchArticleDetail = async () => {
             try {
-                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
-                const detail = await getArticleDetail(articleId);
-                detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
-                setArticle(detail);
-                // Log a user fact
-                logOpenedArticle(cadeyUserId, userFactUrl, articleId, document.title);
+                {{currentArticleId &&
+                    dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
+                    const detail = await getArticleDetail(currentArticleId!);
+                    detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
+                    setArticle(detail);
+                    // Log a user fact
+                    logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId!, document.title);
+                }}
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {
@@ -55,7 +64,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
 
         // Set the title of the page to the title of the article
         document.title = article ? article.title.rendered : "Article Detail";
-    }, [articleId]);
+    }, [currentArticleId]);
 
     /**
      * Removes YouTube iframe embeds from the provided HTML string.
@@ -74,10 +83,12 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
     }
 
     return (
-        <IonPage>
+        <IonModal isOpen={isOpen} onDidDismiss={onClose}>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle>
+                    {/* <IonTitle>{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle> */}
+                    <IonTitle style={{ textAlign: 'left', paddingLeft: 0 }}>Read Now</IonTitle>
+                    <IonButton className="close-button" slot="end" onClick={onClose}>Close</IonButton>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
@@ -98,8 +109,8 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
                     )}
                 </IonRow>
             </IonContent>
-        </IonPage>
+        </IonModal>
     );
 };
 
-export default ArticleDetailPage;
+export default ArticleDetailModal;

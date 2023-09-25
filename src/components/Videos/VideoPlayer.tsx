@@ -52,7 +52,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, videoType, 
     const videoElement = document.querySelector('.react-player');
     if (videoElement) {
       const videoHeight = videoElement.clientHeight;
-      console.log('Video height: ', videoHeight);
       if (onVideoHeightChange) {
         onVideoHeightChange(videoHeight);
       }

@@ -19,7 +19,6 @@ export const getArticleDetail = async (articleId: number): Promise<WP_ArticleDet
             content: fetchedData.content,
             featured_image_url: fetchedData._embedded['wp:featuredmedia'][0].source_url,
         };
-
         return articleDetail;
     } catch (error) {
         console.error("Error fetching article detail:", error);

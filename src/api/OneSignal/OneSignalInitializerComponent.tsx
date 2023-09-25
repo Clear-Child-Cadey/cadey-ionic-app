@@ -7,7 +7,6 @@ const OneSignalInitializer: React.FC = () => {
 
     useEffect(() => {
         const handleNotificationOpened = (jsonData: any) => {
-            // console.log('notificationOpenedCallback in OneSignalInitializer.tsx: ', JSON.stringify(jsonData));
             const launchURL = jsonData?.notification?.launchURL;
 
             if (launchURL) {

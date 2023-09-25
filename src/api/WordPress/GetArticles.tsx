@@ -46,7 +46,6 @@ export const getArticleById = async (articleId: number): Promise<WP_Article> => 
             featured_image_url: articleData._embedded['wp:featuredmedia'] ? articleData._embedded['wp:featuredmedia'][0].source_url : '', // Check if wp:featuredmedia exists first
         }));
 
-        console.log("Article from GetArticles.tsx: ", article)
         return article;
     } catch (error) {
         console.error("Error fetching articles (by IDs):", error);

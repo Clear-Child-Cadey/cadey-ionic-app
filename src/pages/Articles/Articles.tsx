@@ -27,7 +27,6 @@ const ArticlesPage: React.FC = () => {
         document.title = category.name + " Articles";
         setSelectedCategory(category.id);
         setShowArticlesList(true);
-        console.log("Selected Category: ", category);
     };
     
     // Handler for when the user selects an article
@@ -35,7 +34,6 @@ const ArticlesPage: React.FC = () => {
         document.title = article.title.rendered + " | Article Detail";
         setSelectedArticle(article.id);
         setShowArticleDetail(true);
-        console.log("Selected Article: ", article);
     };
 
     // Handler for when the user starts over

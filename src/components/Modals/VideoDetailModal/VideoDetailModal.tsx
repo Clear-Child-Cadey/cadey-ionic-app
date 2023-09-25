@@ -27,6 +27,8 @@ import './VideoDetailModal.css';
 import VideoPlayer from '../../../components/Videos/VideoPlayer';
 import ArticleItem from '../../Articles/ArticleItem';
 import { WP_Article } from '../../../api/WordPress/GetArticles';
+// Modals
+import ArticleDetailModal from '../ArticleDetailModal/ArticleDetailModal';
 
 interface VideoDetailModalProps {
     vimeoId: string;
@@ -155,10 +157,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
     setCurrentVimeoId(videoId);
   }
 
-  const handleArticleSelect = (selectedArticle: WP_Article) => {
-    history.push(`/App/ArticleDetail/${selectedArticle.id}`);
-  };
-
   return (
     <IonModal className="video-detail" isOpen={isOpen} onDidDismiss={onClose}>
         <IonHeader>
@@ -200,8 +198,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
             <IonRow className="suggested-content">
               <hr />
               <h3>Also Recommended</h3>
-              
-              {/* ---------- */}
               {videoData?.relatedMedia && Array.isArray(videoData.relatedMedia) && (
                 <IonList className="related-items-list">
                   {videoData.relatedMedia.map((relatedMedia, index) => (
@@ -224,10 +220,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                           )}
                           {/* Articles */}
                           {item.mediaType === 2 && (
-                            <ArticleItem 
-                              articleId={item.mediaId}
-                              onSelectArticle={handleArticleSelect}
-                            />
+                            <ArticleItem articleId={item.mediaId} />
                           )}
                         </div>
                       ))}

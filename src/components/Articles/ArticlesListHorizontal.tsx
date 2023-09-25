@@ -1,57 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import {
-    IonLoading,
-} from '@ionic/react';
-import { useHistory } from 'react-router';
 // CSS
 import './ArticlesListHorizontal.css';
 // API
 import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
 // Component
 import ArticleItem from './ArticleItem';
+// Contexts
+import { useLoadingState } from '../../context/LoadingStateContext';
 
 // Setup the interface
 interface ArticlesListProps {
     articleIds: number[];
-    onSelectArticle: (article: WP_Article) => void;
 }
 
-const ArticlesList: React.FC<ArticlesListProps> = ({ articleIds, onSelectArticle }) => {
+const ArticlesList: React.FC<ArticlesListProps> = ({ articleIds }) => {
     const [articles, setArticles] = useState<WP_Article[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const history = useHistory();
+    // Load the loading state from the context
+    const { state: loadingState, dispatch } = useLoadingState();
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                setIsLoading(true);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleLists', value: true } });
                 const fetchedArticles = await getArticlesByIds(articleIds);
                 setArticles(fetchedArticles);
-                console.log("Fetched articles:", fetchedArticles); 
             } catch (error) {
                 console.error("Error fetching articles:", error);
             } finally {
-                setIsLoading(false);
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleLists', value: false } });
             }
         };
 
         fetchArticles();
     }, [articleIds]);
-
-    const handleArticleSelect = (selectedArticle: WP_Article) => {
-        history.push(`/App/ArticleDetail/${selectedArticle.id}`);
-    };
     
     return (
         <div>
-            {/* <IonLoading isOpen={isLoading} message={'Loading Articles...'} /> */}
             <div className='article-list'>
                 {articles.map((article, index) => (
-                    <ArticleItem 
-                        articleId={article.id}
-                        onSelectArticle={handleArticleSelect}
-                  />
+                    <ArticleItem articleId={article.id} key={index} />
                 ))}
             </div>
         </div>

@@ -12,17 +12,20 @@ import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
 import { readerOutline } from 'ionicons/icons';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';
+// Modals
+import ArticleDetailModal from '../Modals/ArticleDetailModal/ArticleDetailModal';
 
 // Setup the interface
 interface ArticlesListProps {
     articleId: number;
-    onSelectArticle: (article: WP_Article) => void;
 }
 
-const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }) => {
+const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
     const [article, setArticle] = useState<WP_Article>();
+    const [selectedArticle, setSelectedArticle] = useState<WP_Article | null>(null);
     // Load the loading state from the context
     const { state: loadingState, dispatch } = useLoadingState();
+    const [isArticleDetailModalOpen, setIsArticleDetailModalOpen] = useState(false);
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes
     useEffect(() => {
@@ -31,8 +34,6 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }
                 dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
                 const fetchedArticles = await getArticlesByIds([articleId]);
                 setArticle(fetchedArticles[0]);
-                console.log("Fetched article: ", article);
-                console.log("Article title: ", article!.title.rendered);
             } catch (error) {
                 console.error("Error fetching article ID: ", articleId, " error: ", error);
             } finally {
@@ -44,9 +45,16 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }
     }, [articleId]);
 
     // Log a user fact and proceed to the next screen
-    const handleOnClick = (article: WP_Article) => {
-        onSelectArticle(article);
+    const handleArticleClick = (article: WP_Article) => {
+        // Start the loader - will be dismissed in the ArticleDetail component
+        dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
+        setSelectedArticle(article);
+        setIsArticleDetailModalOpen(true);
     }
+
+    const handleArticleModalClose = () => {
+        setIsArticleDetailModalOpen(false);
+    };
 
     function decodeHtmlEntities(str: string): string {
         let text = new DOMParser().parseFromString(`<!doctype html><body>${str}`, 'text/html').body.textContent;
@@ -58,7 +66,7 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }
             {article && (
                 <div className='related-article'>
                     <div 
-                        onClick={() => handleOnClick(article)}
+                        onClick={() => handleArticleClick(article)}
                         className='article-item'
                     >
                         {article.featured_image_url && (
@@ -78,6 +86,15 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId, onSelectArticle }
                     </div>
                 </div>
             )}
+
+            {selectedArticle && (
+                <ArticleDetailModal 
+                    articleId={selectedArticle.id}
+                    isOpen={isArticleDetailModalOpen} 
+                    onClose={() => handleArticleModalClose()}
+                />
+            )}
+
         </div>
     );
 };

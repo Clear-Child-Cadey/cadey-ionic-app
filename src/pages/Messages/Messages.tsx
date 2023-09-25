@@ -60,7 +60,6 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     const handleMessageClick = (mediaId: string, mediaSourceId: string)  => {
       // Log a user fact that the user clicked a message from the messages page
-      console.log('User clicked a message from the messages page. Media ID: ' + mediaId);
       logMessageOnMessagesPageClicked(cadeyUserId, userFactUrl, mediaId, mediaSourceId, document.title);
       // Redirect to the video detail page
       history.push(`/App/VideoDetail/${mediaSourceId}`);

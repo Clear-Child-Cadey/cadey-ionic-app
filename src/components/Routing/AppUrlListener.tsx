@@ -21,7 +21,6 @@ const AppUrlListener: React.FC<any> = () => {
     useEffect(() => {
         // Listener for detecting URL on app open
         App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
-            console.log('App opened with URL: ', event.url);
             const urlObject = new URL(event.url);
             const host = urlObject.hostname;
             const path = urlObject.pathname;
@@ -31,10 +30,8 @@ const AppUrlListener: React.FC<any> = () => {
             if (fullSlug) {
                 while (fullSlug.startsWith('//')) {
                     // iOS and Android handle these differently
-                    console.log('Removing extra slash: ' + fullSlug);
                     fullSlug = fullSlug.replace('//', '/');
                 }
-                console.log('Redirecting to: ', fullSlug);
                 history.push(fullSlug);
             }
         });

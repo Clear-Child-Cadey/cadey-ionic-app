@@ -33,7 +33,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   const userFactUrl = `${apiUrl}/userfact`
   const [canShare, setCanShare] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const { state: loadingState, dispatch } = useLoadingState();
 
   // Check if the user's device has sharing capabilities
@@ -56,10 +56,8 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
     // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
     dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: true } });
     setSelectedVideo(video);
-    setIsModalOpen(true);
+    setIsVideoModalOpen(true);
   }
-
-  console.log("Video list: ", videos)
 
   return (
     <div className="video-list">
@@ -92,8 +90,8 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
         <VideoDetailModal 
           vimeoId={selectedVideo.videoId} 
           videoType={selectedVideo.videoType}
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)}
+          isOpen={isVideoModalOpen} 
+          onClose={() => setIsVideoModalOpen(false)}
         />
       )}
 

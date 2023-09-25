@@ -124,7 +124,6 @@ const HomePage: React.FC<{
   // Show the modal if a vimeoId is passed in via query string
   useEffect(() => {
     if (vimeoIdFromUrl) {
-      console.log('vimeoIdFromUrl: ', vimeoIdFromUrl);
       setShowModal(true);
     }
   }, [vimeoIdFromUrl]);
@@ -174,7 +173,7 @@ const HomePage: React.FC<{
         {articleIds.length > 0 && (
           <IonRow className="article-list-row">
             <h2>Read Now</h2>
-            <ArticlesListHorizontal articleIds={articleIds} onSelectArticle={handleArticleSelect} />
+            <ArticlesListHorizontal articleIds={articleIds} />
           </IonRow>
         )}
         {/* If user has new videos, show this. Else, skip it */}

@@ -29,7 +29,6 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ categoryId, onSelectArticle
                 dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
                 const fetchedArticles = await getArticlesByCategory(categoryId);
                 setArticles(fetchedArticles);
-                console.log("Fetched articles:", fetchedArticles); 
             } catch (error) {
                 console.error("Error fetching articles:", error);
             } finally {
