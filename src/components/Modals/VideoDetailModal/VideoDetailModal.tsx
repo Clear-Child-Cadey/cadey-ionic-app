@@ -51,8 +51,9 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
   // By default, use the route as the source
   const [source, setSource] = useState(''); 
 
-  // Ref for the video container element
+  // Refs for the video and modal container elements
   const videoRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLIonContentElement>(null);
 
   // State to store the calculated height for the video
   const [videoHeight, setVideoHeight] = useState<number | null>(null);
@@ -103,6 +104,11 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
       setCurrentVimeoId(vimeoId);
     }
   }, [isOpen, vimeoId]);  
+
+  // Scroll user to top of page when the video changes
+  useEffect(() => {
+    contentRef.current?.scrollToTop(500); // 500 is the duration of the scroll animation in milliseconds
+  }, [currentVimeoId]);  
 
   useEffect(() => {
     const fetchVideoData = async () => {
@@ -161,7 +167,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
                 <IonButton className="close-button" slot="end" onClick={onClose}>Close</IonButton>
             </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen>
+        <IonContent fullscreen ref={contentRef}>
           {videoData && (
             <IonRow className="video-player-row">
               <div className="current" key={videoData.sourceId} ref={videoRef}>
