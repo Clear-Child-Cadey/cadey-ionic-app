@@ -33,4 +33,4 @@ export const ApiUrlProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
 };
 
 export default ApiUrlContext;
-export { EDGE_API_URL, STAGING_API_URL, PRODUCTION_API_URL, API_FULL_PATH };
+export { EDGE_API_URL, STAGING_API_URL, PRODUCTION_API_URL, API_PATH, API_FULL_PATH };
