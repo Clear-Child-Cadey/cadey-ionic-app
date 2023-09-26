@@ -17,54 +17,80 @@ import { logOpenedArticle } from '../../../api/UserFacts';
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
 import { useLoadingState } from '../../../context/LoadingStateContext';
+import { useModalContext } from '../../../context/ModalContext';
 
 // Setup the interface
 interface ArticleDetailProps {
-    articleId: number;
-    isOpen: boolean;
-    onClose: () => void;
+    
 }
 
-const ArticleDetailModal: React.FC<ArticleDetailProps> = ({ articleId, isOpen, onClose }) => {
+const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
     const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
-    const [currentArticleId, setCurrentArticleId] = useState<number | null>(null);
     const { state: loadingState, dispatch } = useLoadingState();
+    // Get all the props from the modal context
+    const { 
+        isVideoModalOpen, 
+        setVideoModalOpen, 
+        isArticleDetailModalOpen, 
+        setArticleDetailModalOpen,
+        currentArticleId,
+        setCurrentArticleId,
+        currentVimeoId,
+        setCurrentVimeoId,
+    } = useModalContext();
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
     const userFactUrl = `${apiUrl}/userfact`;
 
-    // Whenever the modal is opened, set the currentVimeoId to the vimeoId prop
     useEffect(() => {
-        if (isOpen) {
-        setCurrentArticleId(articleId);
+        if (isArticleDetailModalOpen && isVideoModalOpen) {
+            setVideoModalOpen(false); // Close Video Modal first
         }
-    }, [isOpen, articleId]);  
+    
+        // Cleanup actions when ArticleDetailModal closes
+        if (!isArticleDetailModalOpen) {
+            setCurrentArticleId(null);
+            setCurrentVimeoId(null);
+            console.log("Resetting modal states");
+            console.log("currentArticleId: ", currentArticleId);
+            console.log("currentVimeoId: ", currentVimeoId);
+        }
+    }, [isArticleDetailModalOpen]);
 
     // Fetch the article detail when the component loads or the currentArticleId changes
     useEffect(() => {
+        let isMounted = true; // To avoid state updates on unmounted component
+        
         const fetchArticleDetail = async () => {
+            if(!currentArticleId) return; // Early return if no articleId is present
+            
             try {
-                {{currentArticleId &&
-                    dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
-                    const detail = await getArticleDetail(currentArticleId!);
-                    detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
-                    setArticle(detail);
-                    // Log a user fact
-                    logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId!, document.title);
-                }}
+                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
+                
+                const detail = await getArticleDetail(currentArticleId);
+                detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
+                
+                if(isMounted) setArticle(detail); // Update state only if component is mounted
+                
+                logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId, document.title);
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {
-                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
+                if(isMounted) dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
             }
         };
+        
+        console.log("Current article ID: ", currentArticleId);
+        console.log("Article modal status: ", isArticleDetailModalOpen);
+        console.log("Video modal status: ", isVideoModalOpen);
 
-        fetchArticleDetail();
-
-        // Set the title of the page to the title of the article
-        document.title = article ? article.title.rendered : "Article Detail";
-    }, [currentArticleId]);
+        if (isArticleDetailModalOpen && currentArticleId) {
+            fetchArticleDetail();
+        }
+    
+        return () => { isMounted = false }; // Cleanup to avoid state updates on unmounted component
+    }, [isArticleDetailModalOpen, currentArticleId]);    
 
     /**
      * Removes YouTube iframe embeds from the provided HTML string.
@@ -83,12 +109,13 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = ({ articleId, isOpen, o
     }
 
     return (
-        <IonModal isOpen={isOpen} onDidDismiss={onClose}>
+        <IonModal isOpen={isArticleDetailModalOpen} onDidDismiss={() => setArticleDetailModalOpen(false)}>
             <IonHeader>
                 <IonToolbar>
-                    {/* <IonTitle>{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle> */}
-                    <IonTitle style={{ textAlign: 'left', paddingLeft: 0 }}>Read Now</IonTitle>
-                    <IonButton className="close-button" slot="end" onClick={onClose}>Close</IonButton>
+                    <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>
+                        {article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}
+                    </IonTitle>
+                    <IonButton className="close-button" slot="end" onClick={() => setArticleDetailModalOpen(false)}>Close</IonButton>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>

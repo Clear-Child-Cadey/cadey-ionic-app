@@ -7,6 +7,7 @@ import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
+import { useModalContext } from '../../context/ModalContext';
 // Functions
 import { logShareClick } from '../../api/UserFacts';
 // CSS
@@ -33,7 +34,22 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   const userFactUrl = `${apiUrl}/userfact`
   const [canShare, setCanShare] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  
+  // Get all the props from the modal context
+  const { 
+    isVideoModalOpen, 
+    setVideoModalOpen, 
+    isArticleDetailModalOpen, 
+    setArticleDetailModalOpen,
+    currentArticleId,
+    setCurrentArticleId,
+    currentVimeoId,
+    setCurrentVimeoId,
+    currentVideoType,
+    setCurrentVideoType,
+  } = useModalContext();
+
+  // Get the loading state from the context
   const { state: loadingState, dispatch } = useLoadingState();
 
   // Check if the user's device has sharing capabilities
@@ -56,7 +72,10 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
     // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
     dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: true } });
     setSelectedVideo(video);
-    setIsVideoModalOpen(true);
+    setCurrentVimeoId(video.videoId);
+    setCurrentVideoType(video.videoType);
+    setArticleDetailModalOpen(false);
+    setVideoModalOpen(true);
   }
 
   return (
@@ -85,16 +104,6 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
           <h3>{video.title}</h3>
         </div>
       ))}
-
-      {selectedVideo && (
-        <VideoDetailModal 
-          vimeoId={selectedVideo.videoId} 
-          videoType={selectedVideo.videoType}
-          isOpen={isVideoModalOpen} 
-          onClose={() => setIsVideoModalOpen(false)}
-        />
-      )}
-
     </div>
   );
 };

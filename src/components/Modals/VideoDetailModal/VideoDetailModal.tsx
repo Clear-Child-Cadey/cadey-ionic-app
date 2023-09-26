@@ -12,12 +12,12 @@ import {
     IonIcon,
     IonList,
  } from '@ionic/react';
- import { useHistory } from 'react-router';
  //  Icons
 import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
 //  Contexts
 import ApiUrlContext from '../../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../../main';
+import { useModalContext } from '../../../context/ModalContext';
 //  API
 import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logShareClick } from '../../../api/UserFacts';
@@ -26,27 +26,31 @@ import './VideoDetailModal.css';
 // Components
 import VideoPlayer from '../../../components/Videos/VideoPlayer';
 import ArticleItem from '../../Articles/ArticleItem';
-import { WP_Article } from '../../../api/WordPress/GetArticles';
-// Modals
-import ArticleDetailModal from '../ArticleDetailModal/ArticleDetailModal';
 
 interface VideoDetailModalProps {
-    vimeoId: string;
-    videoType: string;
-    isOpen: boolean;
-    onClose: () => void;
+    
 }
 
-const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType, isOpen, onClose }) => {
+const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
 
-  const history = useHistory(); // Initialize the useHistory hook
+  // Get all the props from the modal context
+  const { 
+    isVideoModalOpen, 
+    setVideoModalOpen, 
+    isArticleDetailModalOpen, 
+    setArticleDetailModalOpen,
+    currentArticleId,
+    setCurrentArticleId,
+    currentVimeoId,
+    setCurrentVimeoId,
+    currentVideoType,
+    setCurrentVideoType,
+} = useModalContext();
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
   const { apiUrl } = useContext(ApiUrlContext);
   const userFactUrl = `${apiUrl}/userfact`
-
-  const [currentVimeoId, setCurrentVimeoId] = useState(vimeoId);
 
   const [canShare, setCanShare] = useState(false);
 
@@ -95,17 +99,10 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
   }, []);
 
   useEffect(() => {
-    if (isOpen && !source) {
+    if (isVideoModalOpen && !source) {
       setSource(document.title);
     }
-  }, [isOpen]);
-
-  // Whenever the modal is opened, set the currentVimeoId to the vimeoId prop
-  useEffect(() => {
-    if (isOpen) {
-      setCurrentVimeoId(vimeoId);
-    }
-  }, [isOpen, vimeoId]);  
+  }, [isVideoModalOpen]);
 
   // Scroll user to top of page when the video changes
   useEffect(() => {
@@ -113,38 +110,40 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
   }, [currentVimeoId]);  
 
   useEffect(() => {
+    let isMounted = true; // To avoid state updates on unmounted component
+
     const fetchVideoData = async () => {
-        try {
-          const data = await getVideoDetailData(apiUrl, currentVimeoId);
+      if(!currentVimeoId) return; // Early return if no vimeoId is present
 
-          // Ensure relatedMedia is always an array
-        if (data && data.relatedMedia) {
-          if (!Array.isArray(data.relatedMedia)) {
-            data.relatedMedia = [data.relatedMedia]; // Wrap in an array
-          }
-        }
-        setVideoData(data);
+      try {
+        const data = await getVideoDetailData(apiUrl, currentVimeoId);
 
-        } catch (error) {
-            console.error("Error fetching video details:", error);
+        // Ensure relatedMedia is always an array
+        if (data && data.relatedMedia && !Array.isArray(data.relatedMedia)) {
+          data.relatedMedia = [data.relatedMedia]; // Wrap in an array
         }
+        if(isMounted) setVideoData(data); // Update state only if component is mounted
+      } catch (error) {
+        console.error("Error fetching video details:", error);
+      }
     };
 
-    if (isOpen) {
+    if (isVideoModalOpen) {
       fetchVideoData();
     } else {
       // Reset states when modal is closed
-      setCurrentVimeoId('');
+      setCurrentVimeoId(null);
+      setCurrentArticleId(null);
       setVideoData(undefined);
       setSource('');
     }
 
-  }, [isOpen, currentVimeoId]);
+  }, [isVideoModalOpen, currentVimeoId]);
 
   // Function to copy the shareable link to clipboard
-  const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string, videoType: string) => {
+  const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string) => {
     // Log a user fact that the user tapped on Share
-    logShareClick(cadeyUserId, userFactUrl, mediaId, videoType, source)
+    logShareClick(cadeyUserId, userFactUrl, mediaId, currentVideoType, source)
 
     // Share the Vimeo URL
     await Share.share({
@@ -154,83 +153,89 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = ({ vimeoId, videoType,
 
   const handleRelatedVideoClick = (videoId: string) => {
     setSource('Related Video');
+    setCurrentVideoType('Related Video');
     setCurrentVimeoId(videoId);
   }
 
   return (
-    <IonModal className="video-detail" isOpen={isOpen} onDidDismiss={onClose}>
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle style={{ textAlign: 'left', paddingLeft: 0 }}>Watch Now</IonTitle>
-                <IonButton className="close-button" slot="end" onClick={onClose}>Close</IonButton>
-            </IonToolbar>
-        </IonHeader>
-        <IonContent fullscreen ref={contentRef}>
-          {videoData && (
-            <IonRow className="video-player-row">
-              <div className="current" key={videoData.sourceId} ref={videoRef}>
+    <IonModal
+      className="video-detail"
+      isOpen={isVideoModalOpen}
+      onDidDismiss={() => setVideoModalOpen(false)}
+    >
+      <IonHeader>
+          <IonToolbar>
+              <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>Watch Now</IonTitle>
+              <IonButton className="close-button" slot="end" onClick={() => setVideoModalOpen(false)}>
+                Close
+              </IonButton>
+          </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen ref={contentRef}>
+        {videoData && currentVimeoId && (
+          <IonRow className="video-player-row">
+            <div className="current" key={videoData.sourceId} ref={videoRef}>
                 <VideoPlayer 
                   videoId={currentVimeoId}
                   mediaId={videoData.mediaId.toString()}
-                  videoType={videoType}
                   source={source}
                   onVideoHeightChange={(height) => setVideoHeight(height)}
                 />
-                <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
-                  <div className="tag-share">
-                    {canShare && videoData.sourceId && (
-                      <div className="share" onClick={(event) => handleShare(event, videoData.sourceId!, videoData.mediaId.toString(), "Video Modal Type")}>
-                        <p>Share </p>
-                        <div className="share-button">
-                          <IonIcon icon={arrowRedoOutline} />
-                        </div>
+              <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
+                <div className="tag-share">
+                  {canShare && videoData.sourceId && (
+                    <div className="share" onClick={(event) => handleShare(event, videoData.sourceId!, videoData.mediaId.toString())}>
+                      <p>Share </p>
+                      <div className="share-button">
+                        <IonIcon icon={arrowRedoOutline} />
                       </div>
-                    )}
-                  </div>
-                  <h3>{videoData.title}</h3>
-                </div>
-              </div>
-            </IonRow>
-          )}
-            <IonRow>
-                <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
-            </IonRow>
-            <IonRow className="suggested-content">
-              <hr />
-              <h3>Also Recommended</h3>
-              {videoData?.relatedMedia && Array.isArray(videoData.relatedMedia) && (
-                <IonList className="related-items-list">
-                  {videoData.relatedMedia.map((relatedMedia, index) => (
-                    <div key={index}>
-                      {relatedMedia.relatedMediaItems.map((item, itemIndex) => (
-                        <div className='related-item' key={itemIndex}>
-                          {/* Videos */}
-                          {item.mediaType === 1 && item.sourceId && (
-                            <div
-                              onClick={() => handleRelatedVideoClick(item.sourceId!)}
-                              className="related video-item"
-                            >
-                              <div className="video-thumb-play-container">
-                                <img src={item.thumbnail || ''} alt={item.title || ''} />
-                                <IonIcon icon={playCircleOutline} className="play-icon" />
-                              </div>
-                              <p>Video</p>
-                              <h3>{item.title}</h3>
-                            </div>
-                          )}
-                          {/* Articles */}
-                          {item.mediaType === 2 && (
-                            <ArticleItem articleId={item.mediaId} />
-                          )}
-                        </div>
-                      ))}
                     </div>
-                  ))}
-                </IonList>
-              )}
-              {/* ---------- */}
-            </IonRow>
-        </IonContent>
+                  )}
+                </div>
+                <h3>{videoData.title}</h3>
+              </div>
+            </div>
+          </IonRow>
+        )}
+          <IonRow>
+              <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
+          </IonRow>
+          <IonRow className="suggested-content">
+            <hr />
+            <h3>Also Recommended</h3>
+            {videoData?.relatedMedia && Array.isArray(videoData.relatedMedia) && (
+              <IonList className="related-items-list">
+                {videoData.relatedMedia.map((relatedMedia, index) => (
+                  <div key={index}>
+                    {relatedMedia.relatedMediaItems.map((item, itemIndex) => (
+                      <div className='related-item' key={itemIndex}>
+                        {/* Videos */}
+                        {item.mediaType === 1 && item.sourceId && (
+                          <div
+                            onClick={() => handleRelatedVideoClick(item.sourceId!)}
+                            className="related video-item"
+                          >
+                            <div className="video-thumb-play-container">
+                              <img src={item.thumbnail || ''} alt={item.title || ''} />
+                              <IonIcon icon={playCircleOutline} className="play-icon" />
+                            </div>
+                            <p>Video</p>
+                            <h3>{item.title}</h3>
+                          </div>
+                        )}
+                        {/* Articles */}
+                        {item.mediaType === 2 && (
+                          <ArticleItem articleId={item.mediaId} />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </IonList>
+            )}
+            {/* ---------- */}
+          </IonRow>
+      </IonContent>
     </IonModal>
   );
 };

@@ -12,6 +12,7 @@ import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
 import { readerOutline } from 'ionicons/icons';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';
+import { useModalContext } from '../../context/ModalContext';
 // Modals
 import ArticleDetailModal from '../Modals/ArticleDetailModal/ArticleDetailModal';
 
@@ -23,9 +24,21 @@ interface ArticlesListProps {
 const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
     const [article, setArticle] = useState<WP_Article>();
     const [selectedArticle, setSelectedArticle] = useState<WP_Article | null>(null);
+    
     // Load the loading state from the context
     const { state: loadingState, dispatch } = useLoadingState();
-    const [isArticleDetailModalOpen, setIsArticleDetailModalOpen] = useState(false);
+    
+    // Get all the props from the modal context
+    const { 
+        isVideoModalOpen, 
+        setVideoModalOpen, 
+        isArticleDetailModalOpen, 
+        setArticleDetailModalOpen,
+        currentArticleId,
+        setCurrentArticleId,
+        currentVimeoId,
+        setCurrentVimeoId,
+    } = useModalContext();
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes
     useEffect(() => {
@@ -45,16 +58,11 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
     }, [articleId]);
 
     // Log a user fact and proceed to the next screen
-    const handleArticleClick = (article: WP_Article) => {
-        // Start the loader - will be dismissed in the ArticleDetail component
-        dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
+    const handleArticleClick = (article: WP_Article) => {        
         setSelectedArticle(article);
-        setIsArticleDetailModalOpen(true);
+        setCurrentArticleId(article.id);
+        setArticleDetailModalOpen(true);
     }
-
-    const handleArticleModalClose = () => {
-        setIsArticleDetailModalOpen(false);
-    };
 
     function decodeHtmlEntities(str: string): string {
         let text = new DOMParser().parseFromString(`<!doctype html><body>${str}`, 'text/html').body.textContent;
@@ -86,15 +94,6 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
                     </div>
                 </div>
             )}
-
-            {selectedArticle && (
-                <ArticleDetailModal 
-                    articleId={selectedArticle.id}
-                    isOpen={isArticleDetailModalOpen} 
-                    onClose={() => handleArticleModalClose()}
-                />
-            )}
-
         </div>
     );
 };

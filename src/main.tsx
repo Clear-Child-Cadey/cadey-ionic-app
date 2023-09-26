@@ -11,6 +11,8 @@ import { HomeTabVisibilityContext } from './context/TabContext';
 import UnreadCountContext from './context/UnreadCountContext';
 import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
+import { ModalProvider } from './context/ModalContext';
+
 // Functions
 import getAppData from './api/AppOpen';
 
@@ -148,7 +150,9 @@ function MainComponent() {
           <UnreadCountContext.Provider value={{ unreadCount, setUnreadCount }}>
             <TabBarSpotlightProvider>
               <LoadingStateProvider>
-                <App />
+                <ModalProvider>
+                  <App />
+                </ModalProvider>
               </LoadingStateProvider>
             </TabBarSpotlightProvider>
           </UnreadCountContext.Provider>

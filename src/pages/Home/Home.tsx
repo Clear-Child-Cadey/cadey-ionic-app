@@ -15,11 +15,13 @@ import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
 import { useSpotlight } from '../../context/SpotlightContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
+import { useModalContext } from '../../context/ModalContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
 // Modals
 import VideoDetailModal from '../../components/Modals/VideoDetailModal/VideoDetailModal';
+import ArticleDetailModal from '../../components/Modals/ArticleDetailModal/ArticleDetailModal';
 // API
 import getHomeData from '../../api/HomeData';
 // Interfaces
@@ -44,6 +46,18 @@ const HomePage: React.FC<{
 
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
+
+  // Get all the props from the modal context
+  const { 
+    isVideoModalOpen, 
+    setVideoModalOpen, 
+    isArticleDetailModalOpen, 
+    setArticleDetailModalOpen,
+    currentArticleId,
+    setCurrentArticleId,
+    currentVimeoId,
+    setCurrentVimeoId,
+  } = useModalContext();
 
   const handleArticleSelect = (selectedArticle: WP_Article) => {
     history.push(`/App/ArticleDetail/${selectedArticle.id}`);
@@ -150,19 +164,16 @@ const HomePage: React.FC<{
           </IonText>
         </IonRow>
         <hr className="divider" />
-        {/* If user has featured videos, show this. Else, skip it */}
         
-
-        {/* Conditionally render a modal based on whether the query string contains a vimeoId */}
-        {vimeoIdFromUrl && (
-          <VideoDetailModal 
-            vimeoId={vimeoIdFromUrl}
-            videoType={"Deep link"}
-            isOpen={showModal} 
-            onClose={() => setShowModal(false)} 
-          />
+        {isArticleDetailModalOpen && (
+          <ArticleDetailModal />
         )}
 
+        {isVideoModalOpen && currentVimeoId && (
+          <VideoDetailModal />
+        )}
+
+        {/* If user has featured videos, show this. Else, skip it */}
         {featuredVideos.length > 0 && (
           <IonRow className="video-list-row featured">
               <h2>Watch Now</h2>

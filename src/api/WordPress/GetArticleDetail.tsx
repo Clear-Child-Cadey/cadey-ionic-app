@@ -9,6 +9,9 @@ export interface WP_ArticleDetail {
 
 export const getArticleDetail = async (articleId: number): Promise<WP_ArticleDetail> => {
     try {
+        if (!articleId) {
+            throw new Error("No articleId provided");
+        }
         const response = await fetch(`${API_URL}/articles/${articleId}?_embed`);
         const fetchedData = await response.json();
 
