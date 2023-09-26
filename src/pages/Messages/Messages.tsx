@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import './Messages.css';
 import { 
     IonPage, 
@@ -18,6 +17,7 @@ import {
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import UnreadCountContext from '../../context/UnreadCountContext';
+import { useModalContext } from '../../context/ModalContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 import { logMessageOnMessagesPageClicked } from '../../api/UserFacts';
@@ -37,7 +37,12 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const userFactUrl = `${apiUrl}/userfact`
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
-    const history = useHistory(); // Initialize the useHistory hook here
+
+    const {
+      isVideoModalOpen,
+      setVideoModalOpen,
+      setCurrentVimeoId,
+    } = useModalContext();
 
     // On component mount: 
     // - Set the page title
@@ -56,13 +61,13 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       };
       document.title = 'Messages'; // Set the page title when the component mounts
       fetchMessages(); // Get data when the component mounts
-    }, []);
+    }, [isVideoModalOpen]);
 
     const handleMessageClick = (mediaId: string, mediaSourceId: string)  => {
       // Log a user fact that the user clicked a message from the messages page
       logMessageOnMessagesPageClicked(cadeyUserId, userFactUrl, mediaId, mediaSourceId, document.title);
-      // Redirect to the video detail page
-      history.push(`/App/VideoDetail/${mediaSourceId}`);
+      setCurrentVimeoId(mediaSourceId);
+      setVideoModalOpen(true);
     }
 
   return (

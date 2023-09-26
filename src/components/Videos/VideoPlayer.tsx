@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import ReactPlayer from 'react-player';
-import { useLocation } from 'react-router-dom';
 // CSS
 import './VideoPlayer.css';
 // Icons
@@ -27,15 +26,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
   const mediaIdStr = String(mediaId);
 
-  const location = useLocation(); // Get the route so we can update the button text dynamically
-  const [buttonText, setButtonText] = useState(''); // State to update the button text dynamically
-
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/userfact`
 
   const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
-  const [userResponse, setUserResponse] = useState<'yes' | 'no' | null>(null); // Store the user's response
 
   const [falseDoorData, setFalseDoorData] = useState<any>(null); // Hold the data for the false door
 
@@ -63,10 +58,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
     // Dismiss the loader when the player is ready
     dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: false } });
   };
-
-  useEffect(() => {
-      setButtonText('Close');
-  }, [location]);
   
   const Player = ReactPlayer as any;
 
@@ -156,7 +147,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
           thankYouIconUrlNo={falseDoorData?.questionResponseNoIcon || ''}
           thankYouCopyYes={falseDoorData?.questionResponseYesText || ''}
           thankYouCopyNo={falseDoorData?.questionResponseNoText || ''}
-          thankYouButtonText={buttonText}
+          thankYouButtonText="Close"
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
         />

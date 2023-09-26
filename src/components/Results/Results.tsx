@@ -8,7 +8,12 @@ import {
 } from '@ionic/react';
 import './Results.css';
 import { refresh } from 'ionicons/icons';
+// Components
 import VideoList from '../Videos/VideoList';
+// Contexts
+import { useModalContext } from '../../context/ModalContext';
+// modals
+import VideoDetailModal from '../Modals/VideoDetailModal/VideoDetailModal';
 
 // Define the ResultsProps interface
 interface ResultsProps {
@@ -36,6 +41,13 @@ interface ResultsProps {
 // Define the Results component
 // The results data originates in the AgeForm component and is passed to the main Concerns page, then here
 const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }) => {
+  
+  // Get modal context props
+  const {
+    isVideoModalOpen,  
+    currentVimeoId,
+  } = useModalContext();
+  
   return (
     <div className="container recommendations">
       <IonRow>

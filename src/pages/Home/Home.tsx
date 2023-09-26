@@ -8,9 +8,7 @@ import {
     IonContent,
     IonRow,
     IonText,
-    IonLoading,
 } from '@ionic/react';
-import { useHistory } from 'react-router';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
 import { useSpotlight } from '../../context/SpotlightContext';
@@ -19,13 +17,8 @@ import { useModalContext } from '../../context/ModalContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
-// Modals
-import VideoDetailModal from '../../components/Modals/VideoDetailModal/VideoDetailModal';
-import ArticleDetailModal from '../../components/Modals/ArticleDetailModal/ArticleDetailModal';
 // API
 import getHomeData from '../../api/HomeData';
-// Interfaces
-import { WP_Article } from '../../api/WordPress/GetArticles';
 
 const HomePage: React.FC<{ 
   currentTab: string, 
@@ -34,27 +27,22 @@ const HomePage: React.FC<{
   vimeoIdFromUrl?: string,
   articleIdFromUrl?: string,
 }> = ({ currentTab, tutorialStep, setTutorialStep, vimeoIdFromUrl, articleIdFromUrl }) => {
-  // Initialize the useHistory hook
-  const history = useHistory();
   
   const { state: loadingState, dispatch } = useLoadingState();
+  
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
   const [playedVideos, setPlayedVideos] = useState([]);
   const [trendingVideos, setTrendingVideos] = useState([]);
+  
   const [articleIds, setArticleIds] = useState<number[]>([]);
-  const [showModal, setShowModal] = useState(false);
-
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
 
   // Get all the props from the modal context
   const { 
-    isVideoModalOpen, 
     setVideoModalOpen,
-    isArticleDetailModalOpen, 
     setArticleDetailModalOpen,
-    currentVimeoId,
     setCurrentVimeoId,
     setCurrentArticleId,
   } = useModalContext();
@@ -169,14 +157,6 @@ const HomePage: React.FC<{
           </IonText>
         </IonRow>
         <hr className="divider" />
-        
-        {isArticleDetailModalOpen && (
-          <ArticleDetailModal />
-        )}
-
-        {isVideoModalOpen && currentVimeoId && (
-          <VideoDetailModal />
-        )}
 
         {/* If user has featured videos, show this. Else, skip it */}
         {featuredVideos.length > 0 && (

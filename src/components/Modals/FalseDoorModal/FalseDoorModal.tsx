@@ -4,9 +4,9 @@ import {
   IonButton, 
   IonContent 
 } from '@ionic/react';
-import { useLocation } from 'react-router';
+// CSS
 import './FalseDoorModal.css';
-// api
+// API
 import { logFalseDoorResponse } from '../../../api/UserFacts';
 import { requestNotificationPermission } from '../../../api/OneSignal/RequestPermission';
 // Contexts
@@ -36,8 +36,6 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/userfact`
-
-  const location = useLocation(); // Get the route
 
   const handleUserResponse = (userChoice: boolean) => {
     setUserChoice(userChoice); // Store the user's choice in state

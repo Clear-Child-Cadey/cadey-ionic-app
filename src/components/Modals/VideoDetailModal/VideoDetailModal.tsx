@@ -16,16 +16,21 @@ import {
 import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
 //  Contexts
 import ApiUrlContext from '../../../context/ApiUrlContext';
+import UnreadCountContext from '../../../context/UnreadCountContext';
 import { CadeyUserContext } from '../../../main';
 import { useModalContext } from '../../../context/ModalContext';
 //  API
 import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logShareClick } from '../../../api/UserFacts';
+import { logFeaturedVideoNotificationClicked } from '../../../api/UserFacts';
+import { getUserMessages } from '../../../api/UserMessages';
 // CSS
 import './VideoDetailModal.css';
 // Components
 import VideoPlayer from '../../../components/Videos/VideoPlayer';
 import ArticleItem from '../../Articles/ArticleItem';
+// Interfaces
+import { Message } from '../../../pages/Messages/Messages';
 
 interface VideoDetailModalProps {
     
@@ -62,6 +67,8 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   const [videoHeight, setVideoHeight] = useState<number | null>(null);
 
   const [videoData, setVideoData] = useState<VideoDetailData>();
+
+  const unreadCount = useContext(UnreadCountContext); // Get the current unread count
   
   interface RelatedMediaItem {
     mediaType: number;                // 1 = video, 2 = article
@@ -119,6 +126,20 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
         if (data && data.relatedMedia && !Array.isArray(data.relatedMedia)) {
           data.relatedMedia = [data.relatedMedia]; // Wrap in an array
         }
+
+        if(data && data.mediaId) {
+          // Log user fact that the user saw this "message" (video)
+          logFeaturedVideoNotificationClicked(
+            cadeyUserId, 
+            userFactUrl, 
+            String(data.mediaId), 
+            currentVimeoId, 
+            location.pathname
+          );
+          // Get Messages when the user visits the Video Detail page
+          // We use this to decrement the unread counter
+          fetchMessages(); 
+        }
         if(isMounted) setVideoData(data); // Update state only if component is mounted
       } catch (error) {
         console.error("Error fetching video details:", error);
@@ -136,6 +157,17 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     }
 
   }, [isVideoModalOpen, currentVimeoId]);
+
+  const fetchMessages = async () => {
+    try {
+      // Getting messages
+      const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+      const unread = data.filter(data => !data.isRead).length;
+      unreadCount.setUnreadCount?.(unread);
+    } catch (error) {
+      console.error("Error fetching video details:", error);
+    }
+  };
 
   // Function to copy the shareable link to clipboard
   const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string) => {

@@ -7,11 +7,15 @@ import {
 import semver from 'semver';
 // Components
 import { SplashScreen } from '@capacitor/splash-screen';
-import AppUpdateModal from './components/Modals/AppUpdateModal';
 import RouterTabs from './components/Routing/RouterTabs';
+// Modals
+import AppUpdateModal from './components/Modals/AppUpdateModal';
+import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
+import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
 // Contexts
 import { CadeyUserContext } from './main';
 import { useLoadingState } from './context/LoadingStateContext';
+import { useModalContext } from './context/ModalContext';
 // Variables
 import { AppVersion } from './variables/AppVersion';
 // API
@@ -23,6 +27,13 @@ const App: React.FC = () => {
   const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const { state: loadingState, dispatch } = useLoadingState();
+
+  const {
+    isVideoModalOpen,  
+    currentVimeoId,
+    isArticleDetailModalOpen,
+    currentArticleId,
+  } = useModalContext();
 
   const getStoreLink = () => {
     const userAgent = window.navigator.userAgent;
@@ -68,6 +79,14 @@ const App: React.FC = () => {
       {/* Show a loading state if anything is loading */}
       {Object.values(loadingState).some(Boolean) && (
         <IonLoading isOpen={true} message={'Please wait...'} />
+      )}
+      {/* Show a video modal if context dictates */}
+      {isVideoModalOpen && currentVimeoId && (
+        <VideoDetailModal />
+      )}
+      {/* Show an article modal if context dictates */}
+      {isArticleDetailModalOpen && currentArticleId && (
+        <ArticleDetailModal />
       )}
       <RouterTabs />
     </IonApp>
