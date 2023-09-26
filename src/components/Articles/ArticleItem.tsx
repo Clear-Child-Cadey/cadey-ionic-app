@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-    IonLoading,
     IonImg,
     IonIcon,
 } from '@ionic/react';
@@ -13,8 +12,6 @@ import { readerOutline } from 'ionicons/icons';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
-// Modals
-import ArticleDetailModal from '../Modals/ArticleDetailModal/ArticleDetailModal';
 
 // Setup the interface
 interface ArticlesListProps {
@@ -30,14 +27,8 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
     
     // Get all the props from the modal context
     const { 
-        isVideoModalOpen, 
-        setVideoModalOpen, 
-        isArticleDetailModalOpen, 
         setArticleDetailModalOpen,
-        currentArticleId,
         setCurrentArticleId,
-        currentVimeoId,
-        setCurrentVimeoId,
     } = useModalContext();
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes

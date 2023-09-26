@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './ArticlesListHorizontal.css';
 // API
 import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
-// Component
+// Components
 import ArticleItem from './ArticleItem';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';

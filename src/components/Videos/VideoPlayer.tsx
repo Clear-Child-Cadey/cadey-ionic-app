@@ -49,16 +49,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   const { state: loadingState, dispatch } = useLoadingState();
 
   const { 
-    isVideoModalOpen, 
-    setVideoModalOpen, 
-    isArticleDetailModalOpen, 
-    setArticleDetailModalOpen,
-    currentArticleId,
-    setCurrentArticleId,
-    currentVimeoId,
-    setCurrentVimeoId,
     currentVideoType,
-    setCurrentVideoType,
   } = useModalContext();
 
   const handleVideoReady = () => {

@@ -32,7 +32,8 @@ const HomePage: React.FC<{
   tutorialStep: number, 
   setTutorialStep: React.Dispatch<React.SetStateAction<number>>, 
   vimeoIdFromUrl?: string,
-}> = ({ currentTab, tutorialStep, setTutorialStep, vimeoIdFromUrl }) => {
+  articleIdFromUrl?: string,
+}> = ({ currentTab, tutorialStep, setTutorialStep, vimeoIdFromUrl, articleIdFromUrl }) => {
   // Initialize the useHistory hook
   const history = useHistory();
   
@@ -50,18 +51,10 @@ const HomePage: React.FC<{
   // Get all the props from the modal context
   const { 
     isVideoModalOpen, 
-    setVideoModalOpen, 
+    setVideoModalOpen,
     isArticleDetailModalOpen, 
-    setArticleDetailModalOpen,
-    currentArticleId,
-    setCurrentArticleId,
     currentVimeoId,
-    setCurrentVimeoId,
   } = useModalContext();
-
-  const handleArticleSelect = (selectedArticle: WP_Article) => {
-    history.push(`/App/ArticleDetail/${selectedArticle.id}`);
-  };
 
   // Get the latest data from the API
   const { getHomeDataFromApi } = getHomeData();
@@ -138,9 +131,16 @@ const HomePage: React.FC<{
   // Show the modal if a vimeoId is passed in via query string
   useEffect(() => {
     if (vimeoIdFromUrl) {
-      setShowModal(true);
+      setVideoModalOpen(true);
     }
   }, [vimeoIdFromUrl]);
+
+  // Show the modal if an articleId is passed in via query string
+  useEffect(() => {
+    if (articleIdFromUrl) {
+      setVideoModalOpen(true);
+    }
+  }, [articleIdFromUrl]);
 
   return (
     <IonPage className="home">

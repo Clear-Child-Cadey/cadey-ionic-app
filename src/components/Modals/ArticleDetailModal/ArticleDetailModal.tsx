@@ -80,10 +80,6 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
                 if(isMounted) dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
             }
         };
-        
-        console.log("Current article ID: ", currentArticleId);
-        console.log("Article modal status: ", isArticleDetailModalOpen);
-        console.log("Video modal status: ", isVideoModalOpen);
 
         if (isArticleDetailModalOpen && currentArticleId) {
             fetchArticleDetail();

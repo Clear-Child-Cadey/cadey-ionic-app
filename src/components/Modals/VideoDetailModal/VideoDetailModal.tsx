@@ -37,9 +37,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   const { 
     isVideoModalOpen, 
     setVideoModalOpen, 
-    isArticleDetailModalOpen, 
-    setArticleDetailModalOpen,
-    currentArticleId,
     setCurrentArticleId,
     currentVimeoId,
     setCurrentVimeoId,

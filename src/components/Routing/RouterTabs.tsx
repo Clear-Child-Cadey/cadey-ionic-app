@@ -101,6 +101,7 @@ const RouterTabs: React.FC = () => {
             <Route exact path="/App/Concerns" component={ConcernsPage} />
             <Route exact path="/App/Home" render={(routeProps) => {
               const vimeoId = routeProps.location.search.split('video=')[1];
+              const articleId = routeProps.location.search.split('article=')[1];
 
               return (
                   <HomePage 
@@ -108,6 +109,7 @@ const RouterTabs: React.FC = () => {
                       tutorialStep={tutorialStep} 
                       setTutorialStep={setTutorialStep} 
                       vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
+                      articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
                   />
               );
           }} />
@@ -119,11 +121,7 @@ const RouterTabs: React.FC = () => {
               )}
             </Route>
             <Route exact path="/App/Admin" component={AdminPage} />
-            <Route exact path="/App/Messages" component={MessagesPage} />
-            <Route exact path="/App/Articles" component={ArticlesPage} />
-            <Route path="/App/ArticleDetail/:id" render={({ match }) => 
-              <ArticleDetailPage articleId={Number(match.params.id)} />
-            } />            
+            <Route exact path="/App/Messages" component={MessagesPage} />       
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
           </Switch>

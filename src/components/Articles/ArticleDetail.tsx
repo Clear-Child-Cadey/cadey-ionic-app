@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { WP_ArticleDetail, getArticleDetail } from '../../api/WordPress/GetArticleDetail';
 import {
     IonContent,
-    IonLoading,
     IonRow,
     IonButton,
     IonIcon

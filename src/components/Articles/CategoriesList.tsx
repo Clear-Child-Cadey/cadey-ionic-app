@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getCategories, WP_Category } from '../../api/WordPress/GetCategories';
 import {
-    IonList,
-    IonItem,
-    IonLabel,
     IonLoading,
     IonRow,
     IonCol,

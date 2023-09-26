@@ -12,8 +12,6 @@ import { useModalContext } from '../../context/ModalContext';
 import { logShareClick } from '../../api/UserFacts';
 // CSS
 import './VideoList.css';
-// Components
-import VideoDetailModal from '../Modals/VideoDetailModal/VideoDetailModal';
 
 interface VideoItem {
   mediaId: string;
@@ -37,15 +35,9 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   
   // Get all the props from the modal context
   const { 
-    isVideoModalOpen, 
     setVideoModalOpen, 
-    isArticleDetailModalOpen, 
     setArticleDetailModalOpen,
-    currentArticleId,
-    setCurrentArticleId,
-    currentVimeoId,
     setCurrentVimeoId,
-    currentVideoType,
     setCurrentVideoType,
   } = useModalContext();
 
