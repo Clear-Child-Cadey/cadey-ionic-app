@@ -53,7 +53,10 @@ const HomePage: React.FC<{
     isVideoModalOpen, 
     setVideoModalOpen,
     isArticleDetailModalOpen, 
+    setArticleDetailModalOpen,
     currentVimeoId,
+    setCurrentVimeoId,
+    setCurrentArticleId,
   } = useModalContext();
 
   // Get the latest data from the API
@@ -131,6 +134,7 @@ const HomePage: React.FC<{
   // Show the modal if a vimeoId is passed in via query string
   useEffect(() => {
     if (vimeoIdFromUrl) {
+      setCurrentVimeoId(vimeoIdFromUrl);
       setVideoModalOpen(true);
     }
   }, [vimeoIdFromUrl]);
@@ -138,7 +142,8 @@ const HomePage: React.FC<{
   // Show the modal if an articleId is passed in via query string
   useEffect(() => {
     if (articleIdFromUrl) {
-      setVideoModalOpen(true);
+      setCurrentArticleId(Number(articleIdFromUrl));
+      setArticleDetailModalOpen(true);
     }
   }, [articleIdFromUrl]);
 
