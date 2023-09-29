@@ -126,7 +126,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
           playIcon={<IonIcon icon={playCircleOutline} className="play-icon" />}
           playing={false} // Set to true to autoplay the video
           playsInline={true}
-          pip={false}
           width='100%'
           height='100%'
           progressInterval={5000}
