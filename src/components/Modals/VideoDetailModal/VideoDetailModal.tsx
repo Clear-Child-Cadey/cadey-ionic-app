@@ -128,14 +128,19 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
         }
 
         if(data && data.mediaId) {
-          // Log user fact that the user saw this "message" (video)
-          logFeaturedVideoNotificationClicked(
-            cadeyUserId, 
-            userFactUrl, 
-            String(data.mediaId), 
-            currentVimeoId, 
-            location.pathname
-          );
+          console.log("Video: ", location.search.split('video=')[1]);
+          console.log("Current Vimeo ID: ", currentVimeoId);
+          if (currentVimeoId === location.search.split('video=')[1]) {
+            // Log user fact that the user clicked on a push notification
+            logFeaturedVideoNotificationClicked(
+              cadeyUserId, 
+              userFactUrl, 
+              String(data.mediaId), 
+              currentVimeoId, 
+              document.title
+            );
+          }
+          
           // Get Messages when the user visits the Video Detail page
           // We use this to decrement the unread counter
           fetchMessages(); 
@@ -181,7 +186,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   }
 
   const handleRelatedVideoClick = (videoId: string) => {
-    setSource('Related Video');
+    setSource('Video Detail Modal');
     setCurrentVideoType('Related Video');
     setCurrentVimeoId(videoId);
   }

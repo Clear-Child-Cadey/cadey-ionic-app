@@ -27,6 +27,7 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
     
     // Get all the props from the modal context
     const { 
+        isVideoModalOpen,
         setArticleDetailModalOpen,
         setCurrentArticleId,
     } = useModalContext();
@@ -52,6 +53,9 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
     const handleArticleClick = (article: WP_Article) => {        
         setSelectedArticle(article);
         setCurrentArticleId(article.id);
+        if (isVideoModalOpen) {
+            // Change source to Video Detail Modal
+        }
         setArticleDetailModalOpen(true);
     }
 

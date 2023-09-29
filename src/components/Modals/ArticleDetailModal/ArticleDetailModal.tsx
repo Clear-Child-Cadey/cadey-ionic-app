@@ -35,7 +35,6 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         setArticleDetailModalOpen,
         currentArticleId,
         setCurrentArticleId,
-        currentVimeoId,
         setCurrentVimeoId,
     } = useModalContext();
 
@@ -44,6 +43,15 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
     const userFactUrl = `${apiUrl}/userfact`;
 
     useEffect(() => {
+        // Log user fact that the user opened an article
+        if (isVideoModalOpen && currentArticleId) {
+            // Set the video detail as the source if the video detail modal was open
+            logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId, "Video Detail Modal");
+        } else if (currentArticleId) {
+            // Otherwise use the document title as the source
+            logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId, document.title);
+        }
+        
         if (isArticleDetailModalOpen && isVideoModalOpen) {
             setVideoModalOpen(false); // Close Video Modal first
         }
@@ -52,9 +60,6 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         if (!isArticleDetailModalOpen) {
             setCurrentArticleId(null);
             setCurrentVimeoId(null);
-            console.log("Resetting modal states");
-            console.log("currentArticleId: ", currentArticleId);
-            console.log("currentVimeoId: ", currentVimeoId);
         }
     }, [isArticleDetailModalOpen]);
 
@@ -72,8 +77,6 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
                 detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
                 
                 if(isMounted) setArticle(detail); // Update state only if component is mounted
-                
-                logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId, document.title);
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {
