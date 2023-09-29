@@ -41,6 +41,7 @@ const HomePage: React.FC<{
 
   // Get all the props from the modal context
   const { 
+    isVideoModalOpen,
     setVideoModalOpen,
     setArticleDetailModalOpen,
     setCurrentVimeoId,
@@ -68,7 +69,8 @@ const HomePage: React.FC<{
     }
   };
 
-  // This runs every time currentTab changes
+  // This runs every time currentTab changes or the video modal opens/closes
+  // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
     if (currentTab === 'Home') {
       fetchData(); // Fetch the homepage data if the user is on the Home tab
@@ -78,7 +80,7 @@ const HomePage: React.FC<{
       clearTimeout(timerRef.current);
       timerRef.current = undefined;
     }
-  }, [currentTab]);
+  }, [currentTab, isVideoModalOpen]);
 
   // Run when trendingVideos or tutorialStep changes
   useEffect(() => {

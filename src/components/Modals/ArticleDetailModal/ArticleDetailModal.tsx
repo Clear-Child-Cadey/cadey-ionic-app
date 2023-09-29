@@ -112,17 +112,12 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
             <IonHeader>
                 <IonToolbar>
                     <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>
-                        {article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}
+                        {article ? decodeHtmlEntities(article.title.rendered) : "Read Now"}
                     </IonTitle>
                     <IonButton className="close-button" slot="end" onClick={() => setArticleDetailModalOpen(false)}>Close</IonButton>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
-                <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
                 <IonRow>
                     {article && (
                         <div className="article-detail">
