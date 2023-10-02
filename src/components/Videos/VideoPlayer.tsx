@@ -24,6 +24,10 @@ interface VideoPlayerProps {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onVideoHeightChange }) => {
 
+  const vimeoVideoId = videoId.split('/')[0];
+  const vimeoHashParameter = videoId.split('/')[1];
+  const vimeoUrl = `https://player.vimeo.com/video/${vimeoVideoId}?h=${vimeoHashParameter}&autoplay=1`;
+
   const mediaIdStr = String(mediaId);
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
@@ -109,16 +113,50 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25", currentVideoType, source);
       setLogged25(true);
     }
-};
+  };
 
   const onError = (error: any) => {
     // Currently unused
   };
 
+  // Disable loader on mount
+  dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: false } });
+
+  var video02Player = new Vimeo.Player('Video name', url: ${vimeoUrl}, width: "320"});
+
+  video02Player.setVolume(0);
+
+  video02Player.on('play', function() {
+    console.log('Played the second video');
+  });
+
   return (
     <div className="video-item" key={videoId}>
       <div className='player-wrapper'>
-        <Player
+      {/* 863639649/3b331c50c7 */}
+        {/* <iframe 
+          src={`${vimeoUrl}`} 
+        >
+        </iframe> */}
+        <div data-vimeo-url={`${vimeoUrl}`} data-vimeo-width="320" id=""></div>
+        <script src="https://player.vimeo.com/api/player.js"></script>
+
+        {/* <script src="{url}"></script>
+        <script>
+          var video01Player = new Vimeo.Player('{video01_name}');
+          video01Player.on('play', function() {
+            console.log('Played the first video');
+          });
+
+          var video02Player = new Vimeo.Player('{video02_name}');
+          video02Player.on('play', function() {
+            console.log('Played the second video');
+          });
+        </script> */}
+
+
+        
+        {/* <Player
           className='react-player'
           url={`https://vimeo.com/${videoId}`}
           controls={true}
@@ -136,7 +174,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
           onError={onError}
           onProgress={onProgress}
           onReady={handleVideoReady}
-        />
+        /> */}
         <FalseDoorModal 
           falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
           iconUrl={falseDoorData?.questionIcon || ''}
