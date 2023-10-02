@@ -1,13 +1,15 @@
 .player-wrapper {
     position: relative;
-    padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
+    /* padding-top: 56.25%; Player ratio: 100 / (1280 / 720) */
+    width: 100%;
     overflow: hidden; /* Ensure the video corners also get rounded */
   }
   
-  .react-player {
-    position: absolute;
+  .video-player {
+    /* position: absolute;
     top: 0;
-    left: 0;
+    left: 0; */
+    width: 100% !important; 
   }
 
   .play-icon {
