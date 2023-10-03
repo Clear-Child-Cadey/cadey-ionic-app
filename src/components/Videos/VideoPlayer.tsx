@@ -69,6 +69,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
       player.on('ended', () => {
         onEnded();
+        player.exitFullscreen(); // Exit fullscreen when the video ends
       });
 
       player.on('timeupdate', (data) => {
