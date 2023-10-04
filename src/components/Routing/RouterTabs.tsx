@@ -19,14 +19,13 @@ import {
 // CSS
 import './RouterTabs.css';
 // Ionicons
-import { homeOutline, gridOutline, mailOutline, newspaperOutline } from 'ionicons/icons';
+import { homeOutline, gridOutline, mailOutline, newspaperOutline, podiumOutline } from 'ionicons/icons';
 // Pages
 import ConcernsPage from '../../pages/Concerns/Concerns';
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
 import MessagesPage from '../../pages/Messages/Messages';
-import ArticlesPage from '../../pages/Articles/Articles';
-import ArticleDetailPage from '../../pages/Articles/ArticleDetail';
+import GoalsPage from '../../pages/Goals/Goals';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -122,6 +121,7 @@ const RouterTabs: React.FC = () => {
             </Route>
             <Route exact path="/App/Admin" component={AdminPage} />
             <Route exact path="/App/Messages" component={MessagesPage} />       
+            <Route exact path="/App/Goals" component={GoalsPage} />       
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
           </Switch>
@@ -150,6 +150,27 @@ const RouterTabs: React.FC = () => {
           </IonTabButton>
           {/* Show the messages tab if it should be visible (same check as home tab) */}
           {isHomeTabVisible && (
+            // Goals
+            <IonTabButton 
+              tab="Goals" 
+              href="/App/Goals"
+              onClick={() => handleTabClick('Goals')}
+            >
+              <IonIcon icon={podiumOutline} />
+              <IonLabel>Goals</IonLabel>
+              {unreadCount.unreadCount > 0 && (
+                <IonBadge 
+                  color="danger" 
+                  className="unread-messages"
+                  key={unreadCount.unreadCount}
+                >
+                  {unreadCount.unreadCount}
+                </IonBadge>
+              )}
+            </IonTabButton>
+          )}
+          {isHomeTabVisible && (
+            // Messages
             <IonTabButton 
               tab="Messages" 
               href="/App/Messages"
