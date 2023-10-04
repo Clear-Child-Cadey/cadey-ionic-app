@@ -14,6 +14,7 @@ import {
     IonLabel,
     IonIcon,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 // Icons
 import { chevronForwardOutline, checkmarkCircleOutline, closeCircleOutline } from 'ionicons/icons';
 // Contexts
@@ -47,6 +48,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
     const [isLoading, setIsLoading] = useState(false);
     const [goals, setGoals] = useState<Goal[]>([]);
+    const history = useHistory();
 
     // On component mount, make an API call to get data
     useEffect(() => {
@@ -55,8 +57,8 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         setGoals([
             {
                 id: 1,
-                title: "Goal 1",
-                symptom: "Symptom 1",
+                title: "Increase positive affirmations",
+                symptom: "Cries a lot",
                 optinStatus: 1,
                 videos: [
                 {
@@ -103,8 +105,8 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             },
             {
                 id: 2,
-                title: "Goal 3",
-                symptom: "Symptom 3",
+                title: "Improve mood",
+                symptom: "Sadness",
                 optinStatus: null,
                 videos: [
                 {
@@ -130,9 +132,23 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       fetchGoals();
     }, [apiUrl, cadeyUserId]);
 
-    const handleGoalClick = (goalId: number)  => {
-    // Log a user fact
+    const onOptin = () => {
+        // Optin code
+        console.log("Optin");
     }
+
+    const onOptout = () => {
+        // Optout code
+        console.log("Optout");
+    }
+
+    const onForward = (goal: Goal) => {
+        console.log("Forward");
+        history.push({
+          pathname: '/app/GoalDetail',
+          state: { goal: goal }
+        });
+      };
 
   return (
     <IonPage className="goals">
@@ -144,36 +160,58 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Goals</IonTitle>
+            <IonTitle size="large">Choose a Goal</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRow>
-            <IonText className="subcopy">Here are your goals.</IonText>
+            <IonText className="subcopy">Add or remove goals below to get a highly personalized game plan.</IonText>
         </IonRow>
+        <hr className="divider" />
         <IonLoading isOpen={isLoading} message={'Loading Goals...'} />
         {/* Create a list of goals */}
         <IonList>
-            {goals.map((goal, index) => (
+            {goals.map((goal, index) => (                
                 <IonItem 
                     key={index} 
-                    onClick={() => handleGoalClick(goal.id)}
                     className={`goal ${goal.optinStatus === 0 ? 'hidden' : ''}`}
+                    onClick={goal.optinStatus === null ? undefined : () => onForward(goal)}
                 >
                     <IonLabel>
-                        <h2>{goal.title}</h2>
-                        <p>{goal.symptom}</p>
+                        <h3>{goal.title}</h3>
+                        <p>for {goal.symptom} - {goal.videos.length} videos</p>
                     </IonLabel>
 
                     {/* Show a Check/X if the optinStatus is null */}
                     {goal.optinStatus === null ? (
                         <div className="optin-status">
-                            <IonIcon icon={checkmarkCircleOutline} className="check" />
-                            <IonIcon icon={closeCircleOutline} className="x" />
+                            <IonIcon 
+                                icon={checkmarkCircleOutline} 
+                                className="check icon" 
+                                onClick={(e) => {
+                                    e.stopPropagation();  // Prevents IonItem's onClick
+                                    onOptin();
+                                }}
+                            />
+                            <IonIcon 
+                                icon={closeCircleOutline} 
+                                className="x icon"
+                                onClick={(e) => {
+                                    e.stopPropagation();  // Prevents IonItem's onClick
+                                    onOptout();
+                                }}
+                            />
                         </div>
                     ) : 
                     // Show an arrow if the optinStatus is not null
                         <div className="optin-status">
-                            <IonIcon icon={chevronForwardOutline} />
+                            <IonIcon 
+                                icon={chevronForwardOutline} 
+                                className='forward icon' 
+                                onClick={(e) => {
+                                    e.stopPropagation();  // Prevents IonItem's onClick
+                                    onForward(goal);
+                                }}
+                            />
                         </div>
                     }
                 </IonItem>

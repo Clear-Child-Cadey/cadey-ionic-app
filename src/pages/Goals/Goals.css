@@ -1,3 +1,47 @@
+.goal {
+    --background: #fff;
+    --border-radius: 10px;
+    margin: 15px 16px;
+    --border-width: 0;
+    --border-style: none;
+}
+
 .goal.hidden {
     display: none;
+}
+
+.goals .divider {
+    height: 0;
+    border-width: 1px;
+    border-color: #E0E0E0;
+    opacity: 20%;
+    margin: 0 16px;
+}
+
+.icon {
+    font-size: 24px;
+}
+
+.check {
+    color: #7EC472;
+    margin-right: 10px;
+}
+
+.x {
+    color: #E65858;
+}
+
+.goal h3 {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: -0.2px;
+    color: #484443;
+}
+
+.goal p {
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.2px;
+    color: #958D89;
 }
