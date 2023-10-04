@@ -155,6 +155,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
       fetchVideoData();
     } else {
       // Reset states when modal is closed
+      
       setCurrentVimeoId(null);
       setCurrentArticleId(null);
       setVideoData(undefined);
