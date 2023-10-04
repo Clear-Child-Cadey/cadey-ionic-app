@@ -164,7 +164,7 @@ const HomePage: React.FC<{
         {featuredVideos.length > 0 && (
           <IonRow className="video-list-row featured">
               <h2>Watch Now</h2>
-              <VideoList videos={featuredVideos} /> 
+              <VideoList videos={featuredVideos} listType='horizontal' /> 
           </IonRow>
         )}
         {/* If user has articles, show this. Else, skip it */}
@@ -178,21 +178,21 @@ const HomePage: React.FC<{
         {newVideos.length > 0 && (
           <IonRow className="video-list-row new">
               <h2>New Videos</h2>
-              <VideoList videos={newVideos} />
+              <VideoList videos={newVideos} listType='horizontal' />
           </IonRow>
         )}
         {/* If user has trending videos, show this. Else, skip it */}
         {trendingVideos.length > 0 && (
           <IonRow className="video-list-row trending">
               <h2>Trending Now</h2>
-              <VideoList videos={trendingVideos} />
+              <VideoList videos={trendingVideos} listType='horizontal' />
           </IonRow>
         )}
         {/* If user has watched videos, show this. Else, skip it */}
         {playedVideos.length > 0 && (
           <IonRow className="video-list-row recently-viewed">
               <h2>Recently Viewed</h2>
-              <VideoList videos={playedVideos} />
+              <VideoList videos={playedVideos} listType='horizontal' />
           </IonRow>
         )}
       </IonContent>

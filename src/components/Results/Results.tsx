@@ -1,5 +1,5 @@
 // Results.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   IonButton,
   IonText,
@@ -10,10 +10,6 @@ import './Results.css';
 import { refresh } from 'ionicons/icons';
 // Components
 import VideoList from '../Videos/VideoList';
-// Contexts
-import { useModalContext } from '../../context/ModalContext';
-// modals
-import VideoDetailModal from '../Modals/VideoDetailModal/VideoDetailModal';
 
 // Define the ResultsProps interface
 interface ResultsProps {
@@ -42,12 +38,6 @@ interface ResultsProps {
 // The results data originates in the AgeForm component and is passed to the main Concerns page, then here
 const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }) => {
   
-  // Get modal context props
-  const {
-    isVideoModalOpen,  
-    currentVimeoId,
-  } = useModalContext();
-  
   return (
     <div className="container recommendations">
       <IonRow>
@@ -70,6 +60,7 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
                     videoType: "Recommendation",
                     thumbnail: video.thumbnail || '',
                   }))}
+                  listType='horizontal'
                 />
               </>
             )}

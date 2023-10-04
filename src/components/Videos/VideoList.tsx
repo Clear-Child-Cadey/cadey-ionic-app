@@ -24,9 +24,10 @@ interface VideoItem {
 
 interface VideoListProps {
   videos: VideoItem[];
+  listType: string;
 }
 
-const VideoList: React.FC<VideoListProps> = ({ videos }) => {
+const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/userfact`
@@ -71,7 +72,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos }) => {
   }
 
   return (
-    <div className="video-list">
+    <div className={`video-list ${listType === 'full' ? 'full' : ''} ${listType === 'horizontal' ? 'horizontal' : ''}`}>
       {videos.map((video) => (
         <div className="video-item" key={video.videoId}>
           <div className="video-thumb-play-container">
