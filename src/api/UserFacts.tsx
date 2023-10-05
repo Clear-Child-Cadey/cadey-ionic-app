@@ -406,3 +406,37 @@ export const logOpenedArticle = async (cadeyUserId: string, url: string, wordpre
       throw error;
     }
 }
+
+export const logVideoDetailPageClosed = async (cadeyUserId: string, url: string, source: string) => {
+  const requestOptions = {
+      method: 'POST',
+      headers: {
+        'accept': 'text/plain',
+        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+          userid: cadeyUserId,
+          userFactTypeName: "VideoDetailPageClosed",
+          appPage: source,
+          detail1: "",
+          detail2: "",
+          detail3: "",
+          detail4: "",
+          detail5: "",
+          detail6: "",
+          detail7: "",
+          detail8: "",
+          detail9: "",
+      }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+}
