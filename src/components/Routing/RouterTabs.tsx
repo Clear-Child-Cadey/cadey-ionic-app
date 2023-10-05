@@ -26,6 +26,7 @@ import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
 import MessagesPage from '../../pages/Messages/Messages';
 import GoalsPage from '../../pages/Goals/Goals';
+import GoalDetailPage from '../../pages/Goals/GoalDetail';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -121,7 +122,8 @@ const RouterTabs: React.FC = () => {
             </Route>
             <Route exact path="/App/Admin" component={AdminPage} />
             <Route exact path="/App/Messages" component={MessagesPage} />       
-            <Route exact path="/App/Goals" component={GoalsPage} />       
+            <Route exact path="/App/Goals" component={GoalsPage} />  
+            <Route exact path="/App/GoalDetail" component={GoalDetailPage} />     
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
           </Switch>

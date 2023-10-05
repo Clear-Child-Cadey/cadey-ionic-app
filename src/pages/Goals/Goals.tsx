@@ -71,7 +71,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 },
                 {
                     mediaId: "8",
-                    videoId: "830290291/b29396446b",
+                    videoId: "830289952/54d2700589",
                     title: "Active listening parenting pitfall: losing your patience",
                     audience: "For Parents",
                     videoType: "1",
@@ -95,7 +95,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 },
                 {
                     mediaId: "8",
-                    videoId: "830290291/b29396446b",
+                    videoId: "830289952/54d2700589",
                     title: "Active listening parenting pitfall: losing your patience",
                     audience: "For Parents",
                     videoType: "1",
@@ -119,7 +119,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 },
                 {
                     mediaId: "8",
-                    videoId: "830290291/b29396446b",
+                    videoId: "830289952/54d2700589",
                     title: "Active listening parenting pitfall: losing your patience",
                     audience: "For Parents",
                     videoType: "1",
@@ -143,7 +143,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     }
 
     const onForward = (goal: Goal) => {
-        console.log("Forward");
         history.push({
           pathname: '/app/GoalDetail',
           state: { goal: goal }
@@ -154,7 +153,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     <IonPage className="goals">
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Goals</IonTitle>
+          <IonTitle>Choose a Goal</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
