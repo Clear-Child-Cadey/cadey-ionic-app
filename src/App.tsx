@@ -12,21 +12,29 @@ import RouterTabs from './components/Routing/RouterTabs';
 import AppUpdateModal from './components/Modals/AppUpdateModal';
 import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
 import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
+import FalseDoorModal from './components/Modals/FalseDoorModal/FalseDoorModal';
 // Contexts
 import { CadeyUserContext } from './main';
 import { useLoadingState } from './context/LoadingStateContext';
 import { useModalContext } from './context/ModalContext';
+import ApiUrlContext from './context/ApiUrlContext';
 // Variables
 import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
+import { logVideoDetailPageClosed } from './api/UserFacts';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
+  const { cadeyUserId, minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
+  const { apiUrl } = React.useContext(ApiUrlContext);
+  const userFactUrl = `${apiUrl}/userfact`;
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const { state: loadingState, dispatch } = useLoadingState();
+  const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
+  const [falseDoorData, setFalseDoorData] = useState<any>(null); // Hold the data for the false door
+  const [isFalseDoorModalOpen, setIsFalseDoorModalOpen] = useState(false); // Control the modal visibility
 
   const {
     isVideoModalOpen,  
@@ -66,6 +74,28 @@ const App: React.FC = () => {
     }
   }, [minimumSupportedVersion, AppVersion]);
 
+  useEffect(() => {
+    if (!isVideoModalOpen && !videoModalEverOpened) {
+      // Modal closed, hasn't ever been opened
+      // Currently, do nothing in this case
+    } else if (isVideoModalOpen && !videoModalEverOpened) {
+      // Modal opened for the first time
+      setVideoModalEverOpened(true);
+    } else if (!isVideoModalOpen && videoModalEverOpened) {
+      // Modal closed, but has been opened before
+      onVideoDetailPageClosed();
+    }
+  }, [isVideoModalOpen]);
+
+  const onVideoDetailPageClosed = async () => {
+    const response = await logVideoDetailPageClosed(cadeyUserId, userFactUrl, "Video Detail Modal");
+
+      if (response.falseDoorQuestionId !== 0) {
+        setFalseDoorData(response);
+        setIsFalseDoorModalOpen(true);
+      }
+  }
+
   return (
     <IonApp>
       {/* Show a modal if the user needs to update their app*/}
@@ -88,6 +118,22 @@ const App: React.FC = () => {
       {isArticleDetailModalOpen && currentArticleId && (
         <ArticleDetailModal />
       )}
+
+      {/* Show a false door modal if context dictates */}
+      <FalseDoorModal 
+        falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
+        iconUrl={falseDoorData?.questionIcon || ''}
+        copy={falseDoorData?.questionText || ''}
+        yesResponse="Yes, sign me up!"
+        noResponse="No thanks, not interested"
+        thankYouIconUrlYes={falseDoorData?.questionResponseYesIcon || ''}
+        thankYouIconUrlNo={falseDoorData?.questionResponseNoIcon || ''}
+        thankYouCopyYes={falseDoorData?.questionResponseYesText || ''}
+        thankYouCopyNo={falseDoorData?.questionResponseNoText || ''}
+        thankYouButtonText="Close"
+        isOpen={isFalseDoorModalOpen}
+        setIsOpen={setIsFalseDoorModalOpen}
+      />
       <RouterTabs />
     </IonApp>
   );

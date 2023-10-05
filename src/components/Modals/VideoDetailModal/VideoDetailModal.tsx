@@ -23,6 +23,7 @@ import { useModalContext } from '../../../context/ModalContext';
 import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logShareClick } from '../../../api/UserFacts';
 import { logFeaturedVideoNotificationClicked } from '../../../api/UserFacts';
+import { logVideoDetailPageClosed } from '../../../api/UserFacts';
 import { getUserMessages } from '../../../api/UserMessages';
 // CSS
 import './VideoDetailModal.css';
@@ -128,8 +129,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
         }
 
         if(data && data.mediaId) {
-          console.log("Video: ", location.search.split('video=')[1]);
-          console.log("Current Vimeo ID: ", currentVimeoId);
           if (currentVimeoId === location.search.split('video=')[1]) {
             // Log user fact that the user clicked on a push notification
             logFeaturedVideoNotificationClicked(
