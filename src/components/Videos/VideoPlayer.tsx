@@ -65,7 +65,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
       player.on('pause', (data) => {
         setVideoProgress(data.percent);
-        console.log("Video progress data: ", data.percent);
         onPause(data.percent);
       });
 
@@ -97,7 +96,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   };
 
   const onPause = async (progress: number) => {
-    console.log("Video progress: ", progress);
     const response = await logVideoPause(
         cadeyUserId, 
         userFactUrl, 
