@@ -42,6 +42,7 @@
     letter-spacing: -0.2px;
     color: #484443;
     margin-top: 0;
+    margin-bottom: 20px;
 }
 
 .video-list .video-item img {
@@ -52,7 +53,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
   }  
 
 .share-button {
