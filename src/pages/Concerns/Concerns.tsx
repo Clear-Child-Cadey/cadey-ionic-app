@@ -20,6 +20,13 @@ import AgeForm from '../../components/AgeForm/AgeForm';
 import Results from '../../components/Results/Results';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
+import UnreadContext from '../../context/UnreadContext';
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
+// Interfaces
+import { Goal } from '../../pages/Goals/Goals';
+// API
+import { getUserGoals } from '../../api/Goals';
 
 // Define the Concerns component
 const ConcernsPage: React.FC = () => {
@@ -38,6 +45,15 @@ const ConcernsPage: React.FC = () => {
 
   // Home tab visibility context
   const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
+
+  // Unread context
+  const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
+
+  // User context
+  const { cadeyUserId } = useContext(CadeyUserContext);
+
+  // API context
+  const { apiUrl } = useContext(ApiUrlContext);
   
   // Set the title when the component mounts
   useEffect(() => {
@@ -65,7 +81,19 @@ const ConcernsPage: React.FC = () => {
   const handleSubmit = () => {
     setPageTitle("Recommendations");
     document.title = "Recommendations";
+    setGoalsBadge();
   };
+
+  // Set the goals badge
+  const setGoalsBadge = async () => {
+    const goalsData: Goal[] = await getUserGoals(apiUrl, cadeyUserId);
+    const unreadGoals = goalsData.filter(goalsData => !goalsData.isNew).length;
+    if (unreadGoals > 0) {
+      setUnreadGoals?.(true);
+    } else {
+      setUnreadGoals?.(false);
+    }
+  }
 
   // Handler for when the user starts over
   const handleRestart = () => {

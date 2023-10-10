@@ -3,7 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { App, URLOpenListenerEvent, AppState } from '@capacitor/app';
 import OneSignal from 'onesignal-cordova-plugin';
 // Contexts
-import UnreadCountContext from '../../context/UnreadCountContext';
+import UnreadCountContext from '../../context/UnreadContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 // API
@@ -46,7 +46,7 @@ const AppUrlListener: React.FC<any> = () => {
                       // Getting messages
                       const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
                       const unread = data.filter(data => !data.isRead).length;
-                      unreadCount.setUnreadCount?.(unread);
+                      unreadCount.setUnreadMessagesCount?.(unread);
                     } catch (error) {
                         console.error("Error fetching video details:", error);
                     }

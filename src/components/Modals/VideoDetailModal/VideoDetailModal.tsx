@@ -16,7 +16,7 @@ import {
 import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
 //  Contexts
 import ApiUrlContext from '../../../context/ApiUrlContext';
-import UnreadCountContext from '../../../context/UnreadCountContext';
+import UnreadCountContext from '../../../context/UnreadContext';
 import { CadeyUserContext } from '../../../main';
 import { useModalContext } from '../../../context/ModalContext';
 //  API
@@ -167,7 +167,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
       // Getting messages
       const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
       const unread = data.filter(data => !data.isRead).length;
-      unreadCount.setUnreadCount?.(unread);
+      unreadCount.setUnreadMessagesCount?.(unread);
     } catch (error) {
       console.error("Error fetching video details:", error);
     }

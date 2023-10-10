@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
 import { HomeTabVisibilityContext } from './context/TabContext';
-import UnreadCountContext from './context/UnreadCountContext';
+import UnreadContext from './context/UnreadContext';
 import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
 import { ModalProvider } from './context/ModalContext';
@@ -127,7 +127,8 @@ function MainComponent() {
   const [oneSignalId, setOneSignalId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isHomeTabVisible, setIsHomeTabVisible] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+  const [unreadGoals, setUnreadGoals] = useState(false);
 
   // call API to get user details, app version info and video data the first time the app loads
   useEffect(() => {
@@ -147,7 +148,7 @@ function MainComponent() {
     <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion, oneSignalId }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
-          <UnreadCountContext.Provider value={{ unreadCount, setUnreadCount }}>
+          <UnreadContext.Provider value={{ unreadMessagesCount, setUnreadMessagesCount, unreadGoals, setUnreadGoals }}>
             <TabBarSpotlightProvider>
               <LoadingStateProvider>
                 <ModalProvider>
@@ -155,7 +156,7 @@ function MainComponent() {
                 </ModalProvider>
               </LoadingStateProvider>
             </TabBarSpotlightProvider>
-          </UnreadCountContext.Provider>
+          </UnreadContext.Provider>
         </HomeTabVisibilityContext.Provider>
       </DeviceIdContext.Provider>
     </CadeyUserContext.Provider>

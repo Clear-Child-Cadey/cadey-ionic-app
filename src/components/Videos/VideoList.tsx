@@ -13,7 +13,7 @@ import { logShareClick } from '../../api/UserFacts';
 // CSS
 import './VideoList.css';
 
-interface VideoItem {
+export interface VideoItem {
   mediaId: string;
   videoId: string;
   title: string;

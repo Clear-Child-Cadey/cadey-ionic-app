@@ -35,19 +35,26 @@ import OneSignalInitializer from '../../api/OneSignal/OneSignalInitializerCompon
 import { HomeTabVisibilityContext } from '../../context/TabContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
-import UnreadCountContext from '../../context/UnreadCountContext';
+import UnreadContext from '../../context/UnreadContext';
 import { useSpotlight } from '../../context/SpotlightContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 import { logTapBarClick } from '../../api/UserFacts';
+import { getUserGoals } from '../../api/Goals';
 // Interfaces
 import { Message } from '../../pages/Messages/Messages';
+import { Goal } from '../../pages/Goals/Goals';
 
 const RouterTabs: React.FC = () => {
   const [currentTab, setCurrentTab] = useState('Home');
   const homeTabVisibility = useContext(HomeTabVisibilityContext);
   const isHomeTabVisible = homeTabVisibility?.isHomeTabVisible;
-  const unreadCount = useContext(UnreadCountContext); // Get the current unread count
+  const { 
+    unreadMessagesCount, 
+    setUnreadMessagesCount,
+    unreadGoals,
+    setUnreadGoals,
+  } = useContext(UnreadContext); // Get the current unread count
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/userfact`;
@@ -71,9 +78,16 @@ const RouterTabs: React.FC = () => {
     const fetchMessages = async () => {
         try {
           // Getting messages
-          const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
-          const unread = data.filter(data => !data.isRead).length;
-          unreadCount.setUnreadCount?.(unread);
+          const messagesData: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+          const unreadMessages = messagesData.filter(messagesData => !messagesData.isRead).length;
+          setUnreadMessagesCount?.(unreadMessages);
+          const goalsData: Goal[] = await getUserGoals(apiUrl, cadeyUserId);
+          const unreadGoals = goalsData.filter(goalsData => !goalsData.isNew).length;
+          if (unreadGoals > 0) {
+            setUnreadGoals?.(true);
+          } else {
+            setUnreadGoals?.(false);
+          }
         } catch (error) {
             console.error("Error fetching video details:", error);
         }
@@ -141,15 +155,7 @@ const RouterTabs: React.FC = () => {
               <IonLabel>Home</IonLabel>
             </IonTabButton>
           )}
-          <IonTabButton 
-            tab="Concerns" 
-            href="/App/Concerns" 
-            className={showSpotlight ? "spotlight-tab" : ""}
-            onClick={() => handleTabClick('Concerns')}
-          >
-            <IonIcon icon={gridOutline} />
-            <IonLabel>Concerns</IonLabel>
-          </IonTabButton>
+          
           {/* Show the messages tab if it should be visible (same check as home tab) */}
           {isHomeTabVisible && (
             // Goals
@@ -160,17 +166,27 @@ const RouterTabs: React.FC = () => {
             >
               <IonIcon icon={podiumOutline} />
               <IonLabel>Goals</IonLabel>
-              {unreadCount.unreadCount > 0 && (
+              {unreadGoals && (
                 <IonBadge 
                   color="danger" 
                   className="unread-messages"
-                  key={unreadCount.unreadCount}
+                  key={unreadGoals==true ? 1 : 0}
                 >
-                  {unreadCount.unreadCount}
                 </IonBadge>
               )}
             </IonTabButton>
           )}
+
+          <IonTabButton 
+            tab="Concerns" 
+            href="/App/Concerns" 
+            className={showSpotlight ? "spotlight-tab" : ""}
+            onClick={() => handleTabClick('Concerns')}
+          >
+            <IonIcon icon={gridOutline} />
+            <IonLabel>Concerns</IonLabel>
+          </IonTabButton>
+
           {isHomeTabVisible && (
             // Messages
             <IonTabButton 
@@ -180,13 +196,13 @@ const RouterTabs: React.FC = () => {
             >
               <IonIcon icon={mailOutline} />
               <IonLabel>Messages</IonLabel>
-              {unreadCount.unreadCount > 0 && (
+              {unreadMessagesCount > 0 && (
                 <IonBadge 
                   color="danger" 
                   className="unread-messages"
-                  key={unreadCount.unreadCount}
+                  key={unreadMessagesCount}
                 >
-                  {unreadCount.unreadCount}
+                  {unreadMessagesCount}
                 </IonBadge>
               )}
             </IonTabButton>
