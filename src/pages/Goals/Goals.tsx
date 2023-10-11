@@ -48,24 +48,32 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const [goals, setGoals] = useState<Goal[]>([]);
     const history = useHistory();
 
-    // On component mount, make an API call to get data
-    useEffect(() => {
-      const fetchGoals = async () => {
+    const fetchGoals = async () => {
         // Set goals to a dummy array of hardcoded goals
         setGoals(await getUserGoals(apiUrl, cadeyUserId));
-
-          const unreadGoals = goals.filter(goals => !goals.isNew).length;
-          if (unreadGoals > 0) {
-            setUnreadGoals?.(true);
-          } else {
-            setUnreadGoals?.(false);
-          }
+        const unreadGoals = goals.filter(goals => !goals.isNew).length;
+            if (unreadGoals > 0) {
+                setUnreadGoals?.(true);
+            } else {
+                setUnreadGoals?.(false);
+            }
       }
+
+    // On component mount, make an API call to get data
+    useEffect(() => {
       fetchGoals();
     }, [apiUrl, cadeyUserId]);
 
     const onOptin = (userGoalId: number) => {
         postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
+        // Update the optIn value of the goal in state
+        // Allows the user to access the goal immediately without a follow up API call
+        setGoals(goals.map(goal => {
+            if (goal.userGoalId === userGoalId) {
+                goal.optIn = true;
+            }
+            return goal;
+        }));
     }
 
     const onOptout = (userGoalId: number) => {
