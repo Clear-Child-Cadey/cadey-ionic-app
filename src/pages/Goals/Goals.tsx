@@ -23,11 +23,12 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import UnreadContext from '../../context/UnreadContext';
 // API
 import { getUserGoals } from '../../api/Goals';
+import { postGoalOptIn } from '../../api/Goals';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
 
 export interface Goal {
-    goalId: number;
+    userGoalId: number;
     title: string;
     symptom: string;
     optIn: boolean | null;
@@ -63,14 +64,12 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       fetchGoals();
     }, [apiUrl, cadeyUserId]);
 
-    const onOptin = () => {
-        // Optin code
-        console.log("Optin");
+    const onOptin = (userGoalId: number) => {
+        postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
     }
 
-    const onOptout = () => {
-        // Optout code
-        console.log("Optout");
+    const onOptout = (userGoalId: number) => {
+        postGoalOptIn(apiUrl, cadeyUserId, userGoalId, false);
     }
 
     const onForward = (goal: Goal) => {
@@ -119,7 +118,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                                 className="check icon" 
                                 onClick={(e) => {
                                     e.stopPropagation();  // Prevents IonItem's onClick
-                                    onOptin();
+                                    onOptin(goal.userGoalId);
                                 }}
                             />
                             <IonIcon 
@@ -127,7 +126,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                                 className="x icon"
                                 onClick={(e) => {
                                     e.stopPropagation();  // Prevents IonItem's onClick
-                                    onOptout();
+                                    onOptout(goal.userGoalId);
                                 }}
                             />
                         </div>

@@ -20,3 +20,20 @@ export const getUserGoals = async (apiUrl: string, userId: string) => {
 
     return data.goals;
 };
+
+export const postGoalOptIn = async (apiUrl: string, userId: string, userGoalId: number, optIn: boolean) => {
+    const url = `${apiUrl}/goal/${userId}/${userGoalId}/${optIn}`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+            'accept': 'text/plain',
+            'apiKey': API_KEY,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+}
