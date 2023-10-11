@@ -55,7 +55,7 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
                   videos={recommendation.showMeHow.map(video => ({
                     title: video.title,
                     audience: video.audience || 'No Description',
-                    videoId: video.sourceId,
+                    sourceId: video.sourceId,
                     mediaId: video.mediaId,
                     videoType: "Recommendation",
                     thumbnail: video.thumbnail || '',

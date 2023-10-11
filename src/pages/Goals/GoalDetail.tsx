@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
     IonPage,
@@ -26,6 +26,12 @@ interface LocationState {
 const GoalDetailPage: React.FC = () => {
     const location = useLocation<LocationState>();
     const goal: Goal = location.state?.goal || null;
+
+    useEffect(() => {
+        // Log the list of video IDs to the console
+        console.log("Goal: ", goal);
+        console.log("Videos: ", goal.videos);
+      }, [goal]);
 
     return (
         <IonPage className="goals">

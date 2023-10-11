@@ -49,10 +49,9 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const history = useHistory();
 
     const fetchGoals = async () => {
-        // Set goals to a dummy array of hardcoded goals
         setGoals(await getUserGoals(apiUrl, cadeyUserId));
-        const unreadGoals = goals.filter(goals => !goals.isNew).length;
-            if (unreadGoals > 0) {
+        const unreadGoalsCount = goals.filter(goals => !goals.isNew).length;
+            if (unreadGoalsCount > 0) {
                 setUnreadGoals?.(true);
             } else {
                 setUnreadGoals?.(false);
@@ -78,6 +77,14 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     const onOptout = (userGoalId: number) => {
         postGoalOptIn(apiUrl, cadeyUserId, userGoalId, false);
+        // Update the optIn value of the goal in state
+        // Hides the goal immediately without a follow up API call
+        setGoals(goals.map(goal => {
+            if (goal.userGoalId === userGoalId) {
+                goal.optIn = false;
+            }
+            return goal;
+        }));
     }
 
     const onForward = (goal: Goal) => {

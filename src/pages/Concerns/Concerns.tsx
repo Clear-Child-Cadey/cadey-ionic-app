@@ -26,7 +26,7 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 // Interfaces
 import { Goal } from '../../pages/Goals/Goals';
 // API
-import { getUserGoals } from '../../api/Goals';
+import { getNewGoalsIndicator } from '../../api/Goals';
 
 // Define the Concerns component
 const ConcernsPage: React.FC = () => {
@@ -81,14 +81,12 @@ const ConcernsPage: React.FC = () => {
   const handleSubmit = () => {
     setPageTitle("Recommendations");
     document.title = "Recommendations";
-    setGoalsBadge();
   };
 
   // Set the goals badge
   const setGoalsBadge = async () => {
-    const goalsData: Goal[] = await getUserGoals(apiUrl, cadeyUserId);
-    const unreadGoals = goalsData.filter(goalsData => !goalsData.isNew).length;
-    if (unreadGoals > 0) {
+    const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
+    if (unreadGoalsCount > 0) {
       setUnreadGoals?.(true);
     } else {
       setUnreadGoals?.(false);
@@ -114,6 +112,7 @@ const ConcernsPage: React.FC = () => {
     setShowAgeForm(false);
     setShowSymptomsList(false);
     setHomeTabVisibility(true); // Show the Home tab when results are received
+    setGoalsBadge();
   };
 
   // Determine the progress bar value

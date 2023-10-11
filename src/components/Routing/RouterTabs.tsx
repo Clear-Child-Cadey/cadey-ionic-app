@@ -40,7 +40,7 @@ import { useSpotlight } from '../../context/SpotlightContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 import { logTapBarClick } from '../../api/UserFacts';
-import { getUserGoals } from '../../api/Goals';
+import { getNewGoalsIndicator } from '../../api/Goals';
 // Interfaces
 import { Message } from '../../pages/Messages/Messages';
 import { Goal } from '../../pages/Goals/Goals';
@@ -81,9 +81,8 @@ const RouterTabs: React.FC = () => {
           const messagesData: Message[] = await getUserMessages(apiUrl, cadeyUserId);
           const unreadMessages = messagesData.filter(messagesData => !messagesData.isRead).length;
           setUnreadMessagesCount?.(unreadMessages);
-          const goalsData: Goal[] = await getUserGoals(apiUrl, cadeyUserId);
-          const unreadGoals = goalsData.filter(goalsData => !goalsData.isNew).length;
-          if (unreadGoals > 0) {
+          const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
+          if (unreadGoalsCount > 0) {
             setUnreadGoals?.(true);
           } else {
             setUnreadGoals?.(false);

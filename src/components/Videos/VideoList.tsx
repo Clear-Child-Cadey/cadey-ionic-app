@@ -15,7 +15,7 @@ import './VideoList.css';
 
 export interface VideoItem {
   mediaId: string;
-  videoId: string;
+  sourceId: string;
   title: string;
   audience: string;
   videoType: string;
@@ -45,19 +45,25 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   // Get the loading state from the context
   const { state: loadingState, dispatch } = useLoadingState();
 
+  useEffect(() => {
+    // Log the list of video IDs to the console
+    console.log("Video IDs:", videos.map(video => video.sourceId));
+  }, [videos]); // Dependency array ensures this code runs once when videos prop changes
+
+
   // Check if the user's device has sharing capabilities
   useEffect(() => {
     Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));
   }, []);
 
   // Function to copy the shareable link to clipboard
-  const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string, videoType: string) => {
+  const handleShare = async (event: React.MouseEvent, sourceId: string, mediaId: string, videoType: string) => {
     // Log a user fact that the user tapped on Share
     logShareClick(cadeyUserId, userFactUrl, mediaId, videoType, document.title)
 
     // Share the Vimeo URL
     await Share.share({
-      url: `https://vimeo.com/${videoId}`,
+      url: `https://vimeo.com/${sourceId}`,
     });
   }
 
@@ -65,7 +71,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
     // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
     dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: true } });
     setSelectedVideo(video);
-    setCurrentVimeoId(video.videoId);
+    setCurrentVimeoId(video.sourceId);
     setCurrentVideoType(video.videoType);
     setArticleDetailModalOpen(false);
     setVideoModalOpen(true);
@@ -74,7 +80,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   return (
     <div className={`video-list ${listType === 'full' ? 'full' : ''} ${listType === 'horizontal' ? 'horizontal' : ''}`}>
       {videos.map((video) => (
-        <div className="video-item" key={video.videoId}>
+        <div className="video-item" key={video.sourceId}>
           <div className="video-thumb-play-container">
             <img 
               src={video.thumbnail}
@@ -86,7 +92,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
           <div className="tag-share">
             <p>Video</p>  
             {canShare && (
-              <div className="share" onClick={(event) => handleShare(event, video.videoId, video.mediaId, video.videoType)}>
+              <div className="share" onClick={(event) => handleShare(event, video.sourceId, video.mediaId, video.videoType)}>
                 <p>Share </p>
                 <div className="share-button">
                   <IonIcon icon={arrowRedoOutline} />

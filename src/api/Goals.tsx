@@ -37,3 +37,22 @@ export const postGoalOptIn = async (apiUrl: string, userId: string, userGoalId: 
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 }
+
+export const getNewGoalsIndicator = async (apiUrl: string, userId: string) => {
+    const url = `${apiUrl}/goalsisnew/${userId}`;
+
+    const response = await fetch(url, {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+            'accept': 'text/plain',
+            'apiKey': API_KEY,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+}

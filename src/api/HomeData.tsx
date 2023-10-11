@@ -24,7 +24,7 @@ const getHomeData = () => {
         const data = await response.json();
 
         const mapVideos = (videos: any, videoType: string) => videos.map((video: { sourceId: any; mediaId: any; title: any; audience: any; thumbnail: any; }) => ({
-            videoId: video.sourceId,
+            sourceId: video.sourceId,
             mediaId: String(video.mediaId), // Convert the mediaId to a string
             title: video.title,
             audience: video.audience,
