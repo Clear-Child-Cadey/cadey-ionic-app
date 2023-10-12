@@ -18,7 +18,19 @@ export const getUserGoals = async (apiUrl: string, userId: string) => {
 
     const data = await response.json();
 
-    return data.goals;
+    const mapVideos = (videos: any, videoType: string) => videos.map((video: { sourceId: any; mediaId: any; title: any; audience: any; thumbnail: any; }) => ({
+        sourceId: video.sourceId,
+        mediaId: String(video.mediaId), // Convert the mediaId to a string
+        title: video.title,
+        audience: video.audience,
+        videoType: videoType,
+        thumbnail: video.thumbnail,
+    }));
+
+    return data.goals.map((goal: { videos: any; }) => ({
+        ...goal,
+        videos: mapVideos(goal.videos, "goalVideos"),
+    }));
 };
 
 export const postGoalOptIn = async (apiUrl: string, userId: string, userGoalId: number, optIn: boolean) => {

@@ -30,9 +30,9 @@ const getHomeData = () => {
             audience: video.audience,
             videoType: videoType,
             thumbnail: video.thumbnail,
-          }));
+        }));
 
-          return { 
+        return { 
             featuredVideos: data.featuredVideos ? mapVideos(data.featuredVideos, "featuredVideos") : [], 
             newVideos: data.newVideos ? mapVideos(data.newVideos, "newVideos") : [], 
             playedVideos: data.playedVideos ? mapVideos(data.playedVideos, "playedVideos") : [],

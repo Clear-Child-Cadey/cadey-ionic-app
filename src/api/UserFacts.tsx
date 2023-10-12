@@ -347,7 +347,7 @@ export const logTapBarClick = async (cadeyUserId: string, url: string, tabName: 
         'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
           userid: cadeyUserId,
           userFactTypeName: "TapBarNavClick",
           appPage: source,
