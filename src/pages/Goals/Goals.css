@@ -37,6 +37,11 @@
     line-height: 18px;
     letter-spacing: -0.2px;
     color: #484443;
+    text-transform: lowercase;
+}
+
+.goal h3::first-letter {
+    text-transform: uppercase;
 }
 
 .goal p {

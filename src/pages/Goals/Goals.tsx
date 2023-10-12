@@ -122,7 +122,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 >
                     <IonLabel>
                         <h3>{goal.title}</h3>
-                        <p>for {goal.symptom} - {goal.videos.length} videos</p>
+                        <p>Symptom: {goal.symptom} - {goal.videos.length} videos</p>
                     </IonLabel>
 
                     {/* Show a Check/X if the optIn is null */}
