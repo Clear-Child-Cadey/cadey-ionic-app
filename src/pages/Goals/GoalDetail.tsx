@@ -8,16 +8,13 @@ import {
     IonContent,
     IonRow,
     IonText,
-    IonLoading,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonIcon,
 } from '@ionic/react';
 // Interfaces
 import { Goal } from '../../pages/Goals/Goals';
 // Components
 import VideoList from '../../components/Videos/VideoList';
+// CSS
+import './GoalDetail.css';
 
 interface LocationState {
     goal: Goal;
@@ -28,20 +25,24 @@ const GoalDetailPage: React.FC = () => {
     const goal: Goal = location.state?.goal || null;
 
     return (
-        <IonPage className="goals">
+        <IonPage className="goal-detail">
             <IonHeader>
                 <IonToolbar>
-                <IonTitle>Goal</IonTitle>
+                <IonTitle>How to Help</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
                 <IonHeader collapse="condense">
                 <IonToolbar>
-                    <IonTitle size="large">Goal</IonTitle>
+                    <IonTitle size="large">How to Help</IonTitle>
                 </IonToolbar>
                 </IonHeader>
-                <IonRow>
+                {/* <IonRow>
                     <IonText className="subcopy">{goal.title} for {goal.symptom}</IonText>
+                </IonRow> */}
+                <IonRow>
+                    <IonText className="subcopy"><strong>Goal</strong>: {goal.title}</IonText>
+                    <IonText className="symptom"><strong>Symptom</strong>: {goal.symptom}</IonText>
                 </IonRow>
                 <VideoList videos={goal.videos} listType='full' />
             </IonContent>

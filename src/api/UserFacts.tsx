@@ -1,25 +1,28 @@
+const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
+const headers = {
+  'accept': 'text/plain',
+  'apiKey': API_KEY,
+  'Content-Type': 'application/json',
+};
+
 export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, source: string) => {
   const requestOptions = {
     method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        userid: cadeyUserId,
-        userFactTypeName: "StartedMedia",
-        appPage: source,
-        detail1: mediaId,
-        detail2: mediaType,
-        detail3: "",
-        detail4: "",
-        detail5: "",
-        detail6: "",
-        detail7: "",
-        detail8: "",
-        detail9: "",
-      }),
+    headers: headers,
+    body: JSON.stringify({ 
+      userid: cadeyUserId,
+      userFactTypeName: "StartedMedia",
+      appPage: source,
+      detail1: mediaId,
+      detail2: mediaType,
+      detail3: "",
+      detail4: "",
+      detail5: "",
+      detail6: "",
+      detail7: "",
+      detail8: "",
+      detail9: "",
+    }),
   };
   
   try {
@@ -35,11 +38,7 @@ export const logVideoPlay = async (cadeyUserId: string, url: string, mediaId: st
 export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string, mediaType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "PausedMedia",
@@ -69,11 +68,7 @@ export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: s
 export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string, videoType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "InProgressMedia",
@@ -103,11 +98,7 @@ export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId
 export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "FinishedMedia",
@@ -138,11 +129,7 @@ export const logVideoFinish = async (cadeyUserId: string, url: string, mediaId: 
 export const logFalseDoorResponse = async (cadeyUserId: string, url: string, falseDoorQuestionId: string, userResponse: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "FalseDoorQuestionResponse",
@@ -172,11 +159,7 @@ export const logFalseDoorResponse = async (cadeyUserId: string, url: string, fal
 export const logShareClick = async (cadeyUserId: string, url: string, mediaId: string, mediaType: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "MediaShared",
@@ -206,11 +189,7 @@ export const logShareClick = async (cadeyUserId: string, url: string, mediaId: s
 export const logConcernClick = async (cadeyUserId: string, url: string, concernId: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "ConcernChosen",
@@ -240,11 +219,7 @@ export const logConcernClick = async (cadeyUserId: string, url: string, concernI
 export const logFeaturedVideoNotificationClicked = async (cadeyUserId: string, url: string, mediaId: string, sourceId: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "FeaturedVideoNotificationClicked",
@@ -274,11 +249,7 @@ export const logFeaturedVideoNotificationClicked = async (cadeyUserId: string, u
 export const logAgeScreenReached = async (cadeyUserId: string, url: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "AgePageEntered",
@@ -308,11 +279,7 @@ export const logAgeScreenReached = async (cadeyUserId: string, url: string, sour
 export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: string, mediaId: string, mediaSourceId: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "MessageClickedOnMessagesPage",
@@ -342,11 +309,7 @@ export const logMessageOnMessagesPageClicked = async (cadeyUserId: string, url: 
 export const logTapBarClick = async (cadeyUserId: string, url: string, tabName: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({
           userid: cadeyUserId,
           userFactTypeName: "TapBarNavClick",
@@ -376,11 +339,7 @@ export const logTapBarClick = async (cadeyUserId: string, url: string, tabName: 
 export const logOpenedArticle = async (cadeyUserId: string, url: string, wordpressArticleId: number, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "OpenedArticle",
@@ -410,15 +369,41 @@ export const logOpenedArticle = async (cadeyUserId: string, url: string, wordpre
 export const logVideoDetailPageClosed = async (cadeyUserId: string, url: string, source: string) => {
   const requestOptions = {
       method: 'POST',
-      headers: {
-        'accept': 'text/plain',
-        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({ 
           userid: cadeyUserId,
           userFactTypeName: "VideoDetailPageClosed",
           appPage: source,
+          detail1: "",
+          detail2: "",
+          detail3: "",
+          detail4: "",
+          detail5: "",
+          detail6: "",
+          detail7: "",
+          detail8: "",
+          detail9: "",
+      }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+}
+
+export const appPageNavigation = async (cadeyUserId: string, url: string, appPage: string) => {
+  const requestOptions = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ 
+          userid: cadeyUserId,
+          userFactTypeName: "appPageNavigation",
+          appPage: appPage,
           detail1: "",
           detail2: "",
           detail3: "",

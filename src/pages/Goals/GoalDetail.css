@@ -1,0 +1,21 @@
+.goal-detail .subcopy {
+    text-transform: lowercase;
+    padding: 10px 16px 0px 16px;
+}
+
+.goal-detail .subcopy::first-letter {
+    text-transform: uppercase;
+}
+
+.goal-detail .symptom {
+    padding: 10px 16px 20px 16px;
+    text-transform: lowercase;
+}
+
+.goal-detail .symptom::first-letter {
+    text-transform: uppercase;
+}
+
+.goal-detail strong {
+    color: #564941;
+}
