@@ -34,7 +34,7 @@ const GoalDetailPage: React.FC = () => {
 
     // On mount
     useEffect(() => {
-        document.title = "How to Help";
+        document.title = "Goal Detail";
         appPageNavigation(cadeyUserId, userFactUrl, "Goal Detail");
     }, []);
 
