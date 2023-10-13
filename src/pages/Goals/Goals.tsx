@@ -24,6 +24,7 @@ import UnreadContext from '../../context/UnreadContext';
 // API
 import { getUserGoals } from '../../api/Goals';
 import { postGoalOptIn } from '../../api/Goals';
+import { appPageNavigation } from '../../api/UserFacts';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
 
@@ -61,6 +62,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     // On component mount, make an API call to get data
     useEffect(() => {
       fetchGoals();
+      appPageNavigation(cadeyUserId, userFactUrl, "Goals List");
     }, [apiUrl, cadeyUserId]);
 
     const onOptin = (userGoalId: number) => {

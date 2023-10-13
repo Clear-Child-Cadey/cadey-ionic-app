@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
     IonPage,
@@ -11,10 +11,15 @@ import {
 } from '@ionic/react';
 // Interfaces
 import { Goal } from '../../pages/Goals/Goals';
+// Contexts
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
 // Components
 import VideoList from '../../components/Videos/VideoList';
 // CSS
 import './GoalDetail.css';
+// API
+import { appPageNavigation } from '../../api/UserFacts';
 
 interface LocationState {
     goal: Goal;
@@ -23,6 +28,15 @@ interface LocationState {
 const GoalDetailPage: React.FC = () => {
     const location = useLocation<LocationState>();
     const goal: Goal = location.state?.goal || null;
+    const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
+    const userFactUrl = `${apiUrl}/userfact`
+    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+
+    // On mount
+    useEffect(() => {
+        document.title = "How to Help";
+        appPageNavigation(cadeyUserId, userFactUrl, "Goal Detail");
+    }, []);
 
     return (
         <IonPage className="goal-detail">
