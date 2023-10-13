@@ -94,6 +94,11 @@ const RouterTabs: React.FC = () => {
     fetchMessages(); // Get data when the component mounts
   }, []);
 
+  useEffect(() => {
+    console.log("Unread Goals Status: ", unreadGoals);
+  }
+  , [unreadGoals]);
+
   return (
     <IonReactRouter>
       {/* Listen for App URLs */}
@@ -118,11 +123,11 @@ const RouterTabs: React.FC = () => {
 
               return (
                   <HomePage 
-                      currentTab={currentTab} 
-                      tutorialStep={tutorialStep} 
-                      setTutorialStep={setTutorialStep} 
-                      vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
-                      articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
+                    currentTab={currentTab} 
+                    tutorialStep={tutorialStep} 
+                    setTutorialStep={setTutorialStep} 
+                    vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
+                    articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
                   />
               );
           }} />
@@ -165,12 +170,13 @@ const RouterTabs: React.FC = () => {
             >
               <IonIcon icon={podiumOutline} />
               <IonLabel>Goals</IonLabel>
-              {unreadGoals && (
+              {unreadGoals==true && (
                 <IonBadge 
                   color="danger" 
                   className="unread-messages"
                   key={unreadGoals==true ? 1 : 0}
                 >
+                  
                 </IonBadge>
               )}
             </IonTabButton>
