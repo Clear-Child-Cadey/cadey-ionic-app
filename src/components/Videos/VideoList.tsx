@@ -45,12 +45,6 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   // Get the loading state from the context
   const { state: loadingState, dispatch } = useLoadingState();
 
-  useEffect(() => {
-    // Log the list of video IDs to the console
-    console.log("Video IDs:", videos.map(video => video.sourceId));
-  }, [videos]); // Dependency array ensures this code runs once when videos prop changes
-
-
   // Check if the user's device has sharing capabilities
   useEffect(() => {
     Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));

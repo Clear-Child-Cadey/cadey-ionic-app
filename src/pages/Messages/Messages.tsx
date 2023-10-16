@@ -12,6 +12,7 @@ import {
     IonList,
     IonItem,
     IonLabel,
+    IonButton,
 } from '@ionic/react';
 // Contexts
 import { CadeyUserContext } from '../../main';
@@ -37,6 +38,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const userFactUrl = `${apiUrl}/userfact`
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
+    const [messagesLoaded, setMessagesLoaded] = useState(false); // Used to determine if the messages have been loaded yet
 
     const {
       isVideoModalOpen,
@@ -50,6 +52,8 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     useEffect(() => {
       const fetchMessages = async () => {
           try {
+            // Start the loader
+            setIsLoading(true);
             // Getting messages
             const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
             setMessages(data);
@@ -58,6 +62,9 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
           } catch (error) {
               console.error("Error fetching video details:", error);
           }
+          // Clear the loader
+          setIsLoading(false);
+          setMessagesLoaded(true);
       };
       document.title = 'Messages'; // Set the page title when the component mounts
       fetchMessages(); // Get data when the component mounts
@@ -83,30 +90,47 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             <IonTitle size="large">Messages</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonRow>
-            <IonText className="subcopy">Here are your messages.</IonText>
-        </IonRow>
-        <IonLoading isOpen={isLoading} message={'Loading Messages...'} />
-        <IonList>
-            {messages.map((message, index) => (
-                <IonItem 
-                  key={index} 
-                  onClick={() => handleMessageClick(message.mediaId.toString(), message.mediaSourceId,)}
-                  className={message.isRead ? "read" : "unread"}
-                >
-                    {/* Render the unread indicator dot if the message is unread, otherwise render a placeholder */}
-                    {message.isRead ? 
-                        <div className="read-placeholder"></div> :
-                        <div className="unread-indicator"></div> 
-                    }
+        {messagesLoaded && (
+          <IonRow>
+              {/* "subcopy" that changes depending on whether the user has messages or not */}
+              <IonText className="subcopy">{messages.length ? 
+                "Your personalized messages" : 
+                "You have no messages"
+              }</IonText>
+          </IonRow>
+        )}
+        
+        <hr className="divider" />
 
-                    <IonLabel>
-                        <h2>{message.title}</h2>
-                        <p>{message.featuredMessage}</p>
-                    </IonLabel>
-                </IonItem>
-            ))}
-        </IonList>
+        <IonLoading isOpen={isLoading} message={'Loading Messages...'} />
+        {messagesLoaded && !messages.length && (
+            <IonRow className="no-messages-content">
+                <IonText className="subcopy">When you watch videos, your daily personalized messages will appear here.</IonText>
+                <IonButton routerLink='/app/home'>Watch Videos</IonButton>
+            </IonRow>
+        )}
+        {messagesLoaded && !isLoading && (
+          <IonList>
+              {messages.map((message, index) => (
+                  <IonItem 
+                    key={index} 
+                    onClick={() => handleMessageClick(message.mediaId.toString(), message.mediaSourceId,)}
+                    className={message.isRead ? "read" : "unread"}
+                  >
+                      {/* Render the unread indicator dot if the message is unread, otherwise render a placeholder */}
+                      {message.isRead ? 
+                          <div className="read-placeholder"></div> :
+                          <div className="unread-indicator"></div> 
+                      }
+
+                      <IonLabel>
+                          <h2>{message.title}</h2>
+                          <p>{message.featuredMessage}</p>
+                      </IonLabel>
+                  </IonItem>
+              ))}
+          </IonList>
+        )}
       </IonContent>
     </IonPage>
   );

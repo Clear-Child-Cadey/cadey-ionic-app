@@ -94,11 +94,6 @@ const RouterTabs: React.FC = () => {
     fetchMessages(); // Get data when the component mounts
   }, []);
 
-  useEffect(() => {
-    console.log("Unread Goals Status: ", unreadGoals);
-  }
-  , [unreadGoals]);
-
   return (
     <IonReactRouter>
       {/* Listen for App URLs */}

@@ -12,3 +12,21 @@
 .read-placeholder {
     opacity: 0; /* Make it invisible, but it still occupies space */
 }
+
+.no-messages-content ion-button {
+    font-size: 14px;
+    --border-style: solid;
+    --border-width: 1px;
+    --border-color: #EDE7DA;
+    --border-radius: 100px;
+    --box-shadow: none;
+    margin: 0 auto;
+}
+
+.messages .divider {
+    height: 0;
+    border-width: 1px;
+    border-color: #E0E0E0;
+    opacity: 20%;
+    margin: 0 16px;
+}

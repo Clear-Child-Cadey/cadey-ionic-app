@@ -13,6 +13,7 @@ import {
     IonItem,
     IonLabel,
     IonIcon,
+    IonButton,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 // Icons
@@ -47,22 +48,29 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
      } = useContext(UnreadContext); // Get the current unread data
     const [isLoading, setIsLoading] = useState(false);
     const [goals, setGoals] = useState<Goal[]>([]);
+    const [goalsLoaded, setGoalsLoaded] = useState(false); // Used to determine if the goals have been loaded yet
     const history = useHistory();
 
     const fetchGoals = async () => {
-        setGoals(await getUserGoals(apiUrl, cadeyUserId));
-        const unreadGoalsCount = goals.filter(goals => !goals.isNew).length;
+        try {
+            const fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
+            setGoals(fetchedGoals);
+            const unreadGoalsCount = fetchedGoals.filter((goal: Goal) => !goal.isNew).length;
             if (unreadGoalsCount > 0) {
                 setUnreadGoals?.(true);
             } else {
                 setUnreadGoals?.(false);
             }
-      }
+        } catch (error) {
+            console.error("Error fetching goals:", error);
+        }
+        setGoalsLoaded(true);
+    }
 
     // On component mount, make an API call to get data
     useEffect(() => {
-      fetchGoals();
-      appPageNavigation(cadeyUserId, userFactUrl, "Goals List");
+        fetchGoals();
+        appPageNavigation(cadeyUserId, userFactUrl, "Goals List");
     }, [apiUrl, cadeyUserId]);
 
     const onOptin = (userGoalId: number) => {
@@ -109,11 +117,32 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             <IonTitle size="large">Choose a Goal</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonRow>
-            <IonText className="subcopy">Add or remove goals below to get a highly personalized game plan.</IonText>
-        </IonRow>
-        <hr className="divider" />
+        
+        {/* Show loading state */}
         <IonLoading isOpen={isLoading} message={'Loading Goals...'} />
+        
+        {goalsLoaded && (
+            <IonRow>
+                <IonText className="subcopy">
+                    {goals.length ? 
+                        "Add or remove goals below to get a highly personalized game plan." : 
+                        "You don’t have any goals yet."
+                    }
+                </IonText>
+            </IonRow>
+        )}
+        
+        <hr className="divider" />
+        
+        {/* Show the no goals content if context dictates */}
+        {!goals.length && goalsLoaded && (
+            <IonRow className="no-goals-content">
+                <IonText className="subcopy">No goals found. Fill out your Concerns to get goals.</IonText>
+                {/* Button that links to /app/concerns */}
+                <IonButton routerLink="/app/concerns">Go to Concerns</IonButton>
+            </IonRow>
+        )}
+        
         {/* Create a list of goals */}
         <IonList>
             {goals.map((goal, index) => (                
