@@ -117,19 +117,28 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         
         {goalsLoaded && (
             <IonRow>
-                <IonText className="subcopy">
-                    {goals.length ? 
-                        "Add or remove goals below to get a highly personalized game plan." : 
-                        "You don’t have any goals yet."
-                    }
-                </IonText>
+                {(!goals.length || goals.length == 0) && (
+                    <IonText className="subcopy">You don't have any goals yet.</IonText>
+                )}
+
+                {goals.length > 0 && (
+                    <IonText className="subcopy">
+                        {!goals.every(goal => goal.optIn === false) ?
+                            "Add or remove goals below to get a highly personalized game plan." : 
+                            "You don't have any goals yet."
+                        }
+                    </IonText>
+                )}
             </IonRow>
         )}
         
         <hr className="divider" />
         
         {/* Show the no goals content if context dictates */}
-        {!goals.length && goalsLoaded && (
+        {/* Check if goals are loaded and the user either has no goals (!goals.length) or all goals are hidden (optIn === false)
+            // If so, show the no goals content
+            // Otherwise, show nothing */}
+        {goalsLoaded && (!goals.length || goals.every(goal => goal.optIn === false)) && (
             <IonRow className="no-goals-content">
                 <IonText className="subcopy">No goals found. Fill out your Concerns to get goals.</IonText>
                 {/* Button that links to /app/concerns */}

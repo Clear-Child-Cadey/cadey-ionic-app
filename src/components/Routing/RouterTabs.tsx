@@ -69,7 +69,21 @@ const RouterTabs: React.FC = () => {
     } catch (error) {
         console.error("Error logging tab bar click: ", error);
     }
-};
+    fetchGoalsIndicator(); // Check for unread goals
+  };
+
+  const fetchGoalsIndicator = async () => {
+    try {
+      const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
+      if (unreadGoalsCount > 0) {
+        setUnreadGoals?.(true);
+      } else {
+        setUnreadGoals?.(false);
+      }
+    } catch (error) {
+        console.error("Error fetching goals indicator:", error);
+    }
+  }
 
   // On component mount: 
   // - Set the page title
@@ -81,18 +95,13 @@ const RouterTabs: React.FC = () => {
           const messagesData: Message[] = await getUserMessages(apiUrl, cadeyUserId);
           const unreadMessages = messagesData.filter(messagesData => !messagesData.isRead).length;
           setUnreadMessagesCount?.(unreadMessages);
-          const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
-          console.log("unreadGoalsCount: ", unreadGoalsCount);
-          if (unreadGoalsCount > 0) {
-            setUnreadGoals?.(true);
-          } else {
-            setUnreadGoals?.(false);
-          }
         } catch (error) {
             console.error("Error fetching video details:", error);
         }
     };
-    fetchMessages(); // Get data when the component mounts
+    // Get data when the component mounts
+    fetchMessages();
+    fetchGoalsIndicator(); 
   }, []);
 
   return (
