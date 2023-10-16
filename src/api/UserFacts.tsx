@@ -365,3 +365,63 @@ export const logOpenedArticle = async (cadeyUserId: string, url: string, wordpre
       throw error;
     }
 }
+
+export const logVideoDetailPageClosed = async (cadeyUserId: string, url: string, source: string) => {
+  const requestOptions = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ 
+          userid: cadeyUserId,
+          userFactTypeName: "VideoDetailPageClosed",
+          appPage: source,
+          detail1: "",
+          detail2: "",
+          detail3: "",
+          detail4: "",
+          detail5: "",
+          detail6: "",
+          detail7: "",
+          detail8: "",
+          detail9: "",
+      }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+}
+
+export const appPageNavigation = async (cadeyUserId: string, url: string, appPage: string) => {
+  const requestOptions = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ 
+          userid: cadeyUserId,
+          userFactTypeName: "appPageNavigation",
+          appPage: appPage,
+          detail1: "",
+          detail2: "",
+          detail3: "",
+          detail4: "",
+          detail5: "",
+          detail6: "",
+          detail7: "",
+          detail8: "",
+          detail9: "",
+      }),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+}
