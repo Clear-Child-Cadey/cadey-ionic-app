@@ -82,6 +82,7 @@ const RouterTabs: React.FC = () => {
           const unreadMessages = messagesData.filter(messagesData => !messagesData.isRead).length;
           setUnreadMessagesCount?.(unreadMessages);
           const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
+          console.log("unreadGoalsCount: ", unreadGoalsCount);
           if (unreadGoalsCount > 0) {
             setUnreadGoals?.(true);
           } else {
@@ -171,7 +172,7 @@ const RouterTabs: React.FC = () => {
                   className="unread-messages"
                   key={unreadGoals==true ? 1 : 0}
                 >
-                  
+                  &nbsp;
                 </IonBadge>
               )}
             </IonTabButton>

@@ -43,7 +43,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const userFactUrl = `${apiUrl}/userfact`
     const {
-        unreadGoals,
         setUnreadGoals
      } = useContext(UnreadContext); // Get the current unread data
     const [isLoading, setIsLoading] = useState(false);
@@ -55,12 +54,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         try {
             const fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
             setGoals(fetchedGoals);
-            const unreadGoalsCount = fetchedGoals.filter((goal: Goal) => !goal.isNew).length;
-            if (unreadGoalsCount > 0) {
-                setUnreadGoals?.(true);
-            } else {
-                setUnreadGoals?.(false);
-            }
         } catch (error) {
             console.error("Error fetching goals:", error);
         }
@@ -69,6 +62,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     // On component mount, make an API call to get data
     useEffect(() => {
+        setUnreadGoals?.(false);
         fetchGoals();
         appPageNavigation(cadeyUserId, userFactUrl, "Goals List");
     }, [apiUrl, cadeyUserId]);

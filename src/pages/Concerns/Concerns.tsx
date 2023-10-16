@@ -103,6 +103,7 @@ const ConcernsPage: React.FC = () => {
     setResults(null);
     setPageTitle("Concerns");
     document.title = "Concerns";
+    setGoalsBadge();
   };
 
   // Handler for when the results are received from the API
@@ -112,7 +113,6 @@ const ConcernsPage: React.FC = () => {
     setShowAgeForm(false);
     setShowSymptomsList(false);
     setHomeTabVisibility(true); // Show the Home tab when results are received
-    setGoalsBadge();
   };
 
   // Determine the progress bar value
