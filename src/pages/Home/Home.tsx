@@ -69,7 +69,17 @@ const HomePage: React.FC<{
     }
   };
 
-  // This runs every time currentTab changes or the video modal opens/closes
+  // On mount, check if Messages is the currentTab. If so, set it to Home.
+  // This happens when the user navigates to Home from the Messages tab via 
+  // the button present before they get their first message
+  useEffect(() => {
+    if (currentTab === 'Messages') {
+      currentTab = 'Home';
+    }
+  }, []);
+
+
+  // This runs on mount and every time currentTab changes or the video modal opens/closes
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
     if (currentTab === 'Home') {
