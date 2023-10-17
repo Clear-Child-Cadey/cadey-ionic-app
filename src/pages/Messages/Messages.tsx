@@ -106,7 +106,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         {messagesLoaded && !messages.length && (
             <IonRow className="no-messages-content">
                 <IonText className="subcopy">When you watch videos, your daily personalized messages will appear here.</IonText>
-                <IonButton routerLink='/app/home'>Watch Videos</IonButton>
+                <IonButton routerLink='/App/Home'>Watch Videos</IonButton>
             </IonRow>
         )}
         {messagesLoaded && !isLoading && (

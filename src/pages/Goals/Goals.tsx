@@ -43,6 +43,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const userFactUrl = `${apiUrl}/userfact`
     const {
+        unreadGoals,
         setUnreadGoals
      } = useContext(UnreadContext); // Get the current unread data
     const [isLoading, setIsLoading] = useState(false);

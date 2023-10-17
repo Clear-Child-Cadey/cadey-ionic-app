@@ -64,26 +64,41 @@ const RouterTabs: React.FC = () => {
   const [tutorialStep, setTutorialStep] = useState(0);
 
   const handleTabClick = async (tabName: string) => {
+    console.log("Tab Name: ", tabName);
+    if(tabName=="Goals") {
+      setUnreadGoals?.(false);
+      console.log("User clicked on Goals");
+    } else {
+      console.log("Calling fetchGoalsIndicator from: user clicked on tab bar / NOT Goals");
+      fetchGoalsIndicator(); // Check for unread goals
+    }
     try {
         await logTapBarClick(cadeyUserId, userFactUrl, tabName, document.title);
     } catch (error) {
         console.error("Error logging tab bar click: ", error);
     }
-    fetchGoalsIndicator(); // Check for unread goals
   };
 
   const fetchGoalsIndicator = async () => {
     try {
+      console.log("fetchGoalsIndicator");
       const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
+      console.log("Unread Goals Count: ", unreadGoalsCount);
       if (unreadGoalsCount > 0) {
         setUnreadGoals?.(true);
+        console.log("unreadGoals set to true from Router Tabs fetchGoalsIndicator count > 0 ");
       } else {
         setUnreadGoals?.(false);
+        console.log("unreadGoals set to false from Router Tabs fetchGoalsIndicator count NOT > 0 ");
       }
     } catch (error) {
         console.error("Error fetching goals indicator:", error);
     }
   }
+
+  useEffect(() => {
+    console.log("Unread Goals Flag: ", unreadGoals);
+  }, [unreadGoals]);
 
   // On component mount: 
   // - Set the page title
@@ -101,6 +116,7 @@ const RouterTabs: React.FC = () => {
     };
     // Get data when the component mounts
     fetchMessages();
+    console.log("Calling fetchGoalsIndicator from Router Tabs useEffect");
     fetchGoalsIndicator(); 
   }, []);
 
