@@ -72,6 +72,7 @@ const HomePage: React.FC<{
   // On mount, check if Messages is the currentTab. If so, set it to Home.
   // This happens when the user navigates to Home from the Messages tab via 
   // the button present before they get their first message
+  // Refactor: This is not good code and should be re-written when it makes business sense
   useEffect(() => {
     if (currentTab === 'Messages') {
       currentTab = 'Home';
