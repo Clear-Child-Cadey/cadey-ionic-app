@@ -72,36 +72,6 @@ export const logUserFact = async ({
 
 
 
-export const logVideoPause = async (cadeyUserId: string, url: string, mediaId: string, mediaProgress: string, mediaType: string, source: string) => {
-  const requestOptions = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify({ 
-          userid: cadeyUserId,
-          userFactTypeName: "PausedMedia",
-          appPage: source,
-          detail1: mediaId,
-          detail2: mediaProgress,
-          detail3: mediaType,
-          detail4: "",
-          detail5: "",
-          detail6: "",
-          detail7: "",
-          detail8: "",
-          detail9: "",
-      }),
-    };
-
-    try {
-      const response = await fetch(url, requestOptions);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error:', error);
-      throw error;
-    }
-}
-
 export const logVideoProgress = async (cadeyUserId: string, url: string, mediaId: string, progress: string, videoType: string, source: string) => {
   const requestOptions = {
       method: 'POST',

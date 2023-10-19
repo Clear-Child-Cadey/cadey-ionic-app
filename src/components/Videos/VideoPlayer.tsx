@@ -110,14 +110,23 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   };
 
   const onPause = async (progress: number) => {
-    const response = await logVideoPause(
-        cadeyUserId, 
-        userFactUrl, 
-        mediaIdStr, 
-        String(progress), 
-        currentVideoType, 
-        source
-      );
+
+    // userid: cadeyUserId,
+    // userFactTypeName: "PausedMedia",
+    // appPage: source,
+    // detail1: mediaId,
+    // detail2: mediaProgress,
+    // detail3: mediaType,
+
+    const response = await logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'PausedMedia',
+      appPage: source,
+      detail1: mediaIdStr,
+      detail2: String(progress),
+      detail3: currentVideoType
+    });
 
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
