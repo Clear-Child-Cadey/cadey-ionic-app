@@ -12,9 +12,11 @@ import {
     IonTitle,
     IonContent,
     IonToggle,
+    IonButton,
 } from '@ionic/react';
 // API
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
+import { logUserFact } from '../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../main';
 // Variables
@@ -70,6 +72,18 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  const handleUserFactButtonClick = () => {
+    console.log("Test");
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'testUserFactType',
+      appPage: 'Admin page',
+      detail1: 'detail1 value',
+      detail5: 'detail5 value'
+    });
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -111,6 +125,7 @@ const AdminPage: React.FC = () => {
             <IonLabel slot="end" className="ion-text-end one-signal-id">{oneSignalExternalId || 'Unknown'}</IonLabel>
           </IonItem>
         </form>
+        <IonButton onClick={handleUserFactButtonClick}>Send new user fact</IonButton>
       </IonContent>
     </IonPage>
   );

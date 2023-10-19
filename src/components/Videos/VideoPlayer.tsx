@@ -5,7 +5,7 @@ import './VideoPlayer.css';
 // Components
 import FalseDoorModal from '../Modals/FalseDoorModal/FalseDoorModal';
 // API
-import { logVideoFinish, logVideoPause, logVideoPlay, logVideoProgress } from '../../api/UserFacts';
+import { logUserFact } from '../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -92,7 +92,21 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   };
 
   const onPlay = () => {
-    logVideoPlay(cadeyUserId, userFactUrl, mediaIdStr, currentVideoType, source);
+
+    // userid: cadeyUserId,
+    // userFactTypeName: "StartedMedia",
+    // appPage: source,
+    // detail1: mediaId,
+    // detail2: mediaType,
+
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'StartedMedia',
+      appPage: source,
+      detail1: mediaIdStr,
+      detail2: currentVideoType
+    });
   };
 
   const onPause = async (progress: number) => {
