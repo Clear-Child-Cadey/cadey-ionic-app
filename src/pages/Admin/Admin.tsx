@@ -19,6 +19,7 @@ import { requestNotificationPermission } from '../../api/OneSignal/RequestPermis
 import { logUserFact } from '../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../main';
+import { useAppPage } from '../../context/AppPageContext';
 // Variables
 import { AppVersion } from '../../variables/AppVersion';
 
@@ -27,10 +28,12 @@ const AdminPage: React.FC = () => {
   const [pushEnabled, setPushEnabled] = useState(false);
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const [oneSignalExternalId, setOneSignalExternalId] = useState<string | null>(null);
+  const { currentAppPage, setCurrentAppPage } = useAppPage();
   
   // Set the state of the push notification toggle on mount. If the user hasNotificationPermission, we can determine the correct value.
   useEffect(() => {
     document.title = 'Admin';
+    setCurrentAppPage('Admin');
     if (window.cordova) {
       OneSignal.getDeviceState((deviceState) => {
         if (deviceState.hasNotificationPermission) {
@@ -98,6 +101,10 @@ const AdminPage: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <form>
+          <IonItem>
+            <IonLabel>Current App Page:</IonLabel>
+            <IonLabel slot="end" className="ion-text-end">{currentAppPage}</IonLabel>
+          </IonItem>
           <IonItem>
             <IonLabel>Cadey User ID:</IonLabel>
             <IonLabel slot="end" className="ion-text-end">{cadeyUserId}</IonLabel>

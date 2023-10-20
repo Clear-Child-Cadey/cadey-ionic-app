@@ -14,6 +14,7 @@ import { Goal } from '../../pages/Goals/Goals';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { useAppPage } from '../../context/AppPageContext';
 // Components
 import VideoList from '../../components/Videos/VideoList';
 // CSS
@@ -31,10 +32,12 @@ const GoalDetailPage: React.FC = () => {
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
     const userFactUrl = `${apiUrl}/userfact`
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const { setCurrentAppPage } = useAppPage();
 
     // On mount
     useEffect(() => {
         document.title = "Goal Detail";
+        setCurrentAppPage('Goal Detail');
         appPageNavigation(cadeyUserId, userFactUrl, "Goal Detail");
     }, []);
 

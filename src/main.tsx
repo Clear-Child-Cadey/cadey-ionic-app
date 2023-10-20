@@ -12,6 +12,7 @@ import UnreadContext from './context/UnreadContext';
 import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
 import { ModalProvider } from './context/ModalContext';
+import { AppPageProvider } from './context/AppPageContext';
 
 // Functions
 import getAppData from './api/AppOpen';
@@ -149,13 +150,15 @@ function MainComponent() {
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
           <UnreadContext.Provider value={{ unreadMessagesCount, setUnreadMessagesCount, unreadGoals, setUnreadGoals }}>
-            <TabBarSpotlightProvider>
-              <LoadingStateProvider>
-                <ModalProvider>
-                  <App />
-                </ModalProvider>
-              </LoadingStateProvider>
-            </TabBarSpotlightProvider>
+            <AppPageProvider>
+              <TabBarSpotlightProvider>
+                <LoadingStateProvider>
+                  <ModalProvider>
+                    <App />
+                  </ModalProvider>
+                </LoadingStateProvider>
+              </TabBarSpotlightProvider>
+            </AppPageProvider>
           </UnreadContext.Provider>
         </HomeTabVisibilityContext.Provider>
       </DeviceIdContext.Provider>

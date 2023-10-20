@@ -20,6 +20,7 @@ import { logOpenedArticle } from '../../api/UserFacts';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
+import { useAppPage } from '../../context/AppPageContext';
 
 // Setup the interface
 interface ArticleDetailProps {
@@ -33,6 +34,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
     const userFactUrl = `${apiUrl}/userfact`;
+    const { setCurrentAppPage } = useAppPage();
 
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {
@@ -55,6 +57,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
 
         // Set the title of the page to the title of the article
         document.title = article ? article.title.rendered : "Article Detail";
+        setCurrentAppPage('Article Detail');
     }, [articleId]);
 
     /**

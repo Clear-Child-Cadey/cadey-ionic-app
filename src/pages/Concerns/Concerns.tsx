@@ -23,6 +23,7 @@ import { HomeTabVisibilityContext } from '../../context/TabContext';
 import UnreadContext from '../../context/UnreadContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { useAppPage } from '../../context/AppPageContext';
 // Interfaces
 import { Goal } from '../../pages/Goals/Goals';
 // API
@@ -43,21 +44,17 @@ const ConcernsPage: React.FC = () => {
   const [results, setResults] = useState<any | null>(null);
   const [progress, setProgress] = useState(0);
 
-  // Home tab visibility context
+  // Context variables
   const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
-
-  // Unread context
   const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
-
-  // User context
   const { cadeyUserId } = useContext(CadeyUserContext);
-
-  // API context
   const { apiUrl } = useContext(ApiUrlContext);
+  const { setCurrentAppPage } = useAppPage();
   
   // Set the title when the component mounts
   useEffect(() => {
     document.title = "Concerns";
+    setCurrentAppPage('Concerns');
 }, []);
 
   // Handler for when the user proceeds from the ConcernsList
@@ -65,6 +62,7 @@ const ConcernsPage: React.FC = () => {
     setSelectedConcern(choice);
     setPageTitle("Symptoms");
     document.title = "Symptoms";
+    setCurrentAppPage('Symptoms');
     setShowSymptomsList(true);
   };
 
@@ -75,12 +73,14 @@ const ConcernsPage: React.FC = () => {
     setSymptoms(symptoms);
     setPageTitle("Age");
     document.title = "Age";
+    setCurrentAppPage('Age');
   };
 
   // Handler for when the AgeForm is submitted
   const handleSubmit = () => {
     setPageTitle("Recommendations");
     document.title = "Recommendations";
+    setCurrentAppPage('Recommendations');
   };
 
   // Set the goals badge
@@ -103,6 +103,7 @@ const ConcernsPage: React.FC = () => {
     setResults(null);
     setPageTitle("Concerns");
     document.title = "Concerns";
+    setCurrentAppPage('Concerns');
     setGoalsBadge();
   };
 

@@ -7,13 +7,15 @@ import {
 // CSS
 import './FalseDoorModal.css';
 // API
-import { logFalseDoorResponse } from '../../../api/UserFacts';
+import { logUserFact } from '../../../api/UserFacts';
 import { requestNotificationPermission } from '../../../api/OneSignal/RequestPermission';
 // Contexts
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
+import { useModalContext } from '../../../context/ModalContext';
 
 interface ModalProps {
+  source: string;
   falseDoorQuestionId: string;
   iconUrl: string;
   copy: string;
@@ -29,13 +31,16 @@ interface ModalProps {
   setIsOpen: (value: boolean) => void;
 }
 
-const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, copy, yesResponse, noResponse, thankYouIconUrlYes, thankYouIconUrlNo, thankYouCopyYes, thankYouCopyNo, thankYouButtonText, isOpen, setIsOpen }) => {
+const FalseDoorModal: React.FC<ModalProps> = ({ source, falseDoorQuestionId, iconUrl, copy, yesResponse, noResponse, thankYouIconUrlYes, thankYouIconUrlNo, thankYouCopyYes, thankYouCopyNo, thankYouButtonText, isOpen, setIsOpen }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [userChoice, setUserChoice] = useState<boolean | null>(null); // Store the user's choice
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/userfact`
+
+  const { 
+    currentVideoType,
+  } = useModalContext();
 
   const handleUserResponse = (userChoice: boolean) => {
     setUserChoice(userChoice); // Store the user's choice in state
@@ -44,7 +49,16 @@ const FalseDoorModal: React.FC<ModalProps> = ({ falseDoorQuestionId, iconUrl, co
     // Log the user's response
     const userChoiceStr = userChoice ? 'yes' : 'no';
     const falseDoorQuestionIdStr = String(falseDoorQuestionId);
-    logFalseDoorResponse(cadeyUserId, userFactUrl, falseDoorQuestionIdStr, userChoiceStr, document.title);
+
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: "FalseDoorQuestionResponse",
+      appPage: source,
+      detail1: falseDoorQuestionIdStr,
+      detail2: userChoiceStr,
+      detail3: currentVideoType
+    });
 
     // If the user chose "yes", request notification permission
     // Note that the prompt will only appear once; 

@@ -14,6 +14,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { useSpotlight } from '../../context/SpotlightContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
+import { useAppPage } from '../../context/AppPageContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
@@ -38,6 +39,8 @@ const HomePage: React.FC<{
   const [articleIds, setArticleIds] = useState<number[]>([]);
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
+
+  const { setCurrentAppPage } = useAppPage();
 
   // Get all the props from the modal context
   const { 
@@ -115,6 +118,7 @@ const HomePage: React.FC<{
   // On component mount:
   useEffect(() => {
     document.title = 'Home'; // Set the page title
+    setCurrentAppPage('Home'); // Set the current app page
 
     // Dismiss the spotlight on interaction
     const handleInteraction = (event: MouseEvent | TouchEvent) => {

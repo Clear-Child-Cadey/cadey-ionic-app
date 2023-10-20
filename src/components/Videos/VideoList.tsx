@@ -8,8 +8,9 @@ import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
-// Functions
+// API
 import { logShareClick } from '../../api/UserFacts';
+import { logUserFact } from '../../api/UserFacts';
 // CSS
 import './VideoList.css';
 
@@ -54,6 +55,21 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   const handleShare = async (event: React.MouseEvent, sourceId: string, mediaId: string, videoType: string) => {
     // Log a user fact that the user tapped on Share
     logShareClick(cadeyUserId, userFactUrl, mediaId, videoType, document.title)
+
+    // userid: cadeyUserId,
+    // userFactTypeName: "MediaShared",
+    // appPage: source,
+    // detail1: mediaId,
+    // detail2: mediaType,
+
+    logUserFact ({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: "MediaShared",
+      appPage: document.title, // Change to something
+      detail1: mediaId,
+      detail2: videoType,
+    });
 
     // Share the Vimeo URL
     await Share.share({

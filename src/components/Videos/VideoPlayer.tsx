@@ -135,7 +135,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   };
 
   const onEnded = async () => {
-    const response = await logVideoFinish(cadeyUserId, userFactUrl, mediaIdStr, currentVideoType, source);
+    const response = await logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'FinishedMedia',
+      appPage: source,
+      detail1: mediaIdStr,
+      detail2: currentVideoType
+    });
 
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
@@ -149,17 +156,50 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
   useEffect(() => {
     if (videoProgress >= 1 && !logged100) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "1.00", currentVideoType, source);
       setLogged100(true);
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'InProgressMedia',
+        appPage: source,
+        detail1: mediaIdStr,
+        detail2: '1.00',
+        detail3: currentVideoType
+      });
+
     } else if (videoProgress >= 0.75 && !logged75) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.75", currentVideoType, source);
       setLogged75(true);
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'InProgressMedia',
+        appPage: source,
+        detail1: mediaIdStr,
+        detail2: '0.75',
+        detail3: currentVideoType
+      });
     } else if (videoProgress >= 0.5 && !logged50) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.5", currentVideoType, source);
       setLogged50(true);
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'InProgressMedia',
+        appPage: source,
+        detail1: mediaIdStr,
+        detail2: '0.5',
+        detail3: currentVideoType
+      });
     } else if (videoProgress >= 0.25 && !logged25) {
-      logVideoProgress(cadeyUserId, userFactUrl, mediaIdStr, "0.25", currentVideoType, source);
       setLogged25(true);
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'InProgressMedia',
+        appPage: source,
+        detail1: mediaIdStr,
+        detail2: '0.25',
+        detail3: currentVideoType
+      });
     }
   }, [videoProgress]); // This effect will run every time videoProgress changes.  
 
@@ -183,6 +223,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
         </div>
 
         <FalseDoorModal 
+          source={source}
           falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
           iconUrl={falseDoorData?.questionIcon || ''}
           copy={falseDoorData?.questionText || ''}
