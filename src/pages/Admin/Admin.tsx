@@ -28,11 +28,12 @@ const AdminPage: React.FC = () => {
   const [pushEnabled, setPushEnabled] = useState(false);
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const [oneSignalExternalId, setOneSignalExternalId] = useState<string | null>(null);
-  const { currentAppPage, setCurrentAppPage } = useAppPage();
+  const { currentAppPage, setCurrentAppPage, currentBasePage, setCurrentBasePage } = useAppPage();
   
   // Set the state of the push notification toggle on mount. If the user hasNotificationPermission, we can determine the correct value.
   useEffect(() => {
     document.title = 'Admin';
+    setCurrentBasePage('Admin');
     setCurrentAppPage('Admin');
     if (window.cordova) {
       OneSignal.getDeviceState((deviceState) => {

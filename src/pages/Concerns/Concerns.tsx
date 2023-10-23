@@ -49,11 +49,12 @@ const ConcernsPage: React.FC = () => {
   const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
   const { cadeyUserId } = useContext(CadeyUserContext);
   const { apiUrl } = useContext(ApiUrlContext);
-  const { setCurrentAppPage } = useAppPage();
+  const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
   
   // Set the title when the component mounts
   useEffect(() => {
     document.title = "Concerns";
+    setCurrentBasePage('Concerns');
     setCurrentAppPage('Concerns');
 }, []);
 
@@ -62,6 +63,7 @@ const ConcernsPage: React.FC = () => {
     setSelectedConcern(choice);
     setPageTitle("Symptoms");
     document.title = "Symptoms";
+    setCurrentBasePage('Symptoms');
     setCurrentAppPage('Symptoms');
     setShowSymptomsList(true);
   };
@@ -73,6 +75,7 @@ const ConcernsPage: React.FC = () => {
     setSymptoms(symptoms);
     setPageTitle("Age");
     document.title = "Age";
+    setCurrentBasePage('Age');
     setCurrentAppPage('Age');
   };
 
@@ -80,6 +83,7 @@ const ConcernsPage: React.FC = () => {
   const handleSubmit = () => {
     setPageTitle("Recommendations");
     document.title = "Recommendations";
+    setCurrentBasePage('Recommendations');
     setCurrentAppPage('Recommendations');
   };
 
@@ -103,6 +107,7 @@ const ConcernsPage: React.FC = () => {
     setResults(null);
     setPageTitle("Concerns");
     document.title = "Concerns";
+    setCurrentBasePage('Concerns');
     setCurrentAppPage('Concerns');
     setGoalsBadge();
   };

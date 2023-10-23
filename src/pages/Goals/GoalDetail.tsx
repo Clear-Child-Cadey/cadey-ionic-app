@@ -32,11 +32,12 @@ const GoalDetailPage: React.FC = () => {
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
     const userFactUrl = `${apiUrl}/userfact`
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-    const { setCurrentAppPage } = useAppPage();
+    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
     // On mount
     useEffect(() => {
         document.title = "Goal Detail";
+        setCurrentBasePage('Goal Detail');
         setCurrentAppPage('Goal Detail');
         appPageNavigation(cadeyUserId, userFactUrl, "Goal Detail");
     }, []);

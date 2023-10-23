@@ -40,7 +40,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const userFactUrl = `${apiUrl}/userfact`
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
     const [messagesLoaded, setMessagesLoaded] = useState(false); // Used to determine if the messages have been loaded yet
-    const { setCurrentAppPage } = useAppPage();
+    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
     const {
       isVideoModalOpen,
@@ -69,6 +69,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
           setMessagesLoaded(true);
       };
       document.title = 'Messages'; // Set the page title when the component mounts
+      setCurrentBasePage('Messages');
       setCurrentAppPage('Messages');
       fetchMessages(); // Get data when the component mounts
     }, [isVideoModalOpen]);

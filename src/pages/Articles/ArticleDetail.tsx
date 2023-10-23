@@ -34,7 +34,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
     const userFactUrl = `${apiUrl}/userfact`;
-    const { setCurrentAppPage } = useAppPage();
+    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {
@@ -57,6 +57,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
 
         // Set the title of the page to the title of the article
         document.title = article ? article.title.rendered : "Article Detail";
+        setCurrentBasePage('Article Detail');
         setCurrentAppPage('Article Detail');
     }, [articleId]);
 

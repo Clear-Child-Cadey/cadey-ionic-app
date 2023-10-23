@@ -40,7 +40,7 @@ const HomePage: React.FC<{
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
 
-  const { setCurrentAppPage } = useAppPage();
+  const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
   // Get all the props from the modal context
   const { 
@@ -118,6 +118,7 @@ const HomePage: React.FC<{
   // On component mount:
   useEffect(() => {
     document.title = 'Home'; // Set the page title
+    setCurrentBasePage('Home'); // Set the current base page
     setCurrentAppPage('Home'); // Set the current app page
 
     // Dismiss the spotlight on interaction
