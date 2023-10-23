@@ -23,6 +23,7 @@ import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 import { logMessageOnMessagesPageClicked } from '../../api/UserFacts';
+import { logUserFact } from '../../api/UserFacts';
 
 export interface Message {
   mediaId: number;
@@ -45,12 +46,11 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const {
       isVideoModalOpen,
       setVideoModalOpen,
+      isArticleDetailModalOpen,
       setCurrentVimeoId,
     } = useModalContext();
 
-    // On component mount: 
-    // - Set the page title
-    // - Get the user's messages
+    // On component mount & isVideoModalOpen change
     useEffect(() => {
       const fetchMessages = async () => {
           try {
@@ -68,10 +68,18 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
           setIsLoading(false);
           setMessagesLoaded(true);
       };
-      document.title = 'Messages'; // Set the page title when the component mounts
-      setCurrentBasePage('Messages');
-      setCurrentAppPage('Messages');
-      fetchMessages(); // Get data when the component mounts
+      document.title = 'Messages';
+      if (!isVideoModalOpen && !isArticleDetailModalOpen) {
+        setCurrentBasePage('Messages');
+        setCurrentAppPage('Messages');
+        logUserFact({
+          cadeyUserId: cadeyUserId,
+          baseApiUrl: apiUrl,
+          userFactTypeName: 'appPageNavigation',
+          appPage: 'Messages',
+        });
+      }
+      fetchMessages();
     }, [isVideoModalOpen]);
 
     const handleMessageClick = (mediaId: string, mediaSourceId: string)  => {

@@ -35,6 +35,14 @@ const AdminPage: React.FC = () => {
     document.title = 'Admin';
     setCurrentBasePage('Admin');
     setCurrentAppPage('Admin');
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Admin',
+    });
+
+    // Check if the app is running in a browser or on a device | Set the OneSignal external ID
     if (window.cordova) {
       OneSignal.getDeviceState((deviceState) => {
         if (deviceState.hasNotificationPermission) {
@@ -48,6 +56,7 @@ const AdminPage: React.FC = () => {
         console.log(deviceState);
       });
     }
+
   }, []);
 
   const handleUrlChange = (event: any) => {

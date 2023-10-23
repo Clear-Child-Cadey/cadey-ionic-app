@@ -26,7 +26,7 @@ import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserGoals } from '../../api/Goals';
 import { postGoalOptIn } from '../../api/Goals';
-import { appPageNavigation } from '../../api/UserFacts';
+import { logUserFact } from '../../api/UserFacts';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
 
@@ -43,7 +43,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
-    const userFactUrl = `${apiUrl}/userfact`
     const {
         unreadGoals,
         setUnreadGoals
@@ -67,7 +66,12 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     useEffect(() => {
         setCurrentBasePage('Goals List');
         setCurrentAppPage('Goals List');
-        appPageNavigation(cadeyUserId, userFactUrl, "Goals List");
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Goals List',
+          });
         setUnreadGoals?.(false);
         fetchGoals();
     }, [apiUrl, cadeyUserId]);

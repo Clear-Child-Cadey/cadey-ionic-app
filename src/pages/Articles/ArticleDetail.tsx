@@ -16,6 +16,7 @@ import { refresh } from 'ionicons/icons';
 import './ArticleDetail.css';
 // API
 import { logOpenedArticle } from '../../api/UserFacts';
+import { logUserFact } from '../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -59,6 +60,12 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
         document.title = article ? article.title.rendered : "Article Detail";
         setCurrentBasePage('Article Detail');
         setCurrentAppPage('Article Detail');
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Article Detail',
+          });
     }, [articleId]);
 
     /**

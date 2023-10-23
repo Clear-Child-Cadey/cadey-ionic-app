@@ -24,7 +24,7 @@ import { useAppPage } from '../../../context/AppPageContext';
 import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logShareClick } from '../../../api/UserFacts';
 import { logFeaturedVideoNotificationClicked } from '../../../api/UserFacts';
-import { logVideoDetailPageClosed } from '../../../api/UserFacts';
+import { logUserFact } from '../../../api/UserFacts';
 import { getUserMessages } from '../../../api/UserMessages';
 // CSS
 import './VideoDetailModal.css';
@@ -43,7 +43,8 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   // Get all the props from the modal context
   const { 
     isVideoModalOpen, 
-    setVideoModalOpen, 
+    setVideoModalOpen,
+    isArticleDetailModalOpen, 
     setCurrentArticleId,
     currentVimeoId,
     setCurrentVimeoId,
@@ -155,6 +156,12 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
 
     if (isVideoModalOpen) {
       setCurrentAppPage('Video Detail');
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'appPageNavigation',
+        appPage: 'Video Detail',
+      });
       fetchVideoData();
     } else {
       // Reset states when modal is closed
@@ -195,7 +202,15 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   }
 
   function handleClose() {
-    setCurrentAppPage(currentBasePage);
+    if (!isArticleDetailModalOpen) {
+      setCurrentAppPage(currentBasePage);
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'appPageNavigation',
+        appPage: currentBasePage,
+      });
+    }
     setVideoModalOpen(false);
   }
 

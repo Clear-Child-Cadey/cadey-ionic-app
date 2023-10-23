@@ -20,7 +20,7 @@ import VideoList from '../../components/Videos/VideoList';
 // CSS
 import './GoalDetail.css';
 // API
-import { appPageNavigation } from '../../api/UserFacts';
+import { logUserFact } from '../../api/UserFacts';
 
 interface LocationState {
     goal: Goal;
@@ -30,7 +30,6 @@ const GoalDetailPage: React.FC = () => {
     const location = useLocation<LocationState>();
     const goal: Goal = location.state?.goal || null;
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-    const userFactUrl = `${apiUrl}/userfact`
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
@@ -39,7 +38,12 @@ const GoalDetailPage: React.FC = () => {
         document.title = "Goal Detail";
         setCurrentBasePage('Goal Detail');
         setCurrentAppPage('Goal Detail');
-        appPageNavigation(cadeyUserId, userFactUrl, "Goal Detail");
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Goal Detail',
+          });
     }, []);
 
     return (

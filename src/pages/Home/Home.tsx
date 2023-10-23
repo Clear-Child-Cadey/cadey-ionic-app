@@ -15,11 +15,14 @@ import { useSpotlight } from '../../context/SpotlightContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
 // API
 import getHomeData from '../../api/HomeData';
+import { logUserFact } from '../../api/UserFacts';
 
 const HomePage: React.FC<{ 
   currentTab: string, 
@@ -41,6 +44,9 @@ const HomePage: React.FC<{
   const timerRef = useRef<number | undefined>();
 
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
+
+  const { cadeyUserId } = React.useContext(CadeyUserContext);
+  const { apiUrl } = React.useContext(ApiUrlContext);
 
   // Get all the props from the modal context
   const { 
@@ -120,6 +126,12 @@ const HomePage: React.FC<{
     document.title = 'Home'; // Set the page title
     setCurrentBasePage('Home'); // Set the current base page
     setCurrentAppPage('Home'); // Set the current app page
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Home',
+    });
 
     // Dismiss the spotlight on interaction
     const handleInteraction = (event: MouseEvent | TouchEvent) => {

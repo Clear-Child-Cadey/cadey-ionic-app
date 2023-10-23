@@ -13,6 +13,7 @@ import {
 import './ArticleDetailModal.css';
 // API
 import { logOpenedArticle } from '../../../api/UserFacts';
+import { logUserFact } from '../../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
@@ -56,7 +57,7 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         }
         
         if (isArticleDetailModalOpen && isVideoModalOpen) {
-            setVideoModalOpen(false); // Close Video Modal first
+            setVideoModalOpen(false); // Close Video Modal - we don't want both open at the same time
         }
     
         // Cleanup actions when ArticleDetailModal closes
@@ -89,6 +90,12 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
 
         if (isArticleDetailModalOpen && currentArticleId) {
             setCurrentAppPage('Article Detail');
+            logUserFact({
+                cadeyUserId: cadeyUserId,
+                baseApiUrl: apiUrl,
+                userFactTypeName: 'appPageNavigation',
+                appPage: 'Article Detail',
+              });
             fetchArticleDetail();
         }
     
@@ -113,6 +120,12 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
 
     function handleClose() {
         setCurrentAppPage(currentBasePage);
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: currentBasePage,
+          });
         setArticleDetailModalOpen(false);
     }
 

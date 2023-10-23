@@ -28,6 +28,7 @@ import { useAppPage } from '../../context/AppPageContext';
 import { Goal } from '../../pages/Goals/Goals';
 // API
 import { getNewGoalsIndicator } from '../../api/Goals';
+import { logUserFact } from '../../api/UserFacts';
 
 // Define the Concerns component
 const ConcernsPage: React.FC = () => {
@@ -56,15 +57,28 @@ const ConcernsPage: React.FC = () => {
     document.title = "Concerns";
     setCurrentBasePage('Concerns');
     setCurrentAppPage('Concerns');
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Concerns',
+    });
 }, []);
 
   // Handler for when the user proceeds from the ConcernsList
   const handleConcernsNext = (choice: { concern: string; symptoms: Symptom[] }) => {
-    setSelectedConcern(choice);
     setPageTitle("Symptoms");
     document.title = "Symptoms";
     setCurrentBasePage('Symptoms');
     setCurrentAppPage('Symptoms');
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Symptoms',
+    });
+    
+    setSelectedConcern(choice);
     setShowSymptomsList(true);
   };
 
@@ -77,6 +91,12 @@ const ConcernsPage: React.FC = () => {
     document.title = "Age";
     setCurrentBasePage('Age');
     setCurrentAppPage('Age');
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Age',
+    });
   };
 
   // Handler for when the AgeForm is submitted
@@ -85,6 +105,12 @@ const ConcernsPage: React.FC = () => {
     document.title = "Recommendations";
     setCurrentBasePage('Recommendations');
     setCurrentAppPage('Recommendations');
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Recommendations',
+    });
   };
 
   // Set the goals badge
@@ -109,6 +135,12 @@ const ConcernsPage: React.FC = () => {
     document.title = "Concerns";
     setCurrentBasePage('Concerns');
     setCurrentAppPage('Concerns');
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Concerns',
+    });
     setGoalsBadge();
   };
 
