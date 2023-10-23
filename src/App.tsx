@@ -36,7 +36,7 @@ const App: React.FC = () => {
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
   const [falseDoorData, setFalseDoorData] = useState<any>(null); // Hold the data for the false door
   const [isFalseDoorModalOpen, setIsFalseDoorModalOpen] = useState(false); // Control the modal visibility
-  const { currentAppPage } = useAppPage();
+  const { currentBasePage, currentAppPage } = useAppPage();
 
   const {
     isVideoModalOpen,  
@@ -88,6 +88,12 @@ const App: React.FC = () => {
       onVideoDetailPageClosed();
     }
   }, [isVideoModalOpen]);
+
+  // Log the status of currentBasePage and currentAppPage when they change
+  useEffect(() => {
+    console.log('currentBasePage: ', currentBasePage);
+    console.log('currentAppPage: ', currentAppPage);
+  }, [currentBasePage, currentAppPage]);
 
   const onVideoDetailPageClosed = async () => {
     const response = await logVideoDetailPageClosed(cadeyUserId, userFactUrl, "Video Detail Modal");

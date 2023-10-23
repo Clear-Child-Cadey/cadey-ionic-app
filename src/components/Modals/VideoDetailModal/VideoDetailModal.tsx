@@ -19,6 +19,7 @@ import ApiUrlContext from '../../../context/ApiUrlContext';
 import UnreadCountContext from '../../../context/UnreadContext';
 import { CadeyUserContext } from '../../../main';
 import { useModalContext } from '../../../context/ModalContext';
+import { useAppPage } from '../../../context/AppPageContext';
 //  API
 import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logShareClick } from '../../../api/UserFacts';
@@ -48,7 +49,9 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     setCurrentVimeoId,
     currentVideoType,
     setCurrentVideoType,
-} = useModalContext();
+  } = useModalContext();
+
+  const { currentBasePage, setCurrentAppPage } = useAppPage();
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
@@ -151,6 +154,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     };
 
     if (isVideoModalOpen) {
+      setCurrentAppPage('Video Detail');
       fetchVideoData();
     } else {
       // Reset states when modal is closed
@@ -190,16 +194,21 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     setCurrentVimeoId(videoId);
   }
 
+  function handleClose() {
+    setCurrentAppPage(currentBasePage);
+    setVideoModalOpen(false);
+  }
+
   return (
     <IonModal
       className="video-detail"
       isOpen={isVideoModalOpen}
-      onDidDismiss={() => setVideoModalOpen(false)}
+      onDidDismiss={() => handleClose()}
     >
       <IonHeader>
           <IonToolbar>
               <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>Watch Now</IonTitle>
-              <IonButton className="close-button" slot="end" onClick={() => setVideoModalOpen(false)}>
+              <IonButton className="close-button" slot="end" onClick={() => handleClose()}>
                 Close
               </IonButton>
           </IonToolbar>

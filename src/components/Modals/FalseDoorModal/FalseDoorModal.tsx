@@ -13,6 +13,7 @@ import { requestNotificationPermission } from '../../../api/OneSignal/RequestPer
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
 import { useModalContext } from '../../../context/ModalContext';
+import { useAppPage } from '../../../context/AppPageContext';
 
 interface ModalProps {
   source: string;
@@ -37,10 +38,20 @@ const FalseDoorModal: React.FC<ModalProps> = ({ source, falseDoorQuestionId, ico
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
+  const { currentBasePage, setCurrentAppPage } = useAppPage();
 
   const { 
+    isVideoModalOpen,
     currentVideoType,
+
   } = useModalContext();
+
+  // Set the app page when the modal opens
+  React.useEffect(() => {
+    if (isOpen) {
+      setCurrentAppPage('False Door');
+    }
+  }, [isOpen]);
 
   const handleUserResponse = (userChoice: boolean) => {
     setUserChoice(userChoice); // Store the user's choice in state
@@ -69,6 +80,11 @@ const FalseDoorModal: React.FC<ModalProps> = ({ source, falseDoorQuestionId, ico
   };
 
   const handleClose = () => {
+    if(isVideoModalOpen==true) {
+      setCurrentAppPage('Video Detail');  
+    } else {
+      setCurrentAppPage(currentBasePage);
+    }
     setIsOpen(false); // Close the modal
     setUserChoice(null); // Reset user choice
     setShowConfirmation(false); // Reset to initial state

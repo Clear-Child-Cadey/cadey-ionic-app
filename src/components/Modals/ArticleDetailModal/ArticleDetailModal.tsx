@@ -18,6 +18,7 @@ import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
 import { useLoadingState } from '../../../context/LoadingStateContext';
 import { useModalContext } from '../../../context/ModalContext';
+import { useAppPage } from '../../../context/AppPageContext';
 
 // Setup the interface
 interface ArticleDetailProps {
@@ -37,6 +38,8 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         setCurrentArticleId,
         setCurrentVimeoId,
     } = useModalContext();
+
+    const { currentBasePage, setCurrentAppPage } = useAppPage();
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
@@ -85,6 +88,7 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         };
 
         if (isArticleDetailModalOpen && currentArticleId) {
+            setCurrentAppPage('Article Detail');
             fetchArticleDetail();
         }
     
@@ -107,14 +111,19 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         return text || "";
     }
 
+    function handleClose() {
+        setCurrentAppPage(currentBasePage);
+        setArticleDetailModalOpen(false);
+    }
+
     return (
-        <IonModal isOpen={isArticleDetailModalOpen} onDidDismiss={() => setArticleDetailModalOpen(false)}>
+        <IonModal isOpen={isArticleDetailModalOpen} onDidDismiss={() => handleClose()}>
             <IonHeader>
                 <IonToolbar>
                     <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>
                         Read Now
                     </IonTitle>
-                    <IonButton className="close-button" slot="end" onClick={() => setArticleDetailModalOpen(false)}>Close</IonButton>
+                    <IonButton className="close-button" slot="end" onClick={() => handleClose()}>Close</IonButton>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>

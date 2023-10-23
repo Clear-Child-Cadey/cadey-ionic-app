@@ -22,6 +22,7 @@ import { chevronForwardOutline, checkmarkCircleOutline, closeCircleOutline } fro
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import UnreadContext from '../../context/UnreadContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserGoals } from '../../api/Goals';
 import { postGoalOptIn } from '../../api/Goals';
@@ -41,6 +42,7 @@ export interface Goal {
 const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
     const userFactUrl = `${apiUrl}/userfact`
     const {
         unreadGoals,
@@ -63,9 +65,11 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     // On component mount, make an API call to get data
     useEffect(() => {
+        setCurrentBasePage('Goals List');
+        setCurrentAppPage('Goals List');
+        appPageNavigation(cadeyUserId, userFactUrl, "Goals List");
         setUnreadGoals?.(false);
         fetchGoals();
-        appPageNavigation(cadeyUserId, userFactUrl, "Goals List");
     }, [apiUrl, cadeyUserId]);
 
     const onOptin = (userGoalId: number) => {
