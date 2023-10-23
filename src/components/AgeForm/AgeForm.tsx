@@ -16,8 +16,6 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 // Symptoms
 import { Symptom } from '../ConcernsList/ConcernsList';
-// API
-import { logAgeScreenReached } from '../../api/UserFacts';
 
 interface AgeFormProps {
   symptoms: Symptom[];
@@ -44,8 +42,6 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   // Give focus to the age field once the component is rendered (after a safe delay)
   useEffect(() => {
     setTimeout(() => inputRef.current?.setFocus(),150);
-    // Log user fact that the user reached the age screen
-    logAgeScreenReached(cadeyUserId, userFactUrl, document.title);
   }, []);
   
   // Handle submission of the age form

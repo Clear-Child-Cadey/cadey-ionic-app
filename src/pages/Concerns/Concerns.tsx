@@ -43,7 +43,6 @@ const ConcernsPage: React.FC = () => {
   const [symptoms, setSymptoms] = useState<Array<Symptom>>([]);
   const [pageTitle, setPageTitle] = useState("Concerns");
   const [results, setResults] = useState<any | null>(null);
-  const [progress, setProgress] = useState(0);
 
   // Context variables
   const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
