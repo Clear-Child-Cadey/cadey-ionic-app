@@ -160,6 +160,17 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                     <IonText>
                         <p>{searchResults.message}</p>
                     </IonText>
+                    <IonButton
+                        onClick={() => {
+                            setSearchResults({
+                                message: "",
+                                videos: [],
+                                articleIds: [],
+                            });
+                            const searchField = document.querySelector(".search-bar") as HTMLIonSearchbarElement;
+                            searchField.setFocus();
+                        }}
+                    >Try Again</IonButton>
                 </IonRow>
             )}
 
