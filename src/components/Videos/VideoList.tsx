@@ -8,8 +8,8 @@ import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
-import { logShareClick } from '../../api/UserFacts';
 import { logUserFact } from '../../api/UserFacts';
 // CSS
 import './VideoList.css';
@@ -34,6 +34,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   const userFactUrl = `${apiUrl}/userfact`
   const [canShare, setCanShare] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
+  const { currentAppPage } = useAppPage();
   
   // Get all the props from the modal context
   const { 
@@ -54,19 +55,11 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   // Function to copy the shareable link to clipboard
   const handleShare = async (event: React.MouseEvent, sourceId: string, mediaId: string, videoType: string) => {
     // Log a user fact that the user tapped on Share
-    logShareClick(cadeyUserId, userFactUrl, mediaId, videoType, document.title)
-
-    // userid: cadeyUserId,
-    // userFactTypeName: "MediaShared",
-    // appPage: source,
-    // detail1: mediaId,
-    // detail2: mediaType,
-
     logUserFact ({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: "MediaShared",
-      appPage: document.title, // Change to something
+      appPage: currentAppPage,
       detail1: mediaId,
       detail2: videoType,
     });

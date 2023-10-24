@@ -37,13 +37,13 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 import UnreadContext from '../../context/UnreadContext';
 import { useSpotlight } from '../../context/SpotlightContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
-import { logTapBarClick } from '../../api/UserFacts';
 import { getNewGoalsIndicator } from '../../api/Goals';
 // Interfaces
 import { Message } from '../../pages/Messages/Messages';
-import { Goal } from '../../pages/Goals/Goals';
+import { logUserFact } from '../../api/UserFacts';
 
 const RouterTabs: React.FC = () => {
   const [currentTab, setCurrentTab] = useState('Home');
@@ -57,8 +57,8 @@ const RouterTabs: React.FC = () => {
   } = useContext(UnreadContext); // Get the current unread count
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/userfact`;
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  const { currentAppPage } = useAppPage();
 
   const { showSpotlight } = useSpotlight();
   const [tutorialStep, setTutorialStep] = useState(0);
@@ -69,11 +69,14 @@ const RouterTabs: React.FC = () => {
     } else {
       fetchGoalsIndicator(); // Check for unread goals
     }
-    try {
-        await logTapBarClick(cadeyUserId, userFactUrl, tabName, document.title);
-    } catch (error) {
-        console.error("Error logging tab bar click: ", error);
-    }
+    // log user fact that the user clicked on the tap bar
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'TapBarNavClick',
+      appPage: currentAppPage,
+      detail1: tabName,
+    });
   };
 
   const fetchGoalsIndicator = async () => {

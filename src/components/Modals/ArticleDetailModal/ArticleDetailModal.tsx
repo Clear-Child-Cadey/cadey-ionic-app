@@ -12,7 +12,6 @@ import {
 // CSS
 import './ArticleDetailModal.css';
 // API
-import { logOpenedArticle } from '../../../api/UserFacts';
 import { logUserFact } from '../../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../../main';
@@ -40,7 +39,7 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         setCurrentVimeoId,
     } = useModalContext();
 
-    const { currentBasePage, setCurrentAppPage } = useAppPage();
+    const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
@@ -50,10 +49,22 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
         // Log user fact that the user opened an article
         if (isVideoModalOpen && currentArticleId) {
             // Set the video detail as the source if the video detail modal was open
-            logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId, "Video Detail Modal");
+            logUserFact({
+                cadeyUserId: cadeyUserId,
+                baseApiUrl: apiUrl,
+                userFactTypeName: 'OpenedArticle',
+                appPage: 'Video Detail',
+                detail1: currentArticleId.toString()
+            });
         } else if (currentArticleId) {
             // Otherwise use the document title as the source
-            logOpenedArticle(cadeyUserId, userFactUrl, currentArticleId, document.title);
+            logUserFact({
+                cadeyUserId: cadeyUserId,
+                baseApiUrl: apiUrl,
+                userFactTypeName: 'OpenedArticle',
+                appPage: currentAppPage,
+                detail1: currentArticleId.toString()
+            });
         }
         
         if (isArticleDetailModalOpen && isVideoModalOpen) {

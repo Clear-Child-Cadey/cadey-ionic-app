@@ -22,7 +22,6 @@ import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
-import { logMessageOnMessagesPageClicked } from '../../api/UserFacts';
 import { logUserFact } from '../../api/UserFacts';
 
 export interface Message {
@@ -41,7 +40,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const userFactUrl = `${apiUrl}/userfact`
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
     const [messagesLoaded, setMessagesLoaded] = useState(false); // Used to determine if the messages have been loaded yet
-    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
+    const { setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
     const {
       isVideoModalOpen,
@@ -84,7 +83,14 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     const handleMessageClick = (mediaId: string, mediaSourceId: string)  => {
       // Log a user fact that the user clicked a message from the messages page
-      logMessageOnMessagesPageClicked(cadeyUserId, userFactUrl, mediaId, mediaSourceId, document.title);
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'MessageClickedOnMessagesPage',
+        appPage: currentAppPage,
+        detail1: mediaId,
+        detail2: mediaSourceId,
+      });
       setCurrentVimeoId(mediaSourceId);
       setVideoModalOpen(true);
     }

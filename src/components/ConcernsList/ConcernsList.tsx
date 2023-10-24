@@ -11,11 +11,11 @@ import {
 import './ConcernsList.css';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
-import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
-// Functions
-import { logConcernClick } from '../../api/UserFacts';
+import { useAppPage } from '../../context/AppPageContext';
+// API
+import { logUserFact } from '../../api/UserFacts';
 
 // Define a TypeScript interface for the ConcernsList component's props
 interface ConcernsListProps {
@@ -30,10 +30,9 @@ export interface Symptom {
 
 // Define the ConcernsList functional component
 const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
-        const device_id = React.useContext(DeviceIdContext);
         const { apiUrl } = React.useContext(ApiUrlContext);
         const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
-        const userFactUrl = `${apiUrl}/userfact`;
+        const { currentAppPage } = useAppPage();
         
         const [isLoading, setIsLoading] = useState(false);
         const [concernsList, setConcernsList] = useState<any>(null);
@@ -75,7 +74,13 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
 
         // Call the postLogEvent function whenever a button is clicked and proceed to the next screen
         const handleOnClick = (choice: { concern: string; concernId: number; symptoms: Symptom[] }) => {
-                logConcernClick(cadeyUserId, userFactUrl, choice.concernId.toString(), document.title);
+                logUserFact({
+                        cadeyUserId: cadeyUserId,
+                        baseApiUrl: apiUrl,
+                        userFactTypeName: 'ConcernChosen',
+                        appPage: currentAppPage,
+                        detail1: choice.concernId.toString(),
+                });
                 onNext(choice);
         }
 

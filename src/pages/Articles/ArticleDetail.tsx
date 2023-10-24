@@ -15,7 +15,6 @@ import { refresh } from 'ionicons/icons';
 // CSS
 import './ArticleDetail.css';
 // API
-import { logOpenedArticle } from '../../api/UserFacts';
 import { logUserFact } from '../../api/UserFacts';
 // Contexts
 import { CadeyUserContext } from '../../main';
@@ -34,8 +33,7 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
-    const userFactUrl = `${apiUrl}/userfact`;
-    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
+    const { setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {
@@ -46,7 +44,13 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
                 detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
                 setArticle(detail);
                 // Log a user fact
-                logOpenedArticle(cadeyUserId, userFactUrl, articleId, document.title);
+                logUserFact({
+                    cadeyUserId: cadeyUserId,
+                    baseApiUrl: apiUrl,
+                    userFactTypeName: 'OpenedArticle',
+                    appPage: currentAppPage,
+                    detail1: articleId.toString()
+                });
             } catch (error) {
                 console.error("Error fetching article detail:", error);
             } finally {

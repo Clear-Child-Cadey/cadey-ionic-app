@@ -23,7 +23,7 @@ import { useAppPage } from './context/AppPageContext';
 import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
-import { logVideoDetailPageClosed } from './api/UserFacts';
+import { logUserFact } from './api/UserFacts';
 
 setupIonicReact();
 
@@ -96,12 +96,17 @@ const App: React.FC = () => {
   }, [currentBasePage, currentAppPage]);
 
   const onVideoDetailPageClosed = async () => {
-    const response = await logVideoDetailPageClosed(cadeyUserId, userFactUrl, "Video Detail Modal");
+    const response = await logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'VideoDetailPageClosed',
+      appPage: 'Video Detail',
+    });
 
-      if (response.falseDoorQuestionId !== 0) {
-        setFalseDoorData(response);
-        setIsFalseDoorModalOpen(true);
-      }
+    if (response.falseDoorQuestionId !== 0) {
+      setFalseDoorData(response);
+      setIsFalseDoorModalOpen(true);
+    }
   }
 
   return (

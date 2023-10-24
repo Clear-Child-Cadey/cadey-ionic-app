@@ -22,8 +22,6 @@ import { useModalContext } from '../../../context/ModalContext';
 import { useAppPage } from '../../../context/AppPageContext';
 //  API
 import { getVideoDetailData } from '../../../api/VideoDetail';
-import { logShareClick } from '../../../api/UserFacts';
-import { logFeaturedVideoNotificationClicked } from '../../../api/UserFacts';
 import { logUserFact } from '../../../api/UserFacts';
 import { getUserMessages } from '../../../api/UserMessages';
 // CSS
@@ -52,7 +50,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     setCurrentVideoType,
   } = useModalContext();
 
-  const { currentBasePage, setCurrentAppPage } = useAppPage();
+  const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
@@ -135,13 +133,14 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
         if(data && data.mediaId) {
           if (currentVimeoId === location.search.split('video=')[1]) {
             // Log user fact that the user clicked on a push notification
-            logFeaturedVideoNotificationClicked(
-              cadeyUserId, 
-              userFactUrl, 
-              String(data.mediaId), 
-              currentVimeoId, 
-              document.title
-            );
+            logUserFact({
+              cadeyUserId: cadeyUserId,
+              baseApiUrl: apiUrl,
+              userFactTypeName: 'FeaturedVideoNotificationClicked',
+              appPage: currentAppPage,
+              detail1: String(data.mediaId),
+              detail2: currentVimeoId,
+            });
           }
           
           // Get Messages when the user visits the Video Detail page
@@ -187,7 +186,14 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   // Function to copy the shareable link to clipboard
   const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string) => {
     // Log a user fact that the user tapped on Share
-    logShareClick(cadeyUserId, userFactUrl, mediaId, currentVideoType, source)
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'MediaShared',
+      appPage: source,
+      detail1: mediaId,
+      detail2: currentVideoType,
+    });
 
     // Share the Vimeo URL
     await Share.share({
