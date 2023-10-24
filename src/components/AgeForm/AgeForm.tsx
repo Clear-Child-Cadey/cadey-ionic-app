@@ -11,7 +11,6 @@ import {
 import './AgeForm.css';
 import { refresh } from 'ionicons/icons';
 // Contexts
-import DeviceIdContext from '../../context/DeviceIdContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 // Symptoms
@@ -29,9 +28,7 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
   const [response, setResponse] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { symptoms, onAgeFormShown, onRestart, onResultsReceived } = props;
-  const device_id = React.useContext(DeviceIdContext);
   const { apiUrl } = useContext(ApiUrlContext);
-  const userFactUrl = `${apiUrl}/userfact`;
   const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
 
   let ageGroup: number;

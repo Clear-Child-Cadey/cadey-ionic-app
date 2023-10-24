@@ -1,3 +1,18 @@
-.search-bar, .search-directions {
+.search-bar, .search-directions, .age-group-buttons {
     padding-left: 16px;
+    padding-right: 16px;
+}
+
+.selected {
+    --background: #f00;
+}
+
+.age-group-buttons {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.age-group-button {
+    --padding-start: 20px;
+    --padding-end: 20px;
 }
