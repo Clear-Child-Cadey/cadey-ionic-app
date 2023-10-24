@@ -19,7 +19,7 @@ import {
 // CSS
 import './RouterTabs.css';
 // Ionicons
-import { homeOutline, gridOutline, mailOutline, newspaperOutline, podiumOutline } from 'ionicons/icons';
+import { homeOutline, gridOutline, mailOutline, newspaperOutline, podiumOutline, searchOutline } from 'ionicons/icons';
 // Pages
 import ConcernsPage from '../../pages/Concerns/Concerns';
 import HomePage from '../../pages/Home/Home';
@@ -27,6 +27,7 @@ import AdminPage from '../../pages/Admin/Admin';
 import MessagesPage from '../../pages/Messages/Messages';
 import GoalsPage from '../../pages/Goals/Goals';
 import GoalDetailPage from '../../pages/Goals/GoalDetail';
+import SearchPage from '../../pages/Search/Search';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -153,7 +154,8 @@ const RouterTabs: React.FC = () => {
             <Route exact path="/App/Admin" component={AdminPage} />
             <Route exact path="/App/Messages" component={MessagesPage} />       
             <Route exact path="/App/Goals" component={GoalsPage} />  
-            <Route exact path="/App/GoalDetail" component={GoalDetailPage} />     
+            <Route exact path="/App/GoalDetail" component={GoalDetailPage} />  
+            <Route exact path="/App/Search" component={SearchPage} />   
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
           </Switch>
@@ -224,6 +226,16 @@ const RouterTabs: React.FC = () => {
               )}
             </IonTabButton>
           )}
+            
+          {/* Search */}
+          <IonTabButton 
+            tab="Search" 
+            href="/App/Search"
+            onClick={() => handleTabClick('Search')}
+          >
+            <IonIcon icon={searchOutline} />
+            <IonLabel>Search</IonLabel>
+          </IonTabButton>
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
