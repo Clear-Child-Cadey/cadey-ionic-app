@@ -1,4 +1,4 @@
-.search-bar, .search-directions, .age-group-buttons {
+.search-bar, .search-directions, .age-group-buttons, .search-results {
     padding-left: 16px;
     padding-right: 16px;
 }
@@ -15,4 +15,8 @@
 .age-group-button {
     --padding-start: 20px;
     --padding-end: 20px;
+}
+
+.search-results .article-item {
+    width: 91.5vw;
 }

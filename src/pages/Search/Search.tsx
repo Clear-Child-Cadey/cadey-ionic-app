@@ -26,6 +26,9 @@ import { logUserFact } from '../../api/UserFacts';
 import { postUserSearch } from '../../api/Search';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
+// Components
+import VideoList from '../../components/Videos/VideoList';
+import ArticleItem from '../../components/Articles/ArticleItem';
 
 interface SearchResults {
     message: string;
@@ -153,7 +156,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
             {/* Message (usually indicating no results) */}
             {searchResults.message && (
-                <IonRow className="search-message">
+                <IonRow className="search-message search-results">
                     <IonText>
                         <p>{searchResults.message}</p>
                     </IonText>
@@ -162,24 +165,22 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
             {/* Video Results */}
             {searchResults.videos.length > 0 && (
-                <IonList>
-                    {searchResults.videos.map((video) => (
-                        <IonItem key={video.sourceId}>
-                            <IonLabel>{video.title}</IonLabel>
-                        </IonItem>
-                    ))}
-                </IonList>    
+                <IonRow className="video-list-row search-results">
+                    <h2>Videos</h2>
+                    <VideoList videos={searchResults.videos} listType='vertical' />
+                </IonRow>  
             )}
 
             {/* Article Results */}
             {searchResults.articleIds.length > 0 && (
-                <IonList>
-                    {searchResults.articleIds.map((articleId) => (
-                        <IonItem key={articleId}>
-                            <IonLabel>Article {articleId}</IonLabel>
-                        </IonItem>
-                    ))}
-                </IonList>    
+                <IonRow className="article-list-row search-results">
+                    <IonText><h2>Articles</h2></IonText>
+                    <IonList>
+                        {searchResults.articleIds.map((articleId) => (
+                            <ArticleItem articleId={articleId} key={articleId} />
+                        ))}
+                    </IonList>
+                </IonRow>
             )}
             
         </IonContent>
