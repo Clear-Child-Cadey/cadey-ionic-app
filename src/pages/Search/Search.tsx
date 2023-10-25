@@ -29,6 +29,7 @@ import { VideoItem } from '../../components/Videos/VideoList';
 // Components
 import VideoList from '../../components/Videos/VideoList';
 import ArticleItem from '../../components/Articles/ArticleItem';
+import { search } from 'ionicons/icons';
 
 interface SearchResults {
     message: string;
@@ -133,36 +134,48 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             {/* Show loading state */}
             <IonLoading isOpen={isLoading} message={'Loading Results...'} />
             
-            {/* Search bar */}
-            <IonSearchbar className="search-bar" onKeyDown={handleSearchInput}></IonSearchbar>
+            <IonRow className="search-container">
+                {/* Search bar */}
+                <IonSearchbar className="search-bar" onKeyDown={handleSearchInput}></IonSearchbar>
 
-            {/* Age group buttons */}
-            <IonRow className="age-group-buttons">
-                <IonButton 
-                    className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
-                    onClick={() => handleAgeSelection(1)}
-                >
-                    0-4
-                </IonButton>
-                <IonButton 
-                    className={`age-group-button ${ageGroup === 2 ? "selected" : ""}`}
-                    onClick={() => handleAgeSelection(2)}
-                >
-                    5-11
-                </IonButton>
-                <IonButton 
-                    className={`age-group-button ${ageGroup === 3 ? "selected" : ""}`}
-                    onClick={() => handleAgeSelection(3)}
-                >
-                    12+
-                </IonButton>
+                {/* Age group buttons */}
+                <IonRow className="age-group-container">
+                    <IonText className="child-age-text">My child is: </IonText>
+                    <IonRow className="age-buttons-row">
+                        <IonButton 
+                            className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
+                            onClick={() => handleAgeSelection(1)}
+                        >
+                            0-4
+                        </IonButton>
+                        <IonButton 
+                            className={`age-group-button ${ageGroup === 2 ? "selected" : ""}`}
+                            onClick={() => handleAgeSelection(2)}
+                        >
+                            5-11
+                        </IonButton>
+                        <IonButton 
+                            className={`age-group-button ${ageGroup === 3 ? "selected" : ""}`}
+                            onClick={() => handleAgeSelection(3)}
+                        >
+                            12+
+                        </IonButton>
+                    </IonRow>
+                </IonRow>
             </IonRow>
 
             {/* Explanatory copy */}
             <IonRow className="search-directions">
-                <IonText>
-                    <p>Try keywords like 'tantrum', or 'having trouble focusing at school'</p>
-                </IonText>
+                {/* Text that changes based on whether there are any search results */}
+                {(searchResults.message || searchResults.videos.length > 0 || searchResults.articleIds.length > 0) ? (
+                    <IonText>
+                        <p>Here are a few suggestions, based on your search:</p>
+                    </IonText>
+                ) : (
+                    <IonText>
+                        <p>Try keywords like 'tantrum', or 'having trouble focusing at school'</p>
+                    </IonText>
+                )}
             </IonRow>
 
             {/* Message (usually indicating no results) */}
