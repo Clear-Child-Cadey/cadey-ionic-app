@@ -12,10 +12,6 @@
     margin-bottom: 0;
 }
 
-.selected {
-    --background: #f00;
-}
-
 .age-group-container {
     display: flex;
     align-items: center;
@@ -35,11 +31,16 @@
 }
 
 .age-group-button {
+    opacity: 0.5;
     --padding-start: 15px;
     --padding-end: 15px;
     --padding-top: 6px;
     --padding-bottom: 6px;
     height: auto;
+}
+
+.age-group-button.selected {
+    opacity: 1;
 }
 
 .search-results .article-item {
@@ -48,6 +49,14 @@
 
 .search-results .article-image-wrapper {
     margin-bottom: 5px;
+}
+
+.search-results h2 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: #484443;
+    width: 100%;
 }
 
 .search-results h3 {

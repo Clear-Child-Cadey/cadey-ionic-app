@@ -145,7 +145,6 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                         <IonButton 
                             className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
                             onClick={() => handleAgeSelection(1)}
-                            disabled={true}
                         >
                             0-4
                         </IonButton>
