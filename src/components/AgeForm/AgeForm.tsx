@@ -15,6 +15,8 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 // Symptoms
 import { Symptom } from '../ConcernsList/ConcernsList';
+// API
+import { getRecommendations } from '../../api/GetRecommendations';
 
 interface AgeFormProps {
   symptoms: Symptom[];
@@ -67,19 +69,8 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
     }
 
     // Get recommendations from the API
-    const url = `${apiUrl}/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
-
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        accept: 'text/plain',
-        apiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-      },
-    };
-
     try {
-      const recommendationsResponse = await fetch(url, requestOptions);
-      const data = await recommendationsResponse.json();
+      const data = await getRecommendations(apiUrl, cadeyUserId, ageGroup, symptoms);
       setResponse(data);
 
       // Use the callback to send the response to the parent component
@@ -87,13 +78,11 @@ const AgeForm: React.FC<AgeFormProps> = (props) => { // Pass props here
 
       // Invoke the callback when the response is received
       onAgeFormShown();
-
-      setIsLoading(false);
-
     } catch (error) {
       console.error('Error:', error);
-      setIsLoading(false);
     }
+    // Remove the loader
+    setIsLoading(false);
   };
 
   return (

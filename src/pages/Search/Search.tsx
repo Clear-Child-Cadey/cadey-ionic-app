@@ -83,12 +83,23 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     }
 
     const performSearch = async (searchTerm: string, ageGroup: number) => {
+        // Clear any current search results
+        setSearchResults({
+            message: "",
+            videos: [],
+            articleIds: [],
+        });
+        // Set loading state
+        setIsLoading(true);
+        // Get new results
         try {
             const response = await postUserSearch(apiUrl, cadeyUserId, searchTerm, ageGroup);
             setSearchResults(response);
         } catch (error) {
             console.error("Error performing user search: ", error);
         }
+        // Clear loading state
+        setIsLoading(false);
     }
 
     useEffect(() => {

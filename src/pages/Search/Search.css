@@ -20,3 +20,11 @@
 .search-results .article-item {
     width: 91.5vw;
 }
+
+.search-results .article-image-wrapper {
+    margin-bottom: 5px;
+}
+
+.search-results h3 {
+    margin-bottom: 20px;
+}
