@@ -202,7 +202,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   }
 
   const handleRelatedVideoClick = (videoId: string) => {
-    setSource('Video Detail Modal');
+    setSource('Video Detail');
     setCurrentVideoType('relatedVideos');
     setCurrentVimeoId(videoId);
   }

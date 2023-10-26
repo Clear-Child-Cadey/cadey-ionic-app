@@ -42,6 +42,7 @@ const FalseDoorModal: React.FC<ModalProps> = ({ source, falseDoorQuestionId, ico
 
   const { 
     isVideoModalOpen,
+    isArticleDetailModalOpen,
     currentVideoType,
 
   } = useModalContext();
@@ -65,7 +66,7 @@ const FalseDoorModal: React.FC<ModalProps> = ({ source, falseDoorQuestionId, ico
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: "FalseDoorQuestionResponse",
-      appPage: source,
+      appPage: currentBasePage,
       detail1: falseDoorQuestionIdStr,
       detail2: userChoiceStr,
       detail3: currentVideoType
@@ -82,6 +83,8 @@ const FalseDoorModal: React.FC<ModalProps> = ({ source, falseDoorQuestionId, ico
   const handleClose = () => {
     if(isVideoModalOpen==true) {
       setCurrentAppPage('Video Detail');  
+    } else if (isArticleDetailModalOpen==true) {
+      setCurrentAppPage('Article Detail');
     } else {
       setCurrentAppPage(currentBasePage);
     }
