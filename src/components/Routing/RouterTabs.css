@@ -48,7 +48,7 @@
     width: 50vw;
     background-color: #F9F6EF;
     border-radius: 10px;
-    left: calc(62.5% - 25vw); /* Centers the spotlight content */
+    left: calc(50% - 25vw); /* Centers the spotlight content */
     padding: 15px 20px;
 }
 
