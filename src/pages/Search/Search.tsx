@@ -43,6 +43,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
     const [isLoading, setIsLoading] = useState(false);
     const [ageGroup, setAgeGroup] = useState(0);
+    const [searchTerm, setSearchTerm] = useState<string>("");
     const [searchResults, setSearchResults] = useState<SearchResults>({
         message: "",
         videos: [],
@@ -60,6 +61,14 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             appPage: 'Search',
           });
     }, [apiUrl, cadeyUserId]);
+
+    const handleInputChange = (e: any) => {
+        const inputValue = e.detail.value;
+        if (inputValue.length > 100) {
+            const limitedValue = inputValue.slice(0, 100);
+            e.target.value = limitedValue;
+        }
+    }
 
     const handleSearchInput = async (e: React.KeyboardEvent) => {
         const searchTerm = (e.target as HTMLInputElement).value;
@@ -103,10 +112,6 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         setIsLoading(false);
     }
 
-    useEffect(() => {
-        console.log("Search Results: ", searchResults);
-    }, [searchResults]);
-
     const handleAgeSelection = (ageGroup: number) => {
         setAgeGroup(ageGroup);
         // Get the current contents of the search field and then perform a search
@@ -136,7 +141,12 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             
             <IonRow className="search-container">
                 {/* Search bar */}
-                <IonSearchbar className="search-bar" onKeyDown={handleSearchInput}></IonSearchbar>
+                <IonSearchbar 
+                    className="search-bar" 
+                    onIonChange={handleInputChange}
+                    onKeyDown={handleSearchInput}
+                    mode="ios"
+                ></IonSearchbar>
 
                 {/* Age group buttons */}
                 <IonRow className="age-group-container">
