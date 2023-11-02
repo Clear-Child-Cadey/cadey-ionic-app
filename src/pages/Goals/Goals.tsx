@@ -24,8 +24,7 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import UnreadContext from '../../context/UnreadContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
-import { getUserGoals } from '../../api/Goals';
-import { postGoalOptIn } from '../../api/Goals';
+import { getUserGoals, postGoalOptIn, popularGoals } from '../../api/Goals';
 import { logUserFact } from '../../api/UserFacts';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
@@ -50,6 +49,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [goals, setGoals] = useState<Goal[]>([]);
     const [goalsLoaded, setGoalsLoaded] = useState(false); // Used to determine if the goals have been loaded yet
+    const [ageGroup, setAgeGroup] = useState(0);
     const history = useHistory();
 
     const fetchGoals = async () => {
@@ -102,10 +102,33 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     const onForward = (goal: Goal) => {
         history.push({
-          pathname: '/app/GoalDetail',
-          state: { goal: goal }
+            pathname: '/app/GoalDetail',
+            state: { goal: goal }
         });
-      };
+    };
+
+    const handleAgeSelection = async (selectedAgeGroup: number) => {
+        setAgeGroup(selectedAgeGroup);
+        setIsLoading(true); // Show loading indicator while fetching
+    
+        try {
+            // Make API call to PopularGoals endpoint
+            const popularGoalsResponse = await popularGoals(apiUrl, cadeyUserId, String(selectedAgeGroup));
+            
+            // Check if the response is successful
+            if (popularGoalsResponse.status === 200) {
+                await fetchGoals(); // Wait for fetchGoals to complete before proceeding
+            } else {
+                console.error('Error fetching popular goals:', popularGoalsResponse);
+                // Handle any other status accordingly, perhaps set an error message in state
+            }
+        } catch (error) {
+            console.error('Exception when calling popularGoals:', error);
+            // Handle exception, such as updating UI to show an error message
+        } finally {
+            setIsLoading(false); // Hide loading indicator after fetching
+        }
+    }
 
   return (
     <IonPage className="goals">
@@ -124,34 +147,43 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         {/* Show loading state */}
         <IonLoading isOpen={isLoading} message={'Loading Goals...'} />
         
+        {/* Display age group buttons if user has no goals */}
+        {(!goals.length || goals.length == 0) && (
+            <IonRow className="age-group-container">
+                <IonText className="child-age-text">Please enter your child's age for personalized goals: </IonText>
+                <IonRow className="age-buttons-row">
+                    <IonButton 
+                        className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
+                        onClick={() => handleAgeSelection(1)}
+                    >
+                        0-4
+                    </IonButton>
+                    <IonButton 
+                        className={`age-group-button ${ageGroup === 2 ? "selected" : ""}`}
+                        onClick={() => handleAgeSelection(2)}
+                    >
+                        5-11
+                    </IonButton>
+                    <IonButton 
+                        className={`age-group-button ${ageGroup === 3 ? "selected" : ""}`}
+                        onClick={() => handleAgeSelection(3)}
+                    >
+                        12+
+                    </IonButton>
+                </IonRow>
+            </IonRow>
+        )}
+
         {goalsLoaded && (
             <IonRow>
-                {(!goals.length || goals.length == 0) && (
-                    <IonText className="subcopy">You don't have any goals yet.</IonText>
-                )}
-
                 {goals.length > 0 && (
                     <IonText className="subcopy">
                         {!goals.every(goal => goal.optIn === false) ?
                             "Add or remove goals below to get a highly personalized game plan." : 
-                            "You don't have any goals yet."
+                            "You don't have any current goals."
                         }
                     </IonText>
                 )}
-            </IonRow>
-        )}
-        
-        <hr className="divider" />
-        
-        {/* Show the no goals content if context dictates */}
-        {/* Check if goals are loaded and the user either has no goals (!goals.length) or all goals are hidden (optIn === false)
-            // If so, show the no goals content
-            // Otherwise, show nothing */}
-        {goalsLoaded && (!goals.length || goals.every(goal => goal.optIn === false)) && (
-            <IonRow className="no-goals-content">
-                <IonText className="subcopy">No goals found. Fill out your Concerns to get goals.</IonText>
-                {/* Button that links to /app/concerns */}
-                <IonButton routerLink="/app/concerns">Go to Concerns</IonButton>
             </IonRow>
         )}
         
@@ -204,6 +236,13 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 </IonItem>
             ))}
         </IonList>
+
+        <IonRow className="concerns-promo">
+            <IonText className="subcopy">Fill out your Concerns for more personalized goals.</IonText>
+            {/* Button that links to /app/concerns */}
+            <IonButton routerLink="/app/concerns">Go to Concerns</IonButton>
+        </IonRow>
+
       </IonContent>
     </IonPage>
   );
