@@ -188,6 +188,13 @@ const HomePage: React.FC<{
         </IonRow>
         <hr className="divider" />
 
+        {/* If user has watched videos, show this. Else, skip it */}
+        {playedVideos.length > 0 && (
+          <IonRow className="video-list-row recently-viewed">
+              <h2>Recently Viewed</h2>
+              <VideoList videos={playedVideos} listType='horizontal' />
+          </IonRow>
+        )}
         {/* If user has featured videos, show this. Else, skip it */}
         {featuredVideos.length > 0 && (
           <IonRow className="video-list-row featured">
@@ -214,13 +221,6 @@ const HomePage: React.FC<{
           <IonRow className="video-list-row trending">
               <h2>Trending Now</h2>
               <VideoList videos={trendingVideos} listType='horizontal' />
-          </IonRow>
-        )}
-        {/* If user has watched videos, show this. Else, skip it */}
-        {playedVideos.length > 0 && (
-          <IonRow className="video-list-row recently-viewed">
-              <h2>Recently Viewed</h2>
-              <VideoList videos={playedVideos} listType='horizontal' />
           </IonRow>
         )}
       </IonContent>
