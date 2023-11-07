@@ -54,10 +54,13 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     const fetchGoals = async () => {
         try {
+            setIsLoading(true);
             const fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
             setGoals(fetchedGoals);
         } catch (error) {
             console.error("Error fetching goals:", error);
+        } finally {
+            setIsLoading(false);
         }
         setGoalsLoaded(true);
     }

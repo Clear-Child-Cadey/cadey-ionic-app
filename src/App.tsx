@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
   IonApp,
   setupIonicReact,
-  IonLoading,
 } from '@ionic/react';
 import semver from 'semver';
 // Components
@@ -15,7 +14,6 @@ import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDe
 import FalseDoorModal from './components/Modals/FalseDoorModal/FalseDoorModal';
 // Contexts
 import { CadeyUserContext } from './main';
-import { useLoadingState } from './context/LoadingStateContext';
 import { useModalContext } from './context/ModalContext';
 import ApiUrlContext from './context/ApiUrlContext';
 import { useAppPage } from './context/AppPageContext';
@@ -30,9 +28,7 @@ setupIonicReact();
 const App: React.FC = () => {
   const { cadeyUserId, minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
-  const userFactUrl = `${apiUrl}/userfact`;
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const { state: loadingState, dispatch } = useLoadingState();
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
   const [falseDoorData, setFalseDoorData] = useState<any>(null); // Hold the data for the false door
   const [isFalseDoorModalOpen, setIsFalseDoorModalOpen] = useState(false); // Control the modal visibility
@@ -89,12 +85,6 @@ const App: React.FC = () => {
     }
   }, [isVideoModalOpen]);
 
-  // Log the status of currentBasePage and currentAppPage when they change
-  useEffect(() => {
-    console.log('currentBasePage: ', currentBasePage);
-    console.log('currentAppPage: ', currentAppPage);
-  }, [currentBasePage, currentAppPage]);
-
   const onVideoDetailPageClosed = async () => {
     const response = await logUserFact({
       cadeyUserId: cadeyUserId,
@@ -109,11 +99,6 @@ const App: React.FC = () => {
     }
   }
 
-  // Log anytime the loading state changes
-  useEffect(() => {
-    console.log('Loading state changed: ', loadingState);
-  }, [loadingState]);
-
   return (
     <IonApp>
       {/* Show a modal if the user needs to update their app*/}
@@ -124,10 +109,6 @@ const App: React.FC = () => {
         buttonText="Upgrade"
         buttonUrl={getStoreLink()}
       />
-      {/* Show a loading state if anything is loading */}
-      {Object.values(loadingState).some(Boolean) && (
-        <IonLoading isOpen={true} message={'Please wait...'} />
-      )}
       {/* Show a video modal if context dictates */}
       {isVideoModalOpen && currentVimeoId && (
         <VideoDetailModal />

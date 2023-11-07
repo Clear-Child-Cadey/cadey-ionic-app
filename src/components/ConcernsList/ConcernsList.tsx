@@ -6,7 +6,6 @@ import {
   IonRow,
   IonCol,
   IonText,
-  IonLoading,
 } from '@ionic/react';
 import './ConcernsList.css';
 import { SplashScreen } from '@capacitor/splash-screen';

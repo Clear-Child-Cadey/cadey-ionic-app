@@ -2,16 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { WP_ArticleDetail, getArticleDetail } from '../../api/WordPress/GetArticleDetail';
 import {
     IonContent,
-    IonLoading,
     IonRow,
-    IonButton,
-    IonIcon,
     IonPage,
     IonHeader,
     IonToolbar,
     IonTitle,
 } from '@ionic/react';
-import { refresh } from 'ionicons/icons';
 // CSS
 import './ArticleDetail.css';
 // API

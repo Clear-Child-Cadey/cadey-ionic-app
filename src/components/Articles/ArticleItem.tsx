@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import {
-    IonImg,
-    IonIcon,
+import { 
+    IonImg, 
+    IonIcon, 
 } from '@ionic/react';
 // CSS
 import './ArticleItem.css';
 // API & Interface
-import { getArticlesByIds, WP_Article } from '../../api/WordPress/GetArticles';
+import { WP_Article } from '../../api/WordPress/GetArticles';
 // Icons
 import { readerOutline } from 'ionicons/icons';
 // Contexts
-import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
 
 // Setup the interface
-interface ArticlesListProps {
-    articleId: number;
+interface ArticleProps {
+    article: WP_Article;
 }
 
-const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
-    const [article, setArticle] = useState<WP_Article>();
+const ArticleItem: React.FC<ArticleProps> = ({ article }) => {
     const [selectedArticle, setSelectedArticle] = useState<WP_Article | null>(null);
-    
-    // Load the loading state from the context
-    const { state: loadingState, dispatch } = useLoadingState();
     
     // Get all the props from the modal context
     const { 
@@ -31,23 +26,6 @@ const ArticleItem: React.FC<ArticlesListProps> = ({ articleId }) => {
         setArticleDetailModalOpen,
         setCurrentArticleId,
     } = useModalContext();
-
-    // Fetch the articles from the API when the component is mounted or the categoryId changes
-    useEffect(() => {
-        const fetchArticle = async () => {
-            try {
-                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
-                const fetchedArticles = await getArticlesByIds([articleId]);
-                setArticle(fetchedArticles[0]);
-            } catch (error) {
-                console.error("Error fetching article ID: ", articleId, " error: ", error);
-            } finally {
-                dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
-            }
-        };
-
-        fetchArticle();
-    }, [articleId]);
 
     // Log a user fact and proceed to the next screen
     const handleArticleClick = (article: WP_Article) => {        

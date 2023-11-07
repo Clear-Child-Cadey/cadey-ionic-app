@@ -140,9 +140,11 @@ function MainComponent() {
     fetchData();
   }, [apiUrl]);
 
-  // If homepage data is loading, show the loader
+  // If app data is loading, show the loader
+  // Commented out the loader as it causes a flicker, don't really need this one as it's very fast
   if (isLoading) {
-    return <IonLoading isOpen={true} message="Loading..." />;
+    // return <IonLoading isOpen={true} message="Loading app data..." />;
+    return;
   }  
 
   return (
@@ -169,9 +171,9 @@ function MainComponent() {
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ApiUrlProvider>
       <MainComponent />
     </ApiUrlProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

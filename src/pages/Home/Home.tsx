@@ -8,11 +8,11 @@ import {
     IonContent,
     IonRow,
     IonText,
+    IonLoading,
 } from '@ionic/react';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
 import { useSpotlight } from '../../context/SpotlightContext';
-import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
 import { CadeyUserContext } from '../../main';
@@ -32,12 +32,11 @@ const HomePage: React.FC<{
   articleIdFromUrl?: string,
 }> = ({ currentTab, tutorialStep, setTutorialStep, vimeoIdFromUrl, articleIdFromUrl }) => {
   
-  const { state: loadingState, dispatch } = useLoadingState();
-  
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
   const [playedVideos, setPlayedVideos] = useState([]);
   const [trendingVideos, setTrendingVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   
   const [articleIds, setArticleIds] = useState<number[]>([]);
   const { showSpotlight, setShowSpotlight } = useSpotlight();
@@ -62,8 +61,7 @@ const HomePage: React.FC<{
 
   const fetchData = async () => {
     // Start loader
-    dispatch({ type: 'SET_LOADING', payload: { key: 'homepageData', value: true } });
-    console.log('Fetching home data...');
+    setIsLoading(true);
     try {
       const { featuredVideos, newVideos, playedVideos, trendingVideos, articleIds } = await getHomeDataFromApi();
       setFeaturedVideos(featuredVideos);
@@ -74,9 +72,16 @@ const HomePage: React.FC<{
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      dispatch({ type: 'SET_LOADING', payload: { key: 'homepageData', value: false } });
-      console.log('Done fetching home data.');
-      SplashScreen.hide(); // Hide the splash screen after data has been fetched
+      // If the API has returned something, and did not return articles, dismiss the loader. Otherwise the loader will be dismissed in the onArticlesLoaded callback
+      if (
+          (featuredVideos.length > 0 || newVideos.length > 0 || playedVideos.length > 0 || trendingVideos.length > 0 || articleIds.length > 0 ) 
+          && 
+          (articleIds.length == 0)) 
+      {
+        setIsLoading(false);
+      }
+      // Hide the splash screen after data has been fetched
+      SplashScreen.hide();
     }
   };
 
@@ -90,11 +95,11 @@ const HomePage: React.FC<{
     }
   }, []);
 
-
   // This runs on mount and every time currentTab changes or the video modal opens/closes
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
     if (currentTab === 'Home') {
+      // Start loader
       fetchData(); // Fetch the homepage data if the user is on the Home tab
       if (tutorialStep === 0) setTutorialStep(1); // If the tutorial hasn't started, mark it completed
     } else if (timerRef.current) {
@@ -167,6 +172,15 @@ const HomePage: React.FC<{
     }
   }, [articleIdFromUrl]);
 
+  // Callback function to handle the load status of articles
+  const onArticlesLoaded = () => {
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    console.log("isLoading: ", isLoading);
+  } , [isLoading]);
+
   return (
     <IonPage className="home">
       <IonHeader>
@@ -175,6 +189,15 @@ const HomePage: React.FC<{
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+
+        {/* Show a loading state if necessary */}
+        {/* {Object.values(loadingState).some(value => value === true) && (
+          <IonLoading isOpen={true} message={'Loading your data...'} />
+        )} */}
+        {isLoading && (
+          <IonLoading isOpen={true} message={'Loading your data...'} />
+        )}
+
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Home</IonTitle>
@@ -208,7 +231,7 @@ const HomePage: React.FC<{
         {articleIds.length > 0 && (
           <IonRow className="article-list-row">
             <h2>Read Now</h2>
-            <ArticlesListHorizontal articleIds={articleIds} />
+            <ArticlesListHorizontal articleIds={articleIds} onLoaded={onArticlesLoaded} />
           </IonRow>
         )}
         {/* If user has new videos, show this. Else, skip it */}

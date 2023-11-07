@@ -8,13 +8,7 @@ import {
   IonTabButton, 
   IonIcon, 
   IonLabel, 
-  IonTab,
   IonBadge,
-  IonTitle,
-  IonItem,
-  IonRow,
-  IonLoading,
-  IonRouterLink,
 } from '@ionic/react';
 // CSS
 import './RouterTabs.css';
