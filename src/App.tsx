@@ -109,6 +109,11 @@ const App: React.FC = () => {
     }
   }
 
+  // Log anytime the loading state changes
+  useEffect(() => {
+    console.log('Loading state changed: ', loadingState);
+  }, [loadingState]);
+
   return (
     <IonApp>
       {/* Show a modal if the user needs to update their app*/}

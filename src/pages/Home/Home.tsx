@@ -63,6 +63,7 @@ const HomePage: React.FC<{
   const fetchData = async () => {
     // Start loader
     dispatch({ type: 'SET_LOADING', payload: { key: 'homepageData', value: true } });
+    console.log('Fetching home data...');
     try {
       const { featuredVideos, newVideos, playedVideos, trendingVideos, articleIds } = await getHomeDataFromApi();
       setFeaturedVideos(featuredVideos);
@@ -74,6 +75,7 @@ const HomePage: React.FC<{
       console.error('Error:', error);
     } finally {
       dispatch({ type: 'SET_LOADING', payload: { key: 'homepageData', value: false } });
+      console.log('Done fetching home data.');
       SplashScreen.hide(); // Hide the splash screen after data has been fetched
     }
   };
