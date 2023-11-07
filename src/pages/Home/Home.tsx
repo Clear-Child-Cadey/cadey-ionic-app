@@ -72,18 +72,24 @@ const HomePage: React.FC<{
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      // If the API has returned something, and did not return articles, dismiss the loader. Otherwise the loader will be dismissed in the onArticlesLoaded callback
-      if (
-          (featuredVideos.length > 0 || newVideos.length > 0 || playedVideos.length > 0 || trendingVideos.length > 0 || articleIds.length > 0 ) 
-          && 
-          (articleIds.length == 0)) 
-      {
-        setIsLoading(false);
-      }
       // Hide the splash screen after data has been fetched
       SplashScreen.hide();
     }
   };
+
+  // useEffect to dismiss the loader
+  useEffect(() => {
+    console.log("articleIds.length: ", articleIds.length);
+    console.log("trendingVideos.length: ", trendingVideos.length);
+    // If the API has returned something, and did not return articles, dismiss the loader. Otherwise, the loader will be dismissed in the onArticlesLoaded callback
+    if (
+      (featuredVideos.length > 0 || newVideos.length > 0 || playedVideos.length > 0 || trendingVideos.length > 0 || articleIds.length > 0 ) 
+      && 
+      (articleIds.length == 0)) 
+  {
+    setIsLoading(false);
+  }
+  }, [articleIds, trendingVideos, featuredVideos, newVideos, playedVideos]);
 
   // On mount, check if Messages is the currentTab. If so, set it to Home.
   // This happens when the user navigates to Home from the Messages tab via 
