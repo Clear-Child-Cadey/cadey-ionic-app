@@ -197,9 +197,6 @@ const HomePage: React.FC<{
       <IonContent fullscreen>
 
         {/* Show a loading state if necessary */}
-        {/* {Object.values(loadingState).some(value => value === true) && (
-          <IonLoading isOpen={true} message={'Loading your data...'} />
-        )} */}
         {isLoading && (
           <IonLoading isOpen={true} message={'Loading your data...'} />
         )}
