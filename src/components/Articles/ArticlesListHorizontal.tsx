@@ -28,9 +28,7 @@ const ArticlesList: React.FC<ArticlesListProps & { onLoaded?: () => void }> = ({
             } catch (error) {
                 console.error("Error fetching articles:", error);
             } finally {
-                console.log('Articles loaded', articles);
                 if (onLoaded) {
-                    console.log('Calling onLoaded (so the loader can be dismissed)');
                     onLoaded();
                 }
             }

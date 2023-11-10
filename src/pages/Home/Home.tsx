@@ -79,8 +79,6 @@ const HomePage: React.FC<{
 
   // useEffect to dismiss the loader
   useEffect(() => {
-    console.log("articleIds.length: ", articleIds.length);
-    console.log("trendingVideos.length: ", trendingVideos.length);
     // If the API has returned something, and did not return articles, dismiss the loader. Otherwise, the loader will be dismissed in the onArticlesLoaded callback
     if (
       (featuredVideos.length > 0 || newVideos.length > 0 || playedVideos.length > 0 || trendingVideos.length > 0 || articleIds.length > 0 ) 
@@ -182,10 +180,6 @@ const HomePage: React.FC<{
   const onArticlesLoaded = () => {
     setIsLoading(false);
   };
-
-  useEffect(() => {
-    console.log("isLoading: ", isLoading);
-  } , [isLoading]);
 
   return (
     <IonPage className="home">

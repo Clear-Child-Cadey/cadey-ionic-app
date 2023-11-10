@@ -14,6 +14,7 @@ import {
     IonLabel,
     IonIcon,
     IonButton,
+    IonModal,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 // Icons
@@ -24,7 +25,8 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import UnreadContext from '../../context/UnreadContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
-import { getUserGoals, postGoalOptIn, popularGoals } from '../../api/Goals';
+import { getUserGoals, postGoalOptIn, popularGoals, popularSymptomAge } from '../../api/Goals';
+import { getUserSymptoms } from '../../api/UserSymptoms';
 import { logUserFact } from '../../api/UserFacts';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
@@ -46,16 +48,36 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         unreadGoals,
         setUnreadGoals
      } = useContext(UnreadContext); // Get the current unread data
-    const [isLoading, setIsLoading] = useState(false);
+    
     const [goals, setGoals] = useState<Goal[]>([]);
-    const [goalsLoaded, setGoalsLoaded] = useState(false); // Used to determine if the goals have been loaded yet
     const [ageGroup, setAgeGroup] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [goalsLoaded, setGoalsLoaded] = useState(false); // Used to determine if the goals have been loaded yet
+    const [userHasSymptoms, setUserHasSymptoms] = useState(false); // Used to determine if the user has any symptoms
+    const [showAgeGroupModal, setShowAgeGroupModal] = useState(false);
+    const [currentUserGoalId, setCurrentUserGoalId] = useState(0);
+
     const history = useHistory();
 
     const fetchGoals = async () => {
         try {
             setIsLoading(true);
-            const fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
+            
+            // Check if the user has any symptoms & update their flag if so
+            var userSymptoms = await getUserSymptoms(apiUrl, cadeyUserId);
+            if (userSymptoms.length > 0) {
+                setUserHasSymptoms(true);
+            }
+
+            var fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
+            if (fetchedGoals.length == 0) {
+                const popularGoalsResponse = await popularGoals(apiUrl, cadeyUserId);
+                if (popularGoalsResponse.status === 200) {
+                    fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
+                } else {
+                    console.error('Error fetching popular goals:', popularGoalsResponse);
+                }
+            }
             setGoals(fetchedGoals);
         } catch (error) {
             console.error("Error fetching goals:", error);
@@ -65,7 +87,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         setGoalsLoaded(true);
     }
 
-    // On component mount, make an API call to get data
+    // On component mount, make an API call to get goals
     useEffect(() => {
         setCurrentBasePage('Goals List');
         setCurrentAppPage('Goals List');
@@ -79,8 +101,25 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         fetchGoals();
     }, [apiUrl, cadeyUserId]);
 
-    const onOptin = (userGoalId: number) => {
-        postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
+    const onOptin = async (userGoalId: number) => {
+        if (!userHasSymptoms) {
+            // Store this in state for later use
+            setCurrentUserGoalId(userGoalId); 
+
+            // Show the modal for the user to select the age group
+            setShowAgeGroupModal(true); 
+            
+            // Exit early since we don't want to opt-in until after age group selection
+            return; 
+        }
+        
+        console.log('Opting in to goal:', userGoalId);
+        // Opt the user into the goal on the back end
+        await postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
+
+        // Set the user's symptom flag
+        setUserHasSymptoms(true);
+
         // Update the optIn value of the goal in state
         // Allows the user to access the goal immediately without a follow up API call
         setGoals(goals.map(goal => {
@@ -92,7 +131,9 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     }
 
     const onOptout = (userGoalId: number) => {
+        // Opt the user out of the goal on the back end
         postGoalOptIn(apiUrl, cadeyUserId, userGoalId, false);
+        
         // Update the optIn value of the goal in state
         // Hides the goal immediately without a follow up API call
         setGoals(goals.map(goal => {
@@ -108,28 +149,45 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             pathname: '/app/GoalDetail',
             state: { goal: goal }
         });
-    };
+    };      
 
     const handleAgeSelection = async (selectedAgeGroup: number) => {
         setAgeGroup(selectedAgeGroup);
+
         setIsLoading(true); // Show loading indicator while fetching
     
         try {
-            // Make API call to PopularGoals endpoint
-            const popularGoalsResponse = await popularGoals(apiUrl, cadeyUserId, String(selectedAgeGroup));
-            
-            // Check if the response is successful
-            if (popularGoalsResponse.status === 200) {
-                await fetchGoals(); // Wait for fetchGoals to complete before proceeding
-            } else {
-                console.error('Error fetching popular goals:', popularGoalsResponse);
-                // Handle any other status accordingly, perhaps set an error message in state
-            }
+            // Record a popular symptom age group for the user
+            await popularSymptomAge(apiUrl, cadeyUserId, selectedAgeGroup.toString());
         } catch (error) {
             console.error('Exception when calling popularGoals:', error);
             // Handle exception, such as updating UI to show an error message
         } finally {
-            setIsLoading(false); // Hide loading indicator after fetching
+            setUserHasSymptoms(true); // Set the user's symptom flag
+            console.log('Optin to goal:', currentUserGoalId);
+            
+            try {
+                // Opt the user into the goal on the back end
+                await postGoalOptIn(apiUrl, cadeyUserId, currentUserGoalId, true);
+            } catch (error) {
+                console.error('Exception when calling postGoalOptIn:', error);
+            } finally {
+                // Set the user's symptom flag
+                setUserHasSymptoms(true);
+
+                // Update the optIn value of the goal in state
+                // Allows the user to access the goal immediately without a follow up API call
+                setGoals(goals.map(goal => {
+                    if (goal.userGoalId === currentUserGoalId) {
+                        goal.optIn = true;
+                    }
+                    return goal;
+                }));
+
+                setShowAgeGroupModal(false); // Close the modal
+
+                setIsLoading(false); // Hide loading indicator after fetching
+            }
         }
     }
 
@@ -149,33 +207,39 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         
         {/* Show loading state */}
         <IonLoading isOpen={isLoading} message={'Loading Goals...'} />
-        
-        {/* Display age group buttons if user has no goals */}
-        {(!goals.length || goals.length == 0) && (
-            <IonRow className="age-group-container">
-                <IonText className="child-age-text">Please select your child's age for personalized goals: </IonText>
-                <IonRow className="age-buttons-row">
-                    <IonButton 
-                        className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
-                        onClick={() => handleAgeSelection(1)}
-                    >
-                        0-4
-                    </IonButton>
-                    <IonButton 
-                        className={`age-group-button ${ageGroup === 2 ? "selected" : ""}`}
-                        onClick={() => handleAgeSelection(2)}
-                    >
-                        5-11
-                    </IonButton>
-                    <IonButton 
-                        className={`age-group-button ${ageGroup === 3 ? "selected" : ""}`}
-                        onClick={() => handleAgeSelection(3)}
-                    >
-                        12+
-                    </IonButton>
+
+        <IonModal isOpen={showAgeGroupModal} className="age-group-modal">
+            <IonHeader>
+                <IonToolbar>
+                <IonTitle>Select Age Group</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent>
+                <IonRow className="age-group-container">
+                    <IonText className="child-age-text">Please select your child's age for personalized goals: </IonText>
+                    <IonRow className="age-buttons-row">
+                        <IonButton 
+                            className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
+                            onClick={() => handleAgeSelection(1)}
+                        >
+                            0-4
+                        </IonButton>
+                        <IonButton 
+                            className={`age-group-button ${ageGroup === 2 ? "selected" : ""}`}
+                            onClick={() => handleAgeSelection(2)}
+                        >
+                            5-11
+                        </IonButton>
+                        <IonButton 
+                            className={`age-group-button ${ageGroup === 3 ? "selected" : ""}`}
+                            onClick={() => handleAgeSelection(3)}
+                        >
+                            12+
+                        </IonButton>
+                    </IonRow>
                 </IonRow>
-            </IonRow>
-        )}
+            </IonContent>
+        </IonModal>
 
         {goalsLoaded && (
             <IonRow>
