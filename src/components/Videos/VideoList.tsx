@@ -10,6 +10,7 @@ import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
+
 import { logUserFact } from '../../api/UserFacts';
 // CSS
 import './VideoList.css';

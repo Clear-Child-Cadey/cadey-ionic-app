@@ -30,6 +30,7 @@ import { VideoItem } from '../../components/Videos/VideoList';
 import VideoList from '../../components/Videos/VideoList';
 import ArticleItem from '../../components/Articles/ArticleItem';
 import { search } from 'ionicons/icons';
+import { WP_Article, getArticlesByIds } from '../../api/WordPress/GetArticles';
 
 interface SearchResults {
     message: string;
@@ -49,6 +50,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         videos: [],
         articleIds: [],
     });
+    const [articleResults, setArticleResults] = useState<WP_Article[]>([]);
 
     // On component mount, make an API call to get data
     useEffect(() => {
@@ -105,6 +107,9 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         try {
             const response = await postUserSearch(apiUrl, cadeyUserId, searchTerm, ageGroup);
             setSearchResults(response);
+            if (response.articleIds.length > 0) {
+                setArticleResults(await getArticlesByIds(response.articleIds));
+            }
         } catch (error) {
             console.error("Error performing user search: ", error);
         }
@@ -177,7 +182,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             {/* Explanatory copy */}
             <IonRow className="search-directions">
                 {/* Text that changes based on whether there are any search results */}
-                {(searchResults.message || searchResults.videos.length > 0 || searchResults.articleIds.length > 0) ? (
+                {(searchResults.videos.length > 0 || searchResults.articleIds.length > 0) ? (
                     <IonText>
                         <p>Here are a few suggestions, based on your search:</p>
                     </IonText>
@@ -217,12 +222,12 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             )}
 
             {/* Article Results */}
-            {searchResults.articleIds.length > 0 && (
+            {articleResults.length > 0 && (
                 <IonRow className="article-list-row search-results">
                     <IonText><h2>Articles</h2></IonText>
                     <IonList>
-                        {searchResults.articleIds.map((articleId) => (
-                            <ArticleItem articleId={articleId} key={articleId} />
+                        {articleResults.map((article) => (
+                            <ArticleItem article={article} key={article.id} />
                         ))}
                     </IonList>
                 </IonRow>
