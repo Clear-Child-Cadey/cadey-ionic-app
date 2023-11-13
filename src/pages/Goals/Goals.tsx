@@ -18,7 +18,7 @@ import {
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 // Icons
-import { chevronForwardOutline, checkmarkCircleOutline, closeCircleOutline } from 'ionicons/icons';
+import { chevronForwardOutline, checkmarkCircleOutline, closeCircleOutline, caretDownOutline } from 'ionicons/icons';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -254,73 +254,80 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                         </IonRow>
                     </IonContent>
                 </IonModal>
-
-                {goalsLoaded && (
-                    <IonRow>
-                        {goals.length > 0 && (
-                            <IonText className="subcopy">
-                                {!goals.every(goal => goal.optIn === false) ?
-                                    "Add or remove goals below to get a highly personalized game plan." : 
-                                    "Didn't see anything you like?"
-                                }
-                            </IonText>
-                        )}
-                    </IonRow>
-                )}
                 
                 {/* Create a list of goals */}
-                {(goals.length > 0) && (    
-                    <IonList>
-                        {goals.map((goal, index) => (                
-                            <IonItem 
-                                key={index} 
-                                className={`goal ${goal.optIn === false ? 'hidden' : ''}`}
-                                onClick={goal.optIn === null ? undefined : () => onForward(goal)}
-                            >
-                                <IonLabel>
-                                    <h3>{goal.title}</h3>
-                                    <p>Symptom: {goal.symptom} - {goal.videos.length} videos</p>
-                                </IonLabel>
-
-                                {/* Show a Check/X if the optIn is null */}
-                                {goal.optIn === null ? (
-                                    <div className="optin-status">
-                                        <IonIcon 
-                                            icon={checkmarkCircleOutline} 
-                                            className="check icon" 
-                                            onClick={(e) => {
-                                                e.stopPropagation();  // Prevents IonItem's onClick
-                                                onOptin(goal.userGoalId);
-                                            }}
-                                        />
-                                        <IonIcon 
-                                            icon={closeCircleOutline} 
-                                            className="x icon"
-                                            onClick={(e) => {
-                                                e.stopPropagation();  // Prevents IonItem's onClick
-                                                onOptout(goal.userGoalId);
-                                            }}
-                                        />
-                                    </div>
-                                ) : 
-                                // Show an arrow if the optinStatus is not null
-                                    <div className="optin-status">
+                {(goals.length > 0) && (
+                    <>
+                        {(goals.filter(goal => goal.optIn === true).length > 0) && (
+                            <>
+                                <IonRow className="goals-header">
+                                    <IonText className="subcopy">LOREM IPSUM DOLOR Goals you're working on</IonText>
+                                </IonRow>
+                            
+                                {/* Goals you've taken action on (optIn is not null) */}
+                                <IonList>
+                                    {goals.filter(goal => goal.optIn !== null).map((goal, index) => (
+                                        <IonItem 
+                                        key={index} 
+                                        className={`goal ${goal.optIn === false ? 'hidden' : ''}`}
+                                        onClick={() => onForward(goal)}
+                                        >
+                                        <IonLabel>
+                                            <h3>{goal.title}</h3>
+                                            <p>Symptom: {goal.symptom} - {goal.videos.length} videos</p>
+                                        </IonLabel>
                                         <IonIcon 
                                             icon={chevronForwardOutline} 
                                             className='forward icon' 
-                                            onClick={(e) => {
-                                                e.stopPropagation();  // Prevents IonItem's onClick
-                                                onForward(goal);
-                                            }}
                                         />
-                                    </div>
-                                }
-                            </IonItem>
-                        ))}
-                    </IonList>
+                                        </IonItem>
+                                    ))}
+                                </IonList>
+                            </>
+                        )}
+
+                        {(goals.filter(goal => goal.optIn === null).length > 0) && (
+                            <>
+                                <IonRow className="goals-header">
+                                    <IonText className="subcopy">LOREM IPSUM DOLOR Goals you haven't taken action on</IonText>
+                                </IonRow>
+                            
+                                {/* Goals you have not taken action on (optIn is null) */}
+                                <IonList>
+                                    {goals.filter(goal => goal.optIn === null).map((goal, index) => (
+                                        <IonItem key={index} className="goal">
+                                        <IonLabel>
+                                            <h3>{goal.title}</h3>
+                                            <p>Symptom: {goal.symptom} - {goal.videos.length} videos</p>
+                                        </IonLabel>
+                                        <div className="optin-status">
+                                            <IonIcon 
+                                            icon={checkmarkCircleOutline} 
+                                            className="check icon" 
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevents IonItem's onClick
+                                                onOptin(goal.userGoalId);
+                                            }}
+                                            />
+                                            <IonIcon 
+                                            icon={closeCircleOutline} 
+                                            className="x icon"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevents IonItem's onClick
+                                                onOptout(goal.userGoalId);
+                                            }}
+                                            />
+                                        </div>
+                                        </IonItem>
+                                    ))}
+                                </IonList>    
+                            </>    
+                        )}
+                    </>
                 )}
-                {/* If there are no goals, show copy and a CTA to Concerns */}
+
                 
+                {/* If there are no goals, show copy and a CTA to Concerns */}
                 {goalsLoaded && goals.every(goal => goal.optIn === false) && (
                     <IonRow className="concerns-promo">
                         <IonText className="subcopy">Fill out your Concerns for more personalized goals.</IonText>
@@ -328,6 +335,12 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                         <IonButton routerLink="/app/concerns">Go to Concerns</IonButton>
                     </IonRow>
                 )}
+
+                <IonRow className="concerns-indicator">
+                    <IonText className="subcopy">Nothing doing? Check out the concerns tab</IonText>
+                    {/* Down arrow pointing at concerns */}
+                    <IonIcon icon={caretDownOutline} className="down-icon" />
+                </IonRow>
                 
             </IonContent>
         </IonPage>

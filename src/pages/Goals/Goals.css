@@ -114,3 +114,26 @@
     --box-shadow: none;
     margin: 0 auto;
 }
+
+.concerns-indicator {
+    position: absolute; /* Position it relative to the IonContent */
+    bottom: 0; /* Align to the bottom */
+    left: 0;
+    right: 0;
+    text-align: center; /* Center-align the text and icon */
+    padding-bottom: 60px; /* Add some padding */
+  }
+
+.concerns-indicator .subcopy {
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12px;
+    color: #000;
+}
+
+.concerns-indicator .down-icon {
+    font-size: 16px;
+    display: block;
+    width: 100%;
+}
