@@ -18,7 +18,5 @@ export const getUserSymptoms = async (apiUrl: string, userId: string) => {
 
     const data = await response.json();
 
-    console.log('getUserSymptoms data:', data);
-
     return data;
 };

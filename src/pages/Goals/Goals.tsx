@@ -50,11 +50,12 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
      } = useContext(UnreadContext); // Get the current unread data
     
     const [goals, setGoals] = useState<Goal[]>([]);
-    const [ageGroup, setAgeGroup] = useState(0);
+    const [selectedAgeGroup, setSelectedAgeGroup] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [goalsLoaded, setGoalsLoaded] = useState(false); // Used to determine if the goals have been loaded yet
     const [userHasSymptoms, setUserHasSymptoms] = useState(false); // Used to determine if the user has any symptoms
     const [showAgeGroupModal, setShowAgeGroupModal] = useState(false);
+    
     const [currentUserGoalId, setCurrentUserGoalId] = useState(0);
 
     const history = useHistory();
@@ -113,7 +114,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             return; 
         }
         
-        console.log('Opting in to goal:', userGoalId);
         // Opt the user into the goal on the back end
         await postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
 
@@ -152,7 +152,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     };      
 
     const handleAgeSelection = async (selectedAgeGroup: number) => {
-        setAgeGroup(selectedAgeGroup);
 
         setIsLoading(true); // Show loading indicator while fetching
     
@@ -164,7 +163,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             // Handle exception, such as updating UI to show an error message
         } finally {
             setUserHasSymptoms(true); // Set the user's symptom flag
-            console.log('Optin to goal:', currentUserGoalId);
             
             try {
                 // Opt the user into the goal on the back end
@@ -191,129 +189,149 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         }
     }
 
-  return (
-    <IonPage className="goals">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Choose a Goal</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Choose a Goal</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        
-        {/* Show loading state */}
-        <IonLoading isOpen={isLoading} message={'Loading Goals...'} />
+    const handleClose = () => {
+        setShowAgeGroupModal(false);
+    }
 
-        <IonModal isOpen={showAgeGroupModal} className="age-group-modal">
+    return (
+        <IonPage className="goals">
             <IonHeader>
                 <IonToolbar>
-                <IonTitle>Select Age Group</IonTitle>
+                <IonTitle>Choose a Goal</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
-                <IonRow className="age-group-container">
-                    <IonText className="child-age-text">Please select your child's age for personalized goals: </IonText>
-                    <IonRow className="age-buttons-row">
-                        <IonButton 
-                            className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
-                            onClick={() => handleAgeSelection(1)}
-                        >
-                            0-4
-                        </IonButton>
-                        <IonButton 
-                            className={`age-group-button ${ageGroup === 2 ? "selected" : ""}`}
-                            onClick={() => handleAgeSelection(2)}
-                        >
-                            5-11
-                        </IonButton>
-                        <IonButton 
-                            className={`age-group-button ${ageGroup === 3 ? "selected" : ""}`}
-                            onClick={() => handleAgeSelection(3)}
-                        >
-                            12+
-                        </IonButton>
+            <IonContent fullscreen>
+                <IonHeader collapse="condense">
+                    <IonToolbar>
+                        <IonTitle size="large">Choose a Goal</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                
+                {/* Show loading state */}
+                <IonLoading isOpen={isLoading} message={'Loading Goals...'} />
+
+                <IonModal isOpen={showAgeGroupModal} className="age-group-modal">
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>Age</IonTitle>
+                            <IonButton className="close-button" slot="end" onClick={() => handleClose()}>
+                                Close
+                            </IonButton>
+                        </IonToolbar>
+                    </IonHeader>
+                    <IonContent>
+                        <IonRow className="age-group-container">
+                            <IonText className="child-age-text">Please select your child's age for personalized goals: </IonText>
+                            <IonRow className="age-buttons-row">
+                                <IonButton 
+                                    className={`age-group-button ${selectedAgeGroup === 1 ? "selected" : ""}`}
+                                    onClick={() => setSelectedAgeGroup(1)}
+                                >
+                                    0-4
+                                </IonButton>
+                                <IonButton 
+                                    className={`age-group-button ${selectedAgeGroup === 2 ? "selected" : ""}`}
+                                    onClick={() => setSelectedAgeGroup(2)}
+                                >
+                                    5-11
+                                </IonButton>
+                                <IonButton 
+                                    className={`age-group-button ${selectedAgeGroup === 3 ? "selected" : ""}`}
+                                    onClick={() => setSelectedAgeGroup(3)}
+                                >
+                                    12+
+                                </IonButton>
+                            </IonRow>
+                            <IonRow className="continue-row">
+                                <IonButton 
+                                    className="continue-button" 
+                                    disabled={selectedAgeGroup === 0}
+                                    onClick={() => handleAgeSelection(selectedAgeGroup)}
+                                >
+                                    Continue
+                                </IonButton>
+                            </IonRow>
+                        </IonRow>
+                    </IonContent>
+                </IonModal>
+
+                {goalsLoaded && (
+                    <IonRow>
+                        {goals.length > 0 && (
+                            <IonText className="subcopy">
+                                {!goals.every(goal => goal.optIn === false) ?
+                                    "Add or remove goals below to get a highly personalized game plan." : 
+                                    "Didn't see anything you like?"
+                                }
+                            </IonText>
+                        )}
                     </IonRow>
-                </IonRow>
-            </IonContent>
-        </IonModal>
-
-        {goalsLoaded && (
-            <IonRow>
-                {goals.length > 0 && (
-                    <IonText className="subcopy">
-                        {!goals.every(goal => goal.optIn === false) ?
-                            "Add or remove goals below to get a highly personalized game plan." : 
-                            "Didn't see anything you like?"
-                        }
-                    </IonText>
                 )}
-            </IonRow>
-        )}
-        
-        {/* Create a list of goals */}
-        {(goals.length > 0) && (    
-            <IonList>
-                {goals.map((goal, index) => (                
-                    <IonItem 
-                        key={index} 
-                        className={`goal ${goal.optIn === false ? 'hidden' : ''}`}
-                        onClick={goal.optIn === null ? undefined : () => onForward(goal)}
-                    >
-                        <IonLabel>
-                            <h3>{goal.title}</h3>
-                            <p>Symptom: {goal.symptom} - {goal.videos.length} videos</p>
-                        </IonLabel>
+                
+                {/* Create a list of goals */}
+                {(goals.length > 0) && (    
+                    <IonList>
+                        {goals.map((goal, index) => (                
+                            <IonItem 
+                                key={index} 
+                                className={`goal ${goal.optIn === false ? 'hidden' : ''}`}
+                                onClick={goal.optIn === null ? undefined : () => onForward(goal)}
+                            >
+                                <IonLabel>
+                                    <h3>{goal.title}</h3>
+                                    <p>Symptom: {goal.symptom} - {goal.videos.length} videos</p>
+                                </IonLabel>
 
-                        {/* Show a Check/X if the optIn is null */}
-                        {goal.optIn === null ? (
-                            <div className="optin-status">
-                                <IonIcon 
-                                    icon={checkmarkCircleOutline} 
-                                    className="check icon" 
-                                    onClick={(e) => {
-                                        e.stopPropagation();  // Prevents IonItem's onClick
-                                        onOptin(goal.userGoalId);
-                                    }}
-                                />
-                                <IonIcon 
-                                    icon={closeCircleOutline} 
-                                    className="x icon"
-                                    onClick={(e) => {
-                                        e.stopPropagation();  // Prevents IonItem's onClick
-                                        onOptout(goal.userGoalId);
-                                    }}
-                                />
-                            </div>
-                        ) : 
-                        // Show an arrow if the optinStatus is not null
-                            <div className="optin-status">
-                                <IonIcon 
-                                    icon={chevronForwardOutline} 
-                                    className='forward icon' 
-                                    onClick={(e) => {
-                                        e.stopPropagation();  // Prevents IonItem's onClick
-                                        onForward(goal);
-                                    }}
-                                />
-                            </div>
-                        }
-                    </IonItem>
-                ))}
-            </IonList>
-        )}
-        <IonRow className="concerns-promo">
-            <IonText className="subcopy">Fill out your Concerns for more personalized goals.</IonText>
-            {/* Button that links to /app/concerns */}
-            <IonButton routerLink="/app/concerns">Go to Concerns</IonButton>
-        </IonRow>
-
-      </IonContent>
-    </IonPage>
-  );
+                                {/* Show a Check/X if the optIn is null */}
+                                {goal.optIn === null ? (
+                                    <div className="optin-status">
+                                        <IonIcon 
+                                            icon={checkmarkCircleOutline} 
+                                            className="check icon" 
+                                            onClick={(e) => {
+                                                e.stopPropagation();  // Prevents IonItem's onClick
+                                                onOptin(goal.userGoalId);
+                                            }}
+                                        />
+                                        <IonIcon 
+                                            icon={closeCircleOutline} 
+                                            className="x icon"
+                                            onClick={(e) => {
+                                                e.stopPropagation();  // Prevents IonItem's onClick
+                                                onOptout(goal.userGoalId);
+                                            }}
+                                        />
+                                    </div>
+                                ) : 
+                                // Show an arrow if the optinStatus is not null
+                                    <div className="optin-status">
+                                        <IonIcon 
+                                            icon={chevronForwardOutline} 
+                                            className='forward icon' 
+                                            onClick={(e) => {
+                                                e.stopPropagation();  // Prevents IonItem's onClick
+                                                onForward(goal);
+                                            }}
+                                        />
+                                    </div>
+                                }
+                            </IonItem>
+                        ))}
+                    </IonList>
+                )}
+                {/* If there are no goals, show copy and a CTA to Concerns */}
+                
+                {goalsLoaded && goals.every(goal => goal.optIn === false) && (
+                    <IonRow className="concerns-promo">
+                        <IonText className="subcopy">Fill out your Concerns for more personalized goals.</IonText>
+                        {/* Button that links to /app/concerns */}
+                        <IonButton routerLink="/app/concerns">Go to Concerns</IonButton>
+                    </IonRow>
+                )}
+                
+            </IonContent>
+        </IonPage>
+    );
 };
 
 export default GoalsPage;

@@ -31,6 +31,7 @@ import VideoPlayer from '../../../components/Videos/VideoPlayer';
 import ArticleItem from '../../Articles/ArticleItem';
 // Interfaces
 import { Message } from '../../../pages/Messages/Messages';
+import { WP_Article, getArticlesByIds } from '../../../api/WordPress/GetArticles';
 
 interface VideoDetailModalProps {
     
@@ -55,7 +56,6 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
   const { apiUrl } = useContext(ApiUrlContext);
-  const userFactUrl = `${apiUrl}/userfact`
 
   const [canShare, setCanShare] = useState(false);
 
@@ -70,6 +70,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
   const [videoHeight, setVideoHeight] = useState<number | null>(null);
 
   const [videoData, setVideoData] = useState<VideoDetailData>();
+  const [relatedArticles, setRelatedArticles] = useState<WP_Article[]>();
 
   const unreadCount = useContext(UnreadCountContext); // Get the current unread count
   
@@ -147,7 +148,22 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
           // We use this to decrement the unread counter
           fetchMessages(); 
         }
-        if(isMounted) setVideoData(data); // Update state only if component is mounted
+        
+        if (isMounted) setVideoData(data); // Update state only if component is mounted
+
+        // Set article IDs in state via setRelatedArticleIds
+        // An article is a related media item with a mediaType of 2
+        const articleIds = data.relatedMedia
+          .map((relatedMedia: RelatedMedia) => relatedMedia.relatedMediaItems)
+          .flat()
+          .filter((item: RelatedMediaItem) => item.mediaType === 2)
+          .map((item: RelatedMediaItem) => item.mediaId);
+        
+        // If any articles were returned, set them in state
+        if (articleIds.length > 0) {
+          setRelatedArticles(await getArticlesByIds(articleIds));
+        }
+
       } catch (error) {
         console.error("Error fetching video details:", error);
       }
@@ -287,8 +303,8 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
                           </div>
                         )}
                         {/* Articles */}
-                        {item.mediaType === 2 && (
-                          <ArticleItem articleId={item.mediaId} />
+                        {item.mediaType === 2 && relatedArticles && (
+                          <ArticleItem article={relatedArticles[itemIndex]} />
                         )}
                       </div>
                     ))}
