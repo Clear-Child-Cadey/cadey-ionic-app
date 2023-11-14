@@ -11,7 +11,8 @@ if (!cadeyUserDeviceId) {
 
 // Define a function to fetch application data
 export const getAppData = async (
-    setCadeyUserId: any, 
+    setCadeyUserId: any,
+    setCadeyUserAgeGroup: any,
     setMinimumSupportedVersion: any, 
     setOneSignalId: any,
     apiUrl: any,
@@ -57,6 +58,7 @@ export const getAppData = async (
     const data = await response.json(); // Parse the response data as json
 
     setCadeyUserId(data.cadeyUserId); // Update the Cadey User ID state
+    setCadeyUserAgeGroup(data.ageGroup); // Update the Cadey User Age state
     setMinimumSupportedVersion(data.cadeyMinimumSupportedAppVersion); // Update the Minimum Supported Version state
     setOneSignalId(data.oneSignalId); // Update the OneSignal ID state
     

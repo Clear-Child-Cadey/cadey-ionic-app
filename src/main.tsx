@@ -1,8 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { IonLoading, isPlatform } from '@ionic/react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { useHistory } from 'react-router-dom';
 
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
@@ -49,10 +47,12 @@ if (!cadeyUserDeviceId) {
 // create context for cadeyUserId and minimumSupportedVersion
 export const CadeyUserContext = createContext<{
   cadeyUserId: string;
+  cadeyUserAgeGroup: number;
   minimumSupportedVersion: string;
   oneSignalId: string;
 }>({
   cadeyUserId: "",
+  cadeyUserAgeGroup: 0,
   minimumSupportedVersion: "",
   oneSignalId: "",
 });
@@ -124,6 +124,7 @@ function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);
 
   const [cadeyUserId, setCadeyUserId] = useState("");
+  const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
   const [oneSignalId, setOneSignalId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -134,7 +135,7 @@ function MainComponent() {
   // call API to get user details, app version info and video data the first time the app loads
   useEffect(() => {
     const fetchData = async () => {
-      await getAppData(setCadeyUserId, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
+      await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
       setIsLoading(false);
     };
     fetchData();
@@ -145,10 +146,10 @@ function MainComponent() {
   if (isLoading) {
     // return <IonLoading isOpen={true} message="Loading app data..." />;
     return;
-  }  
+  }
 
   return (
-    <CadeyUserContext.Provider value={{ cadeyUserId, minimumSupportedVersion, oneSignalId }}>
+    <CadeyUserContext.Provider value={{ cadeyUserId, cadeyUserAgeGroup, minimumSupportedVersion, oneSignalId }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
           <UnreadContext.Provider value={{ unreadMessagesCount, setUnreadMessagesCount, unreadGoals, setUnreadGoals }}>

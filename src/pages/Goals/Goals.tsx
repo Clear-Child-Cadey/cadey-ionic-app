@@ -42,7 +42,7 @@ export interface Goal {
 
 const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
     const {
         unreadGoals,
@@ -103,6 +103,12 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     }, [apiUrl, cadeyUserId]);
 
     const onOptin = async (userGoalId: number) => {
+        if (cadeyUserAgeGroup == 0) {
+            console.log('User age is 0, cannot opt in to goal', cadeyUserAgeGroup);
+        } else {
+            console.log('User age is not 0, can opt in to goal', cadeyUserAgeGroup);
+        }
+
         if (!userHasSymptoms) {
             // Store this in state for later use
             setCurrentUserGoalId(userGoalId); 
