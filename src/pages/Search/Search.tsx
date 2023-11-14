@@ -10,9 +10,6 @@ import {
     IonText,
     IonLoading,
     IonList,
-    IonItem,
-    IonLabel,
-    IonIcon,
     IonButton,
     IonSearchbar
 } from '@ionic/react';
@@ -21,6 +18,7 @@ import {
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useAppPage } from '../../context/AppPageContext';
+import { useModalContext } from '../../context/ModalContext';
 // API
 import { logUserFact } from '../../api/UserFacts';
 import { postUserSearch } from '../../api/Search';
@@ -29,8 +27,9 @@ import { VideoItem } from '../../components/Videos/VideoList';
 // Components
 import VideoList from '../../components/Videos/VideoList';
 import ArticleItem from '../../components/Articles/ArticleItem';
-import { search } from 'ionicons/icons';
 import { WP_Article, getArticlesByIds } from '../../api/WordPress/GetArticles';
+// Modals
+import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 
 interface SearchResults {
     message: string;
@@ -39,12 +38,13 @@ interface SearchResults {
 }
 
 const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
-    const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const { apiUrl } = useContext(ApiUrlContext);                               // Get the API URL from the context
+    const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
+    const { isAgeGroupModalOpen, setAgeGroupModalOpen } = useModalContext();    // Get the age group modal state from the context
+
+    const [userQuery, setUserQuery] = useState<string>("");
     const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
     const [isLoading, setIsLoading] = useState(false);
-    const [ageGroup, setAgeGroup] = useState(0);
-    const [searchTerm, setSearchTerm] = useState<string>("");
     const [searchResults, setSearchResults] = useState<SearchResults>({
         message: "",
         videos: [],
@@ -77,20 +77,24 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         
         if (e.key === "Enter") {
 
+            // Check if the user has entered a search term
             if (searchTerm.trim() === "") {
                 alert("Please enter a search term.");
                 return;
             }
 
-            if (ageGroup === 0) {
-                alert("Please select an age group.");
+            // Check if the user has an age group
+            if (cadeyUserAgeGroup === 0) {
+                // Store the query in state so we can perform it after the user selects an age group
+                setUserQuery(searchTerm);
+                // Open the age group modal
+                setAgeGroupModalOpen(true);
+                // Return early
                 return;
             }
 
-            // Check if searchTerm is not empty before proceeding
-            if (searchTerm.trim()) {
-                performSearch(searchTerm, ageGroup);
-            }
+            // Perform the search for the user
+            performSearch(searchTerm, cadeyUserAgeGroup);
         }
     }
 
@@ -117,14 +121,9 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         setIsLoading(false);
     }
 
-    const handleAgeSelection = (ageGroup: number) => {
-        setAgeGroup(ageGroup);
-        // Get the current contents of the search field and then perform a search
-        const searchField = document.querySelector(".search-bar") as HTMLIonSearchbarElement;
-        const searchTerm = searchField.value;
-        if (searchTerm && searchTerm.trim() !== "") {
-            performSearch(searchTerm, ageGroup);    
-        }
+    const onAgeGroupSelected = async (selectedAgeGroup: number) => {
+        // Perform the search for the user
+        performSearch(userQuery, selectedAgeGroup);
     }
 
     return (
@@ -143,6 +142,9 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         
             {/* Show loading state */}
             <IonLoading isOpen={isLoading} message={'Loading Results...'} />
+
+            {/* Show an age group modal if context dictates */}
+            <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
             
             <IonRow className="search-container">
                 {/* Search bar */}
@@ -152,31 +154,6 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                     onKeyDown={handleSearchInput}
                     mode="ios"
                 ></IonSearchbar>
-
-                {/* Age group buttons */}
-                <IonRow className="age-group-container">
-                    <IonText className="child-age-text">My child is: </IonText>
-                    <IonRow className="age-buttons-row">
-                        <IonButton 
-                            className={`age-group-button ${ageGroup === 1 ? "selected" : ""}`}
-                            onClick={() => handleAgeSelection(1)}
-                        >
-                            0-4
-                        </IonButton>
-                        <IonButton 
-                            className={`age-group-button ${ageGroup === 2 ? "selected" : ""}`}
-                            onClick={() => handleAgeSelection(2)}
-                        >
-                            5-11
-                        </IonButton>
-                        <IonButton 
-                            className={`age-group-button ${ageGroup === 3 ? "selected" : ""}`}
-                            onClick={() => handleAgeSelection(3)}
-                        >
-                            12+
-                        </IonButton>
-                    </IonRow>
-                </IonRow>
             </IonRow>
 
             {/* Explanatory copy */}

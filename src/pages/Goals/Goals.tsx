@@ -164,17 +164,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     };      
 
     const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-
-        setIsLoading(true); // Show loading indicator while fetching
-    
-        try {
-            // Record a popular symptom age group for the user
-        } catch (error) {
-            console.error('Exception when calling popularGoals:', error);
-            // Handle exception, such as updating UI to show an error message
-        } finally {
-            setIsLoading(true);
-
             // Update the optIn value of the goal in state
             // Allows the user to access the goal immediately without a follow up API call
             setGoals(goals.map(goal => {
@@ -183,9 +172,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 }
                 return goal;
             }));
-
-            setIsLoading(false); // Hide loading indicator after fetching
-        }
     }
 
     return (
