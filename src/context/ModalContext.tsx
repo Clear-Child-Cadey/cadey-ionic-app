@@ -5,12 +5,14 @@ interface ModalContextProps {
     setVideoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isArticleDetailModalOpen: boolean;
     setArticleDetailModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isAgeGroupModalOpen: boolean;
+    setAgeGroupModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     currentArticleId: number | null;
     setCurrentArticleId: React.Dispatch<React.SetStateAction<number | null>>;
     currentVimeoId: string | null;
     setCurrentVimeoId: React.Dispatch<React.SetStateAction<string | null>>;
     currentVideoType: string;
-    setCurrentVideoType: React.Dispatch<React.SetStateAction<string>>;
+    setCurrentVideoType: React.Dispatch<React.SetStateAction<string>>;    
 }
 
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
@@ -22,6 +24,7 @@ interface ModalProviderProps {
 const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     const [isVideoModalOpen, setVideoModalOpen] = useState<boolean>(false);
     const [isArticleDetailModalOpen, setArticleDetailModalOpen] = useState<boolean>(false);
+    const [isAgeGroupModalOpen, setAgeGroupModalOpen] = useState<boolean>(false);
     const [currentArticleId, setCurrentArticleId] = useState<number | null>(null);
     const [currentVimeoId, setCurrentVimeoId] = useState<string | null>(null);
     const [currentVideoType, setCurrentVideoType] = useState<string>('');
@@ -31,6 +34,8 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         setVideoModalOpen,
         isArticleDetailModalOpen,
         setArticleDetailModalOpen,
+        isAgeGroupModalOpen,
+        setAgeGroupModalOpen,
         currentArticleId,
         setCurrentArticleId,
         currentVimeoId,

@@ -48,11 +48,13 @@ if (!cadeyUserDeviceId) {
 export const CadeyUserContext = createContext<{
   cadeyUserId: string;
   cadeyUserAgeGroup: number;
+  setCadeyUserAgeGroup: React.Dispatch<React.SetStateAction<number>>;
   minimumSupportedVersion: string;
   oneSignalId: string;
 }>({
   cadeyUserId: "",
   cadeyUserAgeGroup: 0,
+  setCadeyUserAgeGroup: () => {},
   minimumSupportedVersion: "",
   oneSignalId: "",
 });
@@ -149,7 +151,7 @@ function MainComponent() {
   }
 
   return (
-    <CadeyUserContext.Provider value={{ cadeyUserId, cadeyUserAgeGroup, minimumSupportedVersion, oneSignalId }}>
+    <CadeyUserContext.Provider value={{ cadeyUserId, cadeyUserAgeGroup, setCadeyUserAgeGroup, minimumSupportedVersion, oneSignalId }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
           <UnreadContext.Provider value={{ unreadMessagesCount, setUnreadMessagesCount, unreadGoals, setUnreadGoals }}>

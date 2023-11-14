@@ -36,8 +36,8 @@ const App: React.FC = () => {
 
   const {
     isVideoModalOpen,  
-    currentVimeoId,
     isArticleDetailModalOpen,
+    currentVimeoId,
     currentArticleId,
   } = useModalContext();
 
@@ -109,10 +109,12 @@ const App: React.FC = () => {
         buttonText="Upgrade"
         buttonUrl={getStoreLink()}
       />
+
       {/* Show a video modal if context dictates */}
       {isVideoModalOpen && currentVimeoId && (
         <VideoDetailModal />
       )}
+      
       {/* Show an article modal if context dictates */}
       {isArticleDetailModalOpen && currentArticleId && (
         <ArticleDetailModal />
@@ -134,6 +136,8 @@ const App: React.FC = () => {
         isOpen={isFalseDoorModalOpen}
         setIsOpen={setIsFalseDoorModalOpen}
       />
+      
+      {/* Router Tabs */}
       <RouterTabs />
     </IonApp>
   );

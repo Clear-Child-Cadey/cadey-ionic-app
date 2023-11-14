@@ -87,22 +87,3 @@ export const popularGoals = async (apiUrl: string, userId: string) => {
 
     return await response;
 }
-
-export const popularSymptomAge = async (apiUrl: string, userId: string, ageGroup: string) => {
-    const url = `${apiUrl}/popularsymptomage/${userId}/${ageGroup}`;
-
-    const response = await fetch(url, {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response;
-}

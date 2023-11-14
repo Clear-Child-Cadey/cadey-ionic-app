@@ -1,4 +1,3 @@
-// AppUpdateModal.tsx
 import { IonModal, IonButton, IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/react';
 import React from 'react';
 
