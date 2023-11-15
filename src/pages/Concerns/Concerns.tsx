@@ -125,6 +125,17 @@ useEffect(() => {
     setShowSymptomsList(false);
     setShowResults(true);
     setHomeTabVisibility(true); // Show the Home tab when results are received
+
+    setPageTitle("Recommendations");
+    document.title = "Recommendations";
+    setCurrentBasePage('Recommendations');
+    setCurrentAppPage('Recommendations');
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Recommendations',
+    });
   };
 
   // Set the goals badge
