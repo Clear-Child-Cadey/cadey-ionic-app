@@ -105,8 +105,11 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             videos: [],
             articleIds: [],
         });
+        setArticleResults([]);
+
         // Set loading state
         setIsLoading(true);
+        
         // Get new results
         try {
             const response = await postUserSearch(apiUrl, cadeyUserId, searchTerm, ageGroup);
@@ -117,6 +120,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         } catch (error) {
             console.error("Error performing user search: ", error);
         }
+        
         // Clear loading state
         setIsLoading(false);
     }
@@ -159,9 +163,9 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             {/* Explanatory copy */}
             <IonRow className="search-directions">
                 {/* Show results copy if there are results */}
-                {(searchResults.videos.length == 0 && searchResults.articleIds.length == 0 && !searchResults.message) && (
+                {(searchResults.videos.length == 0 && searchResults.articleIds.length == 0 && searchResults.message == "") && (
                     <IonText>
-                        <p>Enter a search term above to get started.</p>
+                        <p>Try keywords like 'tantrum', or 'having trouble focusing at school'.</p>
                     </IonText>
                 )}
                 {(searchResults.videos.length > 0 || searchResults.articleIds.length > 0)  && (

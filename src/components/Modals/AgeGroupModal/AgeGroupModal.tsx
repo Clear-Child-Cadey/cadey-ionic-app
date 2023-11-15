@@ -31,13 +31,13 @@ const AgeGroupModal: React.FC<AgeGroupModalProps> = ({ isOpen, onAgeGroupSelecte
 
     const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
 
-    function handleAgeSelection(ageGroup: number) {
+    const handleAgeSelection = async (ageGroup: number) => {
         // Set the age group in the user context
         setCadeyUserAgeGroup(ageGroup);
 
         try {
             // Record a popular symptom age group for the user
-            postCadeyUserAgeGroup(apiUrl, cadeyUserId, ageGroup.toString());
+            await postCadeyUserAgeGroup(apiUrl, cadeyUserId, ageGroup.toString());
         } catch (error) {
             console.error('Exception when calling postCadeyUserAgeGroup: ', error);
         }

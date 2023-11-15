@@ -65,6 +65,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             setIsLoading(true);
 
             var fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
+            console.log("Fetched goals: ", fetchedGoals);
             if (fetchedGoals.length == 0) {
                 const popularGoalsResponse = await popularGoals(apiUrl, cadeyUserId);
                 if (popularGoalsResponse.status === 200) {
@@ -73,7 +74,8 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                     console.error('Error fetching popular goals:', popularGoalsResponse);
                 }
             }
-            setGoals(fetchedGoals);
+            // Use functional update to ensure we're working with the most recent state
+            setGoals(previousGoals => fetchedGoals);
         } catch (error) {
             console.error("Error fetching goals:", error);
         } finally {
@@ -81,6 +83,10 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         }
         setGoalsLoaded(true);
     }
+
+    useEffect(() => {
+        console.log("Goals: ", goals);
+    }, [goals]);
 
     // On component mount, make an API call to get goals
     useEffect(() => {
@@ -111,16 +117,20 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         }
         
         // Opt the user into the goal on the back end
-        postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
+        const optInResult = await postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
 
-        // Update the optIn value of the goal in state
-        // Allows the user to access the goal immediately without a follow up API call
-        setGoals(goals.map(goal => {
-            if (goal.userGoalId === userGoalId) {
-                goal.optIn = true;
-            }
-            return goal;
-        }));
+        // Use the functional update to ensure we're working with the most recent state
+        setGoals(currentGoals => {
+            // Create a new array with all items from the current state
+            // Update the goal that matches the userGoalId
+            return currentGoals.map(goal => {
+                if (goal.userGoalId === userGoalId) {
+                    return { ...goal, optIn: true }; // Create a new object for the matching goal
+                }
+                return goal; // Return other goals unmodified
+            });
+        });
+
     }
 
     const onOptout = (userGoalId: number) => {
@@ -145,8 +155,15 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     };      
 
     const onAgeGroupSelected = async (selectedAgeGroup: number) => {
+        console.log("Age group selected: ", selectedAgeGroup);
+        console.log("Fetching goals...");
+        // Get updated goals data
+        await fetchGoals();
+        
+        console.log("Opting in to goal with ID: ", currentUserGoalId);
+
         // Opt the user into the goal
-        onOptin(currentUserGoalId, selectedAgeGroup);
+        await onOptin(currentUserGoalId, selectedAgeGroup);
     }
 
     return (
