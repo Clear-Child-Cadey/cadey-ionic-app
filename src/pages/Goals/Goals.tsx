@@ -26,7 +26,6 @@ import { useAppPage } from '../../context/AppPageContext';
 import { useModalContext } from '../../context/ModalContext';
 // API
 import { getUserGoals, postGoalOptIn, popularGoals } from '../../api/Goals';
-import { getUserSymptoms } from '../../api/UserSymptoms';
 import { logUserFact } from '../../api/UserFacts';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
@@ -56,7 +55,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const [goals, setGoals] = useState<Goal[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [goalsLoaded, setGoalsLoaded] = useState(false); // Used to determine if the goals have been loaded yet
-    const [userHasSymptoms, setUserHasSymptoms] = useState(false); // Used to determine if the user has any symptoms
     
     const [currentUserGoalId, setCurrentUserGoalId] = useState(0);
 
@@ -65,12 +63,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const fetchGoals = async () => {
         try {
             setIsLoading(true);
-            
-            // Check if the user has any symptoms & update their flag if so
-            var userSymptoms = await getUserSymptoms(apiUrl, cadeyUserId);
-            if (userSymptoms.length > 0) {
-                setUserHasSymptoms(true);
-            }
 
             var fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
             if (fetchedGoals.length == 0) {
@@ -104,14 +96,10 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         fetchGoals();
     }, [apiUrl, cadeyUserId]);
 
-    const onOptin = async (userGoalId: number) => {
-        if (cadeyUserAgeGroup == 0) {
-            console.log('User age is 0, cannot opt in to goal', cadeyUserAgeGroup);
-        } else {
-            console.log('User age is not 0, can opt in to goal', cadeyUserAgeGroup);
-        }
-
-        if (cadeyUserAgeGroup == 0) {
+    const onOptin = async (userGoalId: number, ageGroup: number) => {
+        console.log("Starting optin...");
+        console.log("Cadey User Age Group: ", ageGroup);
+        if (ageGroup == 0) {
             // Store this in state for later use
             setCurrentUserGoalId(userGoalId); 
 
@@ -123,10 +111,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         }
         
         // Opt the user into the goal on the back end
-        await postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
-
-        // Set the user's symptom flag
-        setUserHasSymptoms(true);
+        postGoalOptIn(apiUrl, cadeyUserId, userGoalId, true);
 
         // Update the optIn value of the goal in state
         // Allows the user to access the goal immediately without a follow up API call
@@ -137,10 +122,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             return goal;
         }));
     }
-
-    useEffect(() => {
-        console.log("Age group: ", cadeyUserAgeGroup);
-    }, [cadeyUserAgeGroup]);
 
     const onOptout = (userGoalId: number) => {
         // Opt the user out of the goal on the back end
@@ -164,14 +145,8 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     };      
 
     const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-            // Update the optIn value of the goal in state
-            // Allows the user to access the goal immediately without a follow up API call
-            setGoals(goals.map(goal => {
-                if (goal.userGoalId === currentUserGoalId) {
-                    goal.optIn = true;
-                }
-                return goal;
-            }));
+        // Opt the user into the goal
+        onOptin(currentUserGoalId, selectedAgeGroup);
     }
 
     return (
@@ -245,7 +220,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                                             className="check icon" 
                                             onClick={(e) => {
                                                 e.stopPropagation(); // Prevents IonItem's onClick
-                                                onOptin(goal.userGoalId);
+                                                onOptin(goal.userGoalId, cadeyUserAgeGroup);
                                             }}
                                             />
                                             <IonIcon 

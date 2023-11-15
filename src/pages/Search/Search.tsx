@@ -158,14 +158,15 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
             {/* Explanatory copy */}
             <IonRow className="search-directions">
-                {/* Text that changes based on whether there are any search results */}
-                {(searchResults.videos.length > 0 || searchResults.articleIds.length > 0) ? (
+                {/* Show results copy if there are results */}
+                {(searchResults.videos.length == 0 && searchResults.articleIds.length == 0 && !searchResults.message) && (
+                    <IonText>
+                        <p>Enter a search term above to get started.</p>
+                    </IonText>
+                )}
+                {(searchResults.videos.length > 0 || searchResults.articleIds.length > 0)  && (
                     <IonText>
                         <p>Here are a few suggestions, based on your search:</p>
-                    </IonText>
-                ) : (
-                    <IonText>
-                        <p>Try keywords like 'tantrum', or 'having trouble focusing at school'</p>
                     </IonText>
                 )}
             </IonRow>
