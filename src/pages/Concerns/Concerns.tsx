@@ -16,7 +16,6 @@ import './Concerns.css';
 import ConcernsList from '../../components/ConcernsList/ConcernsList';
 import SymptomsList from '../../components/SymptomsList/SymptomsList';
 import { Symptom } from '../../components/ConcernsList/ConcernsList';
-import AgeForm from '../../components/AgeForm/AgeForm';
 import Results from '../../components/Results/Results';
 // Contexts
 import { HomeTabVisibilityContext } from '../../context/TabContext';
@@ -24,11 +23,13 @@ import UnreadContext from '../../context/UnreadContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useAppPage } from '../../context/AppPageContext';
-// Interfaces
-import { Goal } from '../../pages/Goals/Goals';
 // API
 import { getNewGoalsIndicator } from '../../api/Goals';
 import { logUserFact } from '../../api/UserFacts';
+import { getRecommendations } from '../../api/GetRecommendations';
+// Modals
+import { useModalContext } from '../../context/ModalContext';
+import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 
 // Define the Concerns component
 const ConcernsPage: React.FC = () => {
@@ -47,7 +48,8 @@ const ConcernsPage: React.FC = () => {
   // Context variables
   const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
   const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
-  const { cadeyUserId } = useContext(CadeyUserContext);
+  const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  const { isAgeGroupModalOpen, setAgeGroupModalOpen } = useModalContext(); // Get the modal state from the context
   const { apiUrl } = useContext(ApiUrlContext);
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
   
@@ -63,6 +65,10 @@ const ConcernsPage: React.FC = () => {
       appPage: 'Concerns',
     });
 }, []);
+
+useEffect(() => {
+  console.log("Cadey User Age Group: ", cadeyUserAgeGroup);
+}, [cadeyUserAgeGroup]);
 
   // Handler for when the user proceeds from the ConcernsList
   const handleConcernsNext = (choice: { concern: string; symptoms: Symptom[] }) => {
@@ -83,33 +89,42 @@ const ConcernsPage: React.FC = () => {
 
   // Handler for when the user proceeds from the SymptomsList
   const handleSymptomsNext = (symptoms: Symptom[]) => {
-    setShowSymptomsList(false);
-    setShowAgeForm(true);
+    
+    // Store the symptoms in state
     setSymptoms(symptoms);
-    setPageTitle("Age");
-    document.title = "Age";
-    setCurrentBasePage('Age');
-    setCurrentAppPage('Age');
-    logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
-      userFactTypeName: 'appPageNavigation',
-      appPage: 'Age',
-    });
+
+    // If the user has not selected an age group, open the age group modal
+    if (cadeyUserAgeGroup == 0) {
+      // Open the age group modal
+      setAgeGroupModalOpen(true);
+
+      // Return early
+      return;
+    }
+    
+    // Get recommendations for the user
+    getUserRecommendations(cadeyUserAgeGroup, symptoms);
   };
 
-  // Handler for when the AgeForm is submitted
-  const handleSubmit = () => {
-    setPageTitle("Recommendations");
-    document.title = "Recommendations";
-    setCurrentBasePage('Recommendations');
-    setCurrentAppPage('Recommendations');
-    logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
-      userFactTypeName: 'appPageNavigation',
-      appPage: 'Recommendations',
-    });
+  // getUserRecommendations function
+  const getUserRecommendations = async (ageGroup: number, symptoms: Symptom[]) => {
+    try {
+      console.log("Cadey User Age Group in getUserRecommendations: ", ageGroup);
+
+      const data = await getRecommendations(apiUrl, cadeyUserId, ageGroup, symptoms);
+
+      handleResultsReceived(data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  // Handler for when the results are received from the API
+  const handleResultsReceived = (response: any) => {
+    setResults(response);
+    setShowSymptomsList(false);
+    setShowResults(true);
+    setHomeTabVisibility(true); // Show the Home tab when results are received
   };
 
   // Set the goals badge
@@ -143,14 +158,12 @@ const ConcernsPage: React.FC = () => {
     setGoalsBadge();
   };
 
-  // Handler for when the results are received from the API
-  const handleResultsReceived = (response: any) => {
-    setResults(response);
-    setShowResults(true);
-    setShowAgeForm(false);
-    setShowSymptomsList(false);
-    setHomeTabVisibility(true); // Show the Home tab when results are received
-  };
+  // Handler for when the user selects an age group
+  const onAgeGroupSelected = async (selectedAgeGroup: number) => {
+    // Get recommendations for the user
+    getUserRecommendations(selectedAgeGroup, symptoms);
+    console.log("Age group selected: ", selectedAgeGroup);
+  }
 
   // Determine the progress bar value
   const determineProgress = () => {
@@ -164,7 +177,6 @@ const ConcernsPage: React.FC = () => {
       return 0; // 0%
     }
   };
-
 
   // Render the screen
   return (
@@ -205,6 +217,10 @@ const ConcernsPage: React.FC = () => {
             <IonTitle size="large">{pageTitle}</IonTitle>
           </IonToolbar>
         </IonHeader>
+
+        {/* Show an age group modal if context dictates */}
+        <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
+
         {/* Call the renderComponent function to render the correct component */}
         {renderComponent()}
       </IonContent>
@@ -219,15 +235,6 @@ const ConcernsPage: React.FC = () => {
           results={results} 
           selectedConcern={selectedConcern ? selectedConcern.concern : ''} 
           onRestart={handleRestart} 
-        />
-      );
-    } else if (showAgeForm) {
-      return (
-        <AgeForm 
-          symptoms={symptoms} 
-          onAgeFormShown={handleSubmit} 
-          onRestart={handleRestart} 
-          onResultsReceived={handleResultsReceived} 
         />
       );
     } else if (showSymptomsList) {
