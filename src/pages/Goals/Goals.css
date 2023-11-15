@@ -87,12 +87,14 @@
 }
 
 .concerns-indicator {
-    position: absolute; /* Position it relative to the IonContent */
+    position: fixed; /* Position it relative to the IonContent */
     bottom: 0; /* Align to the bottom */
     left: 0;
     right: 0;
     text-align: center; /* Center-align the text and icon */
-    padding-bottom: 60px; /* Add some padding */
+    padding-bottom: 5px; /* Add some padding */
+    width: 100%;
+    background-color: #F9F6EF;
   }
 
 .concerns-indicator .subcopy {
