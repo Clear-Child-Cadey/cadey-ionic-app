@@ -26,3 +26,18 @@
 .age-group-modal .age-group-button.selected {
     --border-color: #51ADEF;
 }
+
+.continue-row {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.continue-button {
+    width: 55vw;
+}
+
+.forward-icon {
+    font-size: 12px;
+    margin-top: 2px;
+}

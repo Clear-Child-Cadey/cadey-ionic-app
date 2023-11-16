@@ -7,6 +7,7 @@ import {
     IonToolbar, 
     IonRow,
     IonText,
+    IonIcon,
 } from '@ionic/react';
 import React from 'react';
 // CSS
@@ -17,6 +18,8 @@ import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
 // API
 import { postCadeyUserAgeGroup } from '../../../api/AgeGroup';
+// Icons
+import { chevronForwardOutline } from 'ionicons/icons';
 
 interface AgeGroupModalProps {
     isOpen: boolean;
@@ -66,7 +69,7 @@ const AgeGroupModal: React.FC<AgeGroupModalProps> = ({ isOpen, onAgeGroupSelecte
             </IonHeader>
             <IonContent>
                 <IonRow className="age-group-container">
-                    <IonText className="child-age-text">Please select your child's age for personalized goals: </IonText>
+                    <IonText className="child-age-text">Please select your child’s age to personalize your results: </IonText>
                     <IonRow className="age-buttons-row">
                         <IonButton 
                             className={`age-group-button ${selectedAgeGroup === 1 ? "selected" : ""}`}
@@ -93,7 +96,8 @@ const AgeGroupModal: React.FC<AgeGroupModalProps> = ({ isOpen, onAgeGroupSelecte
                             disabled={selectedAgeGroup === 0}
                             onClick={() => handleAgeSelection(selectedAgeGroup)}
                         >
-                            Continue
+                            {/* "Next >"" button */}
+                            Next <IonIcon icon={chevronForwardOutline} className="forward-icon" />
                         </IonButton>
                     </IonRow>
                 </IonRow>

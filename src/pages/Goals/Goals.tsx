@@ -192,7 +192,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                         {(goals.filter(goal => goal.optIn === true).length > 0) && (
                             <>
                                 <IonRow className="goals-header">
-                                    <IonText className="subcopy">LOREM IPSUM DOLOR Goals you're working on</IonText>
+                                    <IonText className="subcopy">Goals you’re working on</IonText>
                                 </IonRow>
                             
                                 {/* Goals you've taken action on (optIn is not null) */}
@@ -220,7 +220,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                         {(goals.filter(goal => goal.optIn === null).length > 0) && (
                             <>
                                 <IonRow className="goals-header">
-                                    <IonText className="subcopy">LOREM IPSUM DOLOR Goals you haven't taken action on</IonText>
+                                    <IonText className="subcopy">Goals to consider</IonText>
                                 </IonRow>
                             
                                 {/* Goals you have not taken action on (optIn is null) */}
@@ -268,7 +268,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 )}
 
                 <IonRow className="concerns-indicator">
-                    <IonText className="subcopy">Nothing doing? Check out the concerns tab</IonText>
+                    <IonText className="subcopy">Want more options, click concerns</IonText>
                     {/* Down arrow pointing at concerns */}
                     <IonIcon icon={caretDownOutline} className="down-icon" />
                 </IonRow>
