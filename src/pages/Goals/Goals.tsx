@@ -261,17 +261,19 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 {/* If there are no goals, show copy and a CTA to Concerns */}
                 {goalsLoaded && goals.every(goal => goal.optIn === false) && (
                     <IonRow className="concerns-promo">
-                        <IonText className="subcopy">Fill out your Concerns for more personalized goals.</IonText>
+                        <IonText className="subcopy">Add goals by filling out your concerns</IonText>
                         {/* Button that links to /app/concerns */}
                         <IonButton routerLink="/app/concerns">Go to Concerns</IonButton>
                     </IonRow>
                 )}
 
-                <IonRow className="concerns-indicator">
-                    <IonText className="subcopy">Want more options, click concerns</IonText>
-                    {/* Down arrow pointing at concerns */}
-                    <IonIcon icon={caretDownOutline} className="down-icon" />
-                </IonRow>
+                {goalsLoaded && !goals.every(goal => goal.optIn === false) && (
+                    <IonRow className="concerns-indicator">
+                        <IonText className="subcopy">Click concerns to get more options</IonText>
+                        {/* Down arrow pointing at concerns */}
+                        <IonIcon icon={caretDownOutline} className="down-icon" />
+                    </IonRow>
+                )}
                 
             </IonContent>
         </IonPage>
