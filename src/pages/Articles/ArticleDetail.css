@@ -1,0 +1,4 @@
+/* Hide YouTube embeds & their captions */
+.wp-block-embed.is-provider-youtube {
+    display: none;
+}
