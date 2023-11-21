@@ -9,8 +9,11 @@ import {
     IonRow,
     IonText,
     IonLoading,
+    IonSearchbar,
 } from '@ionic/react';
 import { SplashScreen } from '@capacitor/splash-screen';
+// Routing
+import { useHistory } from 'react-router-dom';
 // Contexts
 import { useSpotlight } from '../../context/SpotlightContext';
 import { useModalContext } from '../../context/ModalContext';
@@ -46,6 +49,8 @@ const HomePage: React.FC<{
 
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
+
+  const history = useHistory();
 
   // Get all the props from the modal context
   const { 
@@ -181,6 +186,35 @@ const HomePage: React.FC<{
     setIsLoading(false);
   };
 
+  const handleInputChange = (e: any) => {
+    // Restrict input to 100 characters
+    const inputValue = e.detail.value;
+    if (inputValue.length > 100) {
+        const limitedValue = inputValue.slice(0, 100);
+        e.target.value = limitedValue;
+    }
+}
+
+const handleSearchInput = async (e: React.KeyboardEvent) => {
+    const searchTerm = (e.target as HTMLInputElement).value;
+    
+    if (e.key === "Enter") {
+
+        // Check if the user has entered a search term
+        if (searchTerm.trim() === "") {
+            alert("Please enter a search term.");
+            return;
+        }
+
+        // Route the user to the search page
+        history.push({
+          pathname: '/App/Search',
+          search: `?query=${encodeURIComponent(searchTerm)}`, // Optional if you want the term in the URL
+          state: { query: searchTerm }
+        });
+    }
+}
+
   return (
     <IonPage className="home">
       <IonHeader>
@@ -200,6 +234,15 @@ const HomePage: React.FC<{
             <IonTitle size="large">Home</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <IonRow className="search-container">
+          {/* Search bar */}
+          <IonSearchbar 
+              className="search-bar" 
+              onIonChange={handleInputChange}
+              onKeyDown={handleSearchInput}
+              mode="ios"
+          ></IonSearchbar>
+          </IonRow>
         <IonRow>
           <IonText className="subcopy">
             {trendingVideos.length > 0 

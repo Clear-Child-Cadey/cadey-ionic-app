@@ -13,7 +13,9 @@ import {
     IonButton,
     IonSearchbar
 } from '@ionic/react';
-// Icons
+// Routing
+import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -37,14 +39,21 @@ interface SearchResults {
     articleIds: number[];
 }
 
+interface LocationState {
+    query?: string;
+  }
+
 const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext);                               // Get the API URL from the context
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
     const { isAgeGroupModalOpen, setAgeGroupModalOpen } = useModalContext();    // Get the age group modal state from the context
 
-    const [userQuery, setUserQuery] = useState<string>("");
+    const location = useLocation();
+    const history = useHistory();
+
     const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
     const [isLoading, setIsLoading] = useState(false);
+    const [userQuery, setUserQuery] = useState<string>("");
     const [searchResults, setSearchResults] = useState<SearchResults>({
         message: "",
         videos: [],
@@ -61,8 +70,41 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             baseApiUrl: apiUrl,
             userFactTypeName: 'appPageNavigation',
             appPage: 'Search',
-          });
-    }, [apiUrl, cadeyUserId]);
+        });
+        
+        // Check if we already have a query via state or query params
+        var query = "";
+
+        const queryFromState = (location.state as LocationState)?.query;
+        const queryParams = new URLSearchParams(location.search);
+        const queryFromParams = queryParams.get('query');
+        
+        if (queryFromState) {
+            query = queryFromState;
+        } else if (queryFromParams) {
+            query = queryFromParams;
+        }
+        
+        // If so, either perform the search or store the query in state and show the age group modal
+        if (query && query !== "") {
+            // Add the query to the search bar
+            const searchField = document.querySelector(".search-bar") as HTMLIonSearchbarElement;
+            searchField.value = query;
+            
+            // Check if the user has an age group
+            if (cadeyUserAgeGroup === 0) {
+                // Store the query in state so we can perform it after the user selects an age group
+                setUserQuery(query);
+                // Open the age group modal
+                setAgeGroupModalOpen(true);
+                // Return early
+                return;
+            }
+
+            // Perform the search for the user
+            performSearch(query, cadeyUserAgeGroup);
+        }
+    }, [apiUrl, cadeyUserId, location.state]);
 
     const handleInputChange = (e: any) => {
         const inputValue = e.detail.value;
@@ -117,6 +159,16 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             if (response.articleIds.length > 0) {
                 setArticleResults(await getArticlesByIds(response.articleIds));
             }
+
+            // Clear the search term from state
+            setUserQuery('');
+
+            // Replace the current entry in the history stack without the query parameter
+            history.replace({
+                pathname: location.pathname, // keep the current pathname
+                search: '', // clear out the query string
+            });
+
         } catch (error) {
             console.error("Error performing user search: ", error);
         }
