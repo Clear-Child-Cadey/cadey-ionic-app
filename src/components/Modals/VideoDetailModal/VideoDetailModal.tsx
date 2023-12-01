@@ -188,6 +188,10 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
 
   }, [isVideoModalOpen, currentVimeoId]);
 
+  useEffect(() => {
+    console.log('Related Articles: ', relatedArticles);
+  }, [relatedArticles]);
+
   const fetchMessages = async () => {
     try {
       // Getting messages
@@ -288,6 +292,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
                   <div key={index}>
                     {relatedMedia.relatedMediaItems.map((item, itemIndex) => (
                       <div className='related-item' key={itemIndex}>
+                        <p>Media Type: {item.mediaType}</p>
                         {/* Videos */}
                         {item.mediaType === 1 && item.sourceId && (
                           <div
@@ -304,7 +309,10 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
                         )}
                         {/* Articles */}
                         {item.mediaType === 2 && relatedArticles && (
-                          <ArticleItem article={relatedArticles[itemIndex]} />
+                          <>
+                            <p>Test 3 - Media ID: {item.mediaId}</p>
+                            <ArticleItem article={relatedArticles[itemIndex]} />
+                          </>
                         )}
                       </div>
                     ))}

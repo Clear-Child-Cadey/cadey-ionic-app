@@ -18,6 +18,11 @@ interface ArticleProps {
 }
 
 const ArticleItem: React.FC<ArticleProps> = ({ article }) => {
+    
+    useEffect(() => {
+        console.log('Article: ', article);
+      }, [article]);
+
     const [selectedArticle, setSelectedArticle] = useState<WP_Article | null>(null);
     
     // Get all the props from the modal context
