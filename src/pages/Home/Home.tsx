@@ -198,6 +198,7 @@ const HomePage: React.FC<{
 const handleSearchInput = async (e: React.KeyboardEvent) => {
   // Dismiss the spotlight on interaction
   setShowSpotlight(false);
+  if (timerRef.current) clearTimeout(timerRef.current);
   
   const searchTerm = (e.target as HTMLInputElement).value;
     
