@@ -196,7 +196,10 @@ const HomePage: React.FC<{
 }
 
 const handleSearchInput = async (e: React.KeyboardEvent) => {
-    const searchTerm = (e.target as HTMLInputElement).value;
+  // Dismiss the spotlight on interaction
+  setShowSpotlight(false);
+  
+  const searchTerm = (e.target as HTMLInputElement).value;
     
     if (e.key === "Enter") {
 
