@@ -187,6 +187,10 @@ const HomePage: React.FC<{
   };
 
   const handleInputChange = (e: any) => {
+    // Dismiss the spotlight
+    setShowSpotlight(false);
+    if (timerRef.current) clearTimeout(timerRef.current);
+
     // Restrict input to 100 characters
     const inputValue = e.detail.value;
     if (inputValue.length > 100) {
@@ -196,7 +200,7 @@ const HomePage: React.FC<{
 }
 
 const handleSearchInput = async (e: React.KeyboardEvent) => {
-  // Dismiss the spotlight on interaction
+  // Dismiss the spotlight
   setShowSpotlight(false);
   if (timerRef.current) clearTimeout(timerRef.current);
   
