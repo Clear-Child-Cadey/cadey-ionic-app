@@ -7,6 +7,8 @@ interface ModalContextProps {
     setArticleDetailModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isAgeGroupModalOpen: boolean;
     setAgeGroupModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isQuizModalOpen: boolean;
+    setQuizModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     currentArticleId: number | null;
     setCurrentArticleId: React.Dispatch<React.SetStateAction<number | null>>;
     currentVimeoId: string | null;
@@ -22,12 +24,13 @@ interface ModalProviderProps {
 }
 
 const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
-    const [isVideoModalOpen, setVideoModalOpen] = useState<boolean>(false);
+    const [isVideoModalOpen, setVideoModalOpen]                 = useState<boolean>(false);
     const [isArticleDetailModalOpen, setArticleDetailModalOpen] = useState<boolean>(false);
-    const [isAgeGroupModalOpen, setAgeGroupModalOpen] = useState<boolean>(false);
-    const [currentArticleId, setCurrentArticleId] = useState<number | null>(null);
-    const [currentVimeoId, setCurrentVimeoId] = useState<string | null>(null);
-    const [currentVideoType, setCurrentVideoType] = useState<string>('');
+    const [isAgeGroupModalOpen, setAgeGroupModalOpen]           = useState<boolean>(false);
+    const [isQuizModalOpen, setQuizModalOpen]                   = useState<boolean>(false);
+    const [currentArticleId, setCurrentArticleId]               = useState<number | null>(null);
+    const [currentVimeoId, setCurrentVimeoId]                   = useState<string | null>(null);
+    const [currentVideoType, setCurrentVideoType]               = useState<string>('');
 
     const contextValue = {
         isVideoModalOpen,
@@ -36,6 +39,8 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         setArticleDetailModalOpen,
         isAgeGroupModalOpen,
         setAgeGroupModalOpen,
+        isQuizModalOpen,
+        setQuizModalOpen,
         currentArticleId,
         setCurrentArticleId,
         currentVimeoId,

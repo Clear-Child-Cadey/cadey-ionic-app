@@ -48,6 +48,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
   const { 
     currentVideoType,
+    setQuizModalOpen,
   } = useModalContext();
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       player.on('pause', (data) => {
         setVideoProgress(data.percent);
         onPause(data.percent);
+        setQuizModalOpen(true);
       });
 
       player.on('ended', () => {

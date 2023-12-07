@@ -12,6 +12,7 @@ import AppUpdateModal from './components/Modals/AppUpdateModal';
 import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
 import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
 import FalseDoorModal from './components/Modals/FalseDoorModal/FalseDoorModal';
+import QuizModal from './components/Modals/QuizModal/QuizModal';
 // Contexts
 import { CadeyUserContext } from './main';
 import { useModalContext } from './context/ModalContext';
@@ -37,6 +38,7 @@ const App: React.FC = () => {
   const {
     isVideoModalOpen,  
     isArticleDetailModalOpen,
+    isQuizModalOpen,
     currentVimeoId,
     currentArticleId,
   } = useModalContext();
@@ -135,6 +137,14 @@ const App: React.FC = () => {
         thankYouButtonText="Close"
         isOpen={isFalseDoorModalOpen}
         setIsOpen={setIsFalseDoorModalOpen}
+      />
+
+      {/* Show a quiz modal if context dictates */}
+      <QuizModal 
+        questionExplanation="Answer a few questions for more accurate results"
+        question="Does your child have low self esteem?"
+        responseExplanation="Choose one"
+        options={["Option 1", "Option 2", "Option 3"]}
       />
       
       {/* Router Tabs */}

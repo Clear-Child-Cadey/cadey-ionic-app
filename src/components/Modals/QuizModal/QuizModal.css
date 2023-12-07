@@ -1,0 +1,56 @@
+.quiz-content {
+    padding: 0 16px !important;
+}
+
+.quiz-modal .cancel, .quiz-modal .skip {
+    font-size: 13px;
+    color: #625A56;
+    font-weight: 700;
+}
+
+.quiz-modal .explanation-text {
+    font-size: 14px;
+    color: #958D89;
+    margin-top: 30px;
+}
+
+.quiz-modal .question-text {
+    font-size: 23px;
+    font-weight: 700;
+    color: #484443;
+    margin-top: 20px;
+}
+
+.quiz-modal .response-explanation-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #484443;
+    margin-top: 60px;
+}
+
+.quiz-modal .response {
+    width: 90vw;
+    margin: 10px auto 0;
+    color: #625A56;
+    --background: #fff;
+    --border-style: solid;
+    --border-width: 1px;
+    --border-color: #F2F1F0;
+    --border-radius: 6px;
+    --box-shadow: none;
+    height: 4.5em;
+    font-size: 14px;
+}
+
+.quiz-modal .response.selected {
+    --border-color: #51ADEF;
+}
+
+.quiz-modal .continue-row {
+    position: fixed;
+    bottom: 40px;
+}
+
+.quiz-modal .continue-button {
+    --border-radius: 100px;
+}
