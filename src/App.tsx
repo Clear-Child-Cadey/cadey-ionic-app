@@ -145,6 +145,7 @@ const App: React.FC = () => {
         question="Does your child have low self esteem?"
         responseExplanation="Choose one"
         options={["Option 1", "Option 2", "Option 3"]}
+        questionType="single"
       />
       
       {/* Router Tabs */}

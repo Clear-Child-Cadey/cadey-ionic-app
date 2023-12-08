@@ -26,6 +26,7 @@ interface QuizModalProps {
     question: string;
     responseExplanation: string;
     options: string[];
+    questionType: string;
 }
 
 const QuizModal: React.FC<QuizModalProps> = ({
@@ -33,6 +34,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
     question,
     responseExplanation,
     options,
+    questionType,
 }) => {
 
     const { isQuizModalOpen, setQuizModalOpen } = useModalContext();
@@ -41,17 +43,18 @@ const QuizModal: React.FC<QuizModalProps> = ({
 
     const [userResponse, setUserResponse] = React.useState<string[]>([]);
     const [anotherQuestion, setAnotherQuestion] = React.useState<boolean>(true);
-    const [nextStatus, setNextStatus] = React.useState<boolean>(false);
 
     const handleSelection = (response: string) => {
-        setNextStatus(true);
-
-        // Check if the user's response is already in the userResponse array
+        // If the user has already selected this response, remove it from the userResponse array
         if (userResponse.includes(response)) {
-            // If it is, remove it from the userResponse array
             setUserResponse(userResponse.filter(item => item !== response));
+            // return early
+            return;
+        }
+        
+        if (questionType === 'single') {
+            setUserResponse([response]);
         } else {
-            // If it isn't, add it to the userResponse array
             setUserResponse([...userResponse, response]);
         }
     }
