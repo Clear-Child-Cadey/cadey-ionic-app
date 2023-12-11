@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
     IonModal, 
     IonButton, 
@@ -21,23 +21,34 @@ import { postCadeyUserAgeGroup } from '../../../api/AgeGroup';
 // Icons
 import { chevronForwardOutline } from 'ionicons/icons';
 
-interface QuizModalProps {
-    questionExplanation: string;
-    question: string;
-    responseExplanation: string;
-    options: string[];
-    questionType: string;
+export interface QuizModalData {
+    nextQuestionPossible: boolean;
+    previousQuestionInfo: any;
+    question: QuizModalQuestion;
 }
 
-const QuizModal: React.FC<QuizModalProps> = ({
-    questionExplanation,
-    question,
-    responseExplanation,
-    options,
-    questionType,
-}) => {
+interface QuizModalQuestion {
+    apiOnly_NextQuestion: boolean;
+    id: number;
+    introMessage: string;
+    isRequired: boolean;
+    maxChoices: number;
+    minChoices: number;
+    options: QuizModalQuestionOption[];
+    quizId: number;
+    text: string;
+}
 
-    const { isQuizModalOpen, setQuizModalOpen } = useModalContext();
+interface QuizModalQuestionOption {
+    displayOrder: number;
+    id: number;
+    label: string;
+    optionType: number; // 1 = select, 2 = text
+}
+
+const QuizModal: React.FC = ({ }) => {
+
+    const { isQuizModalOpen, setQuizModalOpen, quizModalData, setQuizModalData } = useModalContext();
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
 
@@ -52,7 +63,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
             return;
         }
         
-        if (questionType === 'single') {
+        if (quizModalData!.question.maxChoices <= 1) {
             setUserResponse([response]);
         } else {
             setUserResponse([...userResponse, response]);
@@ -81,6 +92,9 @@ const QuizModal: React.FC<QuizModalProps> = ({
     }
 
     function handleClose() {
+        // Clear the quiz data
+        setQuizModalData(null);
+        
         // Close the modal
         setQuizModalOpen(false);
     }
@@ -93,50 +107,58 @@ const QuizModal: React.FC<QuizModalProps> = ({
         handleClose();
     }
 
+    useEffect(() => {
+        {quizModalData && (
+            console.log("QuizModalData: ", quizModalData)
+        )}
+    }, [quizModalData]);
+
     return (
         <IonModal isOpen={isQuizModalOpen} className="quiz-modal" onDidDismiss={handleClose}>
-            <IonContent>
-                <IonRow className="quiz-content">
-                    <IonToolbar>
-                        <IonText className="cancel" slot="start" onClick={() => handleClose()}>
-                            Cancel
-                        </IonText>
-                        <IonText className="skip" slot="end" onClick={() => handleSkipQuestion()}>
-                            Skip question
-                        </IonText>
-                    </IonToolbar>
-                    <IonRow className="explanation">
-                        <IonText className="explanation-text">{questionExplanation}</IonText>
-                    </IonRow>
-                    <IonRow className="question">
-                        <IonText className="question-text">{question}</IonText>
-                    </IonRow>
-                    <IonRow className="response-explanation">
-                        <IonText className="response-explanation-text">{responseExplanation}</IonText>
-                    </IonRow>
-                    <IonRow className="responses">
-                        {options.map((option, index) => (
-                            <IonButton
-                                key={index}
-                                className={`response ${userResponse.includes(option) ? 'selected' : ''}`}
-                                onClick={() => handleSelection(option)}
+            {quizModalData && quizModalData.question.id !== 0 && (
+                <IonContent>
+                    <IonRow className="quiz-content">
+                        <IonToolbar>
+                            <IonText className="cancel" slot="start" onClick={() => handleClose()}>
+                                Cancel
+                            </IonText>
+                            <IonText className="skip" slot="end" onClick={() => handleSkipQuestion()}>
+                                Skip question
+                            </IonText>
+                        </IonToolbar>
+                        <IonRow className="explanation">
+                            <IonText className="explanation-text">{quizModalData.question.introMessage}</IonText>
+                        </IonRow>
+                        <IonRow className="question">
+                            <IonText className="question-text">{quizModalData.question.text}</IonText>
+                        </IonRow>
+                        <IonRow className="response-explanation">
+                            <IonText className="response-explanation-text">{(quizModalData.question.maxChoices > 1) ? "Choose all that apply" : "Choose one"}</IonText>
+                        </IonRow>
+                        <IonRow className="responses">
+                            {quizModalData.question.options.map((option, index) => (
+                                <IonButton
+                                    key={index}
+                                    className={`response ${userResponse.includes(option.label) ? 'selected' : ''}`}
+                                    onClick={() => handleSelection(option.label)}
+                                >
+                                    {option.label}
+                                </IonButton>
+                            ))}
+                        </IonRow>
+                        <IonRow className="continue-row">
+                            <IonButton 
+                                className="continue-button" 
+                                disabled={userResponse.length === 0}
+                                onClick={() => handleSubmission()}
                             >
-                                {option}
+                                {/* "Next >"" button */}
+                                Next <IonIcon icon={chevronForwardOutline} className="forward-icon" />
                             </IonButton>
-                        ))}
+                        </IonRow>
                     </IonRow>
-                    <IonRow className="continue-row">
-                        <IonButton 
-                            className="continue-button" 
-                            disabled={userResponse.length === 0}
-                            onClick={() => handleSubmission()}
-                        >
-                            {/* "Next >"" button */}
-                            Next <IonIcon icon={chevronForwardOutline} className="forward-icon" />
-                        </IonButton>
-                    </IonRow>
-                </IonRow>
-            </IonContent>
+                </IonContent>
+            )}
         </IonModal>
     );
 };

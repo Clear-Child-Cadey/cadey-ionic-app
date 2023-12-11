@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { QuizModalData } from '../components/Modals/QuizModal/QuizModal';
 
 interface ModalContextProps {
     isVideoModalOpen: boolean;
@@ -9,6 +10,8 @@ interface ModalContextProps {
     setAgeGroupModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isQuizModalOpen: boolean;
     setQuizModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    quizModalData: QuizModalData | null;
+    setQuizModalData: React.Dispatch<React.SetStateAction<QuizModalData | null>>;
     currentArticleId: number | null;
     setCurrentArticleId: React.Dispatch<React.SetStateAction<number | null>>;
     currentVimeoId: string | null;
@@ -28,6 +31,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     const [isArticleDetailModalOpen, setArticleDetailModalOpen] = useState<boolean>(false);
     const [isAgeGroupModalOpen, setAgeGroupModalOpen]           = useState<boolean>(false);
     const [isQuizModalOpen, setQuizModalOpen]                   = useState<boolean>(false);
+    const [quizModalData, setQuizModalData]                     = useState<QuizModalData | null>(null);
     const [currentArticleId, setCurrentArticleId]               = useState<number | null>(null);
     const [currentVimeoId, setCurrentVimeoId]                   = useState<string | null>(null);
     const [currentVideoType, setCurrentVideoType]               = useState<string>('');
@@ -41,6 +45,8 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         setAgeGroupModalOpen,
         isQuizModalOpen,
         setQuizModalOpen,
+        quizModalData,
+        setQuizModalData,
         currentArticleId,
         setCurrentArticleId,
         currentVimeoId,

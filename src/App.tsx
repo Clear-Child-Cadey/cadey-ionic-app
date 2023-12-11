@@ -39,6 +39,7 @@ const App: React.FC = () => {
     isVideoModalOpen,  
     isArticleDetailModalOpen,
     isQuizModalOpen,
+    quizModalData,
     currentVimeoId,
     currentArticleId,
   } = useModalContext();
@@ -140,13 +141,7 @@ const App: React.FC = () => {
       />
 
       {/* Show a quiz modal if context dictates */}
-      <QuizModal 
-        questionExplanation="Answer a few questions for more accurate results"
-        question="Does your child have low self esteem?"
-        responseExplanation="Choose one"
-        options={["Option 1", "Option 2", "Option 3"]}
-        questionType="single"
-      />
+      <QuizModal />
       
       {/* Router Tabs */}
       <RouterTabs />

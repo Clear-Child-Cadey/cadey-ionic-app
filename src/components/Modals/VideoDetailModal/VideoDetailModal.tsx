@@ -24,6 +24,7 @@ import { useAppPage } from '../../../context/AppPageContext';
 import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logUserFact } from '../../../api/UserFacts';
 import { getUserMessages } from '../../../api/UserMessages';
+import { getQuiz } from '../../../api/Quiz';
 // CSS
 import './VideoDetailModal.css';
 // Components
@@ -233,6 +234,21 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
       });
     }
     setVideoModalOpen(false);
+  }
+
+  const getQuizData = async () => {
+    try {
+      const quizData = await getQuiz(
+        apiUrl,
+        Number(cadeyUserId),
+        1,                    // Client Context: Where the user is in the app (1 = VideoDetail)
+        1,                    // Entity Type (1 = video)
+        [videoData!.mediaId]  // The ID of the video or article
+      );
+      console.log('quizData: ', quizData);
+    } catch (error) {
+      console.error('Error fetching quiz data: ', error);
+    }
   }
 
   return (
