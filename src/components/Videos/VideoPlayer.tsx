@@ -49,6 +49,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
   const { 
     currentVideoType,
+    isQuizModalOpen,
     setQuizModalOpen,
     setQuizModalData,
   } = useModalContext();
@@ -59,7 +60,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
       player.on('loaded', () => {
         handleVideoReady();
-        player.play(); // Explicitly play the video once it is loaded
+        if (!isQuizModalOpen) {
+          player.play(); // Explicitly play the video once it is loaded
+        }
       });
 
       player.on('play', () => {
