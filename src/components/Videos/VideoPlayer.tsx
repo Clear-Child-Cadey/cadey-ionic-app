@@ -144,7 +144,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       [Number(mediaIdStr)]  // Entity IDs (The ID of the video)
     );
 
-    if (quizResponse.question !== null) {
+    if (quizResponse.question !== null && quizResponse.question.id > 0) {
       // Set the quiz data
       setQuizModalData(quizResponse);
 

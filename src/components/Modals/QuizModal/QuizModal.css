@@ -28,6 +28,10 @@
     margin-top: 60px;
 }
 
+.quiz-modal .responses {
+    padding-bottom: 90px; /* 90px is the height of the continue row */
+}
+
 .quiz-modal .response {
     width: 90vw;
     margin: 10px auto 0;
@@ -38,7 +42,7 @@
     --border-color: #F2F1F0;
     --border-radius: 6px;
     --box-shadow: none;
-    height: 4.5em;
+    height: 64px;
     font-size: 14px;
 }
 
@@ -48,7 +52,11 @@
 
 .quiz-modal .continue-row {
     position: fixed;
-    bottom: 40px;
+    height: 90px;
+    bottom: 0;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    background: #F9F6EF
 }
 
 .quiz-modal .continue-button {
