@@ -1,3 +1,7 @@
 .article-detail {
     padding: 0 16px;
 }
+
+.article-detail .wp-element-caption {
+    display: none; /* hide the caption for YouTube embeds */
+}
