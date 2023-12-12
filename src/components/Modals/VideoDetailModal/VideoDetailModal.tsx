@@ -50,6 +50,8 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     setCurrentVimeoId,
     currentVideoType,
     setCurrentVideoType,
+    setQuizModalOpen,
+    setQuizModalData,
   } = useModalContext();
 
   const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
@@ -199,6 +201,24 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     }
   };
 
+  const requestQuiz = async () => {
+    const quizResponse = await getQuiz(
+      apiUrl,
+      Number(cadeyUserId),
+      1,                            // Client Context: Where the user is in the app (1 = VideoDetail)
+      1,                            // Entity Type (1 = video)
+      [Number(videoData!.mediaId)]  // Entity IDs (The ID of the video)
+    );
+
+    if (quizResponse.question !== null && quizResponse.question.id > 0) {
+      // Set the quiz data
+      setQuizModalData(quizResponse);
+
+      // Open the quiz modal
+      setQuizModalOpen(true);
+    }
+  }
+
   // Function to copy the shareable link to clipboard
   const handleShare = async (event: React.MouseEvent, videoId: string, mediaId: string) => {
     // Log a user fact that the user tapped on Share
@@ -221,6 +241,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
     setSource('Video Detail');
     setCurrentVideoType('relatedVideos');
     setCurrentVimeoId(videoId);
+    requestQuiz();
   }
 
   function handleClose() {
@@ -234,21 +255,8 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
       });
     }
     setVideoModalOpen(false);
-  }
 
-  const getQuizData = async () => {
-    try {
-      const quizData = await getQuiz(
-        apiUrl,
-        Number(cadeyUserId),
-        1,                    // Client Context: Where the user is in the app (1 = VideoDetail)
-        1,                    // Entity Type (1 = video)
-        [videoData!.mediaId]  // The ID of the video or article
-      );
-      console.log('quizData: ', quizData);
-    } catch (error) {
-      console.error('Error fetching quiz data: ', error);
-    }
+    requestQuiz();
   }
 
   return (
@@ -321,7 +329,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
                         {item.mediaType === 2 && relatedArticles && (
                           <>
                             {/* Get the related article from the relatedArticles array whose ID matches the mediaId */}
-                            <ArticleItem article={relatedArticles.find((article) => article.id === item.mediaId)!} />
+                            <ArticleItem article={relatedArticles.find((article) => article.id === item.mediaId)!} videoId={videoData.mediaId} />
                           </>
                         )}
                       </div>

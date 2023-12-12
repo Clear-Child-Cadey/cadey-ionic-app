@@ -136,21 +136,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       setIsModalOpen(true);
     }
 
-    const quizResponse = await getQuiz(
-      apiUrl,
-      Number(cadeyUserId),
-      1,                    // Client Context: Where the user is in the app (1 = VideoDetail)
-      1,                    // Entity Type (1 = video)
-      [Number(mediaIdStr)]  // Entity IDs (The ID of the video)
-    );
-
-    if (quizResponse.question !== null && quizResponse.question.id > 0) {
-      // Set the quiz data
-      setQuizModalData(quizResponse);
-
-      // Open the quiz modal
-      setQuizModalOpen(true);
-    }
+    await requestQuiz();
   };
 
   const onEnded = async () => {
@@ -171,6 +157,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
   const onClickPreview = () => {
     // Unused currently
+  }
+
+  const requestQuiz = async () => {
+    const quizResponse = await getQuiz(
+      apiUrl,
+      Number(cadeyUserId),
+      1,                    // Client Context: Where the user is in the app (1 = VideoDetail)
+      1,                    // Entity Type (1 = video)
+      [Number(mediaIdStr)]  // Entity IDs (The ID of the video)
+    );
+
+    if (quizResponse.question !== null && quizResponse.question.id > 0) {
+      // Set the quiz data
+      setQuizModalData(quizResponse);
+
+      // Open the quiz modal
+      setQuizModalOpen(true);
+    }
   }
 
   useEffect(() => {
