@@ -207,7 +207,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
       Number(cadeyUserId),
       1,                            // Client Context: Where the user is in the app (1 = VideoDetail)
       1,                            // Entity Type (1 = video)
-      [Number(videoData!.mediaId)]  // Entity IDs (The ID of the video)
+      Number(videoData!.mediaId)    // Entity IDs (The ID of the video)
     );
 
     if (quizResponse.question !== null && quizResponse.question.id > 0) {

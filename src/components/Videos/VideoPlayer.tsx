@@ -168,7 +168,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       Number(cadeyUserId),
       1,                    // Client Context: Where the user is in the app (1 = VideoDetail)
       1,                    // Entity Type (1 = video)
-      [Number(mediaIdStr)]  // Entity IDs (The ID of the video)
+      Number(mediaIdStr)    // Entity IDs (The ID of the video)
     );
 
     if (quizResponse.question !== null && quizResponse.question.id > 0) {

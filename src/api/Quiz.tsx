@@ -7,7 +7,7 @@ export const getQuiz = async (
     clientContext: number,  // Where the user is in the app
                                 // 1 = VideoDetail
     entityType: number,     // 1 = video, 2 = article
-    entityIds: [number]     // The ID of the video or article
+    entityId: number        // The ID of the video or article
 ) => {
     const url = `${apiUrl}/quiz`;
 
@@ -22,7 +22,7 @@ export const getQuiz = async (
             cadeyUserId: cadeyUserId,
             clientContext: clientContext,
             entityType: entityType,
-            entityIds: entityIds,
+            entityId: entityId,
         }),
     });
 
