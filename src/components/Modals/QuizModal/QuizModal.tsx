@@ -162,14 +162,15 @@ const QuizModal: React.FC = ({ }) => {
     }
 
     useEffect(() => {
-        {quizModalData && (
-            console.log("QuizModalData: ", quizModalData)
-        )}
-        
-        {quizResponse && (
-            console.log("Quiz Response: ", quizResponse)
-        )}
-    }, [quizModalData, quizResponse]);
+        // Reset user responses and quiz responses when new quiz data is loaded
+        setUserResponse([]);
+        setQuizResponse([]);
+    
+        // Optional: Log the new quiz data
+        if (quizModalData) {
+            console.log("QuizModalData: ", quizModalData);
+        }
+    }, [quizModalData]);
 
     return (
         <IonModal isOpen={isQuizModalOpen} className="quiz-modal" onDidDismiss={handleClose}>
