@@ -36,10 +36,13 @@ export const getQuiz = async (
 export const postQuizResponse = async (
     apiUrl: string, 
     cadeyUserId: number, 
+    clientContext: number,
+    entityId: number,
+    entityType: number,
     quizId: number,
     questionId: number,
     questionWasSkipped: boolean,
-    questionWasCancelled: boolean,
+    quizWasCancelled: boolean,
     responses: QuizResponse[]
 ) => {
     
@@ -53,11 +56,17 @@ export const postQuizResponse = async (
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+            quizRequest: {
+                cadeyUserId: cadeyUserId,
+                clientContext: clientContext,
+                entityType: entityType,
+                entityId: entityId,
+            },
             cadeyUserId: cadeyUserId,
             quizId: quizId,
             questionId: questionId,
             questionWasSkipped: questionWasSkipped,
-            questionWasCancelled: questionWasCancelled,
+            quizWasCancelled: quizWasCancelled,
             responses: responses,
         }),
     });

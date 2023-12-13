@@ -22,9 +22,17 @@ import { postQuizResponse } from '../../../api/Quiz';
 import { chevronForwardOutline } from 'ionicons/icons';
 
 export interface QuizModalData {
+    quizRequest: quizRequest;
     nextQuestionPossible: boolean;
     previousQuestionInfo: any;
     question: QuizModalQuestion;
+}
+
+interface quizRequest {
+    cadeyUserId: number;
+    clientContext: number;
+    entityType: number;
+    entityId: number;
 }
 
 interface QuizModalQuestion {
@@ -48,7 +56,7 @@ interface QuizModalQuestionOption {
 
 export interface QuizResponse {
     optionId: number;
-    isSelect: boolean;
+    isSelected: boolean;
     textResponse: string;
 }
 
@@ -81,7 +89,7 @@ const QuizModal: React.FC = ({ }) => {
         // Create an updated responses array based on the current question's options
         const updatedResponses = quizModalData!.question.options.map(option => ({
             optionId: option.id,
-            isSelect: userResponse.includes(option.label),
+            isSelected: userResponse.includes(option.label),
             textResponse: option.label
         }));
 
@@ -104,20 +112,22 @@ const QuizModal: React.FC = ({ }) => {
 
         // Send the user's response to the API 
         await sendQuizResponse(false, false, mergedResponses);
-        
     }
 
     const sendQuizResponse = async (skipped: boolean, cancelled: boolean, response: QuizResponse[]) => {
         // Send the user's response to the API
         try {
             const quizSubmissionResponse = await postQuizResponse(
-                apiUrl,                             // API URL
-                Number(cadeyUserId),                // Cadey User ID
-                quizModalData!.question.quizId,     // Quiz ID
-                quizModalData!.question.id,         // Question ID
-                skipped,                            // Question was skipped
-                cancelled,                          // Question was cancelled
-                response                            // User's response                                  
+                apiUrl,                                 // API URL
+                Number(cadeyUserId),                    // Cadey User ID
+                1,                                      // Client Context: Where the user is in the app (1 = VideoDetail)
+                quizModalData!.quizRequest.entityId,    // Entity ID (The ID of the video)
+                1,                                      // Entity type (1 = video)
+                quizModalData!.question.quizId,         // Quiz ID
+                quizModalData!.question.id,             // Question ID
+                skipped,                                // Question was skipped
+                cancelled,                              // Question was cancelled
+                response                                // User's response                                  
             );
 
             // Depending on the API response, update the quiz modal with a new question or complete the quiz

@@ -61,4 +61,6 @@
 
 .quiz-modal .continue-button {
     --border-radius: 100px;
+    margin-left: -34px;
+    margin-right: 0;
 }
