@@ -1,5 +1,8 @@
 .quiz-content {
-    padding: 0 16px !important;
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-right: 16px !important;
+    padding-left: 16px !important;
 }
 
 .quiz-modal .cancel, .quiz-modal .skip {
