@@ -67,6 +67,7 @@ const QuizModal: React.FC = ({ }) => {
     const { apiUrl } = React.useContext(ApiUrlContext);
 
     const [userResponse, setUserResponse] = React.useState<string[]>([]);
+    const [textResponses, setTextResponses] = React.useState<{ [key: number]: string }>({}); // Key = optionId, Value = text response
     const [quizResponse, setQuizResponse] = React.useState<QuizResponse[]>([]);
 
     const handleSelection = (response: string) => {
@@ -84,35 +85,59 @@ const QuizModal: React.FC = ({ }) => {
         }
     }
 
-    const handleSubmission = async () => {
-        // For each quiz option, update the quiz response with the user's selection
-        // Create an updated responses array based on the current question's options
-        const updatedResponses = quizModalData!.question.options.map(option => ({
-            optionId: option.id,
-            isSelected: userResponse.includes(option.label),
-            textResponse: option.label
-        }));
+    const handleTextChange = (optionId: number, text: string) => {
+        setTextResponses({
+            ...textResponses,
+            [optionId]: text
+        });
+    };
 
+    const isAnyTextInputFilled = () => {
+        return Object.values(textResponses).some(text => text.trim() !== '');
+    };
+    
+
+    const handleSubmission = async () => {
+        // Create an updated responses array based on the current question's options
+        const updatedResponses = quizModalData!.question.options.map(option => {
+            if (option.optionType === 1) {
+                return {
+                    optionId: option.id,
+                    isSelected: userResponse.includes(option.label),
+                    textResponse: option.label
+                };
+            } else if (option.optionType === 2) {
+                return {
+                    optionId: option.id,
+                    isSelected: textResponses[option.id] !== undefined,
+                    textResponse: textResponses[option.id] || ''
+                };
+            } else {
+                // Return null for unhandled option types
+                return null;
+            }
+        }).filter(response => response !== null); // Filter out null responses
+    
         // Merge the new responses with the existing ones in quizResponse
-        // This ensures that existing responses are updated, and new ones are added
         const mergedResponses = [...quizResponse];
         updatedResponses.forEach(newResponse => {
-            const existingIndex = mergedResponses.findIndex(r => r.optionId === newResponse.optionId);
+            const existingIndex = mergedResponses.findIndex(r => r.optionId === newResponse!.optionId);
             if (existingIndex > -1) {
                 // Update existing response
-                mergedResponses[existingIndex] = newResponse;
+                mergedResponses[existingIndex] = newResponse!;
             } else {
                 // Add new response
-                mergedResponses.push(newResponse);
+                mergedResponses.push(newResponse!);
             }
         });
-
+    
         // Set the updated quizResponse state
         setQuizResponse(mergedResponses);
-
+    
         // Send the user's response to the API 
         await sendQuizResponse(false, false, mergedResponses);
-    }
+    };
+    
 
     const sendQuizResponse = async (skipped: boolean, cancelled: boolean, response: QuizResponse[]) => {
         // Send the user's response to the API
@@ -197,20 +222,44 @@ const QuizModal: React.FC = ({ }) => {
                             <IonText className="response-explanation-text">{(quizModalData.question.maxChoices > 1) ? "Choose all that apply" : "Choose one"}</IonText>
                         </IonRow>
                         <IonRow className="responses">
-                            {quizModalData.question.options.map((option, index) => (
-                                <IonButton
-                                    key={index}
-                                    className={`response ion-text-wrap ${userResponse.includes(option.label) ? 'selected' : ''}`}
-                                    onClick={() => handleSelection(option.label)}
-                                >
-                                    {option.label}
-                                </IonButton>
-                            ))}
+                            {quizModalData.question.options.map((option, index) => {
+                                // Check the type of option and render accordingly
+                                if (option.optionType === 1) {
+                                    // If the option type is 1, show a button
+                                    return (
+                                        <IonButton
+                                            key={index}
+                                            className={`response ion-text-wrap ${userResponse.includes(option.label) ? 'selected' : ''}`}
+                                            onClick={() => handleSelection(option.label)}
+                                        >
+                                            {option.label}
+                                        </IonButton>
+                                    );
+                                } else if (option.optionType === 2) {
+                                    // If the option type is 2, show a text input
+                                    return (
+                                        <IonRow key={index} className="text-input-row">
+                                            <input 
+                                                type="text" 
+                                                className="text-input" 
+                                                placeholder={option.label}
+                                                onFocus={(e) => e.target.placeholder = ''}
+                                                onBlur={(e) => e.target.placeholder = option.label}
+                                                onChange={(e) => handleTextChange(option.id, e.target.value)}
+                                            />
+                                        </IonRow>
+                                    );
+                                }
+
+                                // Return null for unhandled option types
+                                return null;
+                            })}
                         </IonRow>
+
                         <IonRow className="continue-row">
                             <IonButton 
                                 className="continue-button" 
-                                disabled={userResponse.length === 0}
+                                disabled={userResponse.length === 0 && !isAnyTextInputFilled()}
                                 onClick={() => handleSubmission()}
                             >
                                 {quizModalData.nextQuestionPossible ? (

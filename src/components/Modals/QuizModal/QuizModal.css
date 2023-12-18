@@ -67,3 +67,18 @@
     margin-left: -34px;
     margin-right: 0;
 }
+
+.quiz-modal .text-input {
+    background: #fff;
+    width: 90vw;
+    margin: 10px auto 0;
+    color: #625A56;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #F2F1F0;
+    border-radius: 6px;
+    box-shadow: none;
+    height: 64px;
+    font-size: 14px;
+    text-align: center;
+}
