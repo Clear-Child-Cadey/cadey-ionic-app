@@ -190,6 +190,7 @@ const QuizModal: React.FC = ({ }) => {
         // Reset user responses and quiz responses when new quiz data is loaded
         setUserResponse([]);
         setQuizResponse([]);
+        setTextResponses({});
     
         // Optional: Log the new quiz data
         if (quizModalData) {
