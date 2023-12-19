@@ -86,6 +86,12 @@ const QuizModal: React.FC = ({ }) => {
     }
 
     const handleTextChange = (optionId: number, text: string) => {
+        
+        // Trim the text to 300 characters
+        if (text.length > 300) {
+            text = text.slice(0, 300);
+        }
+
         setTextResponses({
             ...textResponses,
             [optionId]: text
@@ -236,13 +242,12 @@ const QuizModal: React.FC = ({ }) => {
                                             {option.label}
                                         </IonButton>
                                     );
-                                } else if (option.optionType === 2) {
+                                } else if (option.optionType === 2 && userResponse.length > 0) {
                                     // If the option type is 2, show a text input
                                     return (
                                         <IonRow key={index} className="text-input-row">
-                                            <input 
-                                                type="text" 
-                                                className="text-input" 
+                                            <textarea
+                                                className="text-input"
                                                 placeholder={option.label}
                                                 onFocus={(e) => e.target.placeholder = ''}
                                                 onBlur={(e) => e.target.placeholder = option.label}
