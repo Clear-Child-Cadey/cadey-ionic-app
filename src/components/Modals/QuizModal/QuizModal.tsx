@@ -259,7 +259,8 @@ const QuizModal: React.FC = ({ }) => {
                         <IonRow className="continue-row">
                             <IonButton 
                                 className="continue-button" 
-                                disabled={userResponse.length === 0 && !isAnyTextInputFilled()}
+                                // disabled={userResponse.length === 0 && !isAnyTextInputFilled()}
+                                disabled={userResponse.length === 0}
                                 onClick={() => handleSubmission()}
                             >
                                 {quizModalData.nextQuestionPossible ? (
