@@ -52,6 +52,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
     isQuizModalOpen,
     setQuizModalOpen,
     setQuizModalData,
+    isPopularSymptomVideoModalOpen,
   } = useModalContext();
 
   useEffect(() => {
@@ -98,13 +99,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   };
 
   const onPlay = () => {
-
-    // userid: cadeyUserId,
-    // userFactTypeName: "StartedMedia",
-    // appPage: source,
-    // detail1: mediaId,
-    // detail2: mediaType,
-
     logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
@@ -116,13 +110,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   };
 
   const onPause = async (progress: number) => {
-
-    // userid: cadeyUserId,
-    // userFactTypeName: "PausedMedia",
-    // appPage: source,
-    // detail1: mediaId,
-    // detail2: mediaProgress,
-    // detail3: mediaType,
 
     const falseDoorResponse = await logUserFact({
       cadeyUserId: cadeyUserId,
@@ -139,6 +126,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       setIsModalOpen(true);
     }
 
+    // If the popularSymptomVideoModal is open, end early
+    if (isPopularSymptomVideoModalOpen) {
+      return;
+    }
     await requestQuiz();
   };
 

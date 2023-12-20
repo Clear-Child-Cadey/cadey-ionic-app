@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { QuizModalData } from '../components/Modals/QuizModal/QuizModal';
+// Interfaces
+import { PopularSymptomVideo } from '../components/SymptomsList/PopularSymptomsList';
 
 interface ModalContextProps {
     isVideoModalOpen: boolean;
@@ -17,7 +19,15 @@ interface ModalContextProps {
     currentVimeoId: string | null;
     setCurrentVimeoId: React.Dispatch<React.SetStateAction<string | null>>;
     currentVideoType: string;
-    setCurrentVideoType: React.Dispatch<React.SetStateAction<string>>;    
+    setCurrentVideoType: React.Dispatch<React.SetStateAction<string>>;
+    isPopularSymptomVideoModalOpen: boolean;
+    setIsPopularSymptomVideoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    popularSymptomVideo: PopularSymptomVideo | null;
+    setPopularSymptomVideo: React.Dispatch<React.SetStateAction<PopularSymptomVideo | null>>;
+    popularSymptomPlaylist: PopularSymptomVideo[];
+    setPopularSymptomPlaylist: React.Dispatch<React.SetStateAction<PopularSymptomVideo[]>>;
+    popularSymptomPlaylistPosition: number;
+    setPopularSymptomPlaylistPosition: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
@@ -27,14 +37,18 @@ interface ModalProviderProps {
 }
 
 const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
-    const [isVideoModalOpen, setVideoModalOpen]                 = useState<boolean>(false);
-    const [isArticleDetailModalOpen, setArticleDetailModalOpen] = useState<boolean>(false);
-    const [isAgeGroupModalOpen, setAgeGroupModalOpen]           = useState<boolean>(false);
-    const [isQuizModalOpen, setQuizModalOpen]                   = useState<boolean>(false);
-    const [quizModalData, setQuizModalData]                     = useState<QuizModalData | null>(null);
-    const [currentArticleId, setCurrentArticleId]               = useState<number | null>(null);
-    const [currentVimeoId, setCurrentVimeoId]                   = useState<string | null>(null);
-    const [currentVideoType, setCurrentVideoType]               = useState<string>('');
+    const [isVideoModalOpen, setVideoModalOpen]                                 = useState<boolean>(false);
+    const [isArticleDetailModalOpen, setArticleDetailModalOpen]                 = useState<boolean>(false);
+    const [isAgeGroupModalOpen, setAgeGroupModalOpen]                           = useState<boolean>(false);
+    const [isQuizModalOpen, setQuizModalOpen]                                   = useState<boolean>(false);
+    const [quizModalData, setQuizModalData]                                     = useState<QuizModalData | null>(null);
+    const [currentArticleId, setCurrentArticleId]                               = useState<number | null>(null);
+    const [currentVimeoId, setCurrentVimeoId]                                   = useState<string | null>(null);
+    const [currentVideoType, setCurrentVideoType]                               = useState<string>('');
+    const [isPopularSymptomVideoModalOpen, setIsPopularSymptomVideoModalOpen]   = useState<boolean>(false);
+    const [popularSymptomVideo, setPopularSymptomVideo]                         = useState<PopularSymptomVideo | null>(null);
+    const [popularSymptomPlaylist, setPopularSymptomPlaylist]                   = useState<PopularSymptomVideo[]>([]);
+    const [popularSymptomPlaylistPosition, setPopularSymptomPlaylistPosition]   = useState<number>(0);
 
     const contextValue = {
         isVideoModalOpen,
@@ -53,6 +67,14 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         setCurrentVimeoId,
         currentVideoType,
         setCurrentVideoType,
+        isPopularSymptomVideoModalOpen,
+        setIsPopularSymptomVideoModalOpen,
+        popularSymptomVideo,
+        setPopularSymptomVideo,
+        popularSymptomPlaylist,
+        setPopularSymptomPlaylist,
+        popularSymptomPlaylistPosition,
+        setPopularSymptomPlaylistPosition,
     };
 
     return (

@@ -23,6 +23,7 @@ import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 import { logUserFact } from './api/UserFacts';
+import PopularSymptomVideoDetailModal from './components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal';
 
 setupIonicReact();
 
@@ -42,6 +43,8 @@ const App: React.FC = () => {
     quizModalData,
     currentVimeoId,
     currentArticleId,
+    isPopularSymptomVideoModalOpen,
+    popularSymptomVideo,
   } = useModalContext();
 
   const getStoreLink = () => {
@@ -88,6 +91,19 @@ const App: React.FC = () => {
     }
   }, [isVideoModalOpen]);
 
+  useEffect(() => {
+    if (!isPopularSymptomVideoModalOpen && !videoModalEverOpened) {
+      // Modal closed, hasn't ever been opened
+      // Currently, do nothing in this case
+    } else if (isPopularSymptomVideoModalOpen && !videoModalEverOpened) {
+      // Modal opened for the first time
+      setVideoModalEverOpened(true);
+    } else if (!isPopularSymptomVideoModalOpen && videoModalEverOpened) {
+      // Modal closed, but has been opened before
+      onVideoDetailPageClosed();
+    }
+  }, [isPopularSymptomVideoModalOpen]);
+
   const onVideoDetailPageClosed = async () => {
     const response = await logUserFact({
       cadeyUserId: cadeyUserId,
@@ -116,6 +132,11 @@ const App: React.FC = () => {
       {/* Show a video modal if context dictates */}
       {isVideoModalOpen && currentVimeoId && (
         <VideoDetailModal />
+      )}
+
+      {/* Show a popular symptom video modal if context dictates */}
+      {isPopularSymptomVideoModalOpen && popularSymptomVideo && (
+        <PopularSymptomVideoDetailModal />
       )}
       
       {/* Show an article modal if context dictates */}
