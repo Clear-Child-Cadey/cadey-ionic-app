@@ -90,11 +90,23 @@ const PopularSymptomsList: React.FC = () => {
 
     const handlePopularSymptomSelection = async (selectedSymptoms: Symptom[]) => {
 
+        // Check if the user has an age group
+        if (cadeyUserAgeGroup === 0) {
+            // Open the age group modal
+            setAgeGroupModalOpen(true);
+            // Return early - the callback on age group seletion will call this function again
+            return;
+        }
+
+        getPopularVideoData();
+    };
+
+    const getPopularVideoData = async () => {
         // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
         setIsLoading(true);
-
+        
         // TODO: Replace this with an API call to get the video ID and next video ID
-
+        
         var playlistVideoIds: string[] = [];
 
         if (selectedSymptoms.some((s) => s.id === 6)) {
@@ -135,17 +147,9 @@ const PopularSymptomsList: React.FC = () => {
 
         setIsLoading(false);
 
-        // Check if the user has an age group
-        if (cadeyUserAgeGroup === 0) {
-            // Open the age group modal
-            setAgeGroupModalOpen(true);
-            // Return early
-            return;
-        }
-
         // Open the video detail modal
         setIsPopularSymptomVideoModalOpen(true);
-    };
+    }
 
     const addVideosToPlaylist = async (videoIds: string[]) => {
         const tempVideos = [];
@@ -173,15 +177,16 @@ const PopularSymptomsList: React.FC = () => {
         // Set the popular symptom playlist
         setPopularSymptomPlaylist(tempVideos);
     };
-    
 
     const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-        // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
-        dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: true } });
-
-        // Open the video detail modal
-        setIsPopularSymptomVideoModalOpen(true);
+        getPopularVideoData();
     }
+
+    // Log selected symptoms anytime they change
+    useEffect(() => {
+        console.log('Selected symptoms:', selectedSymptoms);
+    }, [selectedSymptoms]);
+    
 
   return (
     <div className="container">
