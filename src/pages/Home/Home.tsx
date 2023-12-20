@@ -241,7 +241,7 @@ const handleSearchInput = async (e: React.KeyboardEvent) => {
 
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Home</IonTitle>
+            <IonTitle size="large">{trendingVideos.length > 0 ? "Welcome" : "Home"}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRow className="search-container">
@@ -256,7 +256,7 @@ const handleSearchInput = async (e: React.KeyboardEvent) => {
         <IonRow>
           <IonText className="subcopy">
             {trendingVideos.length > 0 
-              ? "Browse popular topics or tap Concerns to get more personalized results."
+              ? "What brings you here today?"
               : "Here are a few suggestions, based on your concerns about your child."
             }
           </IonText>

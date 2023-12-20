@@ -24,6 +24,8 @@ interface ModalContextProps {
     setIsPopularSymptomVideoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     popularSymptomVideo: PopularSymptomVideo | null;
     setPopularSymptomVideo: React.Dispatch<React.SetStateAction<PopularSymptomVideo | null>>;
+    nextPopularSymptomVideo: PopularSymptomVideo | null;
+    setNextPopularSymptomVideo: React.Dispatch<React.SetStateAction<PopularSymptomVideo | null>>;
     popularSymptomPlaylist: PopularSymptomVideo[];
     setPopularSymptomPlaylist: React.Dispatch<React.SetStateAction<PopularSymptomVideo[]>>;
     popularSymptomPlaylistPosition: number;
@@ -47,6 +49,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     const [currentVideoType, setCurrentVideoType]                               = useState<string>('');
     const [isPopularSymptomVideoModalOpen, setIsPopularSymptomVideoModalOpen]   = useState<boolean>(false);
     const [popularSymptomVideo, setPopularSymptomVideo]                         = useState<PopularSymptomVideo | null>(null);
+    const [nextPopularSymptomVideo, setNextPopularSymptomVideo]                 = useState<PopularSymptomVideo | null>(null);
     const [popularSymptomPlaylist, setPopularSymptomPlaylist]                   = useState<PopularSymptomVideo[]>([]);
     const [popularSymptomPlaylistPosition, setPopularSymptomPlaylistPosition]   = useState<number>(0);
 
@@ -71,6 +74,8 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         setIsPopularSymptomVideoModalOpen,
         popularSymptomVideo,
         setPopularSymptomVideo,
+        nextPopularSymptomVideo,
+        setNextPopularSymptomVideo,
         popularSymptomPlaylist,
         setPopularSymptomPlaylist,
         popularSymptomPlaylistPosition,

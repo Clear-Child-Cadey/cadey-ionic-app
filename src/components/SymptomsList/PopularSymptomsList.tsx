@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   IonItem,
   IonLabel,
@@ -6,7 +6,7 @@ import {
   IonText,
   IonRow,
   IonButton,
-  IonIcon
+  IonLoading,
 } from '@ionic/react';
 import { refresh } from 'ionicons/icons';
 import './SymptomsList.css';
@@ -17,8 +17,11 @@ import { Symptom } from '../ConcernsList/ConcernsList';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
 import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
 // Modals
 import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
+// API
+import { getVideoDetailData } from '../../api/VideoDetail';
 
 // Define an interface for the popular symptom playlist. This should be an array with the following information per item: Title, VimeoID, Thumbnail
 export interface PopularSymptomVideo {
@@ -31,22 +34,24 @@ export interface PopularSymptomVideo {
 const PopularSymptomsList: React.FC = () => {  
 
     // Get the Cadey User data from the context
-    const { cadeyUserId, cadeyUserAgeGroup } = React.useContext(CadeyUserContext);
+    const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+    const { apiUrl } = useContext(ApiUrlContext);
   
     // Define the symptoms [TODO: Replace with API call]
     const symptoms: Symptom[] = [
-        { id: 35, name: 'Angry' },
-        { id: 36, name: 'Bullying peers' },
-        { id: 37, name: 'Bites, kicks, or hits' },
-        { id: 38, name: 'Yells' },
-        { id: 39, name: 'Easily irritable' },
-        { id: 40, name: 'Curses' },
+        { id: 6, name: 'Easily upset' },
+        { id: 35, name: 'Often angry' },
+        { id: 62, name: 'Having outbursts' },
+        { id: 64, name: 'Throwing temper tantrums' },
+        { id: 63, name: 'Having mood swings' },
+        { id: 67, name: 'Not following directions' },
     ];
 
     // Get all the props from the modal context
     const { 
         isAgeGroupModalOpen,
         setAgeGroupModalOpen,
+        isPopularSymptomVideoModalOpen,
         setIsPopularSymptomVideoModalOpen, 
         popularSymptomVideo,
         setPopularSymptomVideo,
@@ -56,6 +61,7 @@ const PopularSymptomsList: React.FC = () => {
 
     // Get the loading state from the context
     const { state: loadingState, dispatch } = useLoadingState();
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const history = useHistory();
     const [selectedSymptoms, setSelectedSymptoms] = React.useState<Symptom[]>([]);
@@ -74,62 +80,60 @@ const PopularSymptomsList: React.FC = () => {
         history.push('/App/Concerns');
     };
 
-    // If the popularSymptomPlaylist changes, set the popular symptom video ID
-    React.useEffect(() => {
+    // If the popularSymptomPlaylist changes, set the popular symptom video to the first item in the playlist
+    useEffect(() => {
         if (popularSymptomPlaylist.length > 0) {
             setPopularSymptomVideo(popularSymptomPlaylist[0]);
         }
-        console.log('popularSymptomPlaylist changed: ', popularSymptomPlaylist);
+        
     }, [popularSymptomPlaylist]);
 
-    // Log the value of popularSymptomVimeoId
-    React.useEffect(() => {
-        console.log('Popular Symptom Video: ', popularSymptomVideo);
-    }, [popularSymptomVideo]);
+    const handlePopularSymptomSelection = async (selectedSymptoms: Symptom[]) => {
 
-    const handlePopularSymptomSelection = (selectedSymptoms: Symptom[]) => {
+        // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
+        setIsLoading(true);
 
         // TODO: Replace this with an API call to get the video ID and next video ID
 
-        // Set the correct vimeoId for the video detail modal depending on which symptom(s) were selected
-        if (selectedSymptoms.some((s) => s.id === 35)) {
-            // Angry
-            setPopularSymptomPlaylist([
-                {
-                    title: "Angry 1",
-                    vimeoId: "832356701/9165cff4bd",
-                    mediaId: "1",
-                    thumbnail: "https://i.vimeocdn.com/video/1687817867-b1ced55d03e223fb711833bccc5b40a26fc87f0025168823f7bc7d4c8e945a47-d_1920x1080?r=pad",
-                },
-                {
-                    title: "Angry 2",
-                    vimeoId: "838726442/a3002cd2db",
-                    mediaId: "1",
-                    thumbnail: "https://i.vimeocdn.com/video/1687817867-b1ced55d03e223fb711833bccc5b40a26fc87f0025168823f7bc7d4c8e945a47-d_1920x1080?r=pad",
-                },
-                {
-                    title: "Angry 3",
-                    vimeoId: "838726442/a3002cd2db",
-                    mediaId: "1",
-                    thumbnail: "https://i.vimeocdn.com/video/1687817867-b1ced55d03e223fb711833bccc5b40a26fc87f0025168823f7bc7d4c8e945a47-d_1920x1080?r=pad",
-                },
-            ]);
-        } else if (selectedSymptoms.some((s) => s.id === 36)) {
-            // Bullying peers
+        var playlistVideoIds: string[] = [];
+
+        if (selectedSymptoms.some((s) => s.id === 6)) {
+            // Easily upset
+            playlistVideoIds = [
+                "832356701/9165cff4bd", //46
+                "869249831/a3e00c5445", //227
+                "836629959/6d7d716355", //96
+                "836198406/611defad41", //118
+                "888828525/eb2d524e1a", //263
+                "871066009/9e432c5508", //202
+                "851688703/0cf6b8e9ef", //167
+                "851687328/e1ea022902", //169
+                "842960023/da9b9ccbb7", //148
+                "833401150/c5fb685731", //39
+                "835501783/cc646b1c66", //75
+                "833404677/53d2f677c1", //53
+                "879855013/b1d35146ec", //251
+            ];
+        } else if (selectedSymptoms.some((s) => s.id === 35)) {
+            // Often angry
+
+        } else if (selectedSymptoms.some((s) => s.id === 62)) {
+            // Having outbursts
+
+        } else if (selectedSymptoms.some((s) => s.id === 64)) {
+            // Throwing temper tantrums
             
-        } else if (selectedSymptoms.some((s) => s.id === 37)) {
-            // Bites, kicks, or hits
+        } else if (selectedSymptoms.some((s) => s.id === 63)) {
+            // Having mood swings
             
-        } else if (selectedSymptoms.some((s) => s.id === 38)) {
-            // Yells
-            
-        } else if (selectedSymptoms.some((s) => s.id === 39)) {
-            // Easily irritable
-            
-        } else if (selectedSymptoms.some((s) => s.id === 40)) {
-            // Curses
+        } else if (selectedSymptoms.some((s) => s.id === 67)) {
+            // Not following directions
             
         }
+
+        await addVideosToPlaylist(playlistVideoIds);
+
+        setIsLoading(false);
 
         // Check if the user has an age group
         if (cadeyUserAgeGroup === 0) {
@@ -139,12 +143,37 @@ const PopularSymptomsList: React.FC = () => {
             return;
         }
 
-        // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
-        dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: true } });
-
         // Open the video detail modal
         setIsPopularSymptomVideoModalOpen(true);
     };
+
+    const addVideosToPlaylist = async (videoIds: string[]) => {
+        const tempVideos = [];
+    
+        for (const videoId of videoIds) {
+            try {
+                // Get video data
+                const response = await getVideoDetailData(apiUrl, videoId);
+                const videoData = {
+                    title: response.title,
+                    vimeoId: response.sourceId,
+                    mediaId: response.mediaId,
+                    thumbnail: response.thumbnail,
+                };
+                tempVideos.push(videoData);
+    
+                // Wait for 100ms before continuing to the next iteration
+                await new Promise(resolve => setTimeout(resolve, 100));
+            } catch (error) {
+                console.error('Error fetching video data:', error);
+                // Optionally handle errors, e.g., by continuing to the next videoId
+            }
+        }
+    
+        // Set the popular symptom playlist
+        setPopularSymptomPlaylist(tempVideos);
+    };
+    
 
     const onAgeGroupSelected = async (selectedAgeGroup: number) => {
         // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
@@ -156,10 +185,16 @@ const PopularSymptomsList: React.FC = () => {
 
   return (
     <div className="container">
+
+        {/* Show a loading state if necessary */}
+        {isLoading && (
+          <IonLoading isOpen={true} message={'Loading data...'} />
+        )}
+
         {/* Show an age group modal if context dictates */}
         <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
         <IonRow>
-            <IonText className="subcopy">What’s most troubling? Choose up to 2.</IonText>
+            <IonText className="subcopy">Is your child...</IonText>
         </IonRow>
         {symptoms.map((symptom) => (
             <IonItem className="symptom-item" lines="none" key={symptom.id}>
