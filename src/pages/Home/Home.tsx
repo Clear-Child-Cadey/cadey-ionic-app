@@ -23,6 +23,7 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
+import PopularSymptomsList from '../../components/SymptomsList/PopularSymptomsList';
 // API
 import getHomeData from '../../api/HomeData';
 import { logUserFact } from '../../api/UserFacts';
@@ -118,24 +119,25 @@ const HomePage: React.FC<{
     }
   }, [currentTab, isVideoModalOpen]);
 
-  // Run when trendingVideos or tutorialStep changes
-  useEffect(() => {
-    // If the tutorial has already progressed, don't set a new timer.
-    if (tutorialStep !== 0) return;
+  // Commenting all this out as we're changing the new user experience
+  // // Run when trendingVideos or tutorialStep changes
+  // useEffect(() => {
+  //   // If the tutorial has already progressed, don't set a new timer.
+  //   if (tutorialStep !== 0) return;
     
-    // Wait to show the spotlight if the user has trending videos and the tutorial step is 0
-    if (trendingVideos.length > 0 && tutorialStep === 0) {
-      timerRef.current = window.setTimeout(() => {
-        setShowSpotlight(true);
-        setTutorialStep(1);
-      }, 8000); 
-    }
+  //   // Wait to show the spotlight if the user has trending videos and the tutorial step is 0
+  //   if (trendingVideos.length > 0 && tutorialStep === 0) {
+  //     timerRef.current = window.setTimeout(() => {
+  //       setShowSpotlight(true);
+  //       setTutorialStep(1);
+  //     }, 8000); 
+  //   }
 
-    // This is to ensure if for some reason the component gets unmounted, we clear the timer
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [trendingVideos, tutorialStep]);
+  //   // This is to ensure if for some reason the component gets unmounted, we clear the timer
+  //   return () => {
+  //     if (timerRef.current) clearTimeout(timerRef.current);
+  //   };
+  // }, [trendingVideos, tutorialStep]);
 
   // On component mount:
   useEffect(() => {
@@ -261,40 +263,51 @@ const handleSearchInput = async (e: React.KeyboardEvent) => {
         </IonRow>
         <hr className="divider" />
 
-        {/* If user has watched videos, show this. Else, skip it */}
-        {playedVideos.length > 0 && (
-          <IonRow className="video-list-row recently-viewed">
-              <h2>Recently Viewed</h2>
-              <VideoList videos={playedVideos} listType='horizontal' />
-          </IonRow>
-        )}
-        {/* If user has featured videos, show this. Else, skip it */}
-        {featuredVideos.length > 0 && (
-          <IonRow className="video-list-row featured">
-              <h2>Watch Now</h2>
-              <VideoList videos={featuredVideos} listType='horizontal' /> 
-          </IonRow>
-        )}
-        {/* If user has articles, show this. Else, skip it */}
-        {articleIds.length > 0 && (
-          <IonRow className="article-list-row">
-            <h2>Read Now</h2>
-            <ArticlesListHorizontal articleIds={articleIds} onLoaded={onArticlesLoaded} />
-          </IonRow>
-        )}
-        {/* If user has new videos, show this. Else, skip it */}
-        {newVideos.length > 0 && (
-          <IonRow className="video-list-row new">
-              <h2>New Videos</h2>
-              <VideoList videos={newVideos} listType='horizontal' />
-          </IonRow>
-        )}
-        {/* If user has trending videos, show this. Else, skip it */}
+        {/* If the user has trending videos, show the popular symptoms component */}
         {trendingVideos.length > 0 && (
-          <IonRow className="video-list-row trending">
-              <h2>Trending Now</h2>
-              <VideoList videos={trendingVideos} listType='horizontal' />
+          <IonRow className="popular-symptoms-row">
+            <PopularSymptomsList />
           </IonRow>
+        )}
+
+        {trendingVideos.length === 0 && (
+          <>
+            {/* If user has watched videos, show this. Else, skip it */}
+            {playedVideos.length > 0 && (
+              <IonRow className="video-list-row recently-viewed">
+                  <h2>Recently Viewed</h2>
+                  <VideoList videos={playedVideos} listType='horizontal' />
+              </IonRow>
+            )}
+            {/* If user has featured videos, show this. Else, skip it */}
+            {featuredVideos.length > 0 && (
+              <IonRow className="video-list-row featured">
+                  <h2>Watch Now</h2>
+                  <VideoList videos={featuredVideos} listType='horizontal' /> 
+              </IonRow>
+            )}
+            {/* If user has articles, show this. Else, skip it */}
+            {articleIds.length > 0 && (
+              <IonRow className="article-list-row">
+                <h2>Read Now</h2>
+                <ArticlesListHorizontal articleIds={articleIds} onLoaded={onArticlesLoaded} />
+              </IonRow>
+            )}
+            {/* If user has new videos, show this. Else, skip it */}
+            {newVideos.length > 0 && (
+              <IonRow className="video-list-row new">
+                  <h2>New Videos</h2>
+                  <VideoList videos={newVideos} listType='horizontal' />
+              </IonRow>
+            )}
+            {/* If user has trending videos, show this. Else, skip it */}
+            {trendingVideos.length > 0 && (
+              <IonRow className="video-list-row trending">
+                  <h2>Trending Now</h2>
+                  <VideoList videos={trendingVideos} listType='horizontal' />
+              </IonRow>
+            )}
+          </>
         )}
       </IonContent>
     </IonPage>
