@@ -342,7 +342,7 @@ const PopularSymptomsList: React.FC = () => {
             ],
         },
         {
-            symptomId: 64, 
+            symptomId: 63, 
             videos: [
             {
                 "title": "Books for bad days",
@@ -425,7 +425,7 @@ const PopularSymptomsList: React.FC = () => {
             ],
         },
         {
-            symptomId: 35,
+            symptomId: 64,
             videos: [
     
             {
@@ -527,7 +527,7 @@ const PopularSymptomsList: React.FC = () => {
             ],
         },
         {
-            symptomId: 36,
+            symptomId: 67,
             videos: [
     
             {
