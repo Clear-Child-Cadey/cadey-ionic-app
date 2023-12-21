@@ -49,6 +49,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     setCurrentVideoType,
     setQuizModalOpen,
     setQuizModalData,
+    popularSymptomId,
     isPopularSymptomVideoModalOpen,
     setIsPopularSymptomVideoModalOpen,
     popularSymptomVideo,
@@ -190,6 +191,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 baseApiUrl: apiUrl,
                 userFactTypeName: 'appPageNavigation',
                 appPage: 'Popular Symptom Video Detail',
+                detail1: 'Symptom ID: ' + popularSymptomId,
             });
             fetchVideoData();
         } else {

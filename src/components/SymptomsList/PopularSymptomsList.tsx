@@ -8,7 +8,7 @@ import {
   IonButton,
   IonLoading,
 } from '@ionic/react';
-import { refresh } from 'ionicons/icons';
+import { play, refresh } from 'ionicons/icons';
 import './SymptomsList.css';
 import { useHistory } from 'react-router-dom';
 // Interfaces
@@ -51,6 +51,7 @@ const PopularSymptomsList: React.FC = () => {
     const { 
         isAgeGroupModalOpen,
         setAgeGroupModalOpen,
+        setPopularSymptomId,
         isPopularSymptomVideoModalOpen,
         setIsPopularSymptomVideoModalOpen, 
         popularSymptomVideo,
@@ -111,6 +112,7 @@ const PopularSymptomsList: React.FC = () => {
 
         if (selectedSymptoms.some((s) => s.id === 6)) {
             // Easily upset
+            setPopularSymptomId(6);
             playlistVideoIds = [
                 "832356701/9165cff4bd", //46
                 "869249831/a3e00c5445", //227
@@ -128,18 +130,112 @@ const PopularSymptomsList: React.FC = () => {
             ];
         } else if (selectedSymptoms.some((s) => s.id === 35)) {
             // Often angry
+            setPopularSymptomId(35);
+            playlistVideoIds = [
+                "830290291/b29396446b",
+                "830289952/54d2700589",
+                "830289633/712b888607",
+                "830290607/4f5e4a7271",
+                "830270250/bc3c2ff029",
+                "870785230/5e1eec15f6",
+                "830307169/b37a38bc9e",
+                "836198015/bd762145bb",
+                "838000810/218c7c8d07",
+                "840652265/97ea4ba5a0",
+                "869250000/3a1731814e",
+                "867263757/4f733f37b4",
+                "858697691/fa749cfafb",
+                "830306966/2eb7e32dbf",
+                "859013453/64fab0e72e",
+            ];
 
         } else if (selectedSymptoms.some((s) => s.id === 62)) {
             // Having outbursts
+            setPopularSymptomId(62);
+            playlistVideoIds = [
+                "869249831/a3e00c5445",
+                "836629959/6d7d716355",
+                "851688703/0cf6b8e9ef",
+                "851687328/e1ea022902",
+                "880262783/2968fa9a59",
+                "855041614/406a6ea534",
+                "830290607/4f5e4a7271",
+                "871066009/9e432c5508",
+                "835517633/6a6031f98d",
+                "833404447/3fec9b07f4",
+                "880567661/c47c46a762",
+                "830306830/ea9976440c",
+                "879497563/eb356bb497",
+                "882237697/03c63a650d",
+                "842960023/da9b9ccbb7",
+                "836233537/f122ad9444",
+            ];
 
         } else if (selectedSymptoms.some((s) => s.id === 64)) {
             // Throwing temper tantrums
+            setPopularSymptomId(64);
+            playlistVideoIds = [
+                "835529695/43aec125c6",
+                "835519075/941972b4bd",
+                "871069391/9cee5e91ac",
+                "869249831/a3e00c5445",
+                "836629959/6d7d716355",
+                "851688703/0cf6b8e9ef",
+                "880262783/2968fa9a59",
+                "832356701/9165cff4bd",
+                "863640207/ebc427a839",
+                "870785230/5e1eec15f6",
+                "832362367/7eb49b66e5",
+                "830270250/bc3c2ff029",
+                "830270037/ce58f6c51e",
+                "833404222/584cf8dc47",
+                "833404677/53d2f677c1",
+                "833404447/3fec9b07f4",
+            ];
             
         } else if (selectedSymptoms.some((s) => s.id === 63)) {
             // Having mood swings
+            setPopularSymptomId(63);
+            playlistVideoIds = [
+                "877192113/f4399e379d",
+                "853409480/81407ca2e1",
+                "830290774/98374faf86",
+                "855073772/36f428a38d",
+                "838728008/3954b52ba9",
+                "830307486/362ea9c8ff",
+                "836586204/ee176ed0da",
+                "833400388/3ec6352552",
+                "836215432/6e8e101aad",
+                "863640207/ebc427a839",
+                "855822095/6cd93f88ff",
+                "855821859/836c665a54",
+                "855821487/75903e7eb8",
+            ];
             
         } else if (selectedSymptoms.some((s) => s.id === 67)) {
             // Not following directions
+            setPopularSymptomId(67);
+            playlistVideoIds = [
+                "830290291/b29396446b",
+                "855048900/c5036cbce8",
+                "871066009/9e432c5508",
+                "867264345/c537d8ffdc",
+                "867263823/7fe44c6de1",
+                "842960680/53fb4098a9",
+                "836587577/0e5ac6e670",
+                "870786518/acfd74e322",
+                "871066109/ff26940c08",
+                "879855013/b1d35146ec",
+                "870747322/6d8c25a17b",
+                "830269476/e48f40d722",
+                "830288735/a5af6c8ea7",
+                "876030295/3548445b80",
+                "830258872/e2eb553e73",
+                "837999787/a3cb413dc0",
+                "840171053/3621e13a09",
+                "842957946/f8811770ff",
+                "842958289/e5038aa729",
+            ];
             
         }
 
@@ -210,7 +306,7 @@ const PopularSymptomsList: React.FC = () => {
                 slot="start"
                 checked={selectedSymptoms.some((s) => s.id === symptom.id)}
                 onIonChange={(e) => handleSymptomChange(symptom, e.detail.checked)}
-                disabled={selectedSymptoms.length >= 2 && !selectedSymptoms.some((s) => s.id === symptom.id)}
+                disabled={selectedSymptoms.length >= 1 && !selectedSymptoms.some((s) => s.id === symptom.id)}
             />
             </IonItem>
         ))}

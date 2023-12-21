@@ -244,15 +244,19 @@ const handleSearchInput = async (e: React.KeyboardEvent) => {
             <IonTitle size="large">{trendingVideos.length > 0 ? "Welcome" : "Home"}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonRow className="search-container">
-          {/* Search bar */}
-          <IonSearchbar 
-              className="search-bar" 
-              onIonChange={handleInputChange}
-              onKeyDown={handleSearchInput}
-              mode="ios"
-          ></IonSearchbar>
+        
+        {!trendingVideos.length && (
+          <IonRow className="search-container">
+            {/* Search bar */}
+            <IonSearchbar 
+                className="search-bar" 
+                onIonChange={handleInputChange}
+                onKeyDown={handleSearchInput}
+                mode="ios"
+            ></IonSearchbar>
           </IonRow>
+        )}
+        
         <IonRow>
           <IonText className="subcopy">
             {trendingVideos.length > 0 

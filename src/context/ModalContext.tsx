@@ -20,6 +20,8 @@ interface ModalContextProps {
     setCurrentVimeoId: React.Dispatch<React.SetStateAction<string | null>>;
     currentVideoType: string;
     setCurrentVideoType: React.Dispatch<React.SetStateAction<string>>;
+    popularSymptomId: number | null;
+    setPopularSymptomId: React.Dispatch<React.SetStateAction<number | null>>;
     isPopularSymptomVideoModalOpen: boolean;
     setIsPopularSymptomVideoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     popularSymptomVideo: PopularSymptomVideo | null;
@@ -47,6 +49,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     const [currentArticleId, setCurrentArticleId]                               = useState<number | null>(null);
     const [currentVimeoId, setCurrentVimeoId]                                   = useState<string | null>(null);
     const [currentVideoType, setCurrentVideoType]                               = useState<string>('');
+    const [popularSymptomId, setPopularSymptomId]                               = useState<number | null>(null); 
     const [isPopularSymptomVideoModalOpen, setIsPopularSymptomVideoModalOpen]   = useState<boolean>(false);
     const [popularSymptomVideo, setPopularSymptomVideo]                         = useState<PopularSymptomVideo | null>(null);
     const [nextPopularSymptomVideo, setNextPopularSymptomVideo]                 = useState<PopularSymptomVideo | null>(null);
@@ -70,6 +73,8 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         setCurrentVimeoId,
         currentVideoType,
         setCurrentVideoType,
+        popularSymptomId,
+        setPopularSymptomId,
         isPopularSymptomVideoModalOpen,
         setIsPopularSymptomVideoModalOpen,
         popularSymptomVideo,
