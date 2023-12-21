@@ -130,7 +130,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     }, [popularSymptomVideo?.vimeoId]);  
 
     useEffect(() => {
-        console.log("Test");
         let isMounted = true; // To avoid state updates on unmounted component
 
         const fetchVideoData = async () => {
@@ -182,7 +181,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 console.error("Error fetching video details:", error);
             }
         };
-
         
         if (isPopularSymptomVideoModalOpen) {
             setCurrentAppPage('Popular Symptom Video Detail');
