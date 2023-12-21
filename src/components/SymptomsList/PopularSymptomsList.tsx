@@ -724,6 +724,9 @@ const PopularSymptomsList: React.FC = () => {
 
         // Open the video detail modal
         setIsPopularSymptomVideoModalOpen(true);
+
+        // Clear symptom selections so the user can select a new symptom when they return
+        setSelectedSymptoms([]);
     }
 
     const onAgeGroupSelected = async (selectedAgeGroup: number) => {

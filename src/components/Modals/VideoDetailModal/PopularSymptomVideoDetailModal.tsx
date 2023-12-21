@@ -198,6 +198,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
             setCurrentArticleId(null);
             setVideoData(undefined);
             setSource('');
+            setPopularSymptomPlaylistPosition(0);
         }
     }, [isPopularSymptomVideoModalOpen, popularSymptomVideo?.vimeoId]);
 
@@ -292,6 +293,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
             appPage: currentBasePage,
         });
         }
+        setPopularSymptomPlaylistPosition(0);
         setIsPopularSymptomVideoModalOpen(false);
 
         requestQuiz();
