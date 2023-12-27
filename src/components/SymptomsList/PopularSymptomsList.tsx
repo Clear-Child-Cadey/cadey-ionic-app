@@ -704,6 +704,8 @@ const PopularSymptomsList: React.FC = () => {
 
     const handlePopularSymptomSelection = async (selectedSymptoms: Symptom[]) => {
 
+        setPopularSymptomId(selectedSymptoms[0].id);
+
         // Check if the user has an age group
         if (cadeyUserAgeGroup === 0) {
             // Open the age group modal

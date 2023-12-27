@@ -193,6 +193,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
             });
             fetchVideoData();
         } else {
+            console.log("Resetting video data");
             // Reset states when modal is closed
             setPopularSymptomVideo(null);
             setCurrentArticleId(null);
