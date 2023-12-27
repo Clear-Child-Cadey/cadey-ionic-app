@@ -218,6 +218,16 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         }
     }, [popularSymptomVideo]);
 
+    // If the playlist position changes, update the nextPopularSymptomVideo value
+    useEffect(() => {
+        if (popularSymptomPlaylist.length > 0 && popularSymptomPlaylistPosition < popularSymptomPlaylist.length - 1) {
+            setNextPopularSymptomVideo(popularSymptomPlaylist[popularSymptomPlaylistPosition + 1]);
+        } else {
+            console.log("No more videos in the playlist");
+            setNextPopularSymptomVideo(null);
+        }
+    }, [popularSymptomPlaylistPosition, popularSymptomPlaylist]);
+
     const fetchMessages = async () => {
         try {
         // Getting messages
@@ -268,21 +278,40 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     }
 
     const handleRelatedVideoClick = (videoId: string) => {
-        // Set the source for logging
-        setSource('Popular Symptom Video Detail');
-        
-        // Set the video type for logging
-        setCurrentVideoType('nextPopularVideo');
-
         // Increment the playlist position
         setPopularSymptomPlaylistPosition(popularSymptomPlaylistPosition + 1);
         
+        // Set the source for logging
+        setSource('Popular Symptom Video Detail');
+                
+        // Set the video type for logging
+        setCurrentVideoType('nextPopularVideo');
+
         // Set the video to the next video in sequence symptom video
         setPopularSymptomVideo(nextPopularSymptomVideo);
 
         // Get a quiz
         requestQuiz();
     }
+
+    // Define the function that should be called when a video ends
+    const handleVideoEnd = () => {
+        // // Increment the playlist position
+        // setPopularSymptomPlaylistPosition(prevPosition => prevPosition + 1);
+
+        // // If there is a next video in the playlist, play it
+        // if (nextPopularSymptomVideo && popularSymptomPlaylistPosition <= popularSymptomPlaylist.length - 1) {
+        //     handleNextVideo();
+        // }
+
+        const newPosition = popularSymptomPlaylistPosition + 1;
+        if (newPosition < popularSymptomPlaylist.length) {
+            setPopularSymptomPlaylistPosition(newPosition);
+            setPopularSymptomVideo(popularSymptomPlaylist[newPosition]);
+        } else {
+            // Handle the end of the playlist if needed
+        }
+    };
 
     function handleClose() {
         if (!isArticleDetailModalOpen) {
@@ -320,10 +349,11 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 <IonRow className="video-player-row">
                     <div className="current" key={popularSymptomVideo.vimeoId} ref={videoRef}>
                         <VideoPlayer 
-                        videoId={popularSymptomVideo.vimeoId}
-                        mediaId={popularSymptomVideo.mediaId.toString()}
-                        source={source}
-                        onVideoHeightChange={(height) => setVideoHeight(height)}
+                            videoId={popularSymptomVideo.vimeoId}
+                            mediaId={popularSymptomVideo.mediaId.toString()}
+                            source={source}
+                            onVideoHeightChange={(height) => setVideoHeight(height)}
+                            onVideoEnd={handleVideoEnd}
                         />
                     <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
                         <div className="tag-share">

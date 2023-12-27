@@ -18,9 +18,10 @@ interface VideoPlayerProps {
   mediaId: string;
   source: string;
   onVideoHeightChange?: (height: number) => void;
+  onVideoEnd?: () => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onVideoHeightChange }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onVideoHeightChange, onVideoEnd }) => {
 
   const vimeoVideoId = videoId.split('/')[0];
   const vimeoHashParameter = videoId.split('/')[1];
@@ -146,6 +147,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
     if (response.falseDoorQuestionId !== 0) {
       setFalseDoorData(response);
       setIsModalOpen(true);
+    }
+
+    // Invoke the callback if it exists
+    if (onVideoEnd) {
+      onVideoEnd();  
     }
   };
 
