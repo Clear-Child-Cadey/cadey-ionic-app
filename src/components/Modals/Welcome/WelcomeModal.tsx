@@ -32,8 +32,8 @@ const WelcomeModal: React.FC = ({ }) => {
     const { apiUrl } = React.useContext(ApiUrlContext);
 
     const handleContinue = () => {
-        setWelcomeModalOpen(false);
         setQuizModalOpen(true);
+        setWelcomeModalOpen(false);
     }
 
     return (
