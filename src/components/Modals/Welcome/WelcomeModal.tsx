@@ -46,7 +46,7 @@ const WelcomeModal: React.FC = ({ }) => {
             <IonContent fullscreen>
                 <IonRow className="welcome-content">
                     <IonRow className="welcome-image">
-                        <img src="assets/images/welcome.png" />
+                        <img src="src/assets/images/welcome.png" />
                     </IonRow>
                     <IonRow className="welcome-text">
                         Parenting support from licensed psychologists
