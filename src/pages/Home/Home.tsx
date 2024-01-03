@@ -27,6 +27,7 @@ import PopularSymptomsList from '../../components/SymptomsList/PopularSymptomsLi
 // API
 import getHomeData from '../../api/HomeData';
 import { logUserFact } from '../../api/UserFacts';
+import { getQuiz } from '../../api/Quiz';
 
 const HomePage: React.FC<{ 
   currentTab: string, 
@@ -60,6 +61,9 @@ const HomePage: React.FC<{
     setArticleDetailModalOpen,
     setCurrentVimeoId,
     setCurrentArticleId,
+    setQuizModalOpen,
+    setQuizModalData,
+    setWelcomeModalOpen,
   } = useModalContext();
 
   // Get the latest data from the API
@@ -118,6 +122,41 @@ const HomePage: React.FC<{
       timerRef.current = undefined;
     }
   }, [currentTab, isVideoModalOpen]);
+
+  // Check for onboarding quiz on mount and when cadeyUserId changes
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      
+      const requestQuiz = async () => {
+        const quizResponse = await getQuiz(
+          apiUrl,
+          Number(cadeyUserId),
+          2,                    // Client Context: Where the user is in the app (1 = VideoDetail)
+          0,                    // Entity Type (1 = video)
+          0                     // Entity IDs (The ID of the video)
+        );
+    
+        if (quizResponse.question !== null && quizResponse.question.id > 0) {
+          // Set the quiz data
+          setQuizModalData(quizResponse);
+    
+          // Show the welcome screen
+          console.log("Showing welcome modal");
+          setWelcomeModalOpen(true);
+
+          // NOTE: We don't open the quiz modal here as the user needs to see the welcome screen first. Welcome screen will open the quiz modal.
+        }
+      }
+      
+      if (cadeyUserId) {
+        requestQuiz();
+      }
+    }
+  
+    if (cadeyUserId) {
+      checkOnboarding();
+    }
+  }, [cadeyUserId, apiUrl]);
 
   // Commenting all this out as we're changing the new user experience
   // // Run when trendingVideos or tutorialStep changes

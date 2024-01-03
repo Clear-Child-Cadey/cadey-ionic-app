@@ -29,11 +29,9 @@ import { getQuiz } from '../../../api/Quiz';
 import './PopularSymptomVideoDetailModal.css';
 // Components
 import VideoPlayer from '../../../components/Videos/VideoPlayer';
-import ArticleItem from '../../Articles/ArticleItem';
 // Interfaces
 import { Message } from '../../../pages/Messages/Messages';
 import { WP_Article, getArticlesByIds } from '../../../api/WordPress/GetArticles';
-import { PopularSymptomVideo } from '../../SymptomsList/PopularSymptomsList';
 
 interface PopularSymptomVideoDetailModalProps {
     
@@ -240,7 +238,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     };
 
     const requestQuiz = async () => {
-        // Commenting out - no quiz for MVP on popular symptom videos
+        // Commenting out - implementing hardcoded quizzes for now
 
         // const quizResponse = await getQuiz(
         //   apiUrl,
@@ -257,6 +255,57 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         //   // Open the quiz modal
         //   setQuizModalOpen(true);
         // }
+
+        // Hardcoded quiz for now
+        // Look for symptomId 6
+        if (popularSymptomId == 6) {
+            // OK - we're in the Easily Upset series. Now display a quiz based on which video is playing
+
+            if (popularSymptomPlaylistPosition == 0) {
+                setQuizModalData({
+                    quizRequest: {
+                        cadeyUserId: Number(cadeyUserId),
+                        clientContext: 1,
+                        entityType: 1,
+                        entityId: 9
+                    },
+                    nextQuestionPossible: false,
+                    previousQuestionInfo: null,
+                    question: {
+                        id: 2,
+                        quizId: 2,
+                        introMessage: "",
+                        text: "Think about your child's triggers. When do you notice your child getting upset?",
+                        isRequired: true,
+                        minChoices: 1,
+                        maxChoices: 1,
+                        apiOnly_NextQuestion: false,
+                        options: [
+                            {
+                                id: 1,
+                                displayOrder: 1,
+                                optionType: 1,
+                                label: "Yes"
+                            },
+                            {
+                                id: 1,
+                                displayOrder: 1,
+                                optionType: 1,
+                                label: "No"
+                            },
+                            {
+                                id: 1,
+                                displayOrder: 1,
+                                optionType: 2,
+                                label: "Tell us about your experience"
+                            },
+                        ]
+                    },
+                });
+                // Open the quiz
+            setQuizModalOpen(true);
+            } 
+        }
     }
 
     // Function to copy the shareable link to clipboard
@@ -278,6 +327,9 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     }
 
     const handleRelatedVideoClick = (videoId: string) => {
+        // Get a quiz
+        requestQuiz();
+        
         // Increment the playlist position
         setPopularSymptomPlaylistPosition(popularSymptomPlaylistPosition + 1);
         
@@ -289,9 +341,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
 
         // Set the video to the next video in sequence symptom video
         setPopularSymptomVideo(nextPopularSymptomVideo);
-
-        // Get a quiz
-        requestQuiz();
     }
 
     // Define the function that should be called when a video ends
@@ -303,6 +352,9 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         // if (nextPopularSymptomVideo && popularSymptomPlaylistPosition <= popularSymptomPlaylist.length - 1) {
         //     handleNextVideo();
         // }
+
+        // Get a quiz
+        requestQuiz();
 
         const newPosition = popularSymptomPlaylistPosition + 1;
         if (newPosition < popularSymptomPlaylist.length) {

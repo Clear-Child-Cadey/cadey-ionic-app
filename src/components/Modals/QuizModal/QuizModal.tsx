@@ -149,16 +149,16 @@ const QuizModal: React.FC = ({ }) => {
         // Send the user's response to the API
         try {
             const quizSubmissionResponse = await postQuizResponse(
-                apiUrl,                                 // API URL
-                Number(cadeyUserId),                    // Cadey User ID
-                1,                                      // Client Context: Where the user is in the app (1 = VideoDetail)
-                quizModalData!.quizRequest.entityId,    // Entity ID (The ID of the video)
-                1,                                      // Entity type (1 = video)
-                quizModalData!.question.quizId,         // Quiz ID
-                quizModalData!.question.id,             // Question ID
-                skipped,                                // Question was skipped
-                cancelled,                              // Question was cancelled
-                response                                // User's response                                  
+                apiUrl,                                     // API URL
+                Number(cadeyUserId),                        // Cadey User ID
+                quizModalData!.quizRequest.clientContext,   // Client Context: Where the user is in the app (1 = VideoDetail)
+                quizModalData!.quizRequest.entityId,        // Entity ID (The ID of the video)
+                quizModalData!.quizRequest.entityType,      // Entity type (1 = video)
+                quizModalData!.question.quizId,             // Quiz ID
+                quizModalData!.question.id,                 // Question ID
+                skipped,                                    // Question was skipped
+                cancelled,                                  // Question was cancelled
+                response                                    // User's response                                  
             );
 
             // Depending on the API response, update the quiz modal with a new question or complete the quiz

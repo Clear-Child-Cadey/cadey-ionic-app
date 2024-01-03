@@ -6,6 +6,7 @@ export const getQuiz = async (
     cadeyUserId: number, 
     clientContext: number,  // Where the user is in the app
                                 // 1 = VideoDetail
+                                // 2 = appopened
     entityType: number,     // 1 = video, 2 = article
     entityId: number        // The ID of the video or article
 ) => {

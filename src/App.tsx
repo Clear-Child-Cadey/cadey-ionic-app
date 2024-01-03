@@ -13,6 +13,7 @@ import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailMo
 import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
 import FalseDoorModal from './components/Modals/FalseDoorModal/FalseDoorModal';
 import QuizModal from './components/Modals/QuizModal/QuizModal';
+import WelcomeModal from './components/Modals/Welcome/WelcomeModal';
 // Contexts
 import { CadeyUserContext } from './main';
 import { useModalContext } from './context/ModalContext';
@@ -163,6 +164,9 @@ const App: React.FC = () => {
 
       {/* Show a quiz modal if context dictates */}
       <QuizModal />
+
+      {/* Show a Welcome modal if context dictates */}
+      <WelcomeModal />
       
       {/* Router Tabs */}
       <RouterTabs />

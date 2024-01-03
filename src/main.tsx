@@ -12,7 +12,7 @@ import { LoadingStateProvider, useLoadingState } from './context/LoadingStateCon
 import { ModalProvider } from './context/ModalContext';
 import { AppPageProvider } from './context/AppPageContext';
 
-// Functions
+// API
 import getAppData from './api/AppOpen';
 
 /* Core CSS required for Ionic components to work properly */
@@ -134,12 +134,13 @@ function MainComponent() {
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [unreadGoals, setUnreadGoals] = useState(false);
 
-  // call API to get user details, app version info and video data the first time the app loads
+  // App startup logic
   useEffect(() => {
     const fetchData = async () => {
       await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
       setIsLoading(false);
     };
+  
     fetchData();
   }, [apiUrl]);
 
