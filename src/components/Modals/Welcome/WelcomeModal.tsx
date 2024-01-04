@@ -3,12 +3,7 @@ import {
     IonModal, 
     IonButton, 
     IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
     IonRow,
-    IonText,
-    IonIcon,
 } from '@ionic/react';
 // CSS
 import './WelcomeModal.css';
@@ -16,11 +11,10 @@ import './WelcomeModal.css';
 import { useModalContext } from '../../../context/ModalContext';
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
-import { HomeTabVisibilityContext } from '../../../context/TabContext';
 // API
-import { postQuizResponse } from '../../../api/Quiz';
+
 // Icons
-import { chevronForwardOutline } from 'ionicons/icons';
+
 
 const WelcomeModal: React.FC = ({ }) => {
 
@@ -31,11 +25,8 @@ const WelcomeModal: React.FC = ({ }) => {
     } = useModalContext();
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
-    const { setIsHomeTabVisible } = React.useContext(HomeTabVisibilityContext);
 
     const handleContinue = () => {
-        // Show the tab bar
-        setIsHomeTabVisible(true);
 
         setQuizModalOpen(true);
         setWelcomeModalOpen(false);
@@ -43,11 +34,6 @@ const WelcomeModal: React.FC = ({ }) => {
 
     return (
         <IonModal isOpen={isWelcomeModalOpen} className="welcome-modal">
-            {/* <IonHeader>
-                <IonToolbar>
-                    <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>Welcome</IonTitle>
-                </IonToolbar>
-            </IonHeader> */}
             <IonContent fullscreen>
                 <IonRow className="welcome-content">
                     <IonRow className="logo">
