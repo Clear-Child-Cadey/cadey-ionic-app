@@ -1,4 +1,8 @@
-.container .symptom-item .symptom-label {
+.symptoms-container {
+    width: 100%;
+}
+
+.symptoms-container .symptom-item .symptom-label {
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -7,7 +11,7 @@
     color: #7A716C;
 }
 
-.container .symptom-item .symptom-checkbox {
+.symptoms-container .symptom-item .symptom-checkbox {
     background-color: transparent;
     --checkbox-background: #fff;
     --border-color: #EDE7DA;

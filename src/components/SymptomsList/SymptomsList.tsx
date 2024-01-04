@@ -35,7 +35,7 @@ const SymptomsList: React.FC<SymptomsListProps> = ({ concern, onNext, onRestart 
   }
 
   return (
-    <div className="container">
+    <div className="symptoms-container">
       <IonRow>
         <IonText className="subcopy">What’s most troubling? Choose up to 2.</IonText>
       </IonRow>

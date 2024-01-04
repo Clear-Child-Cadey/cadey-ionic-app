@@ -1,0 +1,38 @@
+.welcome-modal {
+    --ion-background-color: #E5E5E5;
+}
+
+.logo {
+    width: 160px;
+    margin: 70px auto 30px;
+}
+
+.welcome-text {
+    font-family: Judson;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; 
+    margin: 0 auto;
+    max-width: 275px;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #4C616F;
+}
+
+.welcome-modal .continue-button {
+    width: 200px;
+    --border-radius: 100px;
+}
+
+/* Position the welcome image at the bottom of the modal */
+.welcome-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+  height: auto;
+  z-index: 1;
+}

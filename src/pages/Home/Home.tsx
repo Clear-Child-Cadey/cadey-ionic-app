@@ -20,6 +20,7 @@ import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { HomeTabVisibilityContext } from '../../context/TabContext';
 // Components
 import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
 import VideoList from '../../components/Videos/VideoList';
@@ -51,6 +52,8 @@ const HomePage: React.FC<{
 
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
+
+  const { setIsHomeTabVisible } = React.useContext(HomeTabVisibilityContext);
 
   const history = useHistory();
 
@@ -137,6 +140,10 @@ const HomePage: React.FC<{
         );
     
         if (quizResponse.question !== null && quizResponse.question.id > 0) {
+          console.log("Hiding tap bar");
+          // Hide the tap bar
+          setIsHomeTabVisible(false);
+
           // Set the quiz data
           setQuizModalData(quizResponse);
     

@@ -16,6 +16,7 @@ import './WelcomeModal.css';
 import { useModalContext } from '../../../context/ModalContext';
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
+import { HomeTabVisibilityContext } from '../../../context/TabContext';
 // API
 import { postQuizResponse } from '../../../api/Quiz';
 // Icons
@@ -30,23 +31,27 @@ const WelcomeModal: React.FC = ({ }) => {
     } = useModalContext();
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
+    const { setIsHomeTabVisible } = React.useContext(HomeTabVisibilityContext);
 
     const handleContinue = () => {
+        // Show the tab bar
+        setIsHomeTabVisible(true);
+
         setQuizModalOpen(true);
         setWelcomeModalOpen(false);
     }
 
     return (
-        <IonModal isOpen={isWelcomeModalOpen} className="quiz-modal">
-            <IonHeader>
+        <IonModal isOpen={isWelcomeModalOpen} className="welcome-modal">
+            {/* <IonHeader>
                 <IonToolbar>
                     <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>Welcome</IonTitle>
                 </IonToolbar>
-            </IonHeader>
+            </IonHeader> */}
             <IonContent fullscreen>
                 <IonRow className="welcome-content">
-                    <IonRow className="welcome-image">
-                        <img src="assets/images/welcome.png" />
+                    <IonRow className="logo">
+                        <img src="assets/svgs/cadey.svg" />
                     </IonRow>
                     <IonRow className="welcome-text">
                         Parenting support from licensed psychologists
@@ -56,8 +61,11 @@ const WelcomeModal: React.FC = ({ }) => {
                             className="continue-button" 
                             onClick={() => handleContinue()}
                         >
-                            Next <IonIcon icon={chevronForwardOutline} className="forward-icon" />
+                            Get Started
                         </IonButton>
+                    </IonRow>
+                    <IonRow className="welcome-image">
+                        <img src="assets/images/welcome.png" />
                     </IonRow>
                 </IonRow>
             </IonContent>

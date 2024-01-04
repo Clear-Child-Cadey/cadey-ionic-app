@@ -95,12 +95,12 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
                                         <IonCol size="6" key={index}>
                                                 {/* When a button is clicked, call the onNext function with the chosen concern */}
                                                 <IonButton
-                                                className="concern"
-                                                color="light"
-                                                expand="block"
-                                                size="large"
-                                                onClick={() => handleOnClick(choice)}                                                >
-                                                {choice.concern}
+                                                        className="concern"
+                                                        color="light"
+                                                        expand="block"
+                                                        size="large"
+                                                        onClick={() => handleOnClick(choice)}                                                >
+                                                        {choice.concern}
                                                 </IonButton>
                                         </IonCol>
                                 ))}

@@ -742,7 +742,7 @@ const PopularSymptomsList: React.FC = () => {
     
 
   return (
-    <div className="container">
+    <div className="symptoms-container">
 
         {/* Show a loading state if necessary */}
         {isLoading && (
