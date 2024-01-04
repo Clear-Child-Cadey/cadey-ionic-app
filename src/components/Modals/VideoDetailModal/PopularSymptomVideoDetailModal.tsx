@@ -275,7 +275,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                         id: 2,
                         quizId: 2,
                         introMessage: "",
-                        text: "Think about your child's triggers. When do you notice your child getting upset?",
+                        text: "Think about your child's triggers. Do you notice your child getting upset?",
                         isRequired: true,
                         minChoices: 1,
                         maxChoices: 1,
