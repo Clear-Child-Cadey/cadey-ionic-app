@@ -1,24 +1,24 @@
 PODS:
-  - Capacitor (5.0.4):
+  - Capacitor (5.6.0):
     - CapacitorCordova
-  - CapacitorApp (5.0.2):
+  - CapacitorApp (5.0.6):
     - Capacitor
-  - CapacitorBrowser (5.0.6):
+  - CapacitorBrowser (5.1.0):
     - Capacitor
   - CapacitorClipboard (5.0.6):
     - Capacitor
-  - CapacitorCordova (5.0.4)
-  - CapacitorHaptics (5.0.2):
+  - CapacitorCordova (5.6.0)
+  - CapacitorHaptics (5.0.6):
     - Capacitor
-  - CapacitorKeyboard (5.0.2):
+  - CapacitorKeyboard (5.0.7):
     - Capacitor
   - CapacitorShare (5.0.6):
     - Capacitor
   - CapacitorSplashScreen (5.0.6):
     - Capacitor
-  - CapacitorStatusBar (5.0.2):
+  - CapacitorStatusBar (5.0.6):
     - Capacitor
-  - CordovaPluginsStatic (5.0.4):
+  - CordovaPluginsStatic (5.6.0):
     - CapacitorCordova
     - OneSignalXCFramework (= 3.12.4)
   - OneSignalXCFramework (3.12.4):
@@ -75,17 +75,17 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: d3d4463573438b9fa65326d1f3549da6f4c21634
-  CapacitorApp: 28fef1fd75b2b3686e875216806fb8416d421097
-  CapacitorBrowser: 6192948e0ce804fd72aaf77f4114a3ad2e08c760
+  Capacitor: ebfc16cdb8116d04c101686b080342872da42d43
+  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorBrowser: 7a0fb6a1011abfaaf2dfedfd8248f942a8eda3d6
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
-  CapacitorCordova: b1fe6bf1f36974a8e4a9044b342d22d49c0996d6
-  CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
-  CapacitorKeyboard: e628d4e66d621c69e449945ebabded17c5b9c2e8
+  CapacitorCordova: 931b48fcdbc9bc985fc2f16cec9f77c794a27729
+  CapacitorHaptics: 1fffc1217c7e64a472d7845be50fb0c2f7d4204c
+  CapacitorKeyboard: ce5e01064cf57a2c05b32565310713b7fe6cc6f9
   CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
   CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
-  CapacitorStatusBar: 48f2899f6846cc7d8431b251ebfc58e1c10e3d58
-  CordovaPluginsStatic: af99904c0243da8af971650a0657125ae1d9688d
+  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
+  CordovaPluginsStatic: ceeab3b2a42288951c91ed2a360f546237a74f6e
   OneSignalXCFramework: 087934ab0d4d7445fcf1c015c7c782359e26c020
 
 PODFILE CHECKSUM: cd5916f174c29e8b50a43c576fdf9d3c7233fd84

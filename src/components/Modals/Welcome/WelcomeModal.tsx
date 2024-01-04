@@ -50,9 +50,9 @@ const WelcomeModal: React.FC = ({ }) => {
                             Get Started
                         </IonButton>
                     </IonRow>
-                    <IonRow className="welcome-image">
-                        <img src="assets/images/welcome.png" />
-                    </IonRow>
+                </IonRow>
+                <IonRow className="welcome-image">
+                    <img src="assets/images/welcome.png" />
                 </IonRow>
             </IonContent>
         </IonModal>

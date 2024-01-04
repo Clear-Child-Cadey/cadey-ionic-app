@@ -4,7 +4,17 @@
 
 .logo {
     width: 160px;
-    margin: 70px auto 30px;
+    margin: 0 auto 30px;
+}
+
+.welcome-content {
+    /* Vertically center the content in the modal */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Ballpark height percentage less the rough percent of the welcome-image height. Ideally would be perfectly vertically centered */
+    height: 68%;
 }
 
 .welcome-text {
