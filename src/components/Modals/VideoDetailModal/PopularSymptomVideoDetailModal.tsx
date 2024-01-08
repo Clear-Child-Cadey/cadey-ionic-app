@@ -125,17 +125,17 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     // Scroll user to top of page when the video changes
     useEffect(() => {
         contentRef.current?.scrollToTop(500); // 500 is the duration of the scroll animation in milliseconds
-    }, [popularSymptomVideo?.vimeoId]);  
+    }, [popularSymptomVideo?.vimeoSourceId]);  
 
     useEffect(() => {
         let isMounted = true; // To avoid state updates on unmounted component
 
         const fetchVideoData = async () => {
             console.log("Fetching video data");
-            if(!popularSymptomVideo?.vimeoId) return; // Early return if no vimeoId is present
+            if(!popularSymptomVideo?.vimeoSourceId) return; // Early return if no vimeoId is present
 
             try {
-                const data = await getVideoDetailData(apiUrl, popularSymptomVideo.vimeoId);
+                const data = await getVideoDetailData(apiUrl, popularSymptomVideo.vimeoSourceId);
 
                 // Ensure relatedMedia is always an array
                 if (data && data.relatedMedia && !Array.isArray(data.relatedMedia)) {
@@ -143,7 +143,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 }
 
                 if(data && data.mediaId) {
-                    if (popularSymptomVideo.vimeoId === location.search.split('video=')[1]) {
+                    if (popularSymptomVideo.vimeoSourceId === location.search.split('video=')[1]) {
                         // Log user fact that the user clicked on a push notification
                         logUserFact({
                         cadeyUserId: cadeyUserId,
@@ -151,7 +151,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                         userFactTypeName: 'FeaturedVideoNotificationClicked',
                         appPage: currentAppPage,
                         detail1: String(data.mediaId),
-                        detail2: popularSymptomVideo.vimeoId,
+                        detail2: popularSymptomVideo.vimeoSourceId,
                         });
                     }
                 
@@ -199,7 +199,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
             setSource('');
             setPopularSymptomPlaylistPosition(0);
         }
-    }, [isPopularSymptomVideoModalOpen, popularSymptomVideo?.vimeoId]);
+    }, [isPopularSymptomVideoModalOpen, popularSymptomVideo?.vimeoSourceId]);
 
     // If the popular symptom video changes, update the nextPopularSymptomVideo value
     useEffect(() => {
@@ -208,10 +208,11 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         } else {
             console.log("Clearing nextPopularSymptomVideo");
             setNextPopularSymptomVideo({
-                title: '',
-                vimeoId: '',
-                mediaId: '',
-                thumbnail: '',
+                entityId: 0,
+                entityType: 0,
+                entityTitle: '',
+                vimeoSourceId: '',
+                vimeoThumbnail: '',
             });
         }
     }, [popularSymptomVideo]);
@@ -397,20 +398,20 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen ref={contentRef}>
-                {popularSymptomVideo && popularSymptomVideo.vimeoId && (
+                {popularSymptomVideo && popularSymptomVideo.vimeoSourceId && (
                 <IonRow className="video-player-row">
-                    <div className="current" key={popularSymptomVideo.vimeoId} ref={videoRef}>
+                    <div className="current" key={popularSymptomVideo.vimeoSourceId} ref={videoRef}>
                         <VideoPlayer 
-                            videoId={popularSymptomVideo.vimeoId}
-                            mediaId={popularSymptomVideo.mediaId.toString()}
+                            videoId={popularSymptomVideo.vimeoSourceId}
+                            mediaId={popularSymptomVideo.entityId.toString()}
                             source={source}
                             onVideoHeightChange={(height) => setVideoHeight(height)}
                             onVideoEnd={handleVideoEnd}
                         />
                     <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
                         <div className="tag-share">
-                        {canShare && popularSymptomVideo.vimeoId && (
-                            <div className="share" onClick={(event) => handleShare(event, popularSymptomVideo.vimeoId, popularSymptomVideo.mediaId.toString())}>
+                        {canShare && popularSymptomVideo.vimeoSourceId && (
+                            <div className="share" onClick={(event) => handleShare(event, popularSymptomVideo.vimeoSourceId, popularSymptomVideo.entityId.toString())}>
                             <p>Share </p>
                             <div className="share-button">
                                 <IonIcon icon={arrowRedoOutline} />
@@ -418,7 +419,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                             </div>
                         )}
                         </div>
-                        <h3>{popularSymptomVideo.title}</h3>
+                        <h3>{popularSymptomVideo.entityTitle}</h3>
                     </div>
                     </div>
                 </IonRow>
@@ -426,20 +427,20 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 <IonRow>
                     <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
                 </IonRow>
-                {nextPopularSymptomVideo && nextPopularSymptomVideo.title && (
+                {nextPopularSymptomVideo && nextPopularSymptomVideo.entityTitle && (
                     <IonRow className="suggested-content">
                         <hr />
                         {/* Show the next video in sequence */}
                         <h3>Next Video</h3>
                         <div
-                            onClick={() => handleRelatedVideoClick(nextPopularSymptomVideo.vimeoId)}
+                            onClick={() => handleRelatedVideoClick(nextPopularSymptomVideo.vimeoSourceId)}
                             className="related video-item"
                         >
                             <div className="video-thumb-play-container">
-                                <img src={nextPopularSymptomVideo.thumbnail || ''} alt={nextPopularSymptomVideo.title || ''} />
+                                <img src={nextPopularSymptomVideo.vimeoThumbnail || ''} alt={nextPopularSymptomVideo.entityTitle || ''} />
                                 <IonIcon icon={playCircleOutline} className="play-icon" />
                             </div>
-                            <h3>{nextPopularSymptomVideo.title}</h3>
+                            <h3>{nextPopularSymptomVideo.entityTitle}</h3>
                         </div>
                     </IonRow>
                 )}
