@@ -262,7 +262,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         if (popularSymptomId == 6) {
             // OK - we're in the Easily Upset series. Now display a quiz based on which video is playing
 
-            if (popularSymptomPlaylistPosition == 0) {
+            if (popularSymptomPlaylistPosition == 1) {
                 setQuizModalData({
                     quizRequest: {
                         cadeyUserId: Number(cadeyUserId),
