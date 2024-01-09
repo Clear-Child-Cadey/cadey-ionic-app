@@ -14,6 +14,7 @@ import { AppPageProvider } from './context/AppPageContext';
 
 // API
 import getAppData from './api/AppOpen';
+import { logUserFact } from './api/UserFacts';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -37,6 +38,12 @@ import './theme/main.css';
 // UUID Library (Used to generate a unique ID for the device)
 import { v4 as uuidv4 } from 'uuid';
 
+// Firebase
+import { firebasePerf, firestore } from './api/Firebase/InitializeFirebase';
+import { addDoc, collection } from "firebase/firestore";
+import { trace } from "firebase/performance";
+import { logErrorToFirestore } from './api/Firebase/logErrorToFirestore';
+
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
 if (!cadeyUserDeviceId) {
@@ -59,69 +66,6 @@ export const CadeyUserContext = createContext<{
   oneSignalId: "",
 });
 
-// -------------------FIREBASE------------------------------
-// Initialize Firebase
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-import { getPerformance } from "firebase/performance";
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Firebase configuration information
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// Firebase Web Config
-const firebaseWebConfig = {
-  apiKey: "AIzaSyBcqwDAbWGh25wog7XpbV9gtjV4HEA_Fys",
-  authDomain: "cadeylite.firebaseapp.com",
-  projectId: "cadeylite",
-  storageBucket: "cadeylite.appspot.com",
-  messagingSenderId: "743363017370",
-  appId: "1:743363017370:web:3e1d427d4c85895e73bd23",
-  measurementId: "G-G2QZMXWEVS"
-};
-
-// Firebase iOS Config
-const firebaseIosConfig = {
-  apiKey: "AIzaSyBcqwDAbWGh25wog7XpbV9gtjV4HEA_Fys",
-  authDomain: "cadeylite.firebaseapp.com",
-  projectId: "cadeylite",
-  storageBucket: "cadeylite.appspot.com",
-  messagingSenderId: "743363017370",
-  appId: "1:743363017370:ios:889dbed9707252a473bd23",
-  measurementId: "G-G2QZMXWEVS"
-};
-
-// Firebase Android Config
-const firebaseAndroidConfig = {
-  apiKey: "AIzaSyBcqwDAbWGh25wog7XpbV9gtjV4HEA_Fys",
-  authDomain: "cadeylite.firebaseapp.com",
-  projectId: "cadeylite",
-  storageBucket: "cadeylite.appspot.com",
-  messagingSenderId: "743363017370",
-  appId: "1:743363017370:android:a2df0faaa1378f9673bd23",
-  measurementId: "G-G2QZMXWEVS"
-};
-
-// Initialize Firebase
-const webApp = initializeApp(firebaseWebConfig, "web");
-const iosApp = initializeApp(firebaseIosConfig, "ios");
-const androidApp = initializeApp(firebaseAndroidConfig, "android");
-const webAnalytics = getAnalytics(webApp);
-const iosAnalytics = getAnalytics(iosApp);
-const androidAnalytics = getAnalytics(androidApp);
-
-// Initialize Performance Monitoring and get a reference to the service
-// const webPerf = getPerformance(webApp);
-// const iosPerf = getPerformance(iosApp);
-// const androidPerf = getPerformance(androidApp);
-
-// TODO: Crashlytics - this still isn't working
-// Best link I've found so far: https://github.com/capacitor-community/firebase-crashlytics
-// Ran into dependency issues with the above link though
-
-// -------------------/FIREBASE-------------------------------
-
 function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);
 
@@ -134,20 +78,65 @@ function MainComponent() {
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [unreadGoals, setUnreadGoals] = useState(false);
 
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   // App startup logic
   useEffect(() => {
+    let timeoutId: any;
+
     const fetchData = async () => {
-      await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
-      setIsLoading(false);
+      
+      // Start a Firebase trace
+      const getAppDataTrace = trace(firebasePerf, "getAppDataTrace");
+      await getAppDataTrace.start();
+      
+      try {
+        await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
+        setDataLoaded(true); // Indicate that data has been loaded
+        clearTimeout(timeoutId); // Clear the timeout if data is loaded in time
+      } catch (error) {
+        console.error("Error fetching app data:", error);
+      } finally {
+        // Stop the trace
+        getAppDataTrace.stop();
+
+        // Disable the loader
+        setIsLoading(false);
+      }
     };
-  
+
+    // Start a timer
+    timeoutId = setTimeout(() => {
+      if (!dataLoaded) {
+        // TODO: Implement logic for handling long load times
+
+        // Log a user fact
+        logUserFact({
+          cadeyUserId: cadeyUserId,
+          baseApiUrl: apiUrl,
+          userFactTypeName: 'ErrorLog',
+          appPage: 'App Open',
+          detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
+        });
+
+        console.log("Logging to Firestore");
+        
+        logErrorToFirestore({
+          userID: cadeyUserId,
+          timestamp: new Date().toISOString(),
+          error: 'getAppData call (/appopened) took longer than 10 seconds',
+          context: "Fetching App Data"
+        });
+
+        setIsLoading(false); // Optionally stop the loader
+      }
+    }, 10000); // Set timeout for 10 seconds
+    
     fetchData();
   }, [apiUrl]);
 
-  // If app data is loading, show the loader
-  // Commented out the loader as it causes a flicker, don't really need this one as it's very fast
   if (isLoading) {
-    // return <IonLoading isOpen={true} message="Loading app data..." />;
+    // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
     return;
   }
 
