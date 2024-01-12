@@ -28,6 +28,12 @@ import PopularSymptomsList from '../../components/SymptomsList/PopularSymptomsLi
 import getHomeData from '../../api/HomeData';
 import { logUserFact } from '../../api/UserFacts';
 import { getQuiz } from '../../api/Quiz';
+import { logErrorToFirestore } from '../../api/Firebase/logErrorToFirestore';
+// Variables
+import { tracingEnabled } from '../../variables/Logging';
+// Firebase
+import { firebasePerf } from '../../api/Firebase/InitializeFirebase';
+import { trace } from "firebase/performance";
 
 const HomePage: React.FC<{ 
   currentTab: string, 
@@ -47,12 +53,16 @@ const HomePage: React.FC<{
   const { showSpotlight, setShowSpotlight } = useSpotlight();
   const timerRef = useRef<number | undefined>();
 
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
 
   const history = useHistory();
+
+  var getHomeDataTrace: any;
 
   // Get all the props from the modal context
   const { 
@@ -72,7 +82,15 @@ const HomePage: React.FC<{
     // Start loader
     setIsLoading(true);
     try {
+      // Start a Firebase trace      
+      if (tracingEnabled) {
+          getHomeDataTrace = trace(firebasePerf, "getHomeDataTrace");
+          await getHomeDataTrace.start();
+      }
+      
+      // Get the data from the API
       const { featuredVideos, newVideos, playedVideos, trendingVideos, articleIds } = await getHomeDataFromApi();
+
       setFeaturedVideos(featuredVideos);
       setNewVideos(newVideos);
       setPlayedVideos(playedVideos);
@@ -83,6 +101,10 @@ const HomePage: React.FC<{
     } finally {
       // Hide the splash screen after data has been fetched
       SplashScreen.hide();
+      // Stop the trace
+      if (tracingEnabled) {
+        getHomeDataTrace.stop();
+    }
     }
   };
 
@@ -112,9 +134,38 @@ const HomePage: React.FC<{
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
     if (currentTab === 'Home') {
-      // Start loader
+      let timeoutId: any;
+
+      // Start a timer
+      timeoutId = setTimeout(() => {
+        if (!dataLoaded) {
+          // TODO: Implement logic for handling long load times
+
+          // Log a user fact
+          logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'ErrorLog',
+            appPage: 'App Open',
+            detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
+          });
+          
+          logErrorToFirestore({
+            userID: cadeyUserId,
+            timestamp: new Date().toISOString(),
+            error: 'getAppData call (/appopened) took longer than 10 seconds',
+            context: "Fetching App Data"
+          });
+
+          setIsLoading(false); // Optionally stop the loader
+        }
+      }, 10000); // Set timeout for 10 seconds
+
       fetchData(); // Fetch the homepage data if the user is on the Home tab
-      if (tutorialStep === 0) setTutorialStep(1); // If the tutorial hasn't started, mark it completed
+      
+      if (tutorialStep === 0) {
+        setTutorialStep(1); // If the tutorial hasn't started, mark it completed
+      }
     } else if (timerRef.current) {
       // Clear the timer if navigating away from the Home tab.
       clearTimeout(timerRef.current);

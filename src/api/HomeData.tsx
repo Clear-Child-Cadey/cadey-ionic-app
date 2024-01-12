@@ -1,6 +1,13 @@
+// Contexts
 import { useContext } from 'react';
 import ApiUrlContext from '../context/ApiUrlContext';
 import { CadeyUserContext } from '../main';
+// Firebase
+import { firebasePerf } from './Firebase/InitializeFirebase';
+import { trace } from "firebase/performance";
+// Variables
+import { tracingEnabled } from '../variables/Logging';
+
 
 const getHomeData = () => {  
     const { apiUrl } = useContext(ApiUrlContext);

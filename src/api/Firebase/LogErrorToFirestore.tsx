@@ -2,7 +2,6 @@ import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "./InitializeFirebase";
 import { loggingEnabled } from "../../variables/Logging";
 
-
 export const logErrorToFirestore = async (errorDetails: any) => {
     if (loggingEnabled == true) {
         try {
