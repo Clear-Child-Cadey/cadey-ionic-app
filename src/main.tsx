@@ -16,6 +16,9 @@ import { AppPageProvider } from './context/AppPageContext';
 import getAppData from './api/AppOpen';
 import { logUserFact } from './api/UserFacts';
 
+// Variables
+import { tracingEnabled } from './variables/Logging';
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -86,9 +89,12 @@ function MainComponent() {
 
     const fetchData = async () => {
       
+      var getAppDataTrace: any;
       // Start a Firebase trace
-      const getAppDataTrace = trace(firebasePerf, "getAppDataTrace");
-      await getAppDataTrace.start();
+      if (tracingEnabled) {
+        getAppDataTrace = trace(firebasePerf, "getAppDataTrace");
+        await getAppDataTrace.start();
+      }
       
       try {
         await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
@@ -98,7 +104,9 @@ function MainComponent() {
         console.error("Error fetching app data:", error);
       } finally {
         // Stop the trace
-        getAppDataTrace.stop();
+        if (tracingEnabled) {
+          getAppDataTrace.stop();
+        }
 
         // Disable the loader
         setIsLoading(false);
@@ -118,8 +126,6 @@ function MainComponent() {
           appPage: 'App Open',
           detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
         });
-
-        console.log("Logging to Firestore");
         
         logErrorToFirestore({
           userID: cadeyUserId,
