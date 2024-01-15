@@ -52,6 +52,7 @@ interface QuizModalQuestionOption {
     id: number;
     label: string;
     optionType: number; // 1 = select, 2 = text
+    displayIfOptionIdSelected: string | null;
 }
 
 export interface QuizResponse {
@@ -67,6 +68,7 @@ const QuizModal: React.FC = ({ }) => {
     const { apiUrl } = React.useContext(ApiUrlContext);
 
     const [userResponse, setUserResponse] = React.useState<string[]>([]);
+    const [selectedOptionIds, setSelectedOptionIds] = React.useState<number[]>([]);
     const [textResponses, setTextResponses] = React.useState<{ [key: number]: string }>({}); // Key = optionId, Value = text response
     const [quizResponse, setQuizResponse] = React.useState<QuizResponse[]>([]);
 
@@ -74,6 +76,9 @@ const QuizModal: React.FC = ({ }) => {
         // If the user has already selected this response, remove it from the userResponse array
         if (userResponse.includes(response)) {
             setUserResponse(userResponse.filter(item => item !== response));
+
+            setSelectedOptionIds(selectedOptionIds.filter(item => item !== quizModalData!.question.options.find(option => option.label === response)!.id));
+            
             // return early
             return;
         }
@@ -226,7 +231,16 @@ const QuizModal: React.FC = ({ }) => {
                             <IonText className="question-text">{quizModalData.question.text}</IonText>
                         </IonRow>
                         <IonRow className="response-explanation">
-                            <IonText className="response-explanation-text">{(quizModalData.question.maxChoices > 1) ? "Choose all that apply" : "Choose one"}</IonText>
+                            <IonText className="response-explanation-text">
+                                {/* If all of the question options have an optionType of 2, empty string. 
+                                Else, check if maxChoiceis is > 1. If yes, "Choose all that apply". 
+                                Else, "Choose one" */}
+                                {
+                                    quizModalData.question.options.every(option => option.optionType === 2) ? '' : 
+                                    quizModalData.question.maxChoices > 1 ? 'Choose all that apply' : 
+                                    'Choose one'
+                                }
+                            </IonText>
                         </IonRow>
                         <IonRow className="responses">
                             {quizModalData.question.options.map((option, index) => {
@@ -242,8 +256,8 @@ const QuizModal: React.FC = ({ }) => {
                                             {option.label}
                                         </IonButton>
                                     );
-                                } else if (option.optionType === 2 && userResponse.length > 0) {
-                                    // If the option type is 2, show a text input
+                                } else if (option.optionType === 2 && option.displayIfOptionIdSelected === null) {
+                                    // If the option type is 2, and displayIfOptionIdSelected is null, show a text input
                                     return (
                                         <IonRow key={index} className="text-input-row">
                                             <textarea
@@ -255,6 +269,23 @@ const QuizModal: React.FC = ({ }) => {
                                             />
                                         </IonRow>
                                     );
+                                } else if (option.optionType === 2 && option.displayIfOptionIdSelected !== null) {
+                                    // If the option type is 2, and displayIfOptionIdSelected is not null, display a text field if selectedOptionIds includes one of the displayIfOptionIdSelected values
+                                    // displayIfOptionIdSelected is a comma-separated string of option IDs
+                                    const displayIfOptionIds = option.displayIfOptionIdSelected.split(',').map(id => Number(id));
+                                    if (displayIfOptionIds.some(id => selectedOptionIds.includes(id))) {
+                                        return (
+                                            <IonRow key={index} className="text-input-row">
+                                                <textarea
+                                                    className="text-input"
+                                                    placeholder={option.label}
+                                                    onFocus={(e) => e.target.placeholder = ''}
+                                                    onBlur={(e) => e.target.placeholder = option.label}
+                                                    onChange={(e) => handleTextChange(option.id, e.target.value)}
+                                                />
+                                            </IonRow>
+                                        );
+                                    }
                                 }
 
                                 // Return null for unhandled option types
@@ -265,8 +296,7 @@ const QuizModal: React.FC = ({ }) => {
                         <IonRow className="continue-row">
                             <IonButton 
                                 className="continue-button" 
-                                // disabled={userResponse.length === 0 && !isAnyTextInputFilled()}
-                                disabled={userResponse.length === 0}
+                                disabled={userResponse.length === 0 && !isAnyTextInputFilled()}
                                 onClick={() => handleSubmission()}
                             >
                                 {quizModalData.nextQuestionPossible ? (

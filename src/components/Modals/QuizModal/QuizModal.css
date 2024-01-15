@@ -22,13 +22,13 @@
     font-weight: 700;
     color: #484443;
     margin-top: 20px;
+    margin-bottom: 60px;
 }
 
 .quiz-modal .response-explanation-text {
     font-size: 14px;
     font-weight: 700;
     color: #484443;
-    margin-top: 60px;
 }
 
 .quiz-modal .responses {

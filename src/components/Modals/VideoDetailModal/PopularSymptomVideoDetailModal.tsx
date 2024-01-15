@@ -142,7 +142,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
             });
             
         } else {
-            console.log("Resetting video data");
             // Reset states when modal is closed
             setPopularSymptomVideo(null);
             setCurrentArticleId(null);
@@ -157,7 +156,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         if (popularSymptomPlaylist.length > 0 && popularSymptomPlaylistPosition <= popularSymptomPlaylist.length - 1) {
             setNextPopularSymptomVideo(popularSymptomPlaylist[popularSymptomPlaylistPosition + 1]);
         } else {
-            console.log("Clearing nextPopularSymptomVideo");
             setNextPopularSymptomVideo({
                 entityId: 0,
                 entityType: 0,
@@ -179,9 +177,8 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     }, [popularSymptomPlaylistPosition, popularSymptomPlaylist]);
 
     const requestQuiz = async () => {
-        // Commenting out - implementing hardcoded quizzes for now
-        console.log("Requesting quiz");
 
+        // Get a quiz
         const quizResponse = await getQuiz(
             apiUrl,
             Number(cadeyUserId),
@@ -197,57 +194,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
             // Open the quiz modal
             setQuizModalOpen(true);
         }
-
-        // Hardcoded quiz for now
-        // Look for symptomId 6
-        // if (popularSymptomId == 6) {
-        //     // OK - we're in the Easily Upset series. Now display a quiz based on which video is playing
-
-        //     if (popularSymptomPlaylistPosition == 1) {
-        //         setQuizModalData({
-        //             quizRequest: {
-        //                 cadeyUserId: Number(cadeyUserId),
-        //                 clientContext: 1,
-        //                 entityType: 1,
-        //                 entityId: 9
-        //             },
-        //             nextQuestionPossible: false,
-        //             previousQuestionInfo: null,
-        //             question: {
-        //                 id: 2,
-        //                 quizId: 2,
-        //                 introMessage: "",
-        //                 text: "Think about your child's triggers. Do you notice your child getting upset?",
-        //                 isRequired: true,
-        //                 minChoices: 1,
-        //                 maxChoices: 1,
-        //                 apiOnly_NextQuestion: false,
-        //                 options: [
-        //                     {
-        //                         id: 1,
-        //                         displayOrder: 1,
-        //                         optionType: 1,
-        //                         label: "Yes"
-        //                     },
-        //                     {
-        //                         id: 1,
-        //                         displayOrder: 1,
-        //                         optionType: 1,
-        //                         label: "No"
-        //                     },
-        //                     {
-        //                         id: 1,
-        //                         displayOrder: 1,
-        //                         optionType: 2,
-        //                         label: "Tell us about your experience"
-        //                     },
-        //                 ]
-        //             },
-        //         });
-        //         // Open the quiz
-        //     setQuizModalOpen(true);
-        //     } 
-        // }
     }
 
     // Function to copy the shareable link to clipboard
