@@ -56,36 +56,53 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
     isPopularSymptomVideoModalOpen,
   } = useModalContext();
 
-  useEffect(() => {
-    if (playerRef.current) {
-      const player = new Player(playerRef.current);
+  const player = useRef<Player | null>(null);
 
-      player.on('loaded', () => {
+  useEffect(() => {
+    if (playerRef.current && !player.current) {
+      
+      // Initialize the player only once
+      player.current = new Player(playerRef.current);
+
+      player.current.on('loaded', () => {
         handleVideoReady();
+        console.log('Quiz Modal Status: ', isQuizModalOpen);
         if (!isQuizModalOpen) {
-          player.play(); // Explicitly play the video once it is loaded
+          player.current?.play(); // Explicitly play the video once it is loaded
         }
       });
 
-      player.on('play', () => {
+      player.current.on('play', () => {
         onPlay();
       });
 
-      player.on('pause', (data) => {
+      player.current.on('pause', (data) => {
         setVideoProgress(data.percent);
         onPause(data.percent);
       });
 
-      player.on('ended', () => {
+      player.current.on('ended', () => {
         onEnded();
-        player.exitFullscreen(); // Exit fullscreen when the video ends
+        player.current?.exitFullscreen(); // Exit fullscreen when the video ends
       });
 
-      player.on('timeupdate', (data) => {
+      player.current.on('timeupdate', (data) => {
         onProgress(data);
       });
     }
   }, [playerRef]);
+
+  useEffect(() => {
+    // Use the existing player instance to pause/play based on isQuizModalOpen
+    console.log('Quiz Modal Status Changed: ', isQuizModalOpen);
+    if (isQuizModalOpen) {
+      console.log('Pausing video');
+      player.current?.pause();
+    } else {
+      console.log('Playing video');
+      player.current?.play();
+    }
+  }, [isQuizModalOpen]); // Run this effect when isQuizModalOpen changes
 
   const handleVideoReady = () => {
     const videoElement = document.querySelector('.video-player');

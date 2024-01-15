@@ -111,14 +111,15 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         relatedMedia: RelatedMedia[];       // Array of related media items
     }
 
-    // Check if the user's device has sharing capabilities
+    // On mount:
     useEffect(() => {
+        // Check if the user's device has sharing capabilities
         Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));
     }, []);
 
     useEffect(() => {
         if (isPopularSymptomVideoModalOpen && !source) {
-        setSource(document.title);
+            setSource(document.title);
         }
     }, [isPopularSymptomVideoModalOpen]);
 
@@ -129,56 +130,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
 
     useEffect(() => {
         let isMounted = true; // To avoid state updates on unmounted component
-
-        const fetchVideoData = async () => {
-            console.log("Fetching video data");
-            if(!popularSymptomVideo?.vimeoSourceId) return; // Early return if no vimeoId is present
-
-            try {
-                const data = await getVideoDetailData(apiUrl, popularSymptomVideo.vimeoSourceId);
-
-                // Ensure relatedMedia is always an array
-                if (data && data.relatedMedia && !Array.isArray(data.relatedMedia)) {
-                    data.relatedMedia = [data.relatedMedia]; // Wrap in an array
-                }
-
-                if(data && data.mediaId) {
-                    if (popularSymptomVideo.vimeoSourceId === location.search.split('video=')[1]) {
-                        // Log user fact that the user clicked on a push notification
-                        logUserFact({
-                        cadeyUserId: cadeyUserId,
-                        baseApiUrl: apiUrl,
-                        userFactTypeName: 'FeaturedVideoNotificationClicked',
-                        appPage: currentAppPage,
-                        detail1: String(data.mediaId),
-                        detail2: popularSymptomVideo.vimeoSourceId,
-                        });
-                    }
-                
-                    // Get Messages when the user visits the Video Detail page
-                    // We use this to decrement the unread counter
-                    fetchMessages(); 
-                }
-                
-                if (isMounted) setVideoData(data); // Update state only if component is mounted
-
-                // Set article IDs in state via setRelatedArticleIds
-                // An article is a related media item with a mediaType of 2
-                const articleIds = data.relatedMedia
-                .map((relatedMedia: RelatedMedia) => relatedMedia.relatedMediaItems)
-                .flat()
-                .filter((item: RelatedMediaItem) => item.mediaType === 2)
-                .map((item: RelatedMediaItem) => item.mediaId);
-                
-                // If any articles were returned, set them in state
-                if (articleIds.length > 0) {
-                setRelatedArticles(await getArticlesByIds(articleIds));
-                }
-
-            } catch (error) {
-                console.error("Error fetching video details:", error);
-            }
-        };
         
         if (isPopularSymptomVideoModalOpen) {
             setCurrentAppPage('Popular Symptom Video Detail');
@@ -189,7 +140,7 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 appPage: 'Popular Symptom Video Detail',
                 detail1: 'Symptom ID: ' + popularSymptomId,
             });
-            fetchVideoData();
+            
         } else {
             console.log("Resetting video data");
             // Reset states when modal is closed
@@ -227,86 +178,76 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         }
     }, [popularSymptomPlaylistPosition, popularSymptomPlaylist]);
 
-    const fetchMessages = async () => {
-        try {
-        // Getting messages
-        const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
-        const unread = data.filter(data => !data.isRead).length;
-        unreadCount.setUnreadMessagesCount?.(unread);
-        } catch (error) {
-        console.error("Error fetching video details:", error);
-        }
-    };
-
     const requestQuiz = async () => {
         // Commenting out - implementing hardcoded quizzes for now
+        console.log("Requesting quiz");
 
-        // const quizResponse = await getQuiz(
-        //   apiUrl,
-        //   Number(cadeyUserId),
-        //   1,                            // Client Context: Where the user is in the app (1 = VideoDetail)
-        //   1,                            // Entity Type (1 = video)
-        //   Number(videoData!.mediaId)    // Entity IDs (The ID of the video)
-        // );
+        const quizResponse = await getQuiz(
+            apiUrl,
+            Number(cadeyUserId),
+            1,                                      // Client Context: Where the user is in the app (1 = VideoDetail)
+            1,                                      // Entity Type (1 = video)
+            Number(popularSymptomVideo!.entityId)   // Entity IDs (The ID of the video)
+        );
 
-        // if (quizResponse.question !== null && quizResponse.question.id > 0) {
-        //   // Set the quiz data
-        //   setQuizModalData(quizResponse);
+        if (quizResponse.question !== null && quizResponse.question.id > 0) {
+            // Set the quiz data
+            setQuizModalData(quizResponse);
 
-        //   // Open the quiz modal
-        //   setQuizModalOpen(true);
-        // }
+            // Open the quiz modal
+            setQuizModalOpen(true);
+        }
 
         // Hardcoded quiz for now
         // Look for symptomId 6
-        if (popularSymptomId == 6) {
-            // OK - we're in the Easily Upset series. Now display a quiz based on which video is playing
+        // if (popularSymptomId == 6) {
+        //     // OK - we're in the Easily Upset series. Now display a quiz based on which video is playing
 
-            if (popularSymptomPlaylistPosition == 1) {
-                setQuizModalData({
-                    quizRequest: {
-                        cadeyUserId: Number(cadeyUserId),
-                        clientContext: 1,
-                        entityType: 1,
-                        entityId: 9
-                    },
-                    nextQuestionPossible: false,
-                    previousQuestionInfo: null,
-                    question: {
-                        id: 2,
-                        quizId: 2,
-                        introMessage: "",
-                        text: "Think about your child's triggers. Do you notice your child getting upset?",
-                        isRequired: true,
-                        minChoices: 1,
-                        maxChoices: 1,
-                        apiOnly_NextQuestion: false,
-                        options: [
-                            {
-                                id: 1,
-                                displayOrder: 1,
-                                optionType: 1,
-                                label: "Yes"
-                            },
-                            {
-                                id: 1,
-                                displayOrder: 1,
-                                optionType: 1,
-                                label: "No"
-                            },
-                            {
-                                id: 1,
-                                displayOrder: 1,
-                                optionType: 2,
-                                label: "Tell us about your experience"
-                            },
-                        ]
-                    },
-                });
-                // Open the quiz
-            setQuizModalOpen(true);
-            } 
-        }
+        //     if (popularSymptomPlaylistPosition == 1) {
+        //         setQuizModalData({
+        //             quizRequest: {
+        //                 cadeyUserId: Number(cadeyUserId),
+        //                 clientContext: 1,
+        //                 entityType: 1,
+        //                 entityId: 9
+        //             },
+        //             nextQuestionPossible: false,
+        //             previousQuestionInfo: null,
+        //             question: {
+        //                 id: 2,
+        //                 quizId: 2,
+        //                 introMessage: "",
+        //                 text: "Think about your child's triggers. Do you notice your child getting upset?",
+        //                 isRequired: true,
+        //                 minChoices: 1,
+        //                 maxChoices: 1,
+        //                 apiOnly_NextQuestion: false,
+        //                 options: [
+        //                     {
+        //                         id: 1,
+        //                         displayOrder: 1,
+        //                         optionType: 1,
+        //                         label: "Yes"
+        //                     },
+        //                     {
+        //                         id: 1,
+        //                         displayOrder: 1,
+        //                         optionType: 1,
+        //                         label: "No"
+        //                     },
+        //                     {
+        //                         id: 1,
+        //                         displayOrder: 1,
+        //                         optionType: 2,
+        //                         label: "Tell us about your experience"
+        //                     },
+        //                 ]
+        //             },
+        //         });
+        //         // Open the quiz
+        //     setQuizModalOpen(true);
+        //     } 
+        // }
     }
 
     // Function to copy the shareable link to clipboard
@@ -327,9 +268,13 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         });
     }
 
-    const handleRelatedVideoClick = (videoId: string) => {
+    const handleRelatedVideoClick = async (videoId: string) => {
+        
         // Get a quiz
-        requestQuiz();
+        await requestQuiz();
+
+        // Set the video to the next video in sequence
+        setPopularSymptomVideo(nextPopularSymptomVideo);
         
         // Increment the playlist position
         setPopularSymptomPlaylistPosition(popularSymptomPlaylistPosition + 1);
@@ -339,13 +284,10 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
                 
         // Set the video type for logging
         setCurrentVideoType('nextPopularVideo');
-
-        // Set the video to the next video in sequence symptom video
-        setPopularSymptomVideo(nextPopularSymptomVideo);
     }
 
     // Define the function that should be called when a video ends
-    const handleVideoEnd = () => {
+    const handleVideoEnd = async () => {
         // // Increment the playlist position
         // setPopularSymptomPlaylistPosition(prevPosition => prevPosition + 1);
 
@@ -354,9 +296,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         //     handleNextVideo();
         // }
 
-        // Get a quiz
-        requestQuiz();
-
         const newPosition = popularSymptomPlaylistPosition + 1;
         if (newPosition < popularSymptomPlaylist.length) {
             setPopularSymptomPlaylistPosition(newPosition);
@@ -364,6 +303,9 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         } else {
             // Handle the end of the playlist if needed
         }
+
+        // Get a quiz
+        requestQuiz();
     };
 
     function handleClose() {
