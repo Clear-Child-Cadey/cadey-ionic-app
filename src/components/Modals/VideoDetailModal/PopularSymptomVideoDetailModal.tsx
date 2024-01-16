@@ -234,24 +234,20 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
 
     // Define the function that should be called when a video ends
     const handleVideoEnd = async () => {
-        // // Increment the playlist position
-        // setPopularSymptomPlaylistPosition(prevPosition => prevPosition + 1);
 
-        // // If there is a next video in the playlist, play it
-        // if (nextPopularSymptomVideo && popularSymptomPlaylistPosition <= popularSymptomPlaylist.length - 1) {
-        //     handleNextVideo();
-        // }
+        // Get a quiz
+        await requestQuiz();
 
+        // Increment the playlist position
         const newPosition = popularSymptomPlaylistPosition + 1;
+        
+        // If there's another video, set it as the current video
         if (newPosition < popularSymptomPlaylist.length) {
             setPopularSymptomPlaylistPosition(newPosition);
             setPopularSymptomVideo(popularSymptomPlaylist[newPosition]);
         } else {
             // Handle the end of the playlist if needed
         }
-
-        // Get a quiz
-        requestQuiz();
     };
 
     function handleClose() {
