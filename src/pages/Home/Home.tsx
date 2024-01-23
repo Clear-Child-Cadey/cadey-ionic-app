@@ -36,12 +36,9 @@ import { firebasePerf } from '../../api/Firebase/InitializeFirebase';
 import { trace } from "firebase/performance";
 
 const HomePage: React.FC<{ 
-  currentTab: string, 
-  tutorialStep: number, 
-  setTutorialStep: React.Dispatch<React.SetStateAction<number>>, 
   vimeoIdFromUrl?: string,
   articleIdFromUrl?: string,
-}> = ({ currentTab, tutorialStep, setTutorialStep, vimeoIdFromUrl, articleIdFromUrl }) => {
+}> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
   
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
@@ -120,58 +117,39 @@ const HomePage: React.FC<{
   }
   }, [articleIds, trendingVideos, featuredVideos, newVideos, playedVideos]);
 
-  // On mount, check if Messages is the currentTab. If so, set it to Home.
-  // This happens when the user navigates to Home from the Messages tab via 
-  // the button present before they get their first message
-  // Refactor: This is not good code and should be re-written when it makes business sense
-  useEffect(() => {
-    if (currentTab === 'Messages') {
-      currentTab = 'Home';
-    }
-  }, []);
-
   // This runs on mount and every time currentTab changes or the video modal opens/closes
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
-    if (currentTab === 'Home') {
-      let timeoutId: any;
+    let timeoutId: any;
 
-      // Start a timer
-      timeoutId = setTimeout(() => {
-        if (!dataLoaded) {
-          // TODO: Implement logic for handling long load times
+    // Start a timer
+    timeoutId = setTimeout(() => {
+      if (!dataLoaded) {
+        // TODO: Implement logic for handling long load times
 
-          // Log a user fact
-          logUserFact({
-            cadeyUserId: cadeyUserId,
-            baseApiUrl: apiUrl,
-            userFactTypeName: 'ErrorLog',
-            appPage: 'App Open',
-            detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
-          });
-          
-          logErrorToFirestore({
-            userID: cadeyUserId,
-            timestamp: new Date().toISOString(),
-            error: 'getAppData call (/appopened) took longer than 10 seconds',
-            context: "Fetching App Data"
-          });
+        // Log a user fact
+        logUserFact({
+          cadeyUserId: cadeyUserId,
+          baseApiUrl: apiUrl,
+          userFactTypeName: 'ErrorLog',
+          appPage: 'App Open',
+          detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
+        });
+        
+        logErrorToFirestore({
+          userID: cadeyUserId,
+          timestamp: new Date().toISOString(),
+          error: 'getAppData call (/appopened) took longer than 10 seconds',
+          context: "Fetching App Data"
+        });
 
-          setIsLoading(false); // Optionally stop the loader
-        }
-      }, 10000); // Set timeout for 10 seconds
-
-      fetchData(); // Fetch the homepage data if the user is on the Home tab
-      
-      if (tutorialStep === 0) {
-        setTutorialStep(1); // If the tutorial hasn't started, mark it completed
+        setIsLoading(false); // Optionally stop the loader
       }
-    } else if (timerRef.current) {
-      // Clear the timer if navigating away from the Home tab.
-      clearTimeout(timerRef.current);
-      timerRef.current = undefined;
-    }
-  }, [currentTab, isVideoModalOpen]);
+    }, 10000); // Set timeout for 10 seconds
+
+    fetchData(); // Fetch the homepage data
+      
+  }, [isVideoModalOpen]);
 
   // Check for onboarding quiz on mount and when cadeyUserId changes
   useEffect(() => {
@@ -289,7 +267,7 @@ const HomePage: React.FC<{
         const limitedValue = inputValue.slice(0, 100);
         e.target.value = limitedValue;
     }
-}
+  }
 
 const handleSearchInput = async (e: React.KeyboardEvent) => {
   // Dismiss the spotlight
