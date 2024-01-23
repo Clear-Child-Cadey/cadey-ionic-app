@@ -126,9 +126,20 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         // Check if the user's device has sharing capabilities
         Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));
 
-        console.log("Popular Symptom ID: " + pathId);
-
+        // Get the video data from the API
         getPopularVideoData(pathId);
+
+        // Set the current app page
+        setCurrentAppPage('Path Detail');
+        
+        // Log a user fact that the user navigated to the popular symptom video detail page
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Path Detail',
+            detail1: 'Path ID: ' + pathId,
+        });
     }, []);
 
     useEffect(() => {
@@ -141,29 +152,6 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
     useEffect(() => {
         contentRef.current?.scrollToTop(500); // 500 is the duration of the scroll animation in milliseconds
     }, [popularSymptomVideo?.vimeoSourceId]);  
-
-    useEffect(() => {
-        let isMounted = true; // To avoid state updates on unmounted component
-        
-        if (isPopularSymptomVideoModalOpen) {
-            setCurrentAppPage('Popular Symptom Video Detail');
-            logUserFact({
-                cadeyUserId: cadeyUserId,
-                baseApiUrl: apiUrl,
-                userFactTypeName: 'appPageNavigation',
-                appPage: 'Popular Symptom Video Detail',
-                detail1: 'Symptom ID: ' + popularSymptomId,
-            });
-            
-        } else {
-            // Reset states when modal is closed
-            setPopularSymptomVideo(null);
-            setCurrentArticleId(null);
-            setVideoData(undefined);
-            setSource('');
-            setPopularSymptomPlaylistPosition(0);
-        }
-    }, [isPopularSymptomVideoModalOpen, popularSymptomVideo?.vimeoSourceId]);
 
     // If the popular symptom video changes, update the nextPopularSymptomVideo value
     useEffect(() => {
@@ -275,6 +263,11 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         }
     };
 
+    // Log changes to popularSymptomVideo 
+    useEffect(() => {
+        console.log('popularSymptomVideo: ', popularSymptomVideo);
+    }, [popularSymptomVideo]);
+
     return (
         <IonPage className="video-detail">
             <IonHeader>
@@ -284,30 +277,30 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
             </IonHeader>
             <IonContent fullscreen ref={contentRef}>
                 {popularSymptomVideo && popularSymptomVideo.vimeoSourceId && (
-                <IonRow className="video-player-row">
-                    <div className="current" key={popularSymptomVideo.vimeoSourceId} ref={videoRef}>
-                        <VideoPlayer 
-                            videoId={popularSymptomVideo.vimeoSourceId}
-                            mediaId={popularSymptomVideo.entityId.toString()}
-                            source={source}
-                            onVideoHeightChange={(height) => setVideoHeight(height)}
-                            onVideoEnd={handleVideoEnd}
-                        />
-                    <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
-                        <div className="tag-share">
-                        {canShare && popularSymptomVideo.vimeoSourceId && (
-                            <div className="share" onClick={(event) => handleShare(event, popularSymptomVideo.vimeoSourceId, popularSymptomVideo.entityId.toString())}>
-                            <p>Share </p>
-                            <div className="share-button">
-                                <IonIcon icon={arrowRedoOutline} />
+                    <IonRow className="video-player-row">
+                        <div className="current" key={popularSymptomVideo.vimeoSourceId} ref={videoRef}>
+                            <VideoPlayer 
+                                videoId={popularSymptomVideo.vimeoSourceId}
+                                mediaId={popularSymptomVideo.entityId.toString()}
+                                source={source}
+                                onVideoHeightChange={(height) => setVideoHeight(height)}
+                                onVideoEnd={handleVideoEnd}
+                            />
+                            <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
+                                <div className="tag-share">
+                                    {canShare && popularSymptomVideo.vimeoSourceId && (
+                                        <div className="share" onClick={(event) => handleShare(event, popularSymptomVideo.vimeoSourceId, popularSymptomVideo.entityId.toString())}>
+                                            <p>Share </p>
+                                            <div className="share-button">
+                                                <IonIcon icon={arrowRedoOutline} />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <h3>{popularSymptomVideo.entityTitle}</h3>
                             </div>
-                            </div>
-                        )}
                         </div>
-                        <h3>{popularSymptomVideo.entityTitle}</h3>
-                    </div>
-                    </div>
-                </IonRow>
+                    </IonRow>
                 )}
                 <IonRow>
                     <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
