@@ -13,12 +13,14 @@ import {
 // CSS
 import './RouterTabs.css';
 // Ionicons
-import { homeOutline, searchOutline, libraryOutline } from 'ionicons/icons';
+import { homeOutline, libraryOutline, walkOutline } from 'ionicons/icons';
 // Pages
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
 import LibraryPage from '../../pages/Library/Library';
 import SearchPage from '../../pages/Search/Search';
+import PathListingPage from '../../pages/Paths/PathListing';
+import PathDetailPage from '../../pages/Paths/PathDetail';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -28,7 +30,6 @@ import { HomeTabVisibilityContext } from '../../context/TabContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 import UnreadContext from '../../context/UnreadContext';
-import { useSpotlight } from '../../context/SpotlightContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
@@ -52,12 +53,7 @@ const RouterTabs: React.FC = () => {
   const { currentAppPage } = useAppPage();
 
   const handleTabClick = async (tabName: string) => {
-    if(tabName=="Goals") {
-      setUnreadGoals?.(false);
-    } else {
-      fetchGoalsIndicator(); // Check for unread goals
-    }
-    // log user fact that the user clicked on the tap bar
+    // Log user fact that the user clicked on the tap bar
     logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
@@ -66,19 +62,6 @@ const RouterTabs: React.FC = () => {
       detail1: tabName,
     });
   };
-
-  const fetchGoalsIndicator = async () => {
-    try {
-      const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
-      if (unreadGoalsCount > 0) {
-        setUnreadGoals?.(true);
-      } else {
-        setUnreadGoals?.(false);
-      }
-    } catch (error) {
-        console.error("Error fetching goals indicator:", error);
-    }
-  }
 
   // On component mount: 
   // - Set the page title
@@ -96,7 +79,6 @@ const RouterTabs: React.FC = () => {
     };
     // Get data when the component mounts
     fetchMessages();
-    fetchGoalsIndicator(); 
   }, []);
 
   return (
@@ -117,10 +99,7 @@ const RouterTabs: React.FC = () => {
               const articleId = routeProps.location.search.split('article=')[1];
 
               return (
-                  <HomePage 
-                    vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
-                    articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
-                  />
+                  <HomePage />
               );
           }} />
             <Route exact path="/">
@@ -129,6 +108,11 @@ const RouterTabs: React.FC = () => {
             <Route exact path="/App/Admin" component={AdminPage} />
             <Route exact path="/App/Library" component={LibraryPage} />
             <Route exact path="/App/Library/Search" component={SearchPage} />
+            <Route exact path="/App/Paths">
+              <Redirect to="/App/Paths/PathListing" />
+            </Route>
+            <Route exact path="/App/Paths/PathListing" component={PathListingPage} />
+            <Route exact path="/App/Paths/PathDetail" component={PathDetailPage} />
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
           </Switch>
@@ -144,6 +128,16 @@ const RouterTabs: React.FC = () => {
             <IonLabel>Home</IonLabel>
           </IonTabButton>
           
+          {/* Paths */}
+          <IonTabButton 
+            tab="Paths" 
+            href="/App/Paths/"
+            onClick={() => handleTabClick('Paths')}
+          >
+            <IonIcon icon={walkOutline} />
+            <IonLabel>Paths</IonLabel>
+          </IonTabButton>
+
           {/* Library */}
           <IonTabButton 
             tab="Library" 

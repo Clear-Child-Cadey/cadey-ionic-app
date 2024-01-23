@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './Home.css';
 import { 
     IonPage, 
@@ -9,289 +9,91 @@ import {
     IonRow,
     IonText,
     IonLoading,
-    IonSearchbar,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonButton,
 } from '@ionic/react';
-import { SplashScreen } from '@capacitor/splash-screen';
-// Routing
-import { useHistory } from 'react-router-dom';
 // Contexts
-import { useSpotlight } from '../../context/SpotlightContext';
-import { useModalContext } from '../../context/ModalContext';
-import { useAppPage } from '../../context/AppPageContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
-// Components
-import ArticlesListHorizontal from '../../components/Articles/ArticlesListHorizontal';
-import VideoList from '../../components/Videos/VideoList';
-import PopularSymptomsList from '../../components/SymptomsList/PopularSymptomsList';
+import UnreadCountContext from '../../context/UnreadContext';
+import { useModalContext } from '../../context/ModalContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
-import getHomeData from '../../api/HomeData';
+import { getUserMessages } from '../../api/UserMessages';
 import { logUserFact } from '../../api/UserFacts';
-import { getQuiz } from '../../api/Quiz';
-import { logErrorToFirestore } from '../../api/Firebase/logErrorToFirestore';
-// Variables
-import { tracingEnabled } from '../../variables/Logging';
-// Firebase
-import { firebasePerf } from '../../api/Firebase/InitializeFirebase';
-import { trace } from "firebase/performance";
 
-const HomePage: React.FC<{ 
-  vimeoIdFromUrl?: string,
-  articleIdFromUrl?: string,
-}> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
-  
-  const [featuredVideos, setFeaturedVideos] = useState([]);
-  const [newVideos, setNewVideos] = useState([]);
-  const [playedVideos, setPlayedVideos] = useState([]);
-  const [trendingVideos, setTrendingVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const [articleIds, setArticleIds] = useState<number[]>([]);
-  const { showSpotlight, setShowSpotlight } = useSpotlight();
-  const timerRef = useRef<number | undefined>();
+export interface Message {
+  mediaId: number;
+  mediaSourceId: string;
+  title: string;
+  featuredMessage: string;
+  isRead: boolean;
+}
 
-  const [dataLoaded, setDataLoaded] = useState(false);
+const HomePage: React.FC<{ }> = ({  }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
+    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const userFactUrl = `${apiUrl}/userfact`
+    const unreadCount = useContext(UnreadCountContext); // Get the current unread count
+    const [messagesLoaded, setMessagesLoaded] = useState(false); // Used to determine if the messages have been loaded yet
+    const { setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
-  const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
+    const {
+      isVideoModalOpen,
+      setVideoModalOpen,
+      isArticleDetailModalOpen,
+      setCurrentVimeoId,
+    } = useModalContext();
 
-  const { cadeyUserId } = React.useContext(CadeyUserContext);
-  const { apiUrl } = React.useContext(ApiUrlContext);
-
-  const history = useHistory();
-
-  var getHomeDataTrace: any;
-
-  // Get all the props from the modal context
-  const { 
-    isVideoModalOpen,
-    setVideoModalOpen,
-    setArticleDetailModalOpen,
-    setCurrentVimeoId,
-    setCurrentArticleId,
-    setQuizModalData,
-    setWelcomeModalOpen,
-  } = useModalContext();
-
-  // Get the latest data from the API
-  const { getHomeDataFromApi } = getHomeData();
-
-  const fetchData = async () => {
-    // Start loader
-    setIsLoading(true);
-    try {
-      // Start a Firebase trace      
-      if (tracingEnabled) {
-          getHomeDataTrace = trace(firebasePerf, "getHomeDataTrace");
-          await getHomeDataTrace.start();
-      }
-      
-      // Get the data from the API
-      const { featuredVideos, newVideos, playedVideos, trendingVideos, articleIds } = await getHomeDataFromApi();
-
-      setFeaturedVideos(featuredVideos);
-      setNewVideos(newVideos);
-      setPlayedVideos(playedVideos);
-      setTrendingVideos(trendingVideos);
-      setArticleIds(articleIds);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      // Hide the splash screen after data has been fetched
-      SplashScreen.hide();
-      // Stop the trace
-      if (tracingEnabled) {
-        getHomeDataTrace.stop();
-    }
-    }
-  };
-
-  // useEffect to dismiss the loader
-  useEffect(() => {
-    // If the API has returned something, and did not return articles, dismiss the loader. Otherwise, the loader will be dismissed in the onArticlesLoaded callback
-    if (
-      (featuredVideos.length > 0 || newVideos.length > 0 || playedVideos.length > 0 || trendingVideos.length > 0 || articleIds.length > 0 ) 
-      && 
-      (articleIds.length == 0)) 
-  {
-    setIsLoading(false);
-  }
-  }, [articleIds, trendingVideos, featuredVideos, newVideos, playedVideos]);
-
-  // This runs on mount and every time currentTab changes or the video modal opens/closes
-  // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
-  useEffect(() => {
-    let timeoutId: any;
-
-    // Start a timer
-    timeoutId = setTimeout(() => {
-      if (!dataLoaded) {
-        // TODO: Implement logic for handling long load times
-
-        // Log a user fact
+    // On component mount & isVideoModalOpen change
+    useEffect(() => {
+      const fetchMessages = async () => {
+          try {
+            // Start the loader
+            setIsLoading(true);
+            // Getting messages
+            const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+            setMessages(data);
+            const unread = data.filter(data => !data.isRead).length;
+            unreadCount.setUnreadMessagesCount?.(unread);
+          } catch (error) {
+              console.error("Error fetching video details:", error);
+          }
+          // Clear the loader
+          setIsLoading(false);
+          setMessagesLoaded(true);
+      };
+      document.title = 'Messages';
+      if (!isVideoModalOpen && !isArticleDetailModalOpen) {
+        setCurrentBasePage('Messages');
+        setCurrentAppPage('Messages');
         logUserFact({
           cadeyUserId: cadeyUserId,
           baseApiUrl: apiUrl,
-          userFactTypeName: 'ErrorLog',
-          appPage: 'App Open',
-          detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
+          userFactTypeName: 'appPageNavigation',
+          appPage: 'Messages',
         });
-        
-        logErrorToFirestore({
-          userID: cadeyUserId,
-          timestamp: new Date().toISOString(),
-          error: 'getAppData call (/appopened) took longer than 10 seconds',
-          context: "Fetching App Data"
-        });
-
-        setIsLoading(false); // Optionally stop the loader
       }
-    }, 10000); // Set timeout for 10 seconds
+      fetchMessages();
+    }, [isVideoModalOpen]);
 
-    fetchData(); // Fetch the homepage data
-      
-  }, [isVideoModalOpen]);
-
-  // Check for onboarding quiz on mount and when cadeyUserId changes
-  useEffect(() => {
-    const checkOnboarding = async () => {
-      
-      const requestQuiz = async () => {
-        const quizResponse = await getQuiz(
-          apiUrl,
-          Number(cadeyUserId),
-          2,                    // Client Context: Where the user is in the app (1 = VideoDetail)
-          0,                    // Entity Type (1 = video)
-          0                     // Entity IDs (The ID of the video)
-        );
-    
-        if (quizResponse.question !== null && quizResponse.question.id > 0) {
-
-          // Set the quiz data
-          setQuizModalData(quizResponse);
-    
-          // Show the welcome screen
-          console.log("Showing welcome modal");
-          setWelcomeModalOpen(true);
-
-          // NOTE: We don't open the quiz modal here as the user needs to see the welcome screen first. Welcome screen will open the quiz modal.
-        }
-      }
-      
-      if (cadeyUserId) {
-        requestQuiz();
-      }
-    }
-  
-    if (cadeyUserId) {
-      checkOnboarding();
-    }
-  }, [cadeyUserId, apiUrl]);
-
-  // Commenting all this out as we're changing the new user experience
-  // // Run when trendingVideos or tutorialStep changes
-  // useEffect(() => {
-  //   // If the tutorial has already progressed, don't set a new timer.
-  //   if (tutorialStep !== 0) return;
-    
-  //   // Wait to show the spotlight if the user has trending videos and the tutorial step is 0
-  //   if (trendingVideos.length > 0 && tutorialStep === 0) {
-  //     timerRef.current = window.setTimeout(() => {
-  //       setShowSpotlight(true);
-  //       setTutorialStep(1);
-  //     }, 8000); 
-  //   }
-
-  //   // This is to ensure if for some reason the component gets unmounted, we clear the timer
-  //   return () => {
-  //     if (timerRef.current) clearTimeout(timerRef.current);
-  //   };
-  // }, [trendingVideos, tutorialStep]);
-
-  // On component mount:
-  useEffect(() => {
-    document.title = 'Home'; // Set the page title
-    setCurrentBasePage('Home'); // Set the current base page
-    setCurrentAppPage('Home'); // Set the current app page
-    logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
-      userFactTypeName: 'appPageNavigation',
-      appPage: 'Home',
-    });
-
-    // Dismiss the spotlight on interaction
-    const handleInteraction = (event: MouseEvent | TouchEvent) => {
-      setShowSpotlight(false);
-    };  
-      
-    // Add event listeners for clicks and touches, and handle the interaction
-    document.addEventListener('click', handleInteraction);
-    document.addEventListener('touchstart', handleInteraction);
-  
-    return () => {
-      document.removeEventListener('click', handleInteraction);
-      document.removeEventListener('touchstart', handleInteraction);
-    };
-  }
-  , []);
-
-  // Show the modal if a vimeoId is passed in via query string
-  useEffect(() => {
-    if (vimeoIdFromUrl) {
-      setCurrentVimeoId(vimeoIdFromUrl);
+    const handleMessageClick = (mediaId: string, mediaSourceId: string)  => {
+      // Log a user fact that the user clicked a message from the messages page
+      logUserFact({
+        cadeyUserId: cadeyUserId,
+        baseApiUrl: apiUrl,
+        userFactTypeName: 'MessageClickedOnMessagesPage',
+        appPage: currentAppPage,
+        detail1: mediaId,
+        detail2: mediaSourceId,
+      });
+      setCurrentVimeoId(mediaSourceId);
       setVideoModalOpen(true);
     }
-  }, [vimeoIdFromUrl]);
-
-  // Show the modal if an articleId is passed in via query string
-  useEffect(() => {
-    if (articleIdFromUrl) {
-      setCurrentArticleId(Number(articleIdFromUrl));
-      setArticleDetailModalOpen(true);
-    }
-  }, [articleIdFromUrl]);
-
-  // Callback function to handle the load status of articles
-  const onArticlesLoaded = () => {
-    setIsLoading(false);
-  };
-
-  const handleInputChange = (e: any) => {
-    // Dismiss the spotlight
-    setShowSpotlight(false);
-    if (timerRef.current) clearTimeout(timerRef.current);
-
-    // Restrict input to 100 characters
-    const inputValue = e.detail.value;
-    if (inputValue.length > 100) {
-        const limitedValue = inputValue.slice(0, 100);
-        e.target.value = limitedValue;
-    }
-  }
-
-const handleSearchInput = async (e: React.KeyboardEvent) => {
-  // Dismiss the spotlight
-  setShowSpotlight(false);
-  if (timerRef.current) clearTimeout(timerRef.current);
-  
-  const searchTerm = (e.target as HTMLInputElement).value;
-    
-    if (e.key === "Enter") {
-
-        // Check if the user has entered a search term
-        if (searchTerm.trim() === "") {
-            alert("Please enter a search term.");
-            return;
-        }
-
-        // Route the user to the search page
-        history.push({
-          pathname: '/App/Search',
-          search: `?query=${encodeURIComponent(searchTerm)}`, // Optional if you want the term in the URL
-          state: { query: searchTerm }
-        });
-    }
-}
 
   return (
     <IonPage className="home">
@@ -301,85 +103,55 @@ const handleSearchInput = async (e: React.KeyboardEvent) => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-
-        {/* Show a loading state if necessary */}
-        {isLoading && (
-          <IonLoading isOpen={true} message={'Loading your data...'} />
-        )}
-
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">{trendingVideos.length > 0 ? "Welcome" : "Home"}</IonTitle>
+            <IonTitle size="large">Home</IonTitle>
           </IonToolbar>
         </IonHeader>
-        
-        {!trendingVideos.length && (
-          <IonRow className="search-container">
-            {/* Search bar */}
-            <IonSearchbar 
-                className="search-bar" 
-                onIonChange={handleInputChange}
-                onKeyDown={handleSearchInput}
-                mode="ios"
-            ></IonSearchbar>
+        <IonRow>
+          <IonButton routerLink='/App/Paths'>Resume paths</IonButton>
+          <IonButton routerLink='/App/Library'>Explore library</IonButton>
+        </IonRow>
+        {messagesLoaded && (
+          <IonRow>
+              {/* "subcopy" that changes depending on whether the user has messages or not */}
+              <IonText className="subcopy">{messages.length ? 
+                "Your personalized messages" : 
+                "You have no messages"
+              }</IonText>
           </IonRow>
         )}
         
-        <IonRow>
-          <IonText className="subcopy">
-            {trendingVideos.length > 0 
-              ? "What brings you here today?"
-              : "Here are a few suggestions, based on your concerns about your child."
-            }
-          </IonText>
-        </IonRow>
         <hr className="divider" />
 
-        {/* If the user has trending videos, show the popular symptoms component */}
-        {trendingVideos.length > 0 && (
-          <IonRow className="popular-symptoms-row">
-            <PopularSymptomsList />
-          </IonRow>
+        <IonLoading isOpen={isLoading} message={'Loading Messages...'} />
+        {messagesLoaded && !messages.length && (
+            <IonRow className="no-messages-content">
+                <IonText className="subcopy">When you watch videos, your daily personalized messages will appear here.</IonText>
+                <IonButton routerLink='/App/Home'>Watch Videos</IonButton>
+            </IonRow>
         )}
+        {messagesLoaded && !isLoading && (
+          <IonList>
+              {messages.map((message, index) => (
+                  <IonItem 
+                    key={index} 
+                    onClick={() => handleMessageClick(message.mediaId.toString(), message.mediaSourceId,)}
+                    className={message.isRead ? "read" : "unread"}
+                  >
+                      {/* Render the unread indicator dot if the message is unread, otherwise render a placeholder */}
+                      {message.isRead ? 
+                          <div className="read-placeholder"></div> :
+                          <div className="unread-indicator"></div> 
+                      }
 
-        {trendingVideos.length === 0 && (
-          <>
-            {/* If user has watched videos, show this. Else, skip it */}
-            {playedVideos.length > 0 && (
-              <IonRow className="video-list-row recently-viewed">
-                  <h2>Recently Viewed</h2>
-                  <VideoList videos={playedVideos} listType='horizontal' />
-              </IonRow>
-            )}
-            {/* If user has featured videos, show this. Else, skip it */}
-            {featuredVideos.length > 0 && (
-              <IonRow className="video-list-row featured">
-                  <h2>Watch Now</h2>
-                  <VideoList videos={featuredVideos} listType='horizontal' /> 
-              </IonRow>
-            )}
-            {/* If user has articles, show this. Else, skip it */}
-            {articleIds.length > 0 && (
-              <IonRow className="article-list-row">
-                <h2>Read Now</h2>
-                <ArticlesListHorizontal articleIds={articleIds} onLoaded={onArticlesLoaded} />
-              </IonRow>
-            )}
-            {/* If user has new videos, show this. Else, skip it */}
-            {newVideos.length > 0 && (
-              <IonRow className="video-list-row new">
-                  <h2>New Videos</h2>
-                  <VideoList videos={newVideos} listType='horizontal' />
-              </IonRow>
-            )}
-            {/* If user has trending videos, show this. Else, skip it */}
-            {trendingVideos.length > 0 && (
-              <IonRow className="video-list-row trending">
-                  <h2>Trending Now</h2>
-                  <VideoList videos={trendingVideos} listType='horizontal' />
-              </IonRow>
-            )}
-          </>
+                      <IonLabel>
+                          <h2>{message.title}</h2>
+                          <p>{message.featuredMessage}</p>
+                      </IonLabel>
+                  </IonItem>
+              ))}
+          </IonList>
         )}
       </IonContent>
     </IonPage>
