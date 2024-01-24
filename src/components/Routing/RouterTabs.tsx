@@ -21,6 +21,7 @@ import LibraryPage from '../../pages/Library/Library';
 import SearchPage from '../../pages/Search/Search';
 import PathListingPage from '../../pages/Paths/PathListing';
 import PathDetailPage from '../../pages/Paths/PathDetail';
+import ArticlesListingPage from '../../pages/Articles/ArticlesListing';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -37,6 +38,7 @@ import { getNewGoalsIndicator } from '../../api/Goals';
 // Interfaces
 import MessagesPage, { Message } from '../../pages/Messages/Messages';
 import { logUserFact } from '../../api/UserFacts';
+import ArticlesList from '../Articles/ArticlesList';
 
 const RouterTabs: React.FC = () => {
   const homeTabVisibility = useContext(HomeTabVisibilityContext);
@@ -105,6 +107,7 @@ const RouterTabs: React.FC = () => {
             {/* Library routes */}
             <Route exact path="/App/Library" component={LibraryPage} />
             <Route exact path="/App/Library/Search" component={SearchPage} />
+            <Route exact path="/App/Library/Articles" component={ArticlesListingPage} />
             
             {/* Paths routes */}
             <Route exact path="/App/Paths">

@@ -9,6 +9,7 @@ import {
     IonIcon,
     IonSearchbar,
     IonRow,
+    IonButton,
 } from '@ionic/react';
 // Icons
 import { checkmarkOutline } from 'ionicons/icons';
@@ -227,6 +228,20 @@ const ConcernsPage: React.FC = () => {
         }
     }
 
+    const handleButtonClick = (route: string) => () => {
+        // Log user fact that the user clicked on the button
+        // logUserFact({
+        //   cadeyUserId: cadeyUserId,
+        //   baseApiUrl: apiUrl,
+        //   userFactTypeName: 'TapBarNavClick',
+        //   appPage: 'Home',
+        //   detail1: pageName,
+        // });
+    
+        // Navigate to the page
+        history.push('/App' + route);
+      }
+
     // Render the screen
     return (
         <IonPage>
@@ -307,6 +322,7 @@ const ConcernsPage: React.FC = () => {
                             mode="ios"
                         ></IonSearchbar>
                     </IonRow>
+                    <IonButton onClick={() => handleButtonClick("/Library/Articles")}>Articles</IonButton>
                     <ConcernsList onNext={handleConcernsNext} />
                 </IonRow>
             );

@@ -52,8 +52,6 @@ const HomePage: React.FC<{ }> = ({  }) => {
   // Get all the props from the modal context
   const { 
     isVideoModalOpen,
-    setVideoModalOpen,
-    setCurrentVimeoId,
     setQuizModalData,
     setWelcomeModalOpen,
   } = useModalContext();
