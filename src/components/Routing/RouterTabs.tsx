@@ -35,7 +35,7 @@ import { useAppPage } from '../../context/AppPageContext';
 import { getUserMessages } from '../../api/UserMessages';
 import { getNewGoalsIndicator } from '../../api/Goals';
 // Interfaces
-import { Message } from '../../pages/Messages/Messages';
+import MessagesPage, { Message } from '../../pages/Messages/Messages';
 import { logUserFact } from '../../api/UserFacts';
 
 const RouterTabs: React.FC = () => {
@@ -94,25 +94,28 @@ const RouterTabs: React.FC = () => {
         <IonRouterOutlet>
           <Switch>
             {/* Define all of the specific routes */}
-            <Route exact path="/App/Home" render={(routeProps) => {
-              const vimeoId = routeProps.location.search.split('video=')[1];
-              const articleId = routeProps.location.search.split('article=')[1];
 
-              return (
-                  <HomePage />
-              );
-          }} />
+            {/* Home routes */}
+            <Route exact path="/App/Home" component={HomePage} />
             <Route exact path="/">
                 <Redirect to="/App/Home" />
             </Route>
-            <Route exact path="/App/Admin" component={AdminPage} />
+            <Route exact path="/App/Home/Messages" component={MessagesPage} />
+            
+            {/* Library routes */}
             <Route exact path="/App/Library" component={LibraryPage} />
             <Route exact path="/App/Library/Search" component={SearchPage} />
+            
+            {/* Paths routes */}
             <Route exact path="/App/Paths">
               <Redirect to="/App/Paths/PathListing" />
             </Route>
             <Route exact path="/App/Paths/PathListing" component={PathListingPage} />
             <Route exact path="/App/Paths/PathDetail" component={PathDetailPage} />
+            
+            {/* Miscellaneous routes */}
+            <Route exact path="/App/Admin" component={AdminPage} />
+
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />
           </Switch>
