@@ -9,6 +9,8 @@ import {
 } from '@ionic/react';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';
+// CSS
+import './ArticlesList.css';
 
 // Setup the interface
 interface ArticlesListProps {
@@ -23,6 +25,7 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ categoryId, onSelectArticle
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes
     useEffect(() => {
+        console.log("Fetching articles for category: ", categoryId);
         const fetchArticles = async () => {
             try {
                 dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });
@@ -50,26 +53,24 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ categoryId, onSelectArticle
     }
 
     return (
-        <div>
-            <IonList>
-                {articles.map((article, index) => (
-                    <IonItem 
-                        key={index}
-                        onClick={() => handleOnClick(article)}
-                    >
-                        {article.featured_image_url && (
-                            <IonThumbnail slot="start">
-                                <IonImg src={article.featured_image_url} alt={article.title.rendered} />
-                            </IonThumbnail>
-                        )}
-                        <IonLabel>
-                            <h2>{article.title.rendered}</h2>
-                            <p>{stripHtml(article.excerpt.rendered)}</p>
-                        </IonLabel>
-                    </IonItem>
-                ))}
-            </IonList>
-        </div>
+        <IonList className="article-listing">
+            {articles.map((article, index) => (
+                <IonItem 
+                    key={index}
+                    onClick={() => handleOnClick(article)}
+                >
+                    {article.featured_image_url && (
+                        <IonThumbnail slot="start">
+                            <IonImg src={article.featured_image_url} alt={article.title.rendered} />
+                        </IonThumbnail>
+                    )}
+                    <IonLabel>
+                        <h2>{article.title.rendered}</h2>
+                        {/* <p>{stripHtml(article.excerpt.rendered)}</p> */}
+                    </IonLabel>
+                </IonItem>
+            ))}
+        </IonList>
     );
 };
 

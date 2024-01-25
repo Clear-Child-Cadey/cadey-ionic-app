@@ -228,7 +228,7 @@ const ConcernsPage: React.FC = () => {
         }
     }
 
-    const handleButtonClick = (route: string) => () => {
+    const handleButtonClick = (route: string) => {
         // Log user fact that the user clicked on the button
         // logUserFact({
         //   cadeyUserId: cadeyUserId,
@@ -237,10 +237,11 @@ const ConcernsPage: React.FC = () => {
         //   appPage: 'Home',
         //   detail1: pageName,
         // });
-    
+        
         // Navigate to the page
         history.push('/App' + route);
-      }
+    }
+    
 
     // Render the screen
     return (
@@ -323,6 +324,7 @@ const ConcernsPage: React.FC = () => {
                         ></IonSearchbar>
                     </IonRow>
                     <IonButton onClick={() => handleButtonClick("/Library/Articles")}>Articles</IonButton>
+
                     <ConcernsList onNext={handleConcernsNext} />
                 </IonRow>
             );

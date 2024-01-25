@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { WP_ArticleDetail, getArticleDetail } from '../../api/WordPress/GetArticleDetail';
+import { useLocation, useHistory } from 'react-router';
 import {
     IonContent,
     IonRow,
@@ -18,18 +19,21 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useAppPage } from '../../context/AppPageContext';
 
-// Setup the interface
-interface ArticleDetailProps {
-    articleId: number;
-}
 
-const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
+const ArticleDetailPage: React.FC = () => {
     const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
     const { state: loadingState, dispatch } = useLoadingState();
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
+    
     const { setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
+    const history = useHistory();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+
+    // Get the article ID from the URL
+    const articleId = Number(queryParams.get('id'));
 
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {
@@ -53,6 +57,8 @@ const ArticleDetailPage: React.FC<ArticleDetailProps> = ({ articleId }) => {
                 dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: false } });
             }
         };
+
+        console.log("Fetching article detail for articleId: ", articleId);
 
         fetchArticleDetail();
 

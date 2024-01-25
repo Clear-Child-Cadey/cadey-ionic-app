@@ -8,8 +8,9 @@ import {
     IonToolbar,
     IonTitle,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 // CSS
-import './ArticleDetail.css';
+import './ArticleCategoryListing.css';
 // API
 import { logUserFact } from '../../api/UserFacts';
 import { getCategories } from '../../api/WordPress/GetCategories';
@@ -19,25 +20,27 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { useAppPage } from '../../context/AppPageContext';
 import { WP_Category } from '../../api/WordPress/GetCategories';
 
-const ArticlesListingPage: React.FC = () => {
+const ArticleCategoryListingPage: React.FC = () => {
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
     const { setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
     const [articleCategories, setArticleCategories] = useState<WP_Category[]>([]);
 
+    const history = useHistory();
+
     // Fetch the article detail when the component loads or the articleId changes
     useEffect(() => {
 
         // Set the title of the page to the title of the article
-        document.title = "Articles";
-        setCurrentBasePage('Articles');
-        setCurrentAppPage('Articles');
+        document.title = "Article Categories";
+        setCurrentBasePage('Article Categories');
+        setCurrentAppPage('Article Categories');
         logUserFact({
             cadeyUserId: cadeyUserId,
             baseApiUrl: apiUrl,
             userFactTypeName: 'appPageNavigation',
-            appPage: 'Articles',
+            appPage: 'Article Categories',
           });
 
         // Get the article categories from the WP API
@@ -54,17 +57,30 @@ const ArticlesListingPage: React.FC = () => {
 
     }, []);
 
+    const handleCategorySelection = (categoryId: number) => {
+        // Log user fact that the user clicked on the tap bar
+        // logUserFact({
+        //     cadeyUserId: cadeyUserId,
+        //     baseApiUrl: apiUrl,
+        //     userFactTypeName: 'ArticleCategorySelection',
+        //     appPage: currentAppPage,
+        //     detail1: categoryId.toString(),
+        // });
+
+        history.push(`/App/Library/Articles/Category?id=${categoryId}`);
+    }
+
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Articles</IonTitle>
+                    <IonTitle>Article Categories</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
                 <IonHeader collapse="condense">
                     <IonToolbar>
-                        <IonTitle size="large">Articles</IonTitle>
+                        <IonTitle size="large">Article Categories</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonRow>
@@ -72,7 +88,7 @@ const ArticlesListingPage: React.FC = () => {
                         <div className="article-categories">
                             {articleCategories.map((category) => (
                                 <div className="article-category" key={category.id}>
-                                    <h2>{category.name}</h2>
+                                    <h2 onClick={() => handleCategorySelection(category.id)}>{category.name}</h2>
                                 </div>
                             ))}
                         </div>
@@ -83,4 +99,4 @@ const ArticlesListingPage: React.FC = () => {
     );
 };
 
-export default ArticlesListingPage;
+export default ArticleCategoryListingPage;
