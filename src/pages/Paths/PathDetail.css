@@ -1,3 +1,7 @@
+.path-detail .header-toolbar {
+    margin-top: 11px;
+}
+
 .back-link {
     color: var(--brown-600, #958D89);
     font-family: "SF Pro Display";
@@ -7,7 +11,6 @@
     line-height: 20px; /* 125% */
     letter-spacing: 0.7px;
     text-decoration: none;
-    margin-top: 18px;
 }
 
 /* Add a < character before the back-link */
@@ -15,7 +18,7 @@
     content: "< ";
 }
 
-.current {
+.video-player-row .current {
     display: flex;
     flex-direction: column;
 }
@@ -43,6 +46,15 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+}
+
+.path-detail .player-wrapper {
+    /* Removing a weird padding I can't track down below the player */
+    margin-bottom: -4px; 
+}
+
+.path-sequence .entity { 
+    margin-bottom: 8px;
 }
 
 .path-detail .video-item {
@@ -88,14 +100,14 @@
 
 
 
-.path-detail .current .video-item {
+.path-detail .video-player-row .current .video-item {
     width: 100vw;
     position: fixed;
     z-index: 1;
-    margin-top: 80px;
+    margin-top: 98px;
 }
 
-.path-detail .current p {
+.path-detail .video-player-row .current p {
     font-size: 13px;
     line-height: 16px;
     letter-spacing: -0.2px;
@@ -103,7 +115,7 @@
     margin: 0;
 }
 
-.path-detail .current h3 {
+.path-detail .video-player-row .current h3 {
     font-size: 13px;
     font-weight: 700;
     line-height: 18px;
@@ -125,8 +137,7 @@
 
 #root .path-sequence {
     background-color: #F9F6EF;
-    padding-bottom: 1000px !important;
-    padding-top: 70px;
+    padding-top: 88px;
 }
 
 .path-detail h3 {
@@ -137,5 +148,10 @@
     font-weight: 700;
     line-height: normal;
     letter-spacing: 0.28px;
+    margin-top: 0;
     margin-bottom: 20px;
+}
+
+.path-detail .path-sequence .current {
+    border: 1px solid #51ADEF;
 }

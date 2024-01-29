@@ -78,7 +78,8 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
     // Get the ID from the URL. The URL path will be /app/paths/PathDetail?id=123
     const location = useLocation(); // Get the current location object
     const searchParams = new URLSearchParams(location.search); // Create a URLSearchParams object from the search string
-    const pathId = Number(searchParams.get('id')); // Get the value of the 'id' query parameter
+    // const pathId = Number(searchParams.get('id')); // Get the value of the 'id' query parameter
+    const pathId = 1;
     
     interface RelatedMediaItem {
         mediaType: number;                // 1 = video, 2 = article
@@ -128,11 +129,6 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         });
     }, []);
 
-    // Scroll user to top of page when the video changes
-    useEffect(() => {
-        contentRef.current?.scrollToTop(500);
-    }, [pathEntity?.sourceId]);
-
     // If the path entity changes, update the nextPathEntity value
     useEffect(() => {
         if (pathPlaylist.length > 0 && pathPlaylistPosition <= pathPlaylist.length - 1) {
@@ -140,7 +136,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         } else {
             setNextPathEntity(null);
         }
-    }, [pathEntity]);
+    }, [pathEntity, pathPlaylistPosition, pathPlaylist]);
 
     // If the playlist position changes, update the next value
     useEffect(() => {
@@ -152,8 +148,16 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         }
     }, [pathPlaylistPosition, pathPlaylist]);
 
+    // Log the pathPlaylist when it changes
+    useEffect(() => {
+        console.log('Path playlist changed');
+        console.log(pathPlaylist);
+    }, [pathPlaylist]);
+
     const getPopularVideoData = async ( pathId: number ) => {
         
+        console.log('Getting path detail for path ID ' + pathId);
+
         // Get the popular symptom playlist from the API
         const pathSeries = await getPathDetail(apiUrl, Number(cadeyUserId), pathId);
 
@@ -200,18 +204,18 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         });
     }
 
-    const handleRelatedVideoClick = async (videoId: string) => {
+    const handlePathEntityClick = async (entity: PathEntity) => {
         
         // Get a quiz
         await requestQuiz();
 
         // Set the next entity in sequence
         // TODO: Change this to use the entity the user just clicked on
-        setPathEntity(nextPathEntity);
+        setPathEntity(entity);
         
-        // Increment the playlist position
-        // TODO: Increment the playlist position based on the entity the user just clicked on
-        setPathPlaylistPosition(pathPlaylistPosition + 1);
+        // Set the position in the playlist based on the entity's actual position
+        const entityIndex = pathPlaylist.findIndex((entityToIndex) => entityToIndex === entity);
+        setPathPlaylistPosition(entityIndex);
         
         // Set the source for logging
         setSource('Path Detail');
@@ -273,21 +277,24 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
                 <IonRow>
                     <IonText className="featured-message">{videoData?.featuredMessage}</IonText>
                 </IonRow>
-                {nextPathEntity && nextPathEntity.title && (
+                {pathPlaylist && (
                     <IonRow className="path-sequence">
                         {/* Show the next video in sequence */}
                         <h3>All videos in this path</h3>
-                        <div
-                            onClick={() => handleRelatedVideoClick(nextPathEntity.sourceId)}
-                            className="related video-item"
-                        >
-                            <img src={nextPathEntity.thumbnail || ''} alt={nextPathEntity.title || ''} />
-                            <div className="text-container">
-                                <h3>{nextPathEntity.title}</h3>
-                                <p className="position">Video 1</p>
+                        {pathPlaylist.map((entity, index) => (
+                            <div
+                                onClick={() => handlePathEntityClick(entity)}
+                                className={`entity video-item ${entity === pathEntity ? 'current' : ''}`}
+                                key={entity.entityId}
+                            >
+                                <img src={entity.thumbnail || ''} alt={entity.title || ''} />
+                                <div className="text-container">
+                                    <h3>{entity.title}</h3>
+                                    <p className="position">Video {index + 1}</p>
+                                </div>
+                                <IonIcon icon={playCircleOutline} className="play-icon" />
                             </div>
-                            <IonIcon icon={playCircleOutline} className="play-icon" />
-                        </div>
+                        ))}
                     </IonRow>
                 )}
             </IonContent>
