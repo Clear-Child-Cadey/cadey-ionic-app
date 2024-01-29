@@ -1,0 +1,141 @@
+.back-link {
+    color: var(--brown-600, #958D89);
+    font-family: "SF Pro Display";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 125% */
+    letter-spacing: 0.7px;
+    text-decoration: none;
+    margin-top: 18px;
+}
+
+/* Add a < character before the back-link */
+.back-link::before {
+    content: "< ";
+}
+
+.current {
+    display: flex;
+    flex-direction: column;
+}
+
+.header { 
+    padding: 0 16px;
+}
+
+#root .header-toolbar {
+    --border-width: 0;
+    position: fixed;
+}
+
+.header-toolbar .toolbar-container {
+    padding: 0;
+    --padding-inline-start: 0;
+}
+
+.header h2 {
+    display: block;
+    width: 100%;
+    color: #484443;
+    font-family: "SF Pro";
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.path-detail .video-item {
+    width: calc(100vw - 32px);
+    background-color: #FFF;
+    border-radius: 6px;
+}
+
+.path-detail .path-sequence .video-item {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    padding: 5px;
+}
+
+.path-detail .path-sequence .video-item img {
+    width: 84px;
+    border-radius: 6px;
+    flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
+.path-detail .path-sequence .video-item .text-container {
+    display: flex;
+    flex-direction: column; /* Stack text vertically */
+    justify-content: center; /* Center text vertically */
+    margin-left: 10px; /* Space between the image and text container */
+}
+
+.path-detail .path-sequence .video-item h3 {
+    margin: 0; /* Remove margin from h3 */
+    font-size: 14px; /* Adjust font size as needed */
+}
+
+.path-detail .path-sequence .position {
+    margin-top: 5px; /* Space between the h3 and p */
+    color: var(--brown-400, #AFAAA7);
+    font-family: "SF Pro Display";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.28px;
+}
+
+
+
+.path-detail .current .video-item {
+    width: 100vw;
+    position: fixed;
+    z-index: 1;
+    margin-top: 80px;
+}
+
+.path-detail .current p {
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.2px;
+    color: #958D89;
+    margin: 0;
+}
+
+.path-detail .current h3 {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: -0.2px;
+    color: #484443;
+    margin-top: 0;
+}
+
+.path-detail .video-metadata, 
+.path-detail .featured-message, 
+.path-detail .path-sequence {
+    padding: 0 16px;
+}
+
+.path-detail-title {
+    text-align: left;
+    --padding-left: 0;
+}
+
+#root .path-sequence {
+    background-color: #F9F6EF;
+    padding-bottom: 1000px !important;
+    padding-top: 70px;
+}
+
+.path-detail h3 {
+    color: var(--brown-900, #625A56);
+    font-family: "SF Pro Display";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.28px;
+    margin-bottom: 20px;
+}

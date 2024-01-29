@@ -11,6 +11,7 @@ import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
 import { ModalProvider } from './context/ModalContext';
 import { AppPageProvider } from './context/AppPageContext';
+import { PathProvider } from './context/PathContext';
 
 // API
 import getAppData from './api/AppOpen';
@@ -45,7 +46,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { firebasePerf, firestore } from './api/Firebase/InitializeFirebase';
 import { addDoc, collection } from "firebase/firestore";
 import { trace } from "firebase/performance";
-import { logErrorToFirestore } from './api/Firebase/logErrorToFirestore';
+import { logErrorToFirestore } from './api/Firebase/LogErrorToFirestore';
 
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
@@ -155,7 +156,9 @@ function MainComponent() {
               <TabBarSpotlightProvider>
                 <LoadingStateProvider>
                   <ModalProvider>
-                    <App />
+                    <PathProvider>
+                      <App />
+                    </PathProvider>
                   </ModalProvider>
                 </LoadingStateProvider>
               </TabBarSpotlightProvider>
