@@ -9,7 +9,6 @@ import {
     IonRow,
     IonText,
     IonIcon,
-    IonList,
     IonPage,
  } from '@ionic/react';
  //  Icons
@@ -30,7 +29,7 @@ import './PathDetail.css';
 // Components
 import VideoPlayer from '../../components/Videos/VideoPlayer';
 // Interfaces
-import { Path, PathEntity } from '../../api/Paths';
+import { PathDetail, PathEntity } from '../../api/Paths';
 
 interface PathDetailModalProps {
     

@@ -1,6 +1,19 @@
 const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 
+export interface PathListing {
+    userId: number;
+    paths: Path[];
+}
+
 export interface Path {
+    id: number;
+    pathName: string;
+    userSubscribed: boolean;
+    numItemsCompleted: number;
+    totalItemsInPath: number;
+}
+
+export interface PathDetail {
     pathId: number;
     pathName: string;
     entities: PathEntity[];
@@ -18,6 +31,39 @@ export interface PathEntity {
     isComplete: boolean;
     isCurrent: boolean;
 }
+
+export const getPathListing = async (apiUrl: string, userId: number) => {
+    const url = `${apiUrl}/paths/${userId}`;
+
+    const response = await fetch(url, {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+            'accept': 'text/plain',
+            'apiKey': API_KEY,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Map data to the Path Listing interface
+    const pathListing: PathListing = {
+        userId: userId,
+        paths: data.paths.map((path: Path) => ({
+            id: path.id,
+            pathName: path.pathName,
+            userSubscribed: path.userSubscribed,
+            numItemsCompleted: path.numItemsCompleted,
+            totalItemsInPath: path.totalItemsInPath,
+        })),
+    };
+    
+    return pathListing;
+};
 
 export const getPathDetail = async (apiUrl: string, userId: number, pathId: number) => {
     const url = `${apiUrl}/pathdetail/${userId}/${pathId}`;
@@ -37,8 +83,8 @@ export const getPathDetail = async (apiUrl: string, userId: number, pathId: numb
 
     const data = await response.json();
 
-    // Map data to the Path interface
-    const path = {
+    // Map data to the Path Detail interface
+    const pathDetail: PathDetail = {
         pathId: pathId,
         pathName: data.pathName,
         entities: data.entities.map((entity: PathEntity) => ({
@@ -55,7 +101,5 @@ export const getPathDetail = async (apiUrl: string, userId: number, pathId: numb
         })),
     };
     
-    return path;
+    return pathDetail;
 };
-
-

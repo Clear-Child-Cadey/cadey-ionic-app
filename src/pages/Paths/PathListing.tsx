@@ -7,36 +7,27 @@ import {
   IonRow,
   IonButton,
   IonLoading,
+  IonIcon,
 } from '@ionic/react';
-import { play, refresh } from 'ionicons/icons';
+// Icons
+import { 
+    play, 
+    refresh,
+    happyOutline,
+} from 'ionicons/icons';
 import './PathListing.css';
 import { useHistory } from 'react-router-dom';
 // Interfaces
 import { Symptom } from '../../components/ConcernsList/ConcernsList';
+import { PathListing, Path } from '../../api/Paths';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';
-import { useModalContext } from '../../context/ModalContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 // Modals
 import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 // API
-import { getPopularSeries, getPopularSeriesSymptoms } from '../../api/Playlists';
-
-export interface PopularSymptomSeries {
-    symptomId: number;
-    symptomName: string;
-    items: PopularSymptomVideo[];
-}
-
-// Define an interface for the popular symptom playlist. This should be an array with the following information per item: Title, VimeoID, Thumbnail
-export interface PopularSymptomVideo {
-    entityId: number;
-    entityType: number;
-    entityTitle: string;
-    vimeoSourceId: string;
-    vimeoThumbnail: string;
-}
+import { getPathListing } from '../../api/Paths';
 
 const PathListingPage: React.FC = () => {  
 
@@ -45,124 +36,58 @@ const PathListingPage: React.FC = () => {
     const { apiUrl } = useContext(ApiUrlContext);
 
     // Create an empty set of PopularSeriesSymptoms to populate
-    const [popularSeriesSymptoms, setPopularSeriesSymptoms] = React.useState<Symptom[]>([]);
+    const [pathListing, setPathListing] = React.useState<PathListing>();
 
-    // When the component loads
-    useEffect(() => {
-        const getSymptoms = async () => {
-            setPopularSeriesSymptoms(await getPopularSeriesSymptoms(apiUrl));
-        };
-
-        // Get popular symptoms from the API  
-        getSymptoms();
-    }, [apiUrl]);
-
-    // Get all the props from the modal context
-    const { 
-        isAgeGroupModalOpen,
-        setAgeGroupModalOpen,
-        setPopularSymptomId,
-        isPopularSymptomVideoModalOpen,
-        setIsPopularSymptomVideoModalOpen, 
-        popularSymptomVideo,
-        setPopularSymptomVideo,
-        popularSymptomPlaylist,
-        setPopularSymptomPlaylist,
-    } = useModalContext();
-
-    // Get the loading state from the context
-    const { state: loadingState, dispatch } = useLoadingState();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     const history = useHistory();
-    const [selectedSymptoms, setSelectedSymptoms] = React.useState<Symptom[]>([]);
-
-    const handleSymptomChange = (symptom: Symptom, checked: boolean) => {
-        if (checked) {
-            setSelectedSymptoms([...selectedSymptoms, symptom]);
-        } else {
-            setSelectedSymptoms(selectedSymptoms.filter((s) => s.id !== symptom.id));
-        }
-    };
-
-    const onViewAllSymptoms = () => {
-        setSelectedSymptoms([]);
-        // Navigate to the Concerns page
-        history.push('/App/Concerns');
-    };
-
-    // If the popularSymptomPlaylist changes, set the popular symptom video to the first item in the playlist
+    
+    // When the component loads
     useEffect(() => {
-        console.log('Attempting to set popular symptom video');
-        console.log('Popular symptom playlist: ' + popularSymptomPlaylist);
-        if (popularSymptomPlaylist.length > 0) {
-            setPopularSymptomVideo(popularSymptomPlaylist[0]);
-            console.log('Set popular symptom video');
-        }
-        
-    }, [popularSymptomPlaylist]);
+        const getPaths = async () => {
+            // Get the path listing from the API and set it to state
+            setPathListing(await getPathListing(apiUrl, Number(cadeyUserId)));
 
-    const handlePopularSymptomSelection = async (selectedSymptoms: Symptom[]) => {
-        history.push('/App/Paths/PathDetail?id=' + selectedSymptoms[0].id);
+            // Stop the loader
+            setIsLoading(false);
+        };
+
+        // Start a loader
+        setIsLoading(true);
+
+        // Get popular symptoms from the API  
+        getPaths();
+    }, [apiUrl]);
+
+    const handlePathSelection = async (path: Path) => {
+        history.push('/App/Paths/PathDetail?id=' + path.id);
     };
-
-    const getPopularVideoData = async () => {
-        
-        // Get the popular symptom playlist from the API
-        const popularSeries = await getPopularSeries(apiUrl, selectedSymptoms[0].id);
-
-        // Set the popular symptom playlist to the videos returned from the API
-        setPopularSymptomPlaylist(popularSeries.items);
-
-        setPopularSymptomVideo(popularSeries.items[0]);
-
-        // Clear symptom selections so the user can select a new symptom when they return
-        setSelectedSymptoms([]);
-    }
-
-    const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-        getPopularVideoData();
-    }
 
   return (
-    <div className="symptoms-container">
+    <div className="path-list">
 
         {/* Show a loading state if necessary */}
         {isLoading && (
           <IonLoading isOpen={true} message={'Loading data...'} />
         )}
 
-        {/* Show an age group modal if context dictates */}
-        <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
         <IonRow>
             <IonText className="subcopy">Is your child...</IonText>
         </IonRow>
-        {popularSeriesSymptoms.map((symptom) => (
-            <IonItem className="symptom-item" lines="none" key={symptom.id}>
-            <IonLabel className="symptom-label">{symptom.name}</IonLabel>
-            <IonCheckbox
-                mode="ios"
-                className="symptom-checkbox"
-                slot="start"
-                checked={selectedSymptoms.some((s) => s.id === symptom.id)}
-                onIonChange={(e) => handleSymptomChange(symptom, e.detail.checked)}
-                disabled={selectedSymptoms.length >= 1 && !selectedSymptoms.some((s) => s.id === symptom.id)}
-            />
+        
+        {/* Create a list of rows with an icon on the left, then text, and a play icon on the right for each path in pathListing */}
+        {pathListing && pathListing.paths.map((path: Path) => (
+            <IonItem key={path.id} onClick={() => handlePathSelection(path)}>
+                <IonIcon icon={happyOutline} />
+                <IonLabel>
+                    <h2>{path.pathName}</h2>
+                    <p>{path.numItemsCompleted} of {path.totalItemsInPath} completed</p>
+                </IonLabel>
+                <IonIcon icon={play} />
             </IonItem>
         ))}
-        
-        <IonRow className="bottom-row">
-            <IonButton expand="block" onClick={onViewAllSymptoms} color="secondary" aria-label="Restart">
-            View All Symptoms
-            </IonButton>
-            <IonButton 
-            expand="block" 
-            onClick={() => handlePopularSymptomSelection(selectedSymptoms)}
-            disabled={selectedSymptoms.length === 0}
-            >
-            Continue
-            </IonButton>
-        </IonRow>
+
+        {/* Show a button to refresh the page */}
     </div>
   );
 };
