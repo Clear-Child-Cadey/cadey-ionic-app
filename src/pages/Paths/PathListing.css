@@ -1,0 +1,49 @@
+#root .header-toolbar {
+    --border-width: 0 0 0 0;
+    --padding-start: 0;
+}
+
+.path-listing {
+    padding: 0 16px;
+}
+
+.path-listing .subcopy {
+    color: #A29C98;
+    font-family: "SF Pro";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 16.8px */
+    padding-top: 0;
+}
+
+.path-listing .path {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.path-listing .path .path-icon {
+    flex-shrink: 0; /* Prevents the icon from shrinking */
+}
+
+.path-listing .path-name {
+    flex-grow: 1;
+    margin-left: 15px;
+    color: var(--brown-900, #625A56);
+    font-family: "SF Pro";
+    font-size: 14px;
+    line-height: 140%; /* 19.6px */
+}
+
+.path-listing .play-icon {
+    flex-shrink: 0; /* Prevents the icon from shrinking */
+}
+
+.path-listing .play-icon-wrapper {
+    margin-right: 13px;
+  }
+  

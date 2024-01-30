@@ -12,7 +12,7 @@
     width: 100% !important; 
   }
 
-  .play-icon {
+  .video-item .play-icon {
     color: #fff;
     font-size: 35px;
     position: absolute; /* Position the icon absolutely within the player-wrapper */

@@ -27,7 +27,7 @@
     padding: 0 16px;
 }
 
-#root .header-toolbar {
+#root .path-detail .header-toolbar {
     --border-width: 0;
     position: fixed;
 }
