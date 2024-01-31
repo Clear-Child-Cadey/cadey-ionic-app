@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import './Home.css';
 import { 
     IonPage, 
@@ -9,7 +9,17 @@ import {
     IonRow,
     IonLoading,
     IonButton,
+    IonText,
+    IonIcon,
+    IonBadge,
 } from '@ionic/react';
+// Icons
+import { 
+    trailSignOutline,
+    bookOutline,
+    chatbubbleEllipsesOutline,
+    chevronForwardOutline,
+} from 'ionicons/icons';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Routing
 import { useHistory } from 'react-router-dom';
@@ -18,13 +28,14 @@ import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import UnreadContext from '../../context/UnreadContext';
 // Components
 import VideoList from '../../components/Videos/VideoList';
 // API
 import getHomeData from '../../api/HomeData';
 import { logUserFact } from '../../api/UserFacts';
 import { getQuiz } from '../../api/Quiz';
-import { logErrorToFirestore } from '../../api/Firebase/logErrorToFirestore';
+import { logErrorToFirestore } from '../../api/Firebase/LogErrorToFirestore';
 // Variables
 import { tracingEnabled } from '../../variables/Logging';
 // Firebase
@@ -46,6 +57,11 @@ const HomePage: React.FC<{ }> = ({  }) => {
   const { apiUrl } = React.useContext(ApiUrlContext);
 
   const history = useHistory();
+
+  const { 
+    unreadMessagesCount, 
+    setUnreadMessagesCount,
+  } = useContext(UnreadContext); // Get the current unread count
 
   var getHomeDataTrace: any;
 
@@ -187,11 +203,6 @@ const HomePage: React.FC<{ }> = ({  }) => {
 
   return (
     <IonPage className="home">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Home</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen className='page'>
 
         {/* Show a loading state if necessary */}
@@ -204,18 +215,41 @@ const HomePage: React.FC<{ }> = ({  }) => {
             <IonTitle size="large">Home</IonTitle>
           </IonToolbar>
         </IonHeader>
-        
-        {/* <IonRow>
-          <IonText className="subcopy">
-            Subcopy
-          </IonText>
+
+        <IonRow>
+            <IonText className="subcopy">Welcome</IonText>
         </IonRow>
-        <hr className="divider" /> */}
 
         <IonRow className='content'>
-          <IonButton onClick={handleButtonClick("/Paths")}>Paths</IonButton>
-          <IonButton onClick={handleButtonClick("/Library")}>Library</IonButton>
-          <IonButton onClick={handleButtonClick("/Home/Messages")}>Messages</IonButton>
+          <IonRow className='dashboard'>
+            <div className='paths dashboard-item full-width'>
+              <div className='dashboard-button' onClick={handleButtonClick("/Paths")}>
+                <img src="assets/svgs/icn-paths.svg" className='icon paths-icon' />
+                <div className='text-container'>
+                  <div className='text-title'>Your Paths</div>
+                  <IonBadge className='progress-indicator'>1 in progress</IonBadge>
+                </div>
+                <IonIcon className='icon arrow-icon' icon={chevronForwardOutline} />
+              </div>
+            </div>
+            <div className='library dashboard-item half-width'>
+              <div className='dashboard-button' onClick={handleButtonClick("/Library")}>
+                <img src="assets/svgs/icn-library.svg" className='icon library-icon' />
+                Library
+              </div>
+            </div>
+            <div className='messages dashboard-item half-width'>
+              <div className='dashboard-button' onClick={handleButtonClick("/Home/Messages")}>
+                <div className='messages-content'>
+                  <div className='content-wrapper'>
+                    <img src="assets/svgs/icn-messages.svg" className='icon messages-icon' />
+                    Messages
+                    {unreadMessagesCount > 0 && <IonBadge color="danger" className="unread-messages">{unreadMessagesCount}</IonBadge>}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </IonRow>
           {/* If user has watched videos, show this. Else, skip it */}
           {playedVideos.length > 0 && (
             <IonRow className="video-list-row recently-viewed">
@@ -228,13 +262,6 @@ const HomePage: React.FC<{ }> = ({  }) => {
             <IonRow className="video-list-row featured">
                 <h2>Watch Now</h2>
                 <VideoList videos={featuredVideos} listType='horizontal' /> 
-            </IonRow>
-          )}
-          {/* If user has new videos, show this. Else, skip it */}
-          {newVideos.length > 0 && (
-            <IonRow className="video-list-row new">
-                <h2>New Videos</h2>
-                <VideoList videos={newVideos} listType='horizontal' />
             </IonRow>
           )}
         </IonRow>
