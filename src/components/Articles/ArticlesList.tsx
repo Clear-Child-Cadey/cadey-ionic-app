@@ -61,7 +61,7 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ categoryId, onSelectArticle
                 >
                     {article.featured_image_url && (
                         <IonThumbnail slot="start">
-                            <IonImg src={article.featured_image_url} alt={article.title.rendered} />
+                            <IonImg src={article.featured_image_url} alt={article.title.rendered} className='thumb-image' />
                         </IonThumbnail>
                     )}
                     <IonLabel>

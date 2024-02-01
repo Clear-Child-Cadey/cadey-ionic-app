@@ -92,21 +92,16 @@ const ArticleDetailPage: React.FC = () => {
 
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle>
-                </IonToolbar>
-            </IonHeader>
             <IonContent fullscreen>
-                <IonHeader collapse="condense">
+                {/* <IonHeader collapse="condense">
                     <IonToolbar>
                         <IonTitle size="large">{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle>
                     </IonToolbar>
-                </IonHeader>
+                </IonHeader> */}
                 <IonRow>
                     {article && (
                         <div className="article-detail">
-                            <h2>{decodeHtmlEntities(article.title.rendered)}</h2>
+                            <h1>{decodeHtmlEntities(article.title.rendered)}</h1>
                             {article.featured_image_url && (
                                 <img src={article.featured_image_url} alt={decodeHtmlEntities(article.title.rendered)} className="featured-image" />
                             )}

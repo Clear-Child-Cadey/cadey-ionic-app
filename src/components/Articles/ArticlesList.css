@@ -1,3 +1,7 @@
 .article-listing {
     width: 100%;
 }
+
+.thumb-image {
+    border-radius: 6px;
+}

@@ -246,50 +246,19 @@ const ConcernsPage: React.FC = () => {
     // Render the screen
     return (
         <IonPage>
-        <IonHeader>
-            <IonToolbar>
-            <IonTitle>{pageTitle}</IonTitle>
-            </IonToolbar>
-        </IonHeader>        
-        
-        {/* Display the progress bar only if showResults is false */}
-        {!showResults && (
-            <div className="progress-container">
-            <IonProgressBar value={determineProgress()}></IonProgressBar>
-            <div 
-                className="progress-step" 
-                style={{ left: 'calc(0% + 28px)' }}
-            >
-                {showSymptomsList || showAgeForm || showResults ? <IonIcon icon={checkmarkOutline} /> : '1'}
-            </div>
-            <div 
-                className={`progress-step ${!showAgeForm && !showResults && !showSymptomsList ? "incomplete" : ""}`} 
-                style={{ left: '50%' }}
-            >
-                {showAgeForm || showResults ? <IonIcon icon={checkmarkOutline} /> : '2'}
-            </div>
-            <div 
-                className={`progress-step ${!showResults && !showAgeForm ? "incomplete" : ""}`} 
-                style={{ left: 'calc(100% - 28px)' }}
-            >
-                {showResults ? <IonIcon icon={checkmarkOutline} /> : '3'}
-            </div>
-            </div>
-        )}
+            <IonContent fullscreen>
+                <IonHeader collapse="condense">
+                    <IonToolbar>
+                        <IonTitle size="large">{pageTitle}</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
 
-        <IonContent fullscreen>
-            <IonHeader collapse="condense">
-            <IonToolbar>
-                <IonTitle size="large">{pageTitle}</IonTitle>
-            </IonToolbar>
-            </IonHeader>
+                {/* Show an age group modal if context dictates */}
+                <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
 
-            {/* Show an age group modal if context dictates */}
-            <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
-
-            {/* Call the renderComponent function to render the correct component */}
-            {renderComponent()}
-        </IonContent>
+                {/* Call the renderComponent function to render the correct component */}
+                {renderComponent()}
+            </IonContent>
         </IonPage>
     );
 

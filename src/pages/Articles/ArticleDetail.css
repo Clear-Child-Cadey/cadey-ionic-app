@@ -2,3 +2,11 @@
 .wp-block-embed.is-provider-youtube {
     display: none;
 }
+
+.article-detail h1 {
+    font-weight: 700;
+}
+
+.article-detail h2 {
+    font-size: 22px;
+}

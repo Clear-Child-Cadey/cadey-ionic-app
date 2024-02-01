@@ -4,7 +4,6 @@
 
 .back-link {
     color: var(--brown-600, #958D89);
-    font-family: "SF Pro Display";
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -41,7 +40,6 @@
     display: block;
     width: 100%;
     color: #484443;
-    font-family: "SF Pro";
     font-size: 23px;
     font-style: normal;
     font-weight: 700;
@@ -90,7 +88,6 @@
 .path-detail .path-sequence .position {
     margin-top: 5px; /* Space between the h3 and p */
     color: var(--brown-400, #AFAAA7);
-    font-family: "SF Pro Display";
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -142,7 +139,6 @@
 
 .path-detail h3 {
     color: var(--brown-900, #625A56);
-    font-family: "SF Pro Display";
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
