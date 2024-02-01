@@ -77,8 +77,8 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
     // Get the ID from the URL. The URL path will be /app/paths/PathDetail?id=123
     const location = useLocation(); // Get the current location object
     const searchParams = new URLSearchParams(location.search); // Create a URLSearchParams object from the search string
-    // const pathId = Number(searchParams.get('id')); // Get the value of the 'id' query parameter
-    const pathId = 1;
+    const pathId = Number(searchParams.get('id')); // Get the value of the 'id' query parameter
+    // const pathId = 1;
     
     interface RelatedMediaItem {
         mediaType: number;                // 1 = video, 2 = article
@@ -238,6 +238,19 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         }
     };
 
+    const handle75PercentProgress = () =>{
+        // Log a user fact that the user watched 75% of the video
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'PathEntityCompleted',
+            appPage: source,
+            detail1: pathId.toString(),
+            detail2: pathEntity?.entityType.toString(),
+            detail3: pathEntity?.entityId.toString()
+        });
+    }
+
     return (
         <IonPage className="path-detail">
             <IonContent fullscreen ref={contentRef}>
@@ -256,6 +269,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
                                 source={source}
                                 onVideoHeightChange={(height) => setVideoHeight(height)}
                                 onVideoEnd={handleVideoEnd}
+                                on75PercentProgress={handle75PercentProgress}
                             />
                             <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
                                 <div className="tag-share">

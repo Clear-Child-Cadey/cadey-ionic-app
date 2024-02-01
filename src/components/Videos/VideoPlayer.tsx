@@ -19,9 +19,10 @@ interface VideoPlayerProps {
   source: string;
   onVideoHeightChange?: (height: number) => void;
   onVideoEnd?: () => void;
+  on75PercentProgress?: () => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onVideoHeightChange, onVideoEnd }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onVideoHeightChange, onVideoEnd, on75PercentProgress }) => {
 
   const vimeoVideoId = videoId.split('/')[0];
   const vimeoHashParameter = videoId.split('/')[1];
@@ -42,6 +43,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   const [logged25, setLogged25] = useState(false);
   const [logged50, setLogged50] = useState(false);
   const [logged75, setLogged75] = useState(false);
+  const [callback75, setCallback75] = useState(false);
   const [logged100, setLogged100] = useState(false);
 
   const { state: loadingState, dispatch } = useLoadingState();
@@ -195,6 +197,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   }
 
   useEffect(() => {
+    if (on75PercentProgress && videoProgress >= 0.75 && callback75 === false) {
+      on75PercentProgress();
+      setCallback75(true);
+    }
+    
+    // Report video progress
     if (videoProgress >= 1 && !logged100) {
       setLogged100(true);
       logUserFact({

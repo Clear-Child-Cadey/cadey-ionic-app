@@ -66,13 +66,13 @@ const ArticlesPage: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>{categoryName}</IonTitle>
+                    <IonTitle>{categoryName} Articles</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
                 <IonHeader collapse="condense">
                     <IonToolbar>
-                        <IonTitle size="large">{categoryName}</IonTitle>
+                        <IonTitle size="large">{categoryName} Articles</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonRow>
