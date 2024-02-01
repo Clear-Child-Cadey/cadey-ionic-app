@@ -12,7 +12,7 @@ import {
     IonPage,
  } from '@ionic/react';
  //  Icons
-import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
+import { arrowRedoOutline, playCircleOutline, barChartOutline, checkmarkCircleOutline } from 'ionicons/icons';
 //  Contexts
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
@@ -244,11 +244,16 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
             cadeyUserId: cadeyUserId,
             baseApiUrl: apiUrl,
             userFactTypeName: 'PathEntityCompleted',
-            appPage: source,
+            appPage: "Path Detail",
             detail1: pathId.toString(),
             detail2: pathEntity?.entityType.toString(),
             detail3: pathEntity?.entityId.toString()
         });
+
+        // Change the entity to complete
+        const updatedEntity = pathEntity;
+        updatedEntity!.isComplete = true;
+        setPathEntity(updatedEntity);
     }
 
     return (
@@ -300,12 +305,23 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
                                 className={`entity video-item ${entity === pathEntity ? 'current' : ''}`}
                                 key={entity.entityId}
                             >
-                                <img src={entity.thumbnail || ''} alt={entity.title || ''} />
+                                <img src={entity.thumbnail || ''} alt={entity.title || ''} className='video-thumb' />
                                 <div className="text-container">
                                     <h3>{entity.title}</h3>
                                     <p className="position">Video {index + 1}</p>
                                 </div>
-                                <IonIcon icon={playCircleOutline} className="play-icon" />
+                                
+                                    
+                                    {/* If the video is complete, show a checkmark icon. Otherwise, if the video is currently playing, show a progress icon. Otherwise, show a play icon */}
+                                    {entity === pathEntity ? (
+                                        <img src="assets/svgs/playcard-active.svg" className='path-video-icon' />
+                                    ) : entity.isComplete ? (
+                                        <img src="assets/svgs/playcard-complete.svg" className='path-video-icon' />
+                                    ) : (
+                                        <img src="assets/svgs/playcard-default.svg" className='path-video-icon' />
+                                    )}
+
+                                
                             </div>
                         ))}
                     </IonRow>

@@ -53,6 +53,7 @@
 
 .path-sequence .entity { 
     margin-bottom: 8px;
+    position: relative;
 }
 
 .path-detail .video-item {
@@ -64,10 +65,10 @@
 .path-detail .path-sequence .video-item {
     display: flex;
     align-items: center; /* Center items vertically */
-    padding: 5px;
+    padding: 5px 50px 5px 5px;
 }
 
-.path-detail .path-sequence .video-item img {
+.path-detail .path-sequence .video-item .video-thumb {
     width: 84px;
     border-radius: 6px;
     flex-shrink: 0; /* Prevent the image from shrinking */
@@ -150,4 +151,11 @@
 
 .path-detail .path-sequence .current {
     border: 1px solid #51ADEF;
+}
+
+.path-video-icon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 15px;
 }
