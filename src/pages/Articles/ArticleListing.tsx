@@ -62,18 +62,11 @@ const ArticlesPage: React.FC = () => {
     }
 
     return (
-        
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>{categoryName} Articles</IonTitle>
-                </IonToolbar>
-            </IonHeader>
             <IonContent fullscreen>
-                <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">{categoryName} Articles</IonTitle>
-                    </IonToolbar>
+                <IonHeader class="header">
+                    <a href="/App/Library/Articles" className="back-link">Categories</a>
+                    <h2>{categoryName} Articles</h2>
                 </IonHeader>
                 <IonRow>
                     <ArticleListing categoryId={categoryId} onSelectArticle={handleArticleSelection} />

@@ -72,23 +72,18 @@ const ArticleCategoryListingPage: React.FC = () => {
 
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Article Categories</IonTitle>
-                </IonToolbar>
-            </IonHeader>
             <IonContent fullscreen>
-                <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">Article Categories</IonTitle>
-                    </IonToolbar>
+                <IonHeader class="header">
+                    <a href="/App/Library" className="back-link">Library</a>
+                    <h2>Article Categories</h2>
                 </IonHeader>
                 <IonRow>
                     {articleCategories && (
                         <div className="article-categories">
                             {articleCategories.map((category) => (
-                                <div className="article-category" key={category.id}>
-                                    <h2 onClick={() => handleCategorySelection(category.id)}>{category.name}</h2>
+                                <div className="article-category" key={category.id} onClick={() => handleCategorySelection(category.id)}>
+                                    <h2>{category.name}</h2>
+                                    <span className="arrow">&gt;</span>
                                 </div>
                             ))}
                         </div>

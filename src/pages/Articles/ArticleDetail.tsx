@@ -93,11 +93,9 @@ const ArticleDetailPage: React.FC = () => {
     return (
         <IonPage>
             <IonContent fullscreen>
-                {/* <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">{article ? decodeHtmlEntities(article.title.rendered) : "Article Detail"}</IonTitle>
-                    </IonToolbar>
-                </IonHeader> */}
+                <IonHeader class="header">
+                    <a href="/App/Library/Articles" className="back-link">Articles</a>
+                </IonHeader>
                 <IonRow>
                     {article && (
                         <div className="article-detail">

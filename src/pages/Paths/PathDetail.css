@@ -23,7 +23,7 @@
 }
 
 .header { 
-    padding: 0 16px;
+    padding: 20px 16px 0;
 }
 
 #root .path-detail .header-toolbar {
