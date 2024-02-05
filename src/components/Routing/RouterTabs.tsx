@@ -24,6 +24,7 @@ import PathDetailPage from '../../pages/Paths/PathDetail';
 import ArticleCategoryListingPage from '../../pages/Articles/ArticleCategoryListing';
 import ArticlesPage from '../../pages/Articles/ArticleListing';
 import ArticleDetailPage from '../../pages/Articles/ArticleDetail';
+import VideoLibraryPage from '../../pages/Library/VideoLibrary';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -113,6 +114,7 @@ const RouterTabs: React.FC = () => {
             <Route exact path="/App/Library/Articles" component={ArticleCategoryListingPage} />
             <Route exact path="/App/Library/Articles/Category" component={ArticlesPage} />
             <Route exact path="/App/Library/Articles/Article" component={ArticleDetailPage} />
+            <Route exact path="/App/Library/Videos" component={VideoLibraryPage} />
             
             {/* Paths routes */}
             <Route exact path="/App/Paths">

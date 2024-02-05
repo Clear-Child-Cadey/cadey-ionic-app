@@ -106,6 +106,11 @@ const QuizModal: React.FC = ({ }) => {
     const isAnyTextInputFilled = () => {
         return Object.values(textResponses).some(text => text.trim() !== '');
     };
+
+    useEffect(() => {
+        console.log('quizModalData', quizModalData);
+        console.log('userResponse', userResponse);
+    }, [quizModalData, userResponse]);
     
 
     const handleSubmission = async () => {
@@ -167,7 +172,7 @@ const QuizModal: React.FC = ({ }) => {
             );
 
             // Depending on the API response, update the quiz modal with a new question or complete the quiz
-            if (quizSubmissionResponse.quizQuestion !== null) {
+            if (quizSubmissionResponse.quizQuestion !== null && quizSubmissionResponse.quizQuestion !== undefined && quizSubmissionResponse.quizQuestion.id !== 0) {
                 // Update the quiz modal with a new question
                 setQuizModalData(quizSubmissionResponse);
             } else {

@@ -90,20 +90,15 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
                                 <IonText className="subcopy">Make a selection to get started:</IonText>
                         </IonRow>
                         <IonRow>
-                                {/* Iterate over the choices and create a button for each concern */}
-                                {concerns?.map((choice: { concern: string; concernId: number; symptoms: Symptom[] }, index: number) => (
-                                        <IonCol size="6" key={index}>
-                                                {/* When a button is clicked, call the onNext function with the chosen concern */}
-                                                <IonButton
-                                                        className="concern"
-                                                        color="light"
-                                                        expand="block"
-                                                        size="large"
-                                                        onClick={() => handleOnClick(choice)}                                                >
-                                                        {choice.concern}
-                                                </IonButton>
-                                        </IonCol>
-                                ))}
+                                {/* Iterate over the choices and create a button for each concern */} 
+                                <div className="video-concerns">
+                                        {concerns?.map((choice: { concern: string; concernId: number; symptoms: Symptom[] }, index: number) => (
+                                                <div className="video-concern" key={choice.concernId} onClick={() => handleOnClick(choice)}>
+                                                        <h2>{choice.concern}</h2>
+                                                        <span className="arrow">&gt;</span>
+                                                </div>
+                                        ))}
+                                </div>
                         </IonRow>
                         <IonRow className='privacy'>
                                 <a href="https://clearchildpsychology.com/privacy/" target="_blank" rel="noopener noreferrer" style={{ margin: 'auto' }}>Privacy Policy</a>

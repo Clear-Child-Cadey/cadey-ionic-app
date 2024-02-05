@@ -37,7 +37,7 @@ import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 import { useHistory } from 'react-router-dom';
 
 // Define the Concerns component
-const ConcernsPage: React.FC = () => {
+const LibraryPage: React.FC = () => {
 
     // State variable flags to indicate which component to display
     const [showAgeForm, setShowAgeForm] = useState(false);
@@ -245,43 +245,11 @@ const ConcernsPage: React.FC = () => {
 
     // Render the screen
     return (
-        <IonPage>
+        <IonPage className='library'>
             <IonContent fullscreen>
-                <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">{pageTitle}</IonTitle>
-                    </IonToolbar>
+                <IonHeader class="header">
+                    <h2>Library</h2>
                 </IonHeader>
-
-                {/* Show an age group modal if context dictates */}
-                <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
-
-                {/* Call the renderComponent function to render the correct component */}
-                {renderComponent()}
-            </IonContent>
-        </IonPage>
-    );
-
-    // Return the correct component depending on the state
-    function renderComponent() {
-        if (showResults) {
-            return (
-                <Results 
-                results={results} 
-                selectedConcern={selectedConcern ? selectedConcern.concern : ''} 
-                onRestart={handleRestart} 
-                />
-            );
-        } else if (showSymptomsList) {
-            return (
-                <SymptomsList 
-                concern={selectedConcern} 
-                onNext={handleSymptomsNext} 
-                onRestart={handleRestart} 
-                />
-            );
-        } else {
-            return (
                 <IonRow className="library-home">
                     <IonRow className="search-container">
                         {/* Search bar */}
@@ -292,13 +260,27 @@ const ConcernsPage: React.FC = () => {
                             mode="ios"
                         ></IonSearchbar>
                     </IonRow>
-                    <IonButton onClick={() => handleButtonClick("/Library/Articles")}>Articles</IonButton>
-
-                    <ConcernsList onNext={handleConcernsNext} />
+                    
+                    <div className='library-buttons'>
+                        <div className='library-button' onClick={() => handleButtonClick("/Library/Videos")}>
+                            <img src="assets/svgs/icn-video.svg" className='' />
+                            <div className='library-button-text'>
+                                <h3>How-to videos</h3>
+                                <p>Search by topic, behavior, or condition.</p>
+                            </div>
+                        </div>
+                        <div className='library-button' onClick={() => handleButtonClick("/Library/Articles")}>
+                            <img src="assets/svgs/icn-articles.svg" className='' />
+                            <div className='library-button-text'>
+                                <h3>Articles</h3>
+                                <p>Explore clinically-proven recommendations to try with your child.</p>
+                            </div>
+                        </div>
+                    </div>
                 </IonRow>
-            );
-        }
-    }
+            </IonContent>
+        </IonPage>
+    );
 }
 
-export default ConcernsPage;
+export default LibraryPage;

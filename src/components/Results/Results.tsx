@@ -44,40 +44,27 @@ const Results: React.FC<ResultsProps> = ({ results, selectedConcern, onRestart }
         <IonText className="subcopy">Here are a few suggestions, based on your concerns about {selectedConcern}</IonText>
       </IonRow>
       <IonRow>
+      <div className="divider">
+        <hr />
+      </div>
         {results.recommendations.map((recommendation, index) => (
           <div key={index} className="recommendation">
-            <hr />
             <h2>{recommendation.title}</h2>
             {recommendation.showMeHow.length > 0 && (
-              <>
-                <h3>Show Me How</h3>
-                <VideoList 
-                  videos={recommendation.showMeHow.map(video => ({
-                    title: video.title,
-                    audience: video.audience || 'No Description',
-                    sourceId: video.sourceId,
-                    mediaId: video.mediaId,
-                    videoType: "Recommendation",
-                    thumbnail: video.thumbnail || '',
-                  }))}
-                  listType='horizontal'
-                />
-              </>
+              <VideoList 
+                videos={recommendation.showMeHow.map(video => ({
+                  title: video.title,
+                  audience: video.audience || 'No Description',
+                  sourceId: video.sourceId,
+                  mediaId: video.mediaId,
+                  videoType: "Recommendation",
+                  thumbnail: video.thumbnail || '',
+                }))}
+                listType='horizontal'
+              />
             )}
-            <h3>Tell Me How</h3>
-            <ul>
-              {recommendation.tellMeHow.map((item, index) => (
-                <li key={index}>{item.text}</li>
-              ))}
-            </ul>
           </div>
         ))}
-      </IonRow>
-      <IonRow class="bottom-row single-button">
-        <IonButton expand="block" onClick={onRestart} color="primary" aria-label="New Concern">
-          <IonIcon icon={refresh} slot="start" />
-          New Concern
-        </IonButton>
       </IonRow>
     </div>
   );

@@ -17,6 +17,19 @@
     margin-bottom: 20px;
 }
 
+.recommendations .subcopy {
+    font-size: 16px;
+}
+
+.recommendations .tag-share p {
+    display: none;
+}
+
+.recommendations .video-item h3 {
+    color: #484443;
+    font-size: 12px;
+}
+
 .recommendation h2 {
     font-weight: 700;
     font-size: 18px;
@@ -40,4 +53,9 @@
     font-size: 14px;
     line-height: 24px;
     color: #625A56;
+}
+
+.divider {
+    padding: 0 16px;
+    width: 100%;
 }

@@ -22,13 +22,14 @@
     flex-direction: column;
 }
 
-.header { 
-    padding: 20px 16px 0;
-}
-
 #root .path-detail .header-toolbar {
     --border-width: 0;
     position: fixed;
+}
+
+.path-detail .header {
+    padding-left: 16px;
+    padding-right:16px;
 }
 
 .header-toolbar .toolbar-container {
@@ -102,7 +103,7 @@
     width: 100vw;
     position: fixed;
     z-index: 1;
-    margin-top: 98px;
+    margin-top: 93px;
 }
 
 .path-detail .video-player-row .current p {

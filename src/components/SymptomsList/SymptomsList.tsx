@@ -21,11 +21,15 @@ interface SymptomsListProps {
 const SymptomsList: React.FC<SymptomsListProps> = ({ concern, onNext, onRestart }) => {  
   const [selectedSymptoms, setSelectedSymptoms] = React.useState<Symptom[]>([]);
 
-  const handleSymptomChange = (symptom: Symptom, checked: boolean) => {
-    if (checked) {
+  const handleSymptomChange = (symptom: Symptom) => {
+    if (selectedSymptoms.some(s => s.id === symptom.id)) {
+      // If the symptom is already selected, remove it from the list
+      setSelectedSymptoms(selectedSymptoms.filter(s => s.id !== symptom.id));
+    } else if (selectedSymptoms.length < 2) {
+      // Add the symptom to the list if less than 2 symptoms are selected
       setSelectedSymptoms([...selectedSymptoms, symptom]);
     } else {
-      setSelectedSymptoms(selectedSymptoms.filter((s) => s.id !== symptom.id));
+      // If there are already 2 symptoms selected, do nothing
     }
   };
 
@@ -39,31 +43,24 @@ const SymptomsList: React.FC<SymptomsListProps> = ({ concern, onNext, onRestart 
       <IonRow>
         <IonText className="subcopy">What’s most troubling? Choose up to 2.</IonText>
       </IonRow>
-      {concern.symptoms.map((symptom) => (
-        <IonItem className="symptom-item" lines="none" key={symptom.id}>
-          <IonLabel className="symptom-label">{symptom.name}</IonLabel>
-          <IonCheckbox
-            mode="ios"
-            className="symptom-checkbox"
-            slot="start"
-            checked={selectedSymptoms.some((s) => s.id === symptom.id)}
-            onIonChange={(e) => handleSymptomChange(symptom, e.detail.checked)}
-            disabled={selectedSymptoms.length >= 2 && !selectedSymptoms.some((s) => s.id === symptom.id)}
-          />
-        </IonItem>
-      ))}
-      
+      <IonRow className='symptom-items'>
+        {concern.symptoms.map((symptom) => (
+          <div 
+            className={`symptom-item ${selectedSymptoms.some(s => s.id === symptom.id) ? 'selected' : ''}`}
+            key={symptom.id} 
+            onClick={() => handleSymptomChange(symptom)}
+          >
+            <h2>{symptom.name}</h2>
+          </div>
+        ))}
+      </IonRow>  
       <IonRow className="bottom-row">
-        <IonButton expand="block" onClick={onRestart} color="secondary" aria-label="Restart">
-          <IonIcon icon={refresh} slot="start" />
-          Restart
-        </IonButton>
         <IonButton 
           expand="block" 
           onClick={() => onNext(selectedSymptoms)}
           disabled={selectedSymptoms.length === 0}
         >
-          Continue
+          Next
         </IonButton>
       </IonRow>
     </div>
