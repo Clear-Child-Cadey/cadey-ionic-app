@@ -91,7 +91,7 @@ const ArticleDetailPage: React.FC = () => {
     }
 
     return (
-        <IonPage>
+        <IonPage className='article-detail'>
             <IonContent fullscreen>
                 <IonHeader class="header">
                     <a href="/App/Library/Articles" className="back-link">Articles</a>

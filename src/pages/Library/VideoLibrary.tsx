@@ -7,7 +7,7 @@ import {
 // Icons
 
 // CSS
-import './Library.css';
+import './VideoLibrary.css';
 // Components
 import ConcernsList from '../../components/ConcernsList/ConcernsList';
 import SymptomsList from '../../components/SymptomsList/SymptomsList';
@@ -154,7 +154,7 @@ const VideoLibraryPage: React.FC = () => {
 
     // Render the screen
     return (
-        <IonPage>
+        <IonPage className='video-library'>
             <IonContent fullscreen>
                 <IonHeader class="header">
                     <a href="/App/Library" className="back-link">Library</a>

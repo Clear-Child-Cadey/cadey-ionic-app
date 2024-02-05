@@ -83,7 +83,7 @@ const PathListingPage: React.FC = () => {
                 {/* Create a list of rows with an icon on the left, then text, and a play icon on the right for each path in pathListing */}
                 {pathListing && pathListing.paths.map((path: Path, index) => (
                     <div className="path" key={path.id} onClick={() => handlePathSelection(path)}>
-                        <IonIcon icon={happyOutline} className='path-icon' />
+                        <img src={path.pathIconUrl} className='icon paths-icon' />
                         <IonLabel className='path-name'>
                             <h2>{path.pathName}</h2>
                             <p>{path.numItemsCompleted} of {path.totalItemsInPath} completed</p>

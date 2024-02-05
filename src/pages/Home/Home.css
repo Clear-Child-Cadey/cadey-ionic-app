@@ -136,3 +136,7 @@
     display: inline-grid;
     position: relative;
 }
+
+.progress-indicator span {
+    font-size: 10px;
+}

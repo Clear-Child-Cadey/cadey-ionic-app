@@ -121,12 +121,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         <hr className="divider" />
 
         <IonLoading isOpen={isLoading} message={'Loading Messages...'} />
-        {messagesLoaded && !messages.length && (
-            <IonRow className="no-messages-content">
-                <IonText className="subcopy">When you watch videos, your daily personalized messages will appear here.</IonText>
-                <IonButton routerLink='/App/Home'>Watch Videos</IonButton>
-            </IonRow>
-        )}
+
         {messagesLoaded && !isLoading && (
           <IonList>
               {messages.map((message, index) => (

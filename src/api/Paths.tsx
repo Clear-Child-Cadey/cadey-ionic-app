@@ -11,6 +11,7 @@ export interface Path {
     userSubscribed: boolean;
     numItemsCompleted: number;
     totalItemsInPath: number;
+    pathIconUrl: string;
 }
 
 export interface PathDetail {
@@ -59,6 +60,7 @@ export const getPathListing = async (apiUrl: string, userId: number) => {
             userSubscribed: path.userSubscribed,
             numItemsCompleted: path.numItemsCompleted,
             totalItemsInPath: path.totalItemsInPath,
+            pathIconUrl: path.pathIconUrl,
         })),
     };
     

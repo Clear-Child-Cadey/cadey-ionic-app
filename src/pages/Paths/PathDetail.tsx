@@ -78,7 +78,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
     const location = useLocation(); // Get the current location object
     const searchParams = new URLSearchParams(location.search); // Create a URLSearchParams object from the search string
     const pathId = Number(searchParams.get('id')); // Get the value of the 'id' query parameter
-    // const pathId = 1;
+    const [pathTitle, setPathTitle] = useState<string>('');
     
     interface RelatedMediaItem {
         mediaType: number;                // 1 = video, 2 = article
@@ -113,7 +113,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));
 
         // Get the video data from the API
-        getPopularVideoData(pathId);
+        getPathVideoData(pathId);
 
         // Set the current app page
         setCurrentAppPage('Path Detail');
@@ -153,17 +153,29 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         console.log(pathPlaylist);
     }, [pathPlaylist]);
 
-    const getPopularVideoData = async ( pathId: number ) => {
-        
-        console.log('Getting path detail for path ID ' + pathId);
+    useEffect(() => {
+        console.log('Path title: ', pathTitle);
+    }, [pathTitle]);
+
+    const getPathVideoData = async ( pathId: number ) => {
 
         // Get the popular symptom playlist from the API
-        const pathSeries = await getPathDetail(apiUrl, Number(cadeyUserId), pathId);
+        const pathSeries: PathDetail = await getPathDetail(apiUrl, Number(cadeyUserId), pathId);
+
+        // Set the path title
+        setPathTitle(pathSeries.pathName);
+        console.log('Path Series name: ', pathSeries.pathName);
 
         // Set the popular symptom playlist to the videos returned from the API
         setPathPlaylist(pathSeries.entities);
 
-        setPathEntity(pathSeries.entities[0]);
+        // Check if any videos have "isCurrent: true" and set the current video to that video. Else, set the first video in the series as the current video
+        const currentVideo = pathSeries.entities.find((video) => video.isCurrent === true);
+        if (currentVideo) {
+            setPathEntity(currentVideo);
+        } else {
+            setPathEntity(pathSeries.entities[0]);
+        }
     }
 
     const requestQuiz = async () => {
@@ -262,7 +274,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
                 <IonHeader class="header">
                     <IonToolbar className="header-toolbar">
                         <a href="/App/Paths" className="back-link">Paths</a>
-                        <h2>Following directions</h2>
+                        <h2>{pathTitle}</h2>
                     </IonToolbar>
                 </IonHeader>
                 {pathEntity && pathEntity.sourceId && (
@@ -310,18 +322,15 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
                                     <h3>{entity.title}</h3>
                                     <p className="position">Video {index + 1}</p>
                                 </div>
-                                
                                     
-                                    {/* If the video is complete, show a checkmark icon. Otherwise, if the video is currently playing, show a progress icon. Otherwise, show a play icon */}
-                                    {entity === pathEntity ? (
-                                        <img src="assets/svgs/playcard-active.svg" className='path-video-icon' />
-                                    ) : entity.isComplete ? (
-                                        <img src="assets/svgs/playcard-complete.svg" className='path-video-icon' />
-                                    ) : (
-                                        <img src="assets/svgs/playcard-default.svg" className='path-video-icon' />
-                                    )}
-
-                                
+                                {/* If the video is complete, show a checkmark icon. Otherwise, if the video is currently playing, show a progress icon. Otherwise, show a play icon */}
+                                {entity === pathEntity ? (
+                                    <img src="assets/svgs/playcard-active.svg" className='path-video-icon' />
+                                ) : entity.isComplete ? (
+                                    <img src="assets/svgs/playcard-complete.svg" className='path-video-icon' />
+                                ) : (
+                                    <img src="assets/svgs/playcard-default.svg" className='path-video-icon' />
+                                )}
                             </div>
                         ))}
                     </IonRow>

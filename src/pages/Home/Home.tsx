@@ -15,7 +15,7 @@ import {
 } from '@ionic/react';
 // Icons
 import { 
-    chevronForwardOutline,
+    chevronForwardOutline, home,
 } from 'ionicons/icons';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Routing
@@ -37,14 +37,19 @@ import { tracingEnabled } from '../../variables/Logging';
 // Firebase
 import { firebasePerf } from '../../api/Firebase/InitializeFirebase';
 import { trace } from "firebase/performance";
+// Interfaces
+import { HomeData } from '../../api/HomeData';
 
 const HomePage: React.FC<{ }> = ({  }) => {
   
-  const [featuredVideos, setFeaturedVideos] = useState([]);
-  const [newVideos, setNewVideos] = useState([]);
-  const [playedVideos, setPlayedVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [pathsInProgress, setPathsInProgress] = useState(0);
+  const [completedPaths, setCompletedPaths] = useState(0);
+  const [totalPaths, setTotalPaths] = useState(0);
+  const [featuredVideos, setFeaturedVideos] = useState<any[]>([]);
+  const [newVideos, setNewVideos] = useState<any[]>([]);
+  const [playedVideos, setPlayedVideos] = useState<any[]>([]);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
@@ -61,13 +66,21 @@ const HomePage: React.FC<{ }> = ({  }) => {
 
   var getHomeDataTrace: any;
 
+  var homeData: HomeData = {
+    numPathsInProgress: 0,
+    numCompletedPaths: 0,
+    numTotalPaths: 0,
+    featuredVideos: [],
+    newVideos: [],
+    playedVideos: [],
+    trendingVideos: [],
+    articleIds: [],
+  };
+
   // Get all the props from the modal context
   const { 
     isVideoModalOpen,
   } = useModalContext();
-
-  // Get the latest data from the API
-  const { getHomeDataFromApi } = getHomeData();
 
   const fetchData = async () => {
     // Start loader
@@ -79,12 +92,16 @@ const HomePage: React.FC<{ }> = ({  }) => {
           await getHomeDataTrace.start();
       }
       
+      console.log('Fetching home data...', apiUrl, cadeyUserId);
       // Get the data from the API
-      const { featuredVideos, newVideos, playedVideos } = await getHomeDataFromApi();
+      homeData = await getHomeData(apiUrl, cadeyUserId);
 
-      setFeaturedVideos(featuredVideos);
-      setNewVideos(newVideos);
-      setPlayedVideos(playedVideos);
+      setPathsInProgress(homeData.numPathsInProgress);
+      setCompletedPaths(homeData.numCompletedPaths);
+      setTotalPaths(homeData.numTotalPaths);
+      setFeaturedVideos(homeData.featuredVideos);
+      setNewVideos(homeData.newVideos);
+      setPlayedVideos(homeData.playedVideos);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -136,7 +153,7 @@ const HomePage: React.FC<{ }> = ({  }) => {
     }, 10000); // Set timeout for 10 seconds
 
     fetchData(); // Fetch the homepage data
-      
+    
   }, [isVideoModalOpen]);
 
   // On component mount:
@@ -192,7 +209,25 @@ const HomePage: React.FC<{ }> = ({  }) => {
                 <img src="assets/svgs/icn-paths.svg" className='icon paths-icon' />
                 <div className='text-container'>
                   <div className='text-title'>Your Paths</div>
-                  <IonBadge className='progress-indicator'>1 in progress</IonBadge>
+                  {(completedPaths > 0 || pathsInProgress > 0) && (
+                    <IonBadge className='progress-indicator'>
+                      {completedPaths > 0 && (
+                        <span className='completed-paths'>
+                          {completedPaths} of {totalPaths} complete
+                        </span>
+                      )}
+                      {completedPaths > 0 && pathsInProgress > 0 && (
+                        <span>
+                          &nbsp;&bull;&nbsp;
+                        </span>
+                      )}
+                      {pathsInProgress > 0 && (
+                        <span className='in-progress'>
+                          {pathsInProgress} in progress
+                        </span>
+                      )}
+                    </IonBadge>
+                  )}
                 </div>
                 <IonIcon className='icon arrow-icon' icon={chevronForwardOutline} />
               </div>

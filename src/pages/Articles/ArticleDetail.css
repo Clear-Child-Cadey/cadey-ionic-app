@@ -10,3 +10,7 @@
 .article-detail h2 {
     font-size: 22px;
 }
+
+.article-detail .header {
+    padding: 25px 16px 0;
+}
