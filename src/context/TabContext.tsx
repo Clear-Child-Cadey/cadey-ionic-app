@@ -1,30 +1,36 @@
-import React, { useContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-type HomeTabVisibilityContextType = {
-  isHomeTabVisible: boolean;
-  setIsHomeTabVisible: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const defaultValue: HomeTabVisibilityContextType = {
-  isHomeTabVisible: false,
-  setIsHomeTabVisible: () => {},
-};
-
-export const HomeTabVisibilityContext = React.createContext<HomeTabVisibilityContextType>(defaultValue);
-
-interface HomeTabVisibilityProviderProps {
-  children: ReactNode;
+interface TabContextProps {
+  isTabBarVisible: boolean;
+  setIsTabBarVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const HomeTabVisibilityProvider: React.FC<HomeTabVisibilityProviderProps> = ({ children }) => {
-  const [isHomeTabVisible, setIsHomeTabVisible] = useState(false);
+const TabContext = createContext<TabContextProps | undefined>(undefined);
 
-  return (
-    <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
-      {children}
-    </HomeTabVisibilityContext.Provider>
-  );
+interface TabProviderProps {
+    children: ReactNode;
+}
+
+const TabProvider: React.FC<TabProviderProps> = ({ children }) => {
+    const [isTabBarVisible, setIsTabBarVisible] = useState<boolean>(true);
+
+    const contextValue = {
+      isTabBarVisible,  
+      setIsTabBarVisible,
+    };
+
+    return (
+        <TabContext.Provider value={contextValue}>
+            {children}
+        </TabContext.Provider>
+    );
 };
 
+function useTabContext() {
+    const context = useContext(TabContext);
+    if (!context) throw new Error("TabContext must be used within a TabProvider");
+    return context;
+}
 
+export { TabProvider, useTabContext };
 

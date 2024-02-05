@@ -1,3 +1,7 @@
+.welcome .tab-bar {
+    display: none;
+}
+
 .welcome-modal {
     --ion-background-color: #E5E5E5;
 }

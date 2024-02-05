@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { 
   IonTabs, 
   IonRouterOutlet, 
@@ -25,12 +25,13 @@ import ArticleCategoryListingPage from '../../pages/Articles/ArticleCategoryList
 import ArticlesPage from '../../pages/Articles/ArticleListing';
 import ArticleDetailPage from '../../pages/Articles/ArticleDetail';
 import VideoLibraryPage from '../../pages/Library/VideoLibrary';
+import WelcomePage from '../../pages/Welcome/Welcome';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
 import OneSignalInitializer from '../../api/OneSignal/OneSignalInitializerComponent';
 // Contexts
-import { HomeTabVisibilityContext } from '../../context/TabContext';
+import { useTabContext } from '../../context/TabContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 import UnreadContext from '../../context/UnreadContext';
@@ -45,8 +46,9 @@ import ArticlesList from '../Articles/ArticlesList';
 import ArticleDetail from '../Articles/ArticleDetail';
 
 const RouterTabs: React.FC = () => {
-  const homeTabVisibility = useContext(HomeTabVisibilityContext);
-  const isHomeTabVisible = homeTabVisibility?.isHomeTabVisible;
+  // Tab bar visibility
+  const { isTabBarVisible, setIsTabBarVisible } = useTabContext();
+
   const { 
     unreadMessagesCount, 
     setUnreadMessagesCount,
@@ -57,17 +59,14 @@ const RouterTabs: React.FC = () => {
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { currentAppPage } = useAppPage();
+  // const location = useLocation();
+  const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
 
-  const handleTabClick = async (tabName: string) => {
-    // Log user fact that the user clicked on the tap bar
-    logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
-      userFactTypeName: 'TapBarNavClick',
-      appPage: currentAppPage,
-      detail1: tabName,
-    });
-  };
+  // Use effect to update setIsWelcomeSequence
+  useEffect(() => {
+    // Update the state based on the current path
+    setIsWelcomeSequence(location.pathname.startsWith('/App/Welcome'));
+  }, [location]);
 
   // On component mount: 
   // - Set the page title
@@ -87,82 +86,108 @@ const RouterTabs: React.FC = () => {
     fetchMessages();
   }, []);
 
+  const handleTabClick = async (tabName: string) => {
+    // Log user fact that the user clicked on the tap bar
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'TapBarNavClick',
+      appPage: currentAppPage,
+      detail1: tabName,
+    });
+  };
+
   return (
-    <IonReactRouter>
+    <>
       {/* Listen for App URLs */}
       <AppUrlListener></AppUrlListener>
 
       {/* Initialize OneSignal and listen for OneSignal callbacks */}
       {window.cordova && <OneSignalInitializer />}
 
-      {/* Handle routing */}
-      <IonTabs>
+      {/* If the tab bar is not visible, the user is in the welcome sequence and should not see tabs */}
+      {!isTabBarVisible && (
         <IonRouterOutlet>
           <Switch>
-            {/* Define all of the specific routes */}
-
-            {/* Home routes */}
-            <Route exact path="/App/Home" component={HomePage} />
-            <Route exact path="/">
-                <Redirect to="/App/Home" />
-            </Route>
-            <Route exact path="/App/Home/Messages" component={MessagesPage} />
-            
-            {/* Library routes */}
-            <Route exact path="/App/Library" component={LibraryPage} />
-            <Route exact path="/App/Library/Search" component={SearchPage} />
-            <Route exact path="/App/Library/Articles" component={ArticleCategoryListingPage} />
-            <Route exact path="/App/Library/Articles/Category" component={ArticlesPage} />
-            <Route exact path="/App/Library/Articles/Article" component={ArticleDetailPage} />
-            <Route exact path="/App/Library/Videos" component={VideoLibraryPage} />
-            
-            {/* Paths routes */}
-            <Route exact path="/App/Paths">
-              <Redirect to="/App/Paths/PathListing" />
-            </Route>
-            <Route exact path="/App/Paths/PathListing" component={PathListingPage} />
-            <Route exact path="/App/Paths/PathDetail" component={PathDetailPage} />
-            
-            {/* Miscellaneous routes */}
-            <Route exact path="/App/Admin" component={AdminPage} />
-
-            {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
-            <Route component={RedirectToWeb} />
+            {/* If the user is in the welcome sequence, show the welcome page */}
+            <Route exact path="/App/Welcome" component={WelcomePage} />
           </Switch>
         </IonRouterOutlet>
-        {/* Tab Bar */}
-        <IonTabBar slot="bottom" className="">
-          <IonTabButton 
-            tab="Home" 
-            href="/App/Home"
-            onClick={() => handleTabClick('Home')}
-          >
-            <IonIcon icon={homeOutline} />
-            <IonLabel>Home</IonLabel>
-          </IonTabButton>
-          
-          {/* Paths */}
-          <IonTabButton 
-            tab="Paths" 
-            href="/App/Paths/"
-            onClick={() => handleTabClick('Paths')}
-          >
-            <IonIcon icon={walkOutline} />
-            <IonLabel>Paths</IonLabel>
-          </IonTabButton>
+      )}
 
-          {/* Library */}
-          <IonTabButton 
-            tab="Library" 
-            href="/App/Library"
-            onClick={() => handleTabClick('Library')}
-          >
-            <IonIcon icon={libraryOutline} />
-            <IonLabel>Library</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
+      {isTabBarVisible && (
+        // If the tab bar is visible, show the tabs
+        <IonTabs>
+          <IonRouterOutlet>
+            <Switch>
+              {/* Define all of the specific routes */}
+
+              {/* If the user is in the welcome sequence, show the welcome page */}
+              <Route exact path="/App/Welcome" component={WelcomePage} />
+
+              {/* Home routes */}
+              <Route exact path="/App/Home" component={HomePage} />
+              <Route exact path="/">
+                  <Redirect to="/App/Home" />
+              </Route>
+              <Route exact path="/App/Home/Messages" component={MessagesPage} />
+              
+              {/* Library routes */}
+              <Route exact path="/App/Library" component={LibraryPage} />
+              <Route exact path="/App/Library/Search" component={SearchPage} />
+              <Route exact path="/App/Library/Articles" component={ArticleCategoryListingPage} />
+              <Route exact path="/App/Library/Articles/Category" component={ArticlesPage} />
+              <Route exact path="/App/Library/Articles/Article" component={ArticleDetailPage} />
+              <Route exact path="/App/Library/Videos" component={VideoLibraryPage} />
+              
+              {/* Paths routes */}
+              <Route exact path="/App/Paths">
+                <Redirect to="/App/Paths/PathListing" />
+              </Route>
+              <Route exact path="/App/Paths/PathListing" component={PathListingPage} />
+              <Route exact path="/App/Paths/PathDetail" component={PathDetailPage} />
+              
+              {/* Miscellaneous routes */}
+              <Route exact path="/App/Admin" component={AdminPage} />
+
+              {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
+              <Route component={RedirectToWeb} />
+            </Switch>
+          </IonRouterOutlet>
+          {/* Tab Bar */}
+          <IonTabBar slot="bottom" className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}>
+            <IonTabButton 
+              tab="Home" 
+              href="/App/Home"
+              onClick={() => handleTabClick('Home')}
+            >
+              <IonIcon icon={homeOutline} />
+              <IonLabel>Home</IonLabel>
+            </IonTabButton>
+            
+            {/* Paths */}
+            <IonTabButton 
+              tab="Paths" 
+              href="/App/Paths/"
+              onClick={() => handleTabClick('Paths')}
+            >
+              <IonIcon icon={walkOutline} />
+              <IonLabel>Paths</IonLabel>
+            </IonTabButton>
+
+            {/* Library */}
+            <IonTabButton 
+              tab="Library" 
+              href="/App/Library"
+              onClick={() => handleTabClick('Library')}
+            >
+              <IonIcon icon={libraryOutline} />
+              <IonLabel>Library</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>  
+      )}
+    </>
   );
 }
 

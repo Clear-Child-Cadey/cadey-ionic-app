@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-
+import { IonReactRouter } from '@ionic/react-router';
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
-import { HomeTabVisibilityContext } from './context/TabContext';
+import { TabProvider } from './context/TabContext';
 import UnreadContext from './context/UnreadContext';
 import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
@@ -78,7 +78,6 @@ function MainComponent() {
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
   const [oneSignalId, setOneSignalId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [isHomeTabVisible, setIsHomeTabVisible] = useState(false);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [unreadGoals, setUnreadGoals] = useState(false);
 
@@ -98,7 +97,7 @@ function MainComponent() {
       }
       
       try {
-        await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
+        await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl);
         setDataLoaded(true); // Indicate that data has been loaded
         clearTimeout(timeoutId); // Clear the timeout if data is loaded in time
       } catch (error) {
@@ -150,21 +149,23 @@ function MainComponent() {
   return (
     <CadeyUserContext.Provider value={{ cadeyUserId, cadeyUserAgeGroup, setCadeyUserAgeGroup, minimumSupportedVersion, oneSignalId }}>
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
-        <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
+        <TabProvider>
           <UnreadContext.Provider value={{ unreadMessagesCount, setUnreadMessagesCount, unreadGoals, setUnreadGoals }}>
             <AppPageProvider>
               <TabBarSpotlightProvider>
                 <LoadingStateProvider>
                   <ModalProvider>
                     <PathProvider>
-                      <App />
+                      <IonReactRouter>
+                        <App />
+                      </IonReactRouter>
                     </PathProvider>
                   </ModalProvider>
                 </LoadingStateProvider>
               </TabBarSpotlightProvider>
             </AppPageProvider>
           </UnreadContext.Provider>
-        </HomeTabVisibilityContext.Provider>
+        </TabProvider>
       </DeviceIdContext.Provider>
     </CadeyUserContext.Provider>
   );

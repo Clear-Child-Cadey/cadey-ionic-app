@@ -3,6 +3,7 @@ import {
   IonApp,
   setupIonicReact,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 import semver from 'semver';
 // Components
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -13,18 +14,22 @@ import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailMo
 import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
 import FalseDoorModal from './components/Modals/FalseDoorModal/FalseDoorModal';
 import QuizModal from './components/Modals/QuizModal/QuizModal';
-import WelcomeModal from './components/Modals/Welcome/WelcomeModal';
+import WelcomeModal from './pages/Welcome/Welcome';
 // Contexts
 import { CadeyUserContext } from './main';
 import { useModalContext } from './context/ModalContext';
 import ApiUrlContext from './context/ApiUrlContext';
 import { useAppPage } from './context/AppPageContext';
+import { useTabContext } from './context/TabContext';
 // Variables
 import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 import { logUserFact } from './api/UserFacts';
 import PopularSymptomVideoDetailModal from './components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal';
+import { getQuiz } from './api/Quiz';
+// Pages
+import WelcomePage from './pages/Welcome/Welcome';
 
 setupIonicReact();
 
@@ -36,12 +41,17 @@ const App: React.FC = () => {
   const [falseDoorData, setFalseDoorData] = useState<any>(null); // Hold the data for the false door
   const [isFalseDoorModalOpen, setIsFalseDoorModalOpen] = useState(false); // Control the modal visibility
   const { currentBasePage, currentAppPage } = useAppPage();
+  const history = useHistory();
+  const [checkForWelcome, setCheckForWelcome] = useState(false);
+  const [showWelcomePage, setShowWelcomePage] = useState(false);
+  const { setIsTabBarVisible } = useTabContext();
 
   const {
     isVideoModalOpen,  
     isArticleDetailModalOpen,
     isQuizModalOpen,
     quizModalData,
+    setQuizModalData,
     currentVimeoId,
     currentArticleId,
     isPopularSymptomVideoModalOpen,
@@ -71,6 +81,36 @@ const App: React.FC = () => {
     // Don't interact with OneSignal (which relies on Cordova)
   }
 
+  // Route the user to the welcome page if they haven't completed the welcome sequence
+  useEffect(() => {
+    const requestQuiz = async () => {
+      if (!checkForWelcome) {
+        const quizResponse = await getQuiz(
+          apiUrl,
+          Number(cadeyUserId),
+          3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
+          0, // Entity Type (1 = video)
+          0  // Entity IDs (The ID of the video)
+        );
+
+        setCheckForWelcome(true); // Prevents re-fetching the quiz
+
+        if (quizResponse.question !== null && quizResponse.question.id > 0) {
+          // Set the quiz data
+          setQuizModalData(quizResponse);
+          
+          // Hide the tab bar
+          setIsTabBarVisible(false);
+
+          // Route the user to the welcome page
+          history.push('/App/Welcome');
+        }
+      }
+    }
+
+    requestQuiz();
+  }, [cadeyUserId, apiUrl]);
+
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
     if (semver.lt(AppVersion, minimumSupportedVersion)) {
@@ -92,19 +132,6 @@ const App: React.FC = () => {
     }
   }, [isVideoModalOpen]);
 
-  useEffect(() => {
-    if (!isPopularSymptomVideoModalOpen && !videoModalEverOpened) {
-      // Modal closed, hasn't ever been opened
-      // Currently, do nothing in this case
-    } else if (isPopularSymptomVideoModalOpen && !videoModalEverOpened) {
-      // Modal opened for the first time
-      setVideoModalEverOpened(true);
-    } else if (!isPopularSymptomVideoModalOpen && videoModalEverOpened) {
-      // Modal closed, but has been opened before
-      onVideoDetailPageClosed();
-    }
-  }, [isPopularSymptomVideoModalOpen]);
-
   const onVideoDetailPageClosed = async () => {
     const response = await logUserFact({
       cadeyUserId: cadeyUserId,
@@ -121,6 +148,7 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
+
       {/* Show a modal if the user needs to update their app*/}
       <AppUpdateModal
         isOpen={showUpgradeModal}
@@ -130,14 +158,12 @@ const App: React.FC = () => {
         buttonUrl={getStoreLink()}
       />
 
+      {/* Show a quiz modal if context dictates */}
+      <QuizModal />
+
       {/* Show a video modal if context dictates */}
       {isVideoModalOpen && currentVimeoId && (
         <VideoDetailModal />
-      )}
-
-      {/* Show a popular symptom video modal if context dictates */}
-      {isPopularSymptomVideoModalOpen && popularSymptomVideo && (
-        <PopularSymptomVideoDetailModal />
       )}
       
       {/* Show an article modal if context dictates */}
@@ -161,12 +187,6 @@ const App: React.FC = () => {
         isOpen={isFalseDoorModalOpen}
         setIsOpen={setIsFalseDoorModalOpen}
       />
-
-      {/* Show a quiz modal if context dictates */}
-      <QuizModal />
-
-      {/* Show a Welcome modal if context dictates */}
-      <WelcomeModal />
       
       {/* Router Tabs */}
       <RouterTabs />

@@ -1,39 +1,35 @@
 import React, { useEffect } from 'react';
 import { 
-    IonModal, 
     IonButton, 
     IonContent, 
     IonRow,
+    IonPage,
 } from '@ionic/react';
 // CSS
-import './WelcomeModal.css';
+import './Welcome.css';
 // Contexts
-import { useModalContext } from '../../../context/ModalContext';
-import { CadeyUserContext } from '../../../main';
-import ApiUrlContext from '../../../context/ApiUrlContext';
+import { useModalContext } from '../../context/ModalContext';
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
 // API
 
 // Icons
 
 
-const WelcomeModal: React.FC = ({ }) => {
+const WelcomePage: React.FC = ({ }) => {
 
     const { 
-        isWelcomeModalOpen, 
-        setWelcomeModalOpen,
         setQuizModalOpen,
     } = useModalContext();
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
 
     const handleContinue = () => {
-
         setQuizModalOpen(true);
-        setWelcomeModalOpen(false);
     }
 
     return (
-        <IonModal isOpen={isWelcomeModalOpen} className="welcome-modal">
+        <IonPage className="welcome">
             <IonContent fullscreen>
                 <IonRow className="welcome-content">
                     <IonRow className="logo">
@@ -55,8 +51,8 @@ const WelcomeModal: React.FC = ({ }) => {
                     <img src="assets/images/welcome.png" />
                 </IonRow>
             </IonContent>
-        </IonModal>
+        </IonPage>
     );
 };
 
-export default WelcomeModal;
+export default WelcomePage;

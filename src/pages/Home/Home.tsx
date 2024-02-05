@@ -15,9 +15,6 @@ import {
 } from '@ionic/react';
 // Icons
 import { 
-    trailSignOutline,
-    bookOutline,
-    chatbubbleEllipsesOutline,
     chevronForwardOutline,
 } from 'ionicons/icons';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -34,7 +31,6 @@ import VideoList from '../../components/Videos/VideoList';
 // API
 import getHomeData from '../../api/HomeData';
 import { logUserFact } from '../../api/UserFacts';
-import { getQuiz } from '../../api/Quiz';
 import { logErrorToFirestore } from '../../api/Firebase/LogErrorToFirestore';
 // Variables
 import { tracingEnabled } from '../../variables/Logging';
@@ -68,8 +64,6 @@ const HomePage: React.FC<{ }> = ({  }) => {
   // Get all the props from the modal context
   const { 
     isVideoModalOpen,
-    setQuizModalData,
-    setWelcomeModalOpen,
   } = useModalContext();
 
   // Get the latest data from the API
@@ -145,14 +139,6 @@ const HomePage: React.FC<{ }> = ({  }) => {
       
   }, [isVideoModalOpen]);
 
-  // Check for onboarding quiz on mount and when cadeyUserId changes
-  useEffect(() => {
-      
-      if (cadeyUserId) {
-        requestQuiz();
-      }
-  }, [cadeyUserId, apiUrl]);
-
   // On component mount:
   useEffect(() => {
     document.title = 'Home'; // Set the page title
@@ -165,27 +151,6 @@ const HomePage: React.FC<{ }> = ({  }) => {
       appPage: 'Home',
     });
   }, []);
-
-  const requestQuiz = async () => {
-    const quizResponse = await getQuiz(
-      apiUrl,
-      Number(cadeyUserId),
-      2,                    // Client Context: Where the user is in the app (2 = App Opened)
-      0,                    // Entity Type (1 = video)
-      0                     // Entity IDs (The ID of the video)
-    );
-
-    if (quizResponse.question !== null && quizResponse.question.id > 0) {
-
-      // Set the quiz data
-      setQuizModalData(quizResponse);
-
-      // Show the welcome screen
-      setWelcomeModalOpen(true);
-
-      // NOTE: We don't open the quiz modal here as the user needs to see the welcome screen first. Welcome screen will open the quiz modal.
-    }
-  }
 
   const handleButtonClick = (route: string) => () => {
     // Log user fact that the user clicked on the button

@@ -21,7 +21,6 @@ import SymptomsList from '../../components/SymptomsList/SymptomsList';
 import { Symptom } from '../../components/ConcernsList/ConcernsList';
 import Results from '../../components/Results/Results';
 // Contexts
-import { HomeTabVisibilityContext } from '../../context/TabContext';
 import UnreadContext from '../../context/UnreadContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -51,7 +50,6 @@ const LibraryPage: React.FC = () => {
     const [results, setResults] = useState<any | null>(null);
 
     // Context variables
-    const { setIsHomeTabVisible: setHomeTabVisibility } = useContext(HomeTabVisibilityContext);
     const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const { isAgeGroupModalOpen, setAgeGroupModalOpen } = useModalContext(); // Get the modal state from the context
@@ -132,7 +130,6 @@ const LibraryPage: React.FC = () => {
         setResults(response);
         setShowSymptomsList(false);
         setShowResults(true);
-        setHomeTabVisibility(true); // Show the Home tab when results are received
 
         setPageTitle("Recommendations");
         document.title = "Recommendations";

@@ -16,7 +16,6 @@ export const getAppData = async (
     setMinimumSupportedVersion: any, 
     setOneSignalId: any,
     apiUrl: any,
-    setIsHomeTabVisible: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
   
     // Define the url for the request
@@ -61,11 +60,6 @@ export const getAppData = async (
     setCadeyUserAgeGroup(data.ageGroup); // Update the Cadey User Age state
     setMinimumSupportedVersion(data.cadeyMinimumSupportedAppVersion); // Update the Minimum Supported Version state
     setOneSignalId(data.oneSignalId); // Update the OneSignal ID state
-    
-    // Set the visibility of the Home tab based on the response data
-    if (data.firstPageToShow === "home") {
-      setIsHomeTabVisible(true);
-    }
 
   } catch (error) { // Handle any errors during the request
     console.error('Error during API call', error);

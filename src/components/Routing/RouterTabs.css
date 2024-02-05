@@ -77,3 +77,7 @@
     border-right: 10px solid transparent; /* Adjust for notch size */
     border-top: 10px solid #F9F6EF; /* This color should match the .spotlight div background color */
 }
+
+.tab-bar.welcome {
+    display: none;
+}

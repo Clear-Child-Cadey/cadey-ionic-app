@@ -153,7 +153,6 @@ const QuizModal: React.FC = ({ }) => {
         // Send the user's response to the API 
         await sendQuizResponse(false, false, mergedResponses);
     };
-    
 
     const sendQuizResponse = async (skipped: boolean, cancelled: boolean, response: QuizResponse[]) => {
         // Send the user's response to the API
