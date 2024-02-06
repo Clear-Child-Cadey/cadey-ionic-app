@@ -1,0 +1,146 @@
+[debug] [2024-02-06T20:57:01.811Z] ----------------------------------------------------------------------
+[debug] [2024-02-06T20:57:01.812Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2024-02-06T20:57:01.812Z] CLI Version:   12.2.1
+[debug] [2024-02-06T20:57:01.812Z] Platform:      darwin
+[debug] [2024-02-06T20:57:01.812Z] Node Version:  v18.16.0
+[debug] [2024-02-06T20:57:01.813Z] Time:          Tue Feb 06 2024 13:57:01 GMT-0700 (Mountain Standard Time)
+[debug] [2024-02-06T20:57:01.813Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-02-06T20:57:01.843Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-02-06T20:57:01.844Z] > authorizing via signed-in user (austin@bounddigital.com)
+[debug] [2024-02-06T20:57:01.844Z] [iam] checking project cadeylite for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-02-06T20:57:01.844Z] > refreshing access token with scopes: []
+[debug] [2024-02-06T20:57:01.845Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-02-06T20:57:01.845Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-02-06T20:57:01.953Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-02-06T20:57:01.953Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-02-06T20:57:01.962Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions [none]
+[debug] [2024-02-06T20:57:01.962Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions x-goog-quota-user=projects/cadeylite
+[debug] [2024-02-06T20:57:01.963Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-02-06T20:57:02.143Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions 200
+[debug] [2024-02-06T20:57:02.143Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/cadeylite:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-02-06T20:57:02.144Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/cadeylite [none]
+[debug] [2024-02-06T20:57:02.275Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/cadeylite 200
+[debug] [2024-02-06T20:57:02.276Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/cadeylite {"projectId":"cadeylite","projectNumber":"743363017370","displayName":"CadeyLite","name":"projects/cadeylite","resources":{"hostingSite":"cadeylite"},"state":"ACTIVE","etag":"1_61360c10-f077-4a29-a0ac-7b9ea8f4f574"}
+[info] 
+[info] === Deploying to 'cadeylite'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2024-02-06T20:57:02.282Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test [none]
+[debug] [2024-02-06T20:57:02.282Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test [omitted]
+[debug] [2024-02-06T20:57:02.457Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test 200
+[debug] [2024-02-06T20:57:02.457Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/cadeylite:test {}
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2024-02-06T20:57:02.461Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions [none]
+[debug] [2024-02-06T20:57:02.461Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2024-02-06T20:57:03.743Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions 200
+[debug] [2024-02-06T20:57:03.743Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions {"name":"projects/743363017370/sites/cadeylite/versions/8c5d8d1cfb12a75e","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  firestore: deploying indexes... 
+[debug] [2024-02-06T20:57:03.745Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/releases pageSize=10&pageToken=
+[debug] [2024-02-06T20:57:03.746Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2024-02-06T20:57:03.886Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/releases 200
+[debug] [2024-02-06T20:57:03.886Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/releases {"releases":[{"name":"projects/cadeylite/releases/cloud.firestore","rulesetName":"projects/cadeylite/rulesets/525ee9c4-fbfe-4335-83a3-94912ec10b53","createTime":"2023-06-01T20:34:24.506497Z","updateTime":"2024-02-06T17:39:08.460749Z"}]}
+[debug] [2024-02-06T20:57:03.886Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/rulesets/525ee9c4-fbfe-4335-83a3-94912ec10b53 [none]
+[debug] [2024-02-06T20:57:03.988Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/rulesets/525ee9c4-fbfe-4335-83a3-94912ec10b53 200
+[debug] [2024-02-06T20:57:03.988Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/cadeylite/rulesets/525ee9c4-fbfe-4335-83a3-94912ec10b53 [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[debug] [2024-02-06T20:57:04.025Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2024-02-06T20:57:04.025Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2024-02-06T20:57:04.025Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2024-02-06T20:57:04.218Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
+[debug] [2024-02-06T20:57:04.218Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/cadeylite/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"fields":[{"name":"projects/cadeylite/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[info] ✔  firestore: deployed indexes in firestore.indexes.json successfully for (default) database 
+[info] i  hosting[cadeylite]: beginning deploy... 
+[info] i  hosting[cadeylite]: found 25 files in dist 
+[debug] [2024-02-06T20:57:04.223Z] [hosting] uploading with 200 concurrency
+[debug] [2024-02-06T20:57:04.261Z] [hosting] hash cache [ZGlzdA] stored for 25 files
+[debug] [2024-02-06T20:57:04.261Z] [hosting][hash queue][FINAL] {"max":34,"min":4,"avg":6.04,"active":0,"complete":25,"success":25,"errored":0,"retried":0,"total":25,"elapsed":36}
+[debug] [2024-02-06T20:57:04.262Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/743363017370/sites/cadeylite/versions/8c5d8d1cfb12a75e:populateFiles [none]
+[debug] [2024-02-06T20:57:04.262Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/743363017370/sites/cadeylite/versions/8c5d8d1cfb12a75e:populateFiles {"files":{"/index.html":"16a0ffa1fde57d459a44c1c6ee1f79c4c373b319670b5c406bc7eb4fe89d8377","/assets/index9-67d31892.js":"282a01a3d19aa7a6d6cfaddd382185acbae36cc61bf5c1ea962549eecbc63ba4","/assets/focus-visible-9c13edeb.js":"8dbed4d85519138e681ec9b47780d7277c358683886f4dfdbe8262d23f3f4c5a","/assets/input-shims-3981a6ba.js":"ac552a93d773d4cbc8f944a04a472bc0f8fda4e0ae3b2315d5576c497a41e832","/assets/md.transition-0aa3fc48.js":"aca813f8637fd8b26d592ddba41fbad5d570e0e8d41cb69a1327fe5f12055c19","/assets/status-tap-efe34f60.js":"2e8ec2c93a4d45173d0a9cc1570bca3dd0720abf7510809d7df2050f8e53ddcd","/assets/swipe-back-5e1878ef.js":"1745b2f840cc5ebbcd75c964ac02a14c42fdceaec5ba8e38fe0efe808fe1eec4","/assets/web-31dca8a5.js":"0725b682711321727e899e87c1b058f0e27dbec8359090207878a41cb4f8376a","/assets/web-d576f645.js":"b1b982e3d8f99f5d385d3e51ca8b0331d3e46e0ad98620c5bf71db82864ee6d3","/assets/icon.png":"cd33d74b86645ef84167e34566e2c78121b9d717ed42a1bfac1155f4e6415b30","/assets/ios.transition-a6a01910.js":"c6fd04d21e1e39f38a9f4e35ae64104a8bc0680e01f12042db8e375b06b0dd52","/assets/svgs/icn-articles.svg":"1fbeb8ed682f790f2269a6daae1f14e6821df7d5b6d8c332f1eb3319ac96ed52","/assets/svgs/cadey.svg":"bf85486a44ba4c7f8bf6f28282f1054e1416bfa20e68cb3a63d8ad4039726919","/assets/svgs/icn-library.svg":"bf779367feae56d9c69146515cce41501bfd77a5ab8d3e2c1149dccf9febfd37","/assets/svgs/icn-messages.svg":"a4fb63939ee42adf7dd64c99d774dd0a3a83fe36f646af96edad7cb8541a38df","/assets/svgs/icn-paths.svg":"b97f0339754058fb1d6ed6f824ff46d188f98ed6bdf30ee16e191eeaa6844405","/assets/svgs/playcard-active.svg":"beb527c37b1238fdb0aad1a6f6157f3f37ff90fc534964b1f81235de3f90cdab","/assets/index-7e4b9e30.css":"06e28dd3652523ab3c56cc110f733c47c21b4b64f12057db1a34e0a54731667b","/assets/svgs/playcard-default.svg":"fe9223db521c969236eb64667343327c68cd44a9d0bb8e12956a113b8676d967","/assets/svgs/playcard-complete.svg":"8d3fbef9a1c42541dad64781ab8b39b99ec89986612866768f5560bbc694701b","/assets/svgs/icn-video.svg":"0422cb0abee84a54b88986fd2e5487464be11ab4fd378d2bff814c349d162f05","/assets/web-9ea1dadf.js":"dfe1cc2d2e3c8f1f5092a0f3d40b036898490e5579272312d57c5851196511f0","/assets/web-911c6a6f.js":"ae9b417bc69e5f32f0fc73f1a198a8825ac15e7ef82cef9f44d57bb9fd37f83a","/assets/images/welcome.png":"15e5870221bdaa9bacbddb91132b2bb4b41b5dde9fa9d18ab266e5bc50edefa9","/assets/index-497f442f.js":"d51194623c832b52c2ccdc418da8a4fbadae4e92adb1534c3cb1b3cb6f33287f"}}
+[debug] [2024-02-06T20:57:05.130Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/743363017370/sites/cadeylite/versions/8c5d8d1cfb12a75e:populateFiles 200
+[debug] [2024-02-06T20:57:05.130Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/743363017370/sites/cadeylite/versions/8c5d8d1cfb12a75e:populateFiles {"uploadRequiredHashes":["d51194623c832b52c2ccdc418da8a4fbadae4e92adb1534c3cb1b3cb6f33287f","c6fd04d21e1e39f38a9f4e35ae64104a8bc0680e01f12042db8e375b06b0dd52","1745b2f840cc5ebbcd75c964ac02a14c42fdceaec5ba8e38fe0efe808fe1eec4","ae9b417bc69e5f32f0fc73f1a198a8825ac15e7ef82cef9f44d57bb9fd37f83a","dfe1cc2d2e3c8f1f5092a0f3d40b036898490e5579272312d57c5851196511f0","282a01a3d19aa7a6d6cfaddd382185acbae36cc61bf5c1ea962549eecbc63ba4","ac552a93d773d4cbc8f944a04a472bc0f8fda4e0ae3b2315d5576c497a41e832","b1b982e3d8f99f5d385d3e51ca8b0331d3e46e0ad98620c5bf71db82864ee6d3","0725b682711321727e899e87c1b058f0e27dbec8359090207878a41cb4f8376a","2e8ec2c93a4d45173d0a9cc1570bca3dd0720abf7510809d7df2050f8e53ddcd","aca813f8637fd8b26d592ddba41fbad5d570e0e8d41cb69a1327fe5f12055c19","16a0ffa1fde57d459a44c1c6ee1f79c4c373b319670b5c406bc7eb4fe89d8377"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files"}
+[debug] [2024-02-06T20:57:05.132Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/d51194623c832b52c2ccdc418da8a4fbadae4e92adb1534c3cb1b3cb6f33287f [none]
+[debug] [2024-02-06T20:57:05.132Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/d51194623c832b52c2ccdc418da8a4fbadae4e92adb1534c3cb1b3cb6f33287f [stream]
+[debug] [2024-02-06T20:57:05.134Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/c6fd04d21e1e39f38a9f4e35ae64104a8bc0680e01f12042db8e375b06b0dd52 [none]
+[debug] [2024-02-06T20:57:05.134Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/c6fd04d21e1e39f38a9f4e35ae64104a8bc0680e01f12042db8e375b06b0dd52 [stream]
+[debug] [2024-02-06T20:57:05.135Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/1745b2f840cc5ebbcd75c964ac02a14c42fdceaec5ba8e38fe0efe808fe1eec4 [none]
+[debug] [2024-02-06T20:57:05.135Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/1745b2f840cc5ebbcd75c964ac02a14c42fdceaec5ba8e38fe0efe808fe1eec4 [stream]
+[debug] [2024-02-06T20:57:05.136Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ae9b417bc69e5f32f0fc73f1a198a8825ac15e7ef82cef9f44d57bb9fd37f83a [none]
+[debug] [2024-02-06T20:57:05.136Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ae9b417bc69e5f32f0fc73f1a198a8825ac15e7ef82cef9f44d57bb9fd37f83a [stream]
+[debug] [2024-02-06T20:57:05.137Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/dfe1cc2d2e3c8f1f5092a0f3d40b036898490e5579272312d57c5851196511f0 [none]
+[debug] [2024-02-06T20:57:05.137Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/dfe1cc2d2e3c8f1f5092a0f3d40b036898490e5579272312d57c5851196511f0 [stream]
+[debug] [2024-02-06T20:57:05.137Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/282a01a3d19aa7a6d6cfaddd382185acbae36cc61bf5c1ea962549eecbc63ba4 [none]
+[debug] [2024-02-06T20:57:05.137Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/282a01a3d19aa7a6d6cfaddd382185acbae36cc61bf5c1ea962549eecbc63ba4 [stream]
+[debug] [2024-02-06T20:57:05.138Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ac552a93d773d4cbc8f944a04a472bc0f8fda4e0ae3b2315d5576c497a41e832 [none]
+[debug] [2024-02-06T20:57:05.138Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ac552a93d773d4cbc8f944a04a472bc0f8fda4e0ae3b2315d5576c497a41e832 [stream]
+[debug] [2024-02-06T20:57:05.139Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/b1b982e3d8f99f5d385d3e51ca8b0331d3e46e0ad98620c5bf71db82864ee6d3 [none]
+[debug] [2024-02-06T20:57:05.139Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/b1b982e3d8f99f5d385d3e51ca8b0331d3e46e0ad98620c5bf71db82864ee6d3 [stream]
+[debug] [2024-02-06T20:57:05.139Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/0725b682711321727e899e87c1b058f0e27dbec8359090207878a41cb4f8376a [none]
+[debug] [2024-02-06T20:57:05.139Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/0725b682711321727e899e87c1b058f0e27dbec8359090207878a41cb4f8376a [stream]
+[debug] [2024-02-06T20:57:05.140Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/2e8ec2c93a4d45173d0a9cc1570bca3dd0720abf7510809d7df2050f8e53ddcd [none]
+[debug] [2024-02-06T20:57:05.140Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/2e8ec2c93a4d45173d0a9cc1570bca3dd0720abf7510809d7df2050f8e53ddcd [stream]
+[debug] [2024-02-06T20:57:05.141Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/aca813f8637fd8b26d592ddba41fbad5d570e0e8d41cb69a1327fe5f12055c19 [none]
+[debug] [2024-02-06T20:57:05.141Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/aca813f8637fd8b26d592ddba41fbad5d570e0e8d41cb69a1327fe5f12055c19 [stream]
+[debug] [2024-02-06T20:57:05.141Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/16a0ffa1fde57d459a44c1c6ee1f79c4c373b319670b5c406bc7eb4fe89d8377 [none]
+[debug] [2024-02-06T20:57:05.141Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/16a0ffa1fde57d459a44c1c6ee1f79c4c373b319670b5c406bc7eb4fe89d8377 [stream]
+[debug] [2024-02-06T20:57:05.142Z] [hosting][populate queue][FINAL] {"max":871,"min":871,"avg":871,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":881}
+[debug] [2024-02-06T20:57:05.142Z] [hosting] uploads queued: 12
+[debug] [2024-02-06T20:57:05.549Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/d51194623c832b52c2ccdc418da8a4fbadae4e92adb1534c3cb1b3cb6f33287f 200
+[debug] [2024-02-06T20:57:05.550Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/d51194623c832b52c2ccdc418da8a4fbadae4e92adb1534c3cb1b3cb6f33287f [stream]
+[debug] [2024-02-06T20:57:05.550Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ae9b417bc69e5f32f0fc73f1a198a8825ac15e7ef82cef9f44d57bb9fd37f83a 200
+[debug] [2024-02-06T20:57:05.550Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ae9b417bc69e5f32f0fc73f1a198a8825ac15e7ef82cef9f44d57bb9fd37f83a [stream]
+[debug] [2024-02-06T20:57:05.551Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ac552a93d773d4cbc8f944a04a472bc0f8fda4e0ae3b2315d5576c497a41e832 200
+[debug] [2024-02-06T20:57:05.551Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/ac552a93d773d4cbc8f944a04a472bc0f8fda4e0ae3b2315d5576c497a41e832 [stream]
+[debug] [2024-02-06T20:57:05.552Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/0725b682711321727e899e87c1b058f0e27dbec8359090207878a41cb4f8376a 200
+[debug] [2024-02-06T20:57:05.552Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/0725b682711321727e899e87c1b058f0e27dbec8359090207878a41cb4f8376a [stream]
+[debug] [2024-02-06T20:57:05.552Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/1745b2f840cc5ebbcd75c964ac02a14c42fdceaec5ba8e38fe0efe808fe1eec4 200
+[debug] [2024-02-06T20:57:05.552Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/1745b2f840cc5ebbcd75c964ac02a14c42fdceaec5ba8e38fe0efe808fe1eec4 [stream]
+[debug] [2024-02-06T20:57:05.553Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/282a01a3d19aa7a6d6cfaddd382185acbae36cc61bf5c1ea962549eecbc63ba4 200
+[debug] [2024-02-06T20:57:05.553Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/282a01a3d19aa7a6d6cfaddd382185acbae36cc61bf5c1ea962549eecbc63ba4 [stream]
+[debug] [2024-02-06T20:57:05.559Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/2e8ec2c93a4d45173d0a9cc1570bca3dd0720abf7510809d7df2050f8e53ddcd 200
+[debug] [2024-02-06T20:57:05.559Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/2e8ec2c93a4d45173d0a9cc1570bca3dd0720abf7510809d7df2050f8e53ddcd [stream]
+[debug] [2024-02-06T20:57:05.598Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/dfe1cc2d2e3c8f1f5092a0f3d40b036898490e5579272312d57c5851196511f0 200
+[debug] [2024-02-06T20:57:05.598Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/dfe1cc2d2e3c8f1f5092a0f3d40b036898490e5579272312d57c5851196511f0 [stream]
+[debug] [2024-02-06T20:57:05.620Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/b1b982e3d8f99f5d385d3e51ca8b0331d3e46e0ad98620c5bf71db82864ee6d3 200
+[debug] [2024-02-06T20:57:05.620Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/b1b982e3d8f99f5d385d3e51ca8b0331d3e46e0ad98620c5bf71db82864ee6d3 [stream]
+[debug] [2024-02-06T20:57:05.703Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/aca813f8637fd8b26d592ddba41fbad5d570e0e8d41cb69a1327fe5f12055c19 200
+[debug] [2024-02-06T20:57:05.703Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/aca813f8637fd8b26d592ddba41fbad5d570e0e8d41cb69a1327fe5f12055c19 [stream]
+[debug] [2024-02-06T20:57:05.709Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/c6fd04d21e1e39f38a9f4e35ae64104a8bc0680e01f12042db8e375b06b0dd52 200
+[debug] [2024-02-06T20:57:05.709Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/c6fd04d21e1e39f38a9f4e35ae64104a8bc0680e01f12042db8e375b06b0dd52 [stream]
+[debug] [2024-02-06T20:57:05.743Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/16a0ffa1fde57d459a44c1c6ee1f79c4c373b319670b5c406bc7eb4fe89d8377 200
+[debug] [2024-02-06T20:57:05.743Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/cadeylite/versions/8c5d8d1cfb12a75e/files/16a0ffa1fde57d459a44c1c6ee1f79c4c373b319670b5c406bc7eb4fe89d8377 [stream]
+[debug] [2024-02-06T20:57:05.743Z] [hosting][upload queue][FINAL] {"max":611,"min":419,"avg":472,"active":0,"complete":12,"success":12,"errored":0,"retried":0,"total":12,"elapsed":613}
+[info] ✔  hosting[cadeylite]: file upload complete 
+[debug] [2024-02-06T20:57:05.744Z] [hosting] deploy completed after 1525ms
+[debug] [2024-02-06T20:57:05.745Z] [rules] releasing cloud.firestore/(default) with ruleset projects/cadeylite/rulesets/525ee9c4-fbfe-4335-83a3-94912ec10b53
+[debug] [2024-02-06T20:57:05.745Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/cadeylite/releases/cloud.firestore/(default) [none]
+[debug] [2024-02-06T20:57:05.745Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/cadeylite/releases/cloud.firestore/(default) {"release":{"name":"projects/cadeylite/releases/cloud.firestore/(default)","rulesetName":"projects/cadeylite/rulesets/525ee9c4-fbfe-4335-83a3-94912ec10b53"}}
+[debug] [2024-02-06T20:57:05.912Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/cadeylite/releases/cloud.firestore/(default) 200
+[debug] [2024-02-06T20:57:05.912Z] <<< [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/cadeylite/releases/cloud.firestore/(default) {"name":"projects/cadeylite/releases/cloud.firestore","rulesetName":"projects/cadeylite/rulesets/525ee9c4-fbfe-4335-83a3-94912ec10b53","createTime":"2023-06-01T20:34:24.506497Z","updateTime":"2024-02-06T20:57:05.946627Z"}
+[debug] [2024-02-06T20:57:05.912Z] [rules] updated release projects/cadeylite/releases/cloud.firestore
+[info] ✔  firestore: released rules firestore.rules to cloud.firestore 
+[debug] [2024-02-06T20:57:05.912Z] [
+  {
+    "config": {
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "cadeylite"
+    },
+    "version": "projects/743363017370/sites/cadeylite/versions/8c5d8d1cfb12a75e"
+  }
+]
+[info] i  hosting[cadeylite]: finalizing version... 
+[debug] [2024-02-06T20:57:05.914Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions/8c5d8d1cfb12a75e updateMask=status%2Cconfig
+[debug] [2024-02-06T20:57:05.914Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/cadeylite/versions/8c5d8d1cfb12a75e {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}

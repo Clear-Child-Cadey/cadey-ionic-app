@@ -111,6 +111,14 @@ const RouterTabs: React.FC = () => {
           <Switch>
             {/* If the user is in the welcome sequence, show the welcome page */}
             <Route exact path="/App/Welcome" component={WelcomePage} />
+
+            <Route exact path="/">
+              <Redirect to="/App/Welcome" />
+            </Route>
+
+            <Route exact path="/App/Home">
+                  <Redirect to="/App/Welcome" />
+              </Route>
           </Switch>
         </IonRouterOutlet>
       )}
@@ -121,9 +129,6 @@ const RouterTabs: React.FC = () => {
           <IonRouterOutlet>
             <Switch>
               {/* Define all of the specific routes */}
-
-              {/* If the user is in the welcome sequence, show the welcome page */}
-              <Route exact path="/App/Welcome" component={WelcomePage} />
 
               {/* Home routes */}
               <Route exact path="/App/Home" component={HomePage} />

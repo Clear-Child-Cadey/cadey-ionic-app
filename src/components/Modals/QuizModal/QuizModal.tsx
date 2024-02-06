@@ -10,25 +10,30 @@ import {
     IonText,
     IonIcon,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 // CSS
 import './QuizModal.css';
 // Contexts
 import { useModalContext } from '../../../context/ModalContext';
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
+import { useTabContext } from '../../../context/TabContext';
 // API
 import { postQuizResponse } from '../../../api/Quiz';
 // Icons
 import { chevronForwardOutline } from 'ionicons/icons';
 
 export interface QuizModalData {
-    quizRequest: quizRequest;
-    nextQuestionPossible: boolean;
-    previousQuestionInfo: any;
+    quizRequest: QuizRequest;
+    nextQuestionPossible: boolean | null;
+    previousQuestionInfo: {
+        previousQuestionId: number;
+        responseUserFactId: number;
+    } | null;
     question: QuizModalQuestion;
 }
 
-interface quizRequest {
+interface QuizRequest {
     cadeyUserId: number;
     clientContext: number;
     entityType: number;
@@ -61,6 +66,12 @@ export interface QuizResponse {
     textResponse: string;
 }
 
+export interface QuizSubmissionResponse {
+    entityId: number;
+    entityType: number;
+    quizRequestResponseModel: QuizModalData;
+}
+
 const QuizModal: React.FC = ({ }) => {
 
     const { isQuizModalOpen, setQuizModalOpen, quizModalData, setQuizModalData } = useModalContext();
@@ -71,6 +82,10 @@ const QuizModal: React.FC = ({ }) => {
     const [selectedOptionIds, setSelectedOptionIds] = React.useState<number[]>([]);
     const [textResponses, setTextResponses] = React.useState<{ [key: number]: string }>({}); // Key = optionId, Value = text response
     const [quizResponse, setQuizResponse] = React.useState<QuizResponse[]>([]);
+
+    const history = useHistory();
+
+    const { setIsTabBarVisible } = useTabContext();
 
     const handleSelection = (response: string) => {
         // If the user has already selected this response, remove it from the userResponse array
@@ -157,7 +172,7 @@ const QuizModal: React.FC = ({ }) => {
     const sendQuizResponse = async (skipped: boolean, cancelled: boolean, response: QuizResponse[]) => {
         // Send the user's response to the API
         try {
-            const quizSubmissionResponse = await postQuizResponse(
+            const quizSubmissionResponse: QuizSubmissionResponse = await postQuizResponse(
                 apiUrl,                                     // API URL
                 Number(cadeyUserId),                        // Cadey User ID
                 quizModalData!.quizRequest.clientContext,   // Client Context: Where the user is in the app (1 = VideoDetail)
@@ -170,11 +185,16 @@ const QuizModal: React.FC = ({ }) => {
                 response                                    // User's response                                  
             );
 
+            console.log('quizSubmissionResponse: ', quizSubmissionResponse);
+            // console.log('Quiz response question ID: ', quizSubmissionResponse.quizRequestResponse.question.id);
+
             // Depending on the API response, update the quiz modal with a new question or complete the quiz
-            if (quizSubmissionResponse.quizQuestion !== null && quizSubmissionResponse.quizQuestion !== undefined && quizSubmissionResponse.quizQuestion.id !== 0) {
+            if (quizSubmissionResponse.quizRequestResponseModel.question !== null && quizSubmissionResponse.quizRequestResponseModel.question !== undefined && quizSubmissionResponse.quizRequestResponseModel.question.id !== 0) {
+                console.log('Got a new question!');
                 // Update the quiz modal with a new question
-                setQuizModalData(quizSubmissionResponse);
+                setQuizModalData(quizSubmissionResponse.quizRequestResponseModel);
             } else {
+                console.log('Quiz complete!');
                 // Close the modal
                 handleClose();
             }
@@ -187,6 +207,13 @@ const QuizModal: React.FC = ({ }) => {
         // Clear the quiz data
         setQuizModalData(null);
         
+        // If the user just completed the welcome sequence, route them to the home page
+        if (quizModalData?.question.quizId === 6) {
+            setIsTabBarVisible(true);
+
+            history.push('/App/Home');
+        }
+
         // Close the modal
         setQuizModalOpen(false);
     }

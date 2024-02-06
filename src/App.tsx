@@ -108,7 +108,7 @@ const App: React.FC = () => {
       }
     }
 
-    // requestQuiz();
+    requestQuiz();
   }, [cadeyUserId, apiUrl]);
 
   // Show the upgrade modal if the current app version is not the latest
@@ -172,7 +172,7 @@ const App: React.FC = () => {
       )}
 
       {/* Show a false door modal if context dictates */}
-      <FalseDoorModal 
+      {/* <FalseDoorModal 
         source={currentAppPage}
         falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
         iconUrl={falseDoorData?.questionIcon || ''}
@@ -186,7 +186,7 @@ const App: React.FC = () => {
         thankYouButtonText="Close"
         isOpen={isFalseDoorModalOpen}
         setIsOpen={setIsFalseDoorModalOpen}
-      />
+      /> */}
       
       {/* Router Tabs */}
       <RouterTabs />
