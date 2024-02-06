@@ -180,11 +180,52 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
     const requestQuiz = async () => {
 
+        // Determine the correct context for the quiz
+        // Emotions = 4, PathId = 1
+        // Anger = 5, PathId = 2
+        // Outbursts = 6, PathId = 3
+        // Tantrums = 7, PathId = 4
+        // Mood Swings = 8, PathId = 5
+        // Following Directions = 9, PathId = 6
+
+        let clientContext = 0;
+
+        switch (pathId) {
+            case 1:
+                // Emotions
+                clientContext = 4;
+                break;
+            case 2:
+                // Anger
+                clientContext = 5;
+                break;
+            case 3:
+                // Outbursts
+                clientContext = 6;
+                break;
+            case 4:
+                // Tantrums
+                clientContext = 7;
+                break;
+            case 5:
+                // Mood Swings
+                clientContext = 8;
+                break;
+            case 6:
+                // Following Directions
+                clientContext = 9;
+                break;
+            default:
+                // Default context
+                clientContext = 0;
+                break;
+        }
+
         // Get a quiz
         const quizResponse = await getQuiz(
             apiUrl,
             Number(cadeyUserId),
-            1,                              // Client Context: Where the user is in the app (1 = VideoDetail)
+            clientContext,                  // Client Context: Where the user is in the app (1 = VideoDetail)
             1,                              // Entity Type (1 = video)
             Number(pathEntity!.entityId)    // Entity IDs (The ID of the video)
         );
