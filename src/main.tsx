@@ -83,6 +83,8 @@ function MainComponent() {
 
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  
+
   // App startup logic
   useEffect(() => {
     let timeoutId: any;

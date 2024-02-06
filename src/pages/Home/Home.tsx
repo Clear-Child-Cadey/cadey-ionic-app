@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './Home.css';
 import { 
     IonPage, 
@@ -167,6 +167,17 @@ const HomePage: React.FC<{ }> = ({  }) => {
       userFactTypeName: 'appPageNavigation',
       appPage: 'Home',
     });
+
+    // Function to load the Bugherd script
+    const loadBugherdScript = () => {
+      const script = document.createElement('script');
+      script.src = "https://www.bugherd.com/sidebarv2.js?apikey=stkrojaqmtujmlrixuxddw";
+      script.async = true;
+      document.body.appendChild(script);
+    };
+
+    loadBugherdScript();
+
   }, []);
 
   const handleButtonClick = (route: string) => () => {
