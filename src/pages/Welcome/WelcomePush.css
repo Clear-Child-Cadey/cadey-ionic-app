@@ -1,0 +1,43 @@
+.welcome-push {
+  padding: 0 16px;
+}
+
+.optin-icon {
+    text-align: center;
+    margin-top: 75px;
+}
+
+.optin-icon img {
+    background-color: #fff;
+    padding: 58px;
+    width: 278px;
+    border-radius: 30px;
+}
+
+.welcome-push .continue-row {
+    position: fixed;
+    bottom: 20px;
+    width: calc(100% - 32px);
+    background: #F9F6EF;
+}
+
+.welcome-push .continue-container {
+    width: 100%;
+    display: block;
+    text-align: center;
+}
+
+.welcome-push .yes {
+    --border-radius: 100px;
+    width: 189px;
+    margin: 0 auto;
+}
+
+.welcome-push .no {
+    --background: transparent;
+    color: #51ADEF;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+}

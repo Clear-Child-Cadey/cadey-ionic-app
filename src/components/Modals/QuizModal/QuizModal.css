@@ -60,17 +60,16 @@
 
 .quiz-modal .continue-row {
     position: fixed;
-    height: 90px;
-    bottom: 0;
-    padding-top: 10px;
-    padding-bottom: 30px;
-    background: #F9F6EF
+    height: 40px;
+    bottom: 40px;
+    width: 100%;
+    background: #F9F6EF;
 }
 
 .quiz-modal .continue-button {
     --border-radius: 100px;
-    margin-left: -34px;
-    margin-right: 0;
+    width: 189px;
+    margin: 0 auto;
 }
 
 .quiz-modal .text-input {

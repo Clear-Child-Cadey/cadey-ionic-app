@@ -13,7 +13,7 @@ import {
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 // CSS
-import './WelcomeAgeGroup.css';
+import './WelcomePush.css';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -92,19 +92,26 @@ const WelcomePush: React.FC = () => {
                         <h2>Turn on notifications to get the most out of Cadey</h2>
                     </IonToolbar>
                 </IonHeader>
-                <IonRow className="age-buttons-row">
-                    <IonButton 
-                        className='yes'
-                        onClick={() => handlePushSelection(true)}
-                    >
-                        Enable notifications
-                    </IonButton>
-                    <IonButton 
-                        className='no'
-                        onClick={() => handlePushSelection(false)}
-                    >
-                        Not now
-                    </IonButton>
+                <div className='optin-icon'>
+                    <img src="assets/svgs/bell.svg" />
+                </div>
+                <IonRow className="continue-row">
+                    <div className='yes continue-container'>
+                        <IonButton 
+                            className='yes push-button'
+                            onClick={() => handlePushSelection(true)}
+                        >
+                            Enable notifications
+                        </IonButton>
+                    </div>
+                    <div className='no continue-container'>
+                        <IonButton 
+                            className='no push-button'
+                            onClick={() => handlePushSelection(false)}
+                        >
+                            Not now
+                        </IonButton>
+                    </div>
                 </IonRow>
             </IonContent>
         </IonPage>
