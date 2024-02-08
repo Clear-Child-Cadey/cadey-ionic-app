@@ -8,68 +8,53 @@ import {
     IonRow,
     IonText,
     IonIcon,
+    IonPage,
 } from '@ionic/react';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 // CSS
-import './AgeGroupModal.css';
+import './WelcomeAgeGroup.css';
 // Contexts
-import { useModalContext } from '../../../context/ModalContext';
-import { CadeyUserContext } from '../../../main';
-import ApiUrlContext from '../../../context/ApiUrlContext';
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
 // API
-import { postCadeyUserAgeGroup } from '../../../api/AgeGroup';
+import { postCadeyUserAgeGroup } from '../../api/AgeGroup';
 // Icons
 import { chevronForwardOutline } from 'ionicons/icons';
 
-interface AgeGroupModalProps {
-    isOpen: boolean;
-    onAgeGroupSelected: (ageGroup: number) => void;
-}
-
-const AgeGroupModal: React.FC<AgeGroupModalProps> = ({ isOpen, onAgeGroupSelected }) => {
-    const { isAgeGroupModalOpen, setAgeGroupModalOpen } = useModalContext();
+const WelcomeAgeGroupSelect: React.FC = () => {
     const { setCadeyUserAgeGroup } = React.useContext(CadeyUserContext);
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
 
     const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
 
+    const history = useHistory();
+
     const handleAgeSelection = async (ageGroup: number) => {
         // Set the age group in the user context
         setCadeyUserAgeGroup(ageGroup);
 
         try {
-            // Record a popular symptom age group for the user
+            // Record an age group for the user
             await postCadeyUserAgeGroup(apiUrl, cadeyUserId, ageGroup.toString());
         } catch (error) {
             console.error('Exception when calling postCadeyUserAgeGroup: ', error);
         }
-
-        // Call the callback function with the selected age group
-        onAgeGroupSelected(ageGroup);
         
-        // Close the modal
-        handleClose();
-    }
-
-    function handleClose() {
-        // Close the modal
-        setAgeGroupModalOpen(false);
+        // Route the user to the next page
+        history.push('/App/Welcome/Push');
     }
 
     return (
-        <IonModal isOpen={isAgeGroupModalOpen} className="age-group-modal" onDidDismiss={handleClose}>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle style={{ textAlign: 'left', paddingLeft: 16 }}>Age</IonTitle>
-                    <IonButton className="close-button" slot="end" onClick={() => handleClose()}>
-                        Close
-                    </IonButton>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent>
+        <IonPage className="welcome-age-group" >
+            <IonContent fullscreen>
+                <IonHeader class="header">
+                    <IonToolbar className="header-toolbar">
+                        <h2>How old is your child?</h2>
+                    </IonToolbar>
+                </IonHeader>
                 <IonRow className="age-group-container">
-                    <IonText className="child-age-text">Please select your child’s age to personalize your results: </IonText>
                     <IonRow className="age-buttons-row">
                         <IonButton 
                             className={`age-group-button ${selectedAgeGroup === 1 ? "selected" : ""}`}
@@ -96,14 +81,13 @@ const AgeGroupModal: React.FC<AgeGroupModalProps> = ({ isOpen, onAgeGroupSelecte
                             disabled={selectedAgeGroup === 0}
                             onClick={() => handleAgeSelection(selectedAgeGroup)}
                         >
-                            {/* "Next >"" button */}
-                            Next <IonIcon icon={chevronForwardOutline} className="forward-icon" />
+                            Next
                         </IonButton>
                     </IonRow>
                 </IonRow>
             </IonContent>
-        </IonModal>
+        </IonPage>
     );
 };
 
-export default AgeGroupModal;
+export default WelcomeAgeGroupSelect;

@@ -5,6 +5,7 @@ import {
     IonRow,
     IonPage,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 // CSS
 import './Welcome.css';
 // Contexts
@@ -24,8 +25,10 @@ const WelcomePage: React.FC = ({ }) => {
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
 
+    const history = useHistory();
+
     const handleContinue = () => {
-        setQuizModalOpen(true);
+        history.push('/App/Welcome/Path');
     }
 
     return (
@@ -39,7 +42,7 @@ const WelcomePage: React.FC = ({ }) => {
                         Parenting support from licensed psychologists
                     </IonRow>
                     <IonRow className="continue-row">
-                        <IonButton 
+                        <IonButton
                             className="continue-button" 
                             onClick={() => handleContinue()}
                         >

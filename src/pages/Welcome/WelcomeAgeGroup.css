@@ -1,0 +1,48 @@
+.welcome-age-group .header {
+    padding: 0 16px;
+}
+
+.welcome-age-group .child-age-text {
+    padding-top: 20px;
+}
+
+.welcome-age-group .age-group-button {
+    width: 90vw;
+    margin: 10px auto 0;
+    color: #625A56;
+    --background: #fff;
+    --border-style: solid;
+    --border-width: 1px;
+    --border-color: #F2F1F0;
+    --border-radius: 6px;
+    --box-shadow: none;
+    height: 64px;
+    font-size: 14px;
+}
+
+.welcome-age-group .age-group-button.selected {
+    --border-color: #51ADEF;
+}
+
+.forward-icon {
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.welcome-age-group .age-buttons-row {
+    padding-bottom: 90px; /* 90px is the height of the continue row */
+}
+
+.welcome-age-group .continue-row {
+    position: fixed;
+    height: 40px;
+    bottom: 40px;
+    width: 100%;
+    background: #F9F6EF;
+}
+
+.welcome-age-group .continue-button {
+    --border-radius: 100px;
+    width: 189px;
+    margin: 0 auto;
+}

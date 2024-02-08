@@ -31,7 +31,6 @@ import { logUserFact } from '../../api/UserFacts';
 import { getRecommendations } from '../../api/GetRecommendations';
 // Modals
 import { useModalContext } from '../../context/ModalContext';
-import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 // Routing
 import { useHistory } from 'react-router-dom';
 
@@ -39,7 +38,6 @@ import { useHistory } from 'react-router-dom';
 const LibraryPage: React.FC = () => {
 
     // State variable flags to indicate which component to display
-    const [showAgeForm, setShowAgeForm] = useState(false);
     const [showSymptomsList, setShowSymptomsList] = useState(false);
     const [showResults, setShowResults] = useState(false);
 
@@ -52,7 +50,6 @@ const LibraryPage: React.FC = () => {
     // Context variables
     const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
-    const { isAgeGroupModalOpen, setAgeGroupModalOpen } = useModalContext(); // Get the modal state from the context
     const { apiUrl } = useContext(ApiUrlContext);
     const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
@@ -71,10 +68,6 @@ const LibraryPage: React.FC = () => {
         appPage: 'Concerns',
         });
     }, []);
-
-    useEffect(() => {
-    console.log("Cadey User Age Group: ", cadeyUserAgeGroup);
-    }, [cadeyUserAgeGroup]);
 
     // Handler for when the user proceeds from the ConcernsList
     const handleConcernsNext = (choice: { concern: string; symptoms: Symptom[] }) => {
@@ -98,15 +91,6 @@ const LibraryPage: React.FC = () => {
         
         // Store the symptoms in state
         setSymptoms(symptoms);
-
-        // If the user has not selected an age group, open the age group modal
-        if (cadeyUserAgeGroup == 0) {
-        // Open the age group modal
-        setAgeGroupModalOpen(true);
-
-        // Return early
-        return;
-        }
         
         // Get recommendations for the user
         getUserRecommendations(cadeyUserAgeGroup, symptoms);
@@ -115,13 +99,11 @@ const LibraryPage: React.FC = () => {
     // getUserRecommendations function
     const getUserRecommendations = async (ageGroup: number, symptoms: Symptom[]) => {
         try {
-        console.log("Cadey User Age Group in getUserRecommendations: ", ageGroup);
+            const data = await getRecommendations(apiUrl, cadeyUserId, ageGroup, symptoms);
 
-        const data = await getRecommendations(apiUrl, cadeyUserId, ageGroup, symptoms);
-
-        handleResultsReceived(data);
+            handleResultsReceived(data);
         } catch (error) {
-        console.error('Error:', error);
+            console.error('Error:', error);
         }
     }
 
@@ -152,47 +134,6 @@ const LibraryPage: React.FC = () => {
         setUnreadGoals?.(false);
         }
     }
-
-    // Handler for when the user starts over
-    const handleRestart = () => {
-        setShowAgeForm(false);
-        setShowSymptomsList(false);
-        setShowResults(false)
-        setSymptoms([]);
-        setSelectedConcern(null);
-        setResults(null);
-        setPageTitle("Concerns");
-        document.title = "Concerns";
-        setCurrentBasePage('Concerns');
-        setCurrentAppPage('Concerns');
-        logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
-        userFactTypeName: 'appPageNavigation',
-        appPage: 'Concerns',
-        });
-        setGoalsBadge();
-    };
-
-    // Handler for when the user selects an age group
-    const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-        // Get recommendations for the user
-        getUserRecommendations(selectedAgeGroup, symptoms);
-        console.log("Age group selected: ", selectedAgeGroup);
-    }
-
-    // Determine the progress bar value
-    const determineProgress = () => {
-        if (showResults) {
-        return 1; // 100%, but unused. We hide the progress bar when results are visible
-        } else if (showAgeForm) {
-        return 1; // 100%
-        } else if (showSymptomsList) {
-        return 0.50; // 50%
-        } else {
-        return 0; // 0%
-        }
-    };
 
     const handleInputChange = (e: any) => {
         

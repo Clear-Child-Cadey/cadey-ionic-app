@@ -16,7 +16,7 @@ import {
     play, 
     happyOutline,
 } from 'ionicons/icons';
-import './PathListing.css';
+import './WelcomePathSelect.css';
 import { useHistory } from 'react-router-dom';
 // Interfaces
 import { PathListing, Path } from '../../api/Paths';
@@ -28,7 +28,7 @@ import { usePathContext } from '../../context/PathContext';
 // API
 import { getPathListing } from '../../api/Paths';
 
-const PathListingPage: React.FC = () => {  
+const WelcomePathSelect: React.FC = () => {  
 
     // Get the Cadey User data from the context
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
@@ -62,15 +62,15 @@ const PathListingPage: React.FC = () => {
 
     const handlePathSelection = async (path: Path) => {
         setPathId(path.id);
-        history.push('/App/Paths/PathDetail?id=' + path.id);
+        history.push('/App/Welcome/AgeGroup');
     };
 
   return (
-    <IonPage className="path-listing">
+    <IonPage className="welcome-path-listing">
         <IonContent fullscreen>
             <IonHeader class="header">
                 <IonToolbar className="header-toolbar">
-                    <h2>Paths</h2>
+                    <h2>Hi there! What is your child struggling with most?</h2>
                 </IonToolbar>
             </IonHeader>
             <div className="path-list">
@@ -79,10 +79,6 @@ const PathListingPage: React.FC = () => {
                 {isLoading && (
                 <IonLoading isOpen={true} message={'Loading data...'} />
                 )}
-
-                <IonRow>
-                    <IonText className="subcopy">Pick up where you left off, or explore new paths</IonText>
-                </IonRow>
                 
                 {/* Create a list of rows with an icon on the left, then text, and a play icon on the right for each path in pathListing */}
                 {pathListing && pathListing.paths.map((path: Path, index) => (
@@ -103,4 +99,4 @@ const PathListingPage: React.FC = () => {
   );
 };
 
-export default PathListingPage;
+export default WelcomePathSelect;

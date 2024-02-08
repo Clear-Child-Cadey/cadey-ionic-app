@@ -30,8 +30,6 @@ import { VideoItem } from '../../components/Videos/VideoList';
 import VideoList from '../../components/Videos/VideoList';
 import ArticleItem from '../../components/Articles/ArticleItem';
 import { WP_Article, getArticlesByIds } from '../../api/WordPress/GetArticles';
-// Modals
-import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 
 interface SearchResults {
     message: string;
@@ -46,7 +44,6 @@ interface LocationState {
 const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext);                               // Get the API URL from the context
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
-    const { isAgeGroupModalOpen, setAgeGroupModalOpen } = useModalContext();    // Get the age group modal state from the context
 
     const location = useLocation();
     const history = useHistory();
@@ -90,16 +87,6 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             // Add the query to the search bar
             const searchField = document.querySelector(".search-bar") as HTMLIonSearchbarElement;
             searchField.value = query;
-            
-            // Check if the user has an age group
-            if (cadeyUserAgeGroup === 0) {
-                // Store the query in state so we can perform it after the user selects an age group
-                setUserQuery(query);
-                // Open the age group modal
-                setAgeGroupModalOpen(true);
-                // Return early
-                return;
-            }
 
             // Perform the search for the user
             performSearch(query, cadeyUserAgeGroup);
@@ -122,16 +109,6 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             // Check if the user has entered a search term
             if (searchTerm.trim() === "") {
                 alert("Please enter a search term.");
-                return;
-            }
-
-            // Check if the user has an age group
-            if (cadeyUserAgeGroup === 0) {
-                // Store the query in state so we can perform it after the user selects an age group
-                setUserQuery(searchTerm);
-                // Open the age group modal
-                setAgeGroupModalOpen(true);
-                // Return early
                 return;
             }
 
@@ -177,11 +154,6 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         setIsLoading(false);
     }
 
-    const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-        // Perform the search for the user
-        performSearch(userQuery, selectedAgeGroup);
-    }
-
     return (
     <IonPage className="search">
         <IonHeader>
@@ -198,9 +170,6 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         
             {/* Show loading state */}
             <IonLoading isOpen={isLoading} message={'Loading Results...'} />
-
-            {/* Show an age group modal if context dictates */}
-            <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
             
             <IonRow className="search-container">
                 {/* Search bar */}

@@ -2,7 +2,7 @@
     display: none;
 }
 
-.welcome-modal {
+.welcome {
     --ion-background-color: #E5E5E5;
 }
 
@@ -34,7 +34,7 @@
     color: #4C616F;
 }
 
-.welcome-modal .continue-button {
+.welcome .continue-button {
     width: 200px;
     --border-radius: 100px;
 }

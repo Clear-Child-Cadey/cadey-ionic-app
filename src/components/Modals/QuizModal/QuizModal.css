@@ -17,12 +17,17 @@
     margin-top: 30px;
 }
 
+.quiz-modal .question {
+    width: 100%;
+}
+
 .quiz-modal .question-text {
     font-size: 23px;
     font-weight: 700;
     color: #484443;
-    margin-top: 20px;
+    margin-top: 45px;
     margin-bottom: 60px;
+    width: 100%;
 }
 
 .quiz-modal .response-explanation-text {

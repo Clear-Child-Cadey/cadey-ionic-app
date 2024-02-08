@@ -37,7 +37,7 @@ ion-progress-bar {
     position: relative;
 }
 
-.search-bar, .search-directions, .age-group-container, .search-results {
+.search-bar, .search-directions, .search-results {
     padding-left: 16px;
     padding-right: 16px;
 }
@@ -47,35 +47,10 @@ ion-progress-bar {
     margin-bottom: 0;
 }
 
-.search .age-group-container {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    padding: 0 1rem 22px;
-}
-
 .search .child-age-text {
     margin: 0 5px 3px 0;
     flex-shrink: 0; /* Prevents the text from shrinking in the flex container */
     font-size: 14px;
-}
-
-.search .age-buttons-row {
-    display: flex;
-    gap: 0.1rem; /* Spacing between buttons */
-}
-
-.age-group-button {
-    opacity: 0.5;
-    --padding-start: 15px;
-    --padding-end: 15px;
-    --padding-top: 6px;
-    --padding-bottom: 6px;
-    height: auto;
-}
-
-.age-group-button.selected {
-    opacity: 1;
 }
 
 .search-results .article-item {

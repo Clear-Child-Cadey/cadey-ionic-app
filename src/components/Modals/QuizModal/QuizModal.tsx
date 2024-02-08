@@ -332,7 +332,7 @@ const QuizModal: React.FC = ({ }) => {
                             >
                                 {quizModalData.nextQuestionPossible ? (
                                     <>
-                                        Next <IonIcon icon={chevronForwardOutline} className="forward-icon" />
+                                        Next
                                     </>
                                 ) : (
                                     'Finish'
