@@ -18,6 +18,7 @@ import { useModalContext } from '../../../context/ModalContext';
 import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
 import { useTabContext } from '../../../context/TabContext';
+import { usePathContext } from '../../../context/PathContext';
 // API
 import { postQuizResponse } from '../../../api/Quiz';
 // Icons
@@ -79,6 +80,7 @@ const QuizModal: React.FC = ({ }) => {
     const { isQuizModalOpen, setQuizModalOpen, quizModalData, setQuizModalData } = useModalContext();
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
+    const { pathId } = usePathContext();
 
     const [userResponse, setUserResponse] = React.useState<string[]>([]);
     const [selectedOptionIds, setSelectedOptionIds] = React.useState<number[]>([]);
@@ -213,7 +215,7 @@ const QuizModal: React.FC = ({ }) => {
         if (quizModalData?.question.quizId === 6) {
             setIsTabBarVisible(true);
 
-            history.push('/App/Home');
+            history.push('/App/Paths/PathDetail?id=' + pathId);
         }
 
         // Close the modal
