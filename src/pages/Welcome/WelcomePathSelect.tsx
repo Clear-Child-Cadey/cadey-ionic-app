@@ -86,11 +86,7 @@ const WelcomePathSelect: React.FC = () => {
                         <img src={path.pathIconUrl} className='icon paths-icon' />
                         <IonLabel className='path-name'>
                             <h2>{path.pathName}</h2>
-                            <p>{path.numItemsCompleted} of {path.totalItemsInPath} completed</p>
                         </IonLabel>
-                        <div className='play-icon-wrapper'>
-                            <IonIcon icon={play} className='play-icon' />
-                        </div>
                     </div>
                 ))}
             </div>
