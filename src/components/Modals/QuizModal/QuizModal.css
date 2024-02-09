@@ -28,6 +28,7 @@
     margin-top: 45px;
     margin-bottom: 60px;
     width: 100%;
+    line-height: normal;
 }
 
 .quiz-modal .response-explanation-text {
