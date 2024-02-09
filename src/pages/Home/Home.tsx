@@ -92,9 +92,10 @@ const HomePage: React.FC<{ }> = ({  }) => {
           await getHomeDataTrace.start();
       }
       
-      console.log('Fetching home data...', apiUrl, cadeyUserId);
       // Get the data from the API
       homeData = await getHomeData(apiUrl, cadeyUserId);
+
+      setIsLoading(false);
 
       setPathsInProgress(homeData.numPathsInProgress);
       setCompletedPaths(homeData.numCompletedPaths);
@@ -110,17 +111,9 @@ const HomePage: React.FC<{ }> = ({  }) => {
       // Stop the trace
       if (tracingEnabled) {
         getHomeDataTrace.stop();
-    }
+      }
     }
   };
-
-  // useEffect to dismiss the loader
-  useEffect(() => {
-    // If the API has returned something, dismiss the loader
-    if (featuredVideos.length > 0 || newVideos.length > 0 || playedVideos.length > 0 ) {
-      setIsLoading(false);
-    }
-  }, [featuredVideos, newVideos, playedVideos]);
 
   // This runs on mount and every time currentTab changes or the video modal opens/closes
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve

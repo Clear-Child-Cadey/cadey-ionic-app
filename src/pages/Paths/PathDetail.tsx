@@ -173,8 +173,10 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         const currentVideo = pathSeries.entities.find((video) => video.isCurrent === true);
         if (currentVideo) {
             setPathEntity(currentVideo);
+            setPathPlaylistPosition(pathSeries.entities.indexOf(currentVideo));
         } else {
             setPathEntity(pathSeries.entities[0]);
+            setPathPlaylistPosition(0);
         }
     }
 
@@ -275,6 +277,8 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
     // Define the function that should be called when a video ends
     const handleVideoEnd = async () => {
+
+        console.log('Video ended. Current position: ', pathPlaylistPosition);
 
         // Get a quiz
         await requestQuiz();
