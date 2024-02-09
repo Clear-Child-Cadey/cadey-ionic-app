@@ -3,7 +3,6 @@ import Player from '@vimeo/player';
 // CSS
 import './VideoPlayer.css';
 // Components
-import FalseDoorModal from '../Modals/FalseDoorModal/FalseDoorModal';
 // API
 import { logUserFact } from '../../api/UserFacts';
 import { getQuiz } from '../../api/Quiz';
@@ -35,8 +34,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   const userFactUrl = `${apiUrl}/userfact`
 
   const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
-
-  const [falseDoorData, setFalseDoorData] = useState<any>(null); // Hold the data for the false door
   
   const playerRef = useRef(null);
   const [videoProgress, setVideoProgress] = useState(0);
@@ -130,22 +127,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   };
 
   const onPause = async (progress: number) => {
-
-    const falseDoorResponse = await logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
-      userFactTypeName: 'PausedMedia',
-      appPage: source,
-      detail1: mediaIdStr,
-      detail2: String(progress),
-      detail3: currentVideoType
-    });
-
-    if (falseDoorResponse.falseDoorQuestionId !== 0) {
-      setFalseDoorData(falseDoorResponse);
-      setIsModalOpen(true);
-    }
-
     // If the popularSymptomVideoModal is open, end early
     if (isPopularSymptomVideoModalOpen) {
       return;
@@ -162,11 +143,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       detail1: mediaIdStr,
       detail2: currentVideoType
     });
-
-    if (response.falseDoorQuestionId !== 0) {
-      setFalseDoorData(response);
-      setIsModalOpen(true);
-    }
 
     // Invoke the callback if it exists
     if (onVideoEnd) {
@@ -269,22 +245,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
           className="video-player"
         >
         </div>
-
-        <FalseDoorModal 
-          source={source}
-          falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
-          iconUrl={falseDoorData?.questionIcon || ''}
-          copy={falseDoorData?.questionText || ''}
-          yesResponse="Yes, sign me up!"
-          noResponse="No thanks, not interested"
-          thankYouIconUrlYes={falseDoorData?.questionResponseYesIcon || ''}
-          thankYouIconUrlNo={falseDoorData?.questionResponseNoIcon || ''}
-          thankYouCopyYes={falseDoorData?.questionResponseYesText || ''}
-          thankYouCopyNo={falseDoorData?.questionResponseNoText || ''}
-          thankYouButtonText="Close"
-          isOpen={isModalOpen}
-          setIsOpen={setIsModalOpen}
-        />
       </div>
     </div>
   );

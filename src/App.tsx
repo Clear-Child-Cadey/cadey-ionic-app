@@ -12,7 +12,6 @@ import RouterTabs from './components/Routing/RouterTabs';
 import AppUpdateModal from './components/Modals/AppUpdateModal';
 import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
 import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
-import FalseDoorModal from './components/Modals/FalseDoorModal/FalseDoorModal';
 import QuizModal from './components/Modals/QuizModal/QuizModal';
 import WelcomeModal from './pages/Welcome/Welcome';
 // Contexts
@@ -38,8 +37,6 @@ const App: React.FC = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
-  const [falseDoorData, setFalseDoorData] = useState<any>(null); // Hold the data for the false door
-  const [isFalseDoorModalOpen, setIsFalseDoorModalOpen] = useState(false); // Control the modal visibility
   const { currentBasePage, currentAppPage } = useAppPage();
   const history = useHistory();
   const [checkForWelcome, setCheckForWelcome] = useState(false);
@@ -139,11 +136,6 @@ const App: React.FC = () => {
       userFactTypeName: 'VideoDetailPageClosed',
       appPage: 'Video Detail',
     });
-
-    if (response.falseDoorQuestionId !== 0) {
-      setFalseDoorData(response);
-      setIsFalseDoorModalOpen(true);
-    }
   }
 
   return (
@@ -170,23 +162,6 @@ const App: React.FC = () => {
       {isArticleDetailModalOpen && currentArticleId && (
         <ArticleDetailModal />
       )}
-
-      {/* Show a false door modal if context dictates */}
-      {/* <FalseDoorModal 
-        source={currentAppPage}
-        falseDoorQuestionId={falseDoorData?.falseDoorQuestionId || 0}
-        iconUrl={falseDoorData?.questionIcon || ''}
-        copy={falseDoorData?.questionText || ''}
-        yesResponse="Yes, sign me up!"
-        noResponse="No thanks, not interested"
-        thankYouIconUrlYes={falseDoorData?.questionResponseYesIcon || ''}
-        thankYouIconUrlNo={falseDoorData?.questionResponseNoIcon || ''}
-        thankYouCopyYes={falseDoorData?.questionResponseYesText || ''}
-        thankYouCopyNo={falseDoorData?.questionResponseNoText || ''}
-        thankYouButtonText="Close"
-        isOpen={isFalseDoorModalOpen}
-        setIsOpen={setIsFalseDoorModalOpen}
-      /> */}
       
       {/* Router Tabs */}
       <RouterTabs />
