@@ -50,6 +50,7 @@ interface QuizModalQuestion {
     options: QuizModalQuestionOption[];
     quizId: number;
     text: string;
+    subCopy: string | null;
 }
 
 interface QuizModalQuestionOption {
@@ -58,6 +59,7 @@ interface QuizModalQuestionOption {
     label: string;
     optionType: number; // 1 = select, 2 = text
     displayIfOptionIdSelected: string | null;
+    imageUrl: string | null;
 }
 
 export interface QuizResponse {
@@ -261,30 +263,29 @@ const QuizModal: React.FC = ({ }) => {
                         <IonRow className="question">
                             <IonText className="question-text">{quizModalData.question.text}</IonText>
                         </IonRow>
-                        <IonRow className="response-explanation">
-                            <IonText className="response-explanation-text">
-                                {/* If all of the question options have an optionType of 2, empty string. 
-                                Else, check if maxChoiceis is > 1. If yes, "Choose all that apply". 
-                                Else, "Choose one" */}
-                                {
-                                    quizModalData.question.options.every(option => option.optionType === 2) ? '' : 
-                                    quizModalData.question.maxChoices > 1 ? 'Choose all that apply' : 
-                                    'Choose one'
-                                }
-                            </IonText>
-                        </IonRow>
+                        {quizModalData.question.subCopy && (
+                            <IonRow className="response-explanation">
+                                <IonText className="response-explanation-text">
+                                    {quizModalData.question.subCopy}
+                                </IonText>
+                            </IonRow>    
+                        )}
                         <IonRow className="responses">
                             {quizModalData.question.options.map((option, index) => {
                                 // Check the type of option and render accordingly
                                 if (option.optionType === 1) {
-                                    // If the option type is 1, show a button
+                                    // If the option type is 1, show a button. If there is an image, show the image as well
                                     return (
                                         <IonButton
                                             key={index}
                                             className={`response ion-text-wrap ${userResponse.includes(option.label) ? 'selected' : ''}`}
                                             onClick={() => handleSelection(option.label)}
                                         >
-                                            {option.label}
+                                            {/* If there's an image, show it here */}
+                                            {option.imageUrl && (
+                                                <img src={option.imageUrl} className="response-image" />
+                                            )}
+                                            <div className="button-text">{option.label}</div>
                                         </IonButton>
                                     );
                                 } else if (option.optionType === 2 && option.displayIfOptionIdSelected === null) {

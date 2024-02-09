@@ -50,8 +50,22 @@
     --border-color: #F2F1F0;
     --border-radius: 6px;
     --box-shadow: none;
-    height: 64px;
     font-size: 14px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; /* Add this to vertically center align items */
+    min-height: 74px;
+}
+
+.quiz-modal .response img {
+    margin-right: 15px; /* Add some space between the image and the text */
+}
+
+.quiz-modal .response .button-text {
+    flex-grow: 1; /* Allows the text to fill the space in the button */
+    display: flex;
+    align-items: center; /* Vertically aligns text to center if there is more than one line */
+    text-align: left;
 }
 
 .quiz-modal .response.selected {
@@ -86,4 +100,10 @@
     height: 104px;
     font-size: 14px;
     text-align: center;
+}
+
+.quiz-modal .response-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
 }

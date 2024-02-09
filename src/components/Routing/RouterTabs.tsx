@@ -12,8 +12,11 @@ import {
 } from '@ionic/react';
 // CSS
 import './RouterTabs.css';
-// Ionicons
+// Icons
 import { homeOutline, libraryOutline, walkOutline } from 'ionicons/icons';
+import { HomeIcon } from '../../svgs/NavHome';
+import { PathsIcon } from '../../svgs/NavPaths';
+import { LibraryIcon } from '../../svgs/NavLibrary';
 // Pages
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
@@ -177,7 +180,7 @@ const RouterTabs: React.FC = () => {
               href="/App/Home"
               onClick={() => handleTabClick('Home')}
             >
-              <IonIcon icon={homeOutline} />
+              <HomeIcon />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
             
@@ -187,7 +190,7 @@ const RouterTabs: React.FC = () => {
               href="/App/Paths/"
               onClick={() => handleTabClick('Paths')}
             >
-              <IonIcon icon={walkOutline} />
+              <PathsIcon />
               <IonLabel>Paths</IonLabel>
             </IonTabButton>
 
@@ -197,7 +200,7 @@ const RouterTabs: React.FC = () => {
               href="/App/Library"
               onClick={() => handleTabClick('Library')}
             >
-              <IonIcon icon={libraryOutline} />
+              <LibraryIcon />
               <IonLabel>Library</IonLabel>
             </IonTabButton>
           </IonTabBar>
