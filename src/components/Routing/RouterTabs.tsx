@@ -169,6 +169,11 @@ const RouterTabs: React.FC = () => {
               {/* Miscellaneous routes */}
               <Route exact path="/App/Admin" component={AdminPage} />
 
+              {/* Re-route any route with "/App/Welcome" to the home screen */}
+              <Route path="/App/Welcome">
+                <Redirect to="/App/Home" />
+              </Route>
+
               {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
               <Route component={RedirectToWeb} />
             </Switch>

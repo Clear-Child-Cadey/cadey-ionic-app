@@ -196,10 +196,10 @@ const HomePage: React.FC<{ }> = ({  }) => {
           <IonLoading isOpen={true} message={'Loading your data...'} />
         )}
 
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Home</IonTitle>
-          </IonToolbar>
+        <IonHeader class="header">
+            <IonToolbar className="header-toolbar">
+                <h2>Home</h2>
+            </IonToolbar>
         </IonHeader>
 
         <IonRow>

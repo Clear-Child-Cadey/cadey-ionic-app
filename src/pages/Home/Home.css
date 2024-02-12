@@ -140,3 +140,7 @@
 .progress-indicator span {
     font-size: 10px;
 }
+
+.home .header {
+    padding: 0 16px;
+}

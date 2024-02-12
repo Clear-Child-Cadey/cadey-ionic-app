@@ -16,7 +16,7 @@
 
 .welcome-push .continue-row {
     position: fixed;
-    bottom: 20px;
+    bottom: 40px;
     width: calc(100% - 32px);
     background: #F9F6EF;
 }
@@ -40,4 +40,6 @@
     --padding-bottom: 0;
     --padding-start: 0;
     --padding-end: 0;
+    border: none;
+    margin-top: 10px;
 }

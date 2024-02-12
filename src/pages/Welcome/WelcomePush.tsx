@@ -105,12 +105,12 @@ const WelcomePush: React.FC = () => {
                         </IonButton>
                     </div>
                     <div className='no continue-container'>
-                        <IonButton 
+                        <a
                             className='no push-button'
                             onClick={() => handlePushSelection(false)}
                         >
                             Not now
-                        </IonButton>
+                        </a>
                     </div>
                 </IonRow>
             </IonContent>
