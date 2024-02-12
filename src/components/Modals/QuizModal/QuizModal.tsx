@@ -126,12 +126,6 @@ const QuizModal: React.FC = ({ }) => {
         return Object.values(textResponses).some(text => text.trim() !== '');
     };
 
-    useEffect(() => {
-        console.log('quizModalData', quizModalData);
-        console.log('userResponse', userResponse);
-    }, [quizModalData, userResponse]);
-    
-
     const handleSubmission = async () => {
         // Create an updated responses array based on the current question's options
         const updatedResponses = quizModalData!.question.options.map(option => {
@@ -189,16 +183,11 @@ const QuizModal: React.FC = ({ }) => {
                 response                                    // User's response                                  
             );
 
-            console.log('quizSubmissionResponse: ', quizSubmissionResponse);
-            // console.log('Quiz response question ID: ', quizSubmissionResponse.quizRequestResponse.question.id);
-
             // Depending on the API response, update the quiz modal with a new question or complete the quiz
             if (quizSubmissionResponse.quizRequestResponseModel.question !== null && quizSubmissionResponse.quizRequestResponseModel.question !== undefined && quizSubmissionResponse.quizRequestResponseModel.question.id !== 0) {
-                console.log('Got a new question!');
                 // Update the quiz modal with a new question
                 setQuizModalData(quizSubmissionResponse.quizRequestResponseModel);
             } else {
-                console.log('Quiz complete!');
                 // Close the modal
                 handleClose();
             }
@@ -237,11 +226,6 @@ const QuizModal: React.FC = ({ }) => {
         setUserResponse([]);
         setQuizResponse([]);
         setTextResponses({});
-    
-        // Optional: Log the new quiz data
-        if (quizModalData) {
-            console.log("QuizModalData: ", quizModalData);
-        }
     }, [quizModalData]);
 
     return (

@@ -142,20 +142,9 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         if (pathPlaylist.length > 0 && pathPlaylistPosition < pathPlaylist.length - 1) {
             setNextPathEntity(pathPlaylist[pathPlaylistPosition + 1]);
         } else {
-            console.log("No more videos in the playlist");
             setNextPathEntity(null);
         }
     }, [pathPlaylistPosition, pathPlaylist]);
-
-    // Log the pathPlaylist when it changes
-    useEffect(() => {
-        console.log('Path playlist changed');
-        console.log(pathPlaylist);
-    }, [pathPlaylist]);
-
-    useEffect(() => {
-        console.log('Path title: ', pathTitle);
-    }, [pathTitle]);
 
     const getPathVideoData = async ( pathId: number ) => {
 
@@ -164,7 +153,6 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
         // Set the path title
         setPathTitle(pathSeries.pathName);
-        console.log('Path Series name: ', pathSeries.pathName);
 
         // Set the popular symptom playlist to the videos returned from the API
         setPathPlaylist(pathSeries.entities);
@@ -264,7 +252,6 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         await requestQuiz();
 
         // Set the next entity in sequence
-        // TODO: Change this to use the entity the user just clicked on
         setPathEntity(entity);
         
         // Set the position in the playlist based on the entity's actual position
@@ -277,8 +264,6 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
     // Define the function that should be called when a video ends
     const handleVideoEnd = async () => {
-
-        console.log('Video ended. Current position: ', pathPlaylistPosition);
 
         // Get a quiz
         await requestQuiz();

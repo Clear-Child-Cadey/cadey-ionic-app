@@ -28,7 +28,6 @@ import { logUserFact } from '../../api/UserFacts';
 import { getRecommendations } from '../../api/GetRecommendations';
 // Modals
 import { useModalContext } from '../../context/ModalContext';
-import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 
 // Define the Concerns component
 const ConcernsPage: React.FC = () => {
@@ -63,10 +62,6 @@ const ConcernsPage: React.FC = () => {
       appPage: 'Concerns',
     });
 }, []);
-
-useEffect(() => {
-  console.log("Cadey User Age Group: ", cadeyUserAgeGroup);
-}, [cadeyUserAgeGroup]);
 
   // Handler for when the user proceeds from the ConcernsList
   const handleConcernsNext = (choice: { concern: string; symptoms: Symptom[] }) => {
@@ -107,8 +102,6 @@ useEffect(() => {
   // getUserRecommendations function
   const getUserRecommendations = async (ageGroup: number, symptoms: Symptom[]) => {
     try {
-      console.log("Cadey User Age Group in getUserRecommendations: ", ageGroup);
-
       const data = await getRecommendations(apiUrl, cadeyUserId, ageGroup, symptoms);
 
       handleResultsReceived(data);
@@ -166,13 +159,6 @@ useEffect(() => {
     setGoalsBadge();
   };
 
-  // Handler for when the user selects an age group
-  const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-    // Get recommendations for the user
-    getUserRecommendations(selectedAgeGroup, symptoms);
-    console.log("Age group selected: ", selectedAgeGroup);
-  }
-
   // Determine the progress bar value
   const determineProgress = () => {
     if (showResults) {
@@ -225,9 +211,6 @@ useEffect(() => {
             <IonTitle size="large">{pageTitle}</IonTitle>
           </IonToolbar>
         </IonHeader>
-
-        {/* Show an age group modal if context dictates */}
-        <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
 
         {/* Call the renderComponent function to render the correct component */}
         {renderComponent()}

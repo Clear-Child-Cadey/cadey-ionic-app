@@ -25,7 +25,6 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ categoryId, onSelectArticle
 
     // Fetch the articles from the API when the component is mounted or the categoryId changes
     useEffect(() => {
-        console.log("Fetching articles for category: ", categoryId);
         const fetchArticles = async () => {
             try {
                 dispatch({ type: 'SET_LOADING', payload: { key: 'articleDetail', value: true } });

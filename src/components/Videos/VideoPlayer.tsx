@@ -65,7 +65,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
       player.current.on('loaded', () => {
         handleVideoReady();
-        console.log('Quiz Modal Status: ', isQuizModalOpen);
+
         if (!isQuizModalOpen) {
           player.current?.play(); // Explicitly play the video once it is loaded
         }
@@ -93,12 +93,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
   useEffect(() => {
     // Use the existing player instance to pause/play based on isQuizModalOpen
-    console.log('Quiz Modal Status Changed: ', isQuizModalOpen);
     if (isQuizModalOpen) {
-      console.log('Pausing video');
       player.current?.pause();
     } else {
-      console.log('Playing video');
       player.current?.play();
     }
   }, [isQuizModalOpen]); // Run this effect when isQuizModalOpen changes

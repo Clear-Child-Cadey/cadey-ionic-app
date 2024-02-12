@@ -58,8 +58,6 @@ const ArticleDetailPage: React.FC = () => {
             }
         };
 
-        console.log("Fetching article detail for articleId: ", articleId);
-
         fetchArticleDetail();
 
         // Set the title of the page to the title of the article

@@ -171,7 +171,6 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
         if (popularSymptomPlaylist.length > 0 && popularSymptomPlaylistPosition < popularSymptomPlaylist.length - 1) {
             setNextPopularSymptomVideo(popularSymptomPlaylist[popularSymptomPlaylistPosition + 1]);
         } else {
-            console.log("No more videos in the playlist");
             setNextPopularSymptomVideo(null);
         }
     }, [popularSymptomPlaylistPosition, popularSymptomPlaylist]);

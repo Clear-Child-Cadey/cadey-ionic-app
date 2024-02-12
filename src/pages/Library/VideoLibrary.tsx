@@ -93,7 +93,6 @@ const VideoLibraryPage: React.FC = () => {
     // getUserRecommendations function
     const getUserRecommendations = async (ageGroup: number, symptoms: Symptom[]) => {
         try {
-        console.log("Cadey User Age Group in getUserRecommendations: ", ageGroup);
 
         const data = await getRecommendations(apiUrl, cadeyUserId, ageGroup, symptoms);
 

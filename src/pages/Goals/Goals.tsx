@@ -29,8 +29,6 @@ import { getUserGoals, postGoalOptIn, popularGoals } from '../../api/Goals';
 import { logUserFact } from '../../api/UserFacts';
 // Interfaces
 import { VideoItem } from '../../components/Videos/VideoList';
-// Modals
-import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 
 export interface Goal {
     userGoalId: number;
@@ -65,7 +63,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             setIsLoading(true);
 
             var fetchedGoals = await getUserGoals(apiUrl, cadeyUserId);
-            console.log("Fetched goals: ", fetchedGoals);
+            
             if (fetchedGoals.length == 0) {
                 const popularGoalsResponse = await popularGoals(apiUrl, cadeyUserId);
                 if (popularGoalsResponse.status === 200) {
@@ -84,10 +82,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         setGoalsLoaded(true);
     }
 
-    useEffect(() => {
-        console.log("Goals: ", goals);
-    }, [goals]);
-
     // On component mount, make an API call to get goals
     useEffect(() => {
         setCurrentBasePage('Goals List');
@@ -103,8 +97,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     }, [apiUrl, cadeyUserId]);
 
     const onOptin = async (userGoalId: number, ageGroup: number) => {
-        console.log("Starting optin...");
-        console.log("Cadey User Age Group: ", ageGroup);
         if (ageGroup == 0) {
             // Store this in state for later use
             setCurrentUserGoalId(userGoalId); 
@@ -152,19 +144,7 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             pathname: '/app/GoalDetail',
             state: { goal: goal }
         });
-    };      
-
-    const onAgeGroupSelected = async (selectedAgeGroup: number) => {
-        console.log("Age group selected: ", selectedAgeGroup);
-        console.log("Fetching goals...");
-        // Get updated goals data
-        await fetchGoals();
-        
-        console.log("Opting in to goal with ID: ", currentUserGoalId);
-
-        // Opt the user into the goal
-        await onOptin(currentUserGoalId, selectedAgeGroup);
-    }
+    };
 
     return (
         <IonPage className="goals">
@@ -182,9 +162,6 @@ const GoalsPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
                 
                 {/* Show loading state */}
                 <IonLoading isOpen={isLoading} message={'Loading Goals...'} />
-                
-                {/* Show an age group modal if context dictates */}
-                <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />  
 
                 {/* Create a list of goals */}
                 {(goals.length > 0) && (
