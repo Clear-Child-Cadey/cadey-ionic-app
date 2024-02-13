@@ -25,14 +25,18 @@ import { useLoadingState } from '../../context/LoadingStateContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { usePathContext } from '../../context/PathContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getPathListing } from '../../api/Paths';
+import { postPathSelect } from '../../api/Paths';
+import { logUserFact } from '../../api/UserFacts';
 
 const WelcomePathSelect: React.FC = () => {  
 
     // Get the Cadey User data from the context
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const { apiUrl } = useContext(ApiUrlContext);
+    const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
     // Create an empty set of PopularSeriesSymptoms to populate
     const [pathListing, setPathListing] = React.useState<PathListing>();
@@ -53,6 +57,17 @@ const WelcomePathSelect: React.FC = () => {
             setIsLoading(false);
         };
 
+        setCurrentAppPage("Welcome - Path Select");
+        setCurrentBasePage("Welcome - Path Select");
+
+        // appPageNavigation user fact
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Welcome - Path Select',
+        });
+
         // Start a loader
         setIsLoading(true);
 
@@ -62,6 +77,7 @@ const WelcomePathSelect: React.FC = () => {
 
     const handlePathSelection = async (path: Path) => {
         setPathId(path.id);
+        postPathSelect(apiUrl, Number(cadeyUserId), path.id);
         history.push('/App/Welcome/AgeGroup');
     };
 

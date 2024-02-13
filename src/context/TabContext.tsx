@@ -12,7 +12,7 @@ interface TabProviderProps {
 }
 
 const TabProvider: React.FC<TabProviderProps> = ({ children }) => {
-    const [isTabBarVisible, setIsTabBarVisible] = useState<boolean>(true);
+    const [isTabBarVisible, setIsTabBarVisible] = useState<boolean>(false);
 
     const contextValue = {
       isTabBarVisible,  

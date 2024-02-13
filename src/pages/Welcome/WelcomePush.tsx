@@ -1,16 +1,12 @@
 import { 
-    IonModal, 
     IonButton, 
     IonContent, 
     IonHeader, 
-    IonTitle, 
     IonToolbar, 
     IonRow,
-    IonText,
-    IonIcon,
     IonPage,
 } from '@ionic/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 // CSS
 import './WelcomePush.css';
@@ -18,20 +14,37 @@ import './WelcomePush.css';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useModalContext } from '../../context/ModalContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
-import { postCadeyUserAgeGroup } from '../../api/AgeGroup';
 import OneSignal from 'onesignal-cordova-plugin';
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
+import { logUserFact } from '../../api/UserFacts';
 // Icons
 
 const WelcomePush: React.FC = () => {
     
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
+    const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
     const history = useHistory();
 
     const { setQuizModalOpen } = useModalContext();
+
+    // When the component loads
+    useEffect(() => {
+
+        setCurrentAppPage("Welcome - Push Optin");
+        setCurrentBasePage("Welcome - Push Optin");
+
+        // appPageNavigation user fact
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Welcome - Push Optin',
+        });
+    }, [apiUrl]);
 
     const requestNotificationPermission = () => {
         console.log('Processing notification permission request');

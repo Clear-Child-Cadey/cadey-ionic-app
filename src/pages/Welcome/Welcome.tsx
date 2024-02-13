@@ -12,8 +12,9 @@ import './Welcome.css';
 import { useModalContext } from '../../context/ModalContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
-
+import { logUserFact } from '../../api/UserFacts';
 // Icons
 
 
@@ -24,8 +25,24 @@ const WelcomePage: React.FC = ({ }) => {
     } = useModalContext();
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
+    const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
     const history = useHistory();
+
+    // When the component loads
+    useEffect(() => {
+
+        setCurrentAppPage("Welcome - Intro Screen");
+        setCurrentBasePage("Welcome - Intro Screen");
+
+        // appPageNavigation user fact
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Welcome - Intro Screen',
+        });
+    }, [apiUrl]);
 
     const handleContinue = () => {
         history.push('/App/Welcome/Path');

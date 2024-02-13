@@ -103,6 +103,11 @@ const RouterTabs: React.FC = () => {
     });
   };
 
+  // Console log if the tab bar is visible
+  useEffect(() => {
+    console.log('Tab bar visibility:', isTabBarVisible);
+  }, [isTabBarVisible]);
+
   return (
     <>
       {/* Listen for App URLs */}

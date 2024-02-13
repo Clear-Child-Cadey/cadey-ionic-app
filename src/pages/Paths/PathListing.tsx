@@ -14,25 +14,27 @@ import {
 // Icons
 import { 
     play, 
-    happyOutline,
 } from 'ionicons/icons';
 import './PathListing.css';
 import { useHistory } from 'react-router-dom';
 // Interfaces
 import { PathListing, Path } from '../../api/Paths';
 // Contexts
-import { useLoadingState } from '../../context/LoadingStateContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { usePathContext } from '../../context/PathContext';
 // API
 import { getPathListing } from '../../api/Paths';
+import { postPathSelect } from '../../api/Paths';
+import { logUserFact } from '../../api/UserFacts';
+import { useAppPage } from '../../context/AppPageContext';
 
 const PathListingPage: React.FC = () => {  
 
     // Get the Cadey User data from the context
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const { apiUrl } = useContext(ApiUrlContext);
+    const { setCurrentAppPage } = useAppPage();
 
     // Create an empty set of PopularSeriesSymptoms to populate
     const [pathListing, setPathListing] = React.useState<PathListing>();
@@ -53,6 +55,17 @@ const PathListingPage: React.FC = () => {
             setIsLoading(false);
         };
 
+        // Set the current app page
+        setCurrentAppPage('Path Listing');
+        
+        // Log a user fact that the user navigated to the popular symptom video detail page
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Path Listing',
+        });
+
         // Start a loader
         setIsLoading(true);
 
@@ -62,6 +75,7 @@ const PathListingPage: React.FC = () => {
 
     const handlePathSelection = async (path: Path) => {
         setPathId(path.id);
+        postPathSelect(apiUrl, Number(cadeyUserId), path.id);
         history.push('/App/Paths/PathDetail?id=' + path.id);
     };
 

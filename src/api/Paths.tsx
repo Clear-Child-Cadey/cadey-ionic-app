@@ -105,3 +105,26 @@ export const getPathDetail = async (apiUrl: string, userId: number, pathId: numb
     
     return pathDetail;
 };
+
+export const postPathSelect = async (apiUrl: string, userId: number, pathId: number) => {
+        
+        const url = `${apiUrl}/pathselect/${userId}`;
+    
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'accept': 'text/plain',
+                'apiKey': API_KEY,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                pathId: pathId,
+            }),
+        });
+    
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
+        return await response.json();
+    };

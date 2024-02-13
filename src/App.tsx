@@ -92,6 +92,7 @@ const App: React.FC = () => {
 
         setCheckForWelcome(true); // Prevents re-fetching the quiz
 
+        // If the user has not completed the welcome sequence, show the welcome page
         if (quizResponse.question !== null && quizResponse.question.id > 0) {
           // Set the quiz data
           setQuizModalData(quizResponse);
@@ -101,6 +102,9 @@ const App: React.FC = () => {
 
           // Route the user to the welcome page
           history.push('/App/Welcome');
+        } else {
+          // Show the tab bar
+          setIsTabBarVisible(true);
         }
       }
     }

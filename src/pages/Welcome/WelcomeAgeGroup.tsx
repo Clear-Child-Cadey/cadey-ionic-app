@@ -10,15 +10,17 @@ import {
     IonIcon,
     IonPage,
 } from '@ionic/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 // CSS
 import './WelcomeAgeGroup.css';
 // Contexts
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
+import { useAppPage } from '../../context/AppPageContext';
 // API
 import { postCadeyUserAgeGroup } from '../../api/AgeGroup';
+import { logUserFact } from '../../api/UserFacts';
 // Icons
 import { chevronForwardOutline } from 'ionicons/icons';
 
@@ -26,10 +28,26 @@ const WelcomeAgeGroupSelect: React.FC = () => {
     const { setCadeyUserAgeGroup } = React.useContext(CadeyUserContext);
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
+    const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
     const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
 
     const history = useHistory();
+
+    // When the component loads
+    useEffect(() => {
+
+        setCurrentAppPage("Welcome - Age Select");
+        setCurrentBasePage("Welcome - Age Select");
+
+        // appPageNavigation user fact
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Welcome - Age Select',
+        });
+    }, [apiUrl]);
 
     const handleAgeSelection = async (ageGroup: number) => {
         // Set the age group in the user context
