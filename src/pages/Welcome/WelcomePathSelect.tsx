@@ -36,7 +36,7 @@ const WelcomePathSelect: React.FC = () => {
     // Get the Cadey User data from the context
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const { apiUrl } = useContext(ApiUrlContext);
-    const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
+    const { currentAppPage, setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
     // Create an empty set of PopularSeriesSymptoms to populate
     const [pathListing, setPathListing] = React.useState<PathListing>();
@@ -77,7 +77,7 @@ const WelcomePathSelect: React.FC = () => {
 
     const handlePathSelection = async (path: Path) => {
         setPathId(path.id);
-        postPathSelect(apiUrl, Number(cadeyUserId), path.id);
+        postPathSelect(apiUrl, Number(cadeyUserId), currentAppPage, path.id, path.pathName);
         history.push('/App/Welcome/AgeGroup');
     };
 

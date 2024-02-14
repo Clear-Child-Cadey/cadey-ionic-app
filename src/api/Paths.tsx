@@ -106,7 +106,7 @@ export const getPathDetail = async (apiUrl: string, userId: number, pathId: numb
     return pathDetail;
 };
 
-export const postPathSelect = async (apiUrl: string, userId: number, pathId: number) => {
+export const postPathSelect = async (apiUrl: string, userId: number, appPage: string, pathId: number, pathName: string) => {
         
         const url = `${apiUrl}/pathselect/${userId}`;
     
@@ -118,7 +118,9 @@ export const postPathSelect = async (apiUrl: string, userId: number, pathId: num
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                appPage: appPage,
                 pathId: pathId,
+                pathName: pathName,
             }),
         });
     

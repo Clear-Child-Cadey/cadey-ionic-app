@@ -74,7 +74,18 @@ const WelcomePush: React.FC = () => {
     };
 
     const handlePushSelection = async (optin: boolean) => {
+        // Log a user fact
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: 'Welcome - Push Optin',
+            detail1: 'Welcome - Push Optin',
+            detail2: optin ? 'Optin Button' : 'Optout Button',
+        });
+        
         console.log('Starting push selection. Optin: ', optin);
+
         if (optin) {
             // User opted in, request push notification permission (if we're on a device)
             

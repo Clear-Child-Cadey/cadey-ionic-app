@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Share } from '@capacitor/share';
 import { 
     IonHeader,
@@ -57,7 +57,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         setQuizModalOpen, 
     } = useModalContext();
     
-    const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
+    const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const { apiUrl } = useContext(ApiUrlContext);
     const [canShare, setCanShare] = useState(false);
@@ -71,7 +71,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
     // State to store the calculated height for the video
     const [videoHeight, setVideoHeight] = useState<number | null>(null);
-
+    
     const [videoData, setVideoData] = useState<VideoDetailData>();
 
     // Get the ID from the URL. The URL path will be /app/paths/PathDetail?id=123
@@ -79,6 +79,8 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
     const searchParams = new URLSearchParams(location.search); // Create a URLSearchParams object from the search string
     const pathId = Number(searchParams.get('id')); // Get the value of the 'id' query parameter
     const [pathTitle, setPathTitle] = useState<string>('');
+
+    const history = useHistory();
     
     interface RelatedMediaItem {
         mediaType: number;                // 1 = video, 2 = article
@@ -116,6 +118,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         getPathVideoData(pathId);
 
         // Set the current app page
+        setCurrentBasePage('Path Detail');
         setCurrentAppPage('Path Detail');
         
         // Log a user fact that the user navigated to the popular symptom video detail page
@@ -298,12 +301,27 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         setPathEntity(updatedEntity);
     }
 
+    const handleBack = (route: string) => {
+        // Log user fact that the user clicked on the button
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: currentAppPage,
+            detail1: currentBasePage,
+            detail2: 'Back',
+        });
+
+        // Navigate to the page
+        history.push(route);
+    }
+
     return (
         <IonPage className="path-detail">
             <IonContent fullscreen ref={contentRef}>
                 <IonHeader class="header">
                     <IonToolbar className="header-toolbar">
-                        <a href="/App/Paths" className="back-link">Paths</a>
+                        <a className="back-link" onClick={() => handleBack("/App/Paths/")}>Paths</a>
                         <h2>{pathTitle}</h2>
                     </IonToolbar>
                 </IonHeader>

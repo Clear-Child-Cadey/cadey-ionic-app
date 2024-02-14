@@ -15,10 +15,19 @@ import { WP_Article } from '../../api/WordPress/GetArticles';
 // CSS
 import './ArticleListing.css';
 import { getCategories } from '../../api/WordPress/GetCategories';
+// Contexts
+import { useAppPage } from '../../context/AppPageContext';
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
+// API
+import { logUserFact } from '../../api/UserFacts';
 
 const ArticlesPage: React.FC = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
+    const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
+    const { cadeyUserId } = React.useContext(CadeyUserContext);
+    const { apiUrl } = React.useContext(ApiUrlContext);
     
     const categoryId = Number(queryParams.get('id'));
     
@@ -30,15 +39,31 @@ const ArticlesPage: React.FC = () => {
     useEffect(() => {
         // Get the category name from the WP API
         const fetchCategoryName = async () => {
+            var tempCategoryName = '';
             try {
                 const categories = await getCategories();
-                setCategoryName(categories.find(category => category.id === categoryId)?.name || 'Articles');
+                tempCategoryName = categories.find(category => category.id === categoryId)?.name || 'Articles';
+                setCategoryName(tempCategoryName);
+
+                setCurrentBasePage('Article Listing (' + tempCategoryName + ')');
+                setCurrentAppPage('Article Listing (' + tempCategoryName + ')');
+
+                logUserFact({
+                    cadeyUserId: cadeyUserId,
+                    baseApiUrl: apiUrl,
+                    userFactTypeName: 'appPageNavigation',
+                    appPage: 'Article Listing',
+                    detail1: categoryId.toString(),
+                    detail2: tempCategoryName,
+                });
+
             } catch (error) {
                 console.error("Error fetching category name:", error);
             }
         };
 
         fetchCategoryName();
+
     }, [categoryId]);
 
     const handleArticleSelection = (article: WP_Article) => {
@@ -56,16 +81,24 @@ const ArticlesPage: React.FC = () => {
         history.push(`/App/Library/Articles/Article?id=${articleId}`);
     }
 
-    // Add a new function to update the category name
-    const updateCategoryName = (name: string) => {
-        setCategoryName(name);
+    const handleBack = (route: string) => {
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: currentAppPage, 
+            detail1: currentBasePage,
+            detail2: 'Back Button',
+        });
+
+        history.push(route);
     }
 
     return (
         <IonPage className='article-listing'>
             <IonContent fullscreen>
                 <IonHeader class="header">
-                    <a href="/App/Library/Articles" className="back-link">Categories</a>
+                    <a className="back-link" onClick={() => handleBack("/App/Library/Articles")}>Library</a>
                     <h2>{categoryName} Articles</h2>
                 </IonHeader>
                 <IonRow>

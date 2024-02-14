@@ -34,7 +34,7 @@ const PathListingPage: React.FC = () => {
     // Get the Cadey User data from the context
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const { apiUrl } = useContext(ApiUrlContext);
-    const { setCurrentAppPage } = useAppPage();
+    const { currentAppPage, setCurrentAppPage } = useAppPage();
 
     // Create an empty set of PopularSeriesSymptoms to populate
     const [pathListing, setPathListing] = React.useState<PathListing>();
@@ -75,7 +75,7 @@ const PathListingPage: React.FC = () => {
 
     const handlePathSelection = async (path: Path) => {
         setPathId(path.id);
-        postPathSelect(apiUrl, Number(cadeyUserId), path.id);
+        postPathSelect(apiUrl, Number(cadeyUserId), currentAppPage, path.id, path.pathName);
         history.push('/App/Paths/PathDetail?id=' + path.id);
     };
 

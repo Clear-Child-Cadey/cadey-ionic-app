@@ -52,7 +52,7 @@ const HomePage: React.FC<{ }> = ({  }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
+  const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
@@ -173,15 +173,16 @@ const HomePage: React.FC<{ }> = ({  }) => {
 
   }, []);
 
-  const handleButtonClick = (route: string) => () => {
+  const handleButtonClick = (route: string, entity: string) => () => {
     // Log user fact that the user clicked on the button
-    // logUserFact({
-    //   cadeyUserId: cadeyUserId,
-    //   baseApiUrl: apiUrl,
-    //   userFactTypeName: 'TapBarNavClick',
-    //   appPage: 'Home',
-    //   detail1: pageName,
-    // });
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'UserTap',
+      appPage: currentAppPage,
+      detail1: currentBasePage,
+      detail2: entity,
+    });
 
     // Navigate to the page
     history.push('/App' + route);
@@ -209,7 +210,7 @@ const HomePage: React.FC<{ }> = ({  }) => {
         <IonRow className='content'>
           <IonRow className='dashboard'>
             <div className='paths dashboard-item full-width'>
-              <div className='dashboard-button' onClick={handleButtonClick("/Paths")}>
+              <div className='dashboard-button' onClick={handleButtonClick("/Paths", "Paths Button")}>
                 <img src="assets/svgs/icn-paths.svg" className='icon paths-icon' />
                 <div className='text-container'>
                   <div className='text-title'>Your Paths</div>
@@ -237,13 +238,13 @@ const HomePage: React.FC<{ }> = ({  }) => {
               </div>
             </div>
             <div className='library dashboard-item half-width'>
-              <div className='dashboard-button' onClick={handleButtonClick("/Library")}>
+              <div className='dashboard-button' onClick={handleButtonClick("/Library", "Library Button")}>
                 <img src="assets/svgs/icn-library.svg" className='icon library-icon' />
                 Library
               </div>
             </div>
             <div className='messages dashboard-item half-width'>
-              <div className='dashboard-button' onClick={handleButtonClick("/Home/Messages")}>
+              <div className='dashboard-button' onClick={handleButtonClick("/Home/Messages", "Messages Button")}>
                 <div className='messages-content'>
                   <div className='content-wrapper'>
                     <img src="assets/svgs/icn-messages.svg" className='icon messages-icon' />

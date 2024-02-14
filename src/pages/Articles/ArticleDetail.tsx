@@ -27,7 +27,7 @@ const ArticleDetailPage: React.FC = () => {
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
     
-    const { setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
+    const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
     const history = useHistory();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -48,8 +48,18 @@ const ArticleDetailPage: React.FC = () => {
                     cadeyUserId: cadeyUserId,
                     baseApiUrl: apiUrl,
                     userFactTypeName: 'OpenedArticle',
-                    appPage: currentAppPage,
-                    detail1: articleId.toString()
+                    appPage: 'Article Detail',
+                    detail1: articleId.toString(),
+                    detail2: detail.title.rendered,
+                });
+
+                logUserFact({
+                    cadeyUserId: cadeyUserId,
+                    baseApiUrl: apiUrl,
+                    userFactTypeName: 'appPageNavigation',
+                    appPage: 'Article Detail',
+                    detail1: articleId.toString(),
+                    detail2: detail.title.rendered,
                 });
             } catch (error) {
                 console.error("Error fetching article detail:", error);
@@ -58,18 +68,14 @@ const ArticleDetailPage: React.FC = () => {
             }
         };
 
+        setCurrentBasePage('Article Detail');
+        setCurrentAppPage('Article Detail');
+
         fetchArticleDetail();
 
         // Set the title of the page to the title of the article
         document.title = article ? article.title.rendered : "Article Detail";
-        setCurrentBasePage('Article Detail');
-        setCurrentAppPage('Article Detail');
-        logUserFact({
-            cadeyUserId: cadeyUserId,
-            baseApiUrl: apiUrl,
-            userFactTypeName: 'appPageNavigation',
-            appPage: 'Article Detail',
-          });
+        
     }, [articleId]);
 
     /**
@@ -88,11 +94,24 @@ const ArticleDetailPage: React.FC = () => {
         return text || "";
     }
 
+    const handleBack = (route: string) => {
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: currentAppPage,
+            detail1: currentBasePage,
+            detail2: 'Back Button',
+        });
+
+        history.push(route);
+    }
+
     return (
         <IonPage className='article-detail'>
             <IonContent fullscreen>
                 <IonHeader class="header">
-                    <a href="/App/Library/Articles" className="back-link">Articles</a>
+                <a className="back-link" onClick={() => handleBack("/App/Library/Articles")}>Library</a>
                 </IonHeader>
                 <IonRow>
                     {article && (

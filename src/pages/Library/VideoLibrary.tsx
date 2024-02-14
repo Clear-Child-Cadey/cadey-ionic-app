@@ -45,7 +45,7 @@ const VideoLibraryPage: React.FC = () => {
     const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const { apiUrl } = useContext(ApiUrlContext);
-    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
+    const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
     // Other variables
     const history = useHistory();
@@ -151,12 +151,25 @@ const VideoLibraryPage: React.FC = () => {
         setGoalsBadge();
     };
 
+    const handleBack = (route: string) => {
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: currentAppPage,
+            detail1: currentBasePage,
+            detail2: 'Back Button',
+        });
+
+        history.push(route);
+    }
+
     // Render the screen
     return (
         <IonPage className='video-library'>
             <IonContent fullscreen>
                 <IonHeader class="header">
-                    <a href="/App/Library" className="back-link">Library</a>
+                    <a className="back-link" onClick={() => handleBack("/App/Library/")}>Library</a>
                     <h2>{pageTitle}</h2>
                 </IonHeader>
 

@@ -24,7 +24,7 @@ const ArticleCategoryListingPage: React.FC = () => {
 
     const { cadeyUserId } = React.useContext(CadeyUserContext);
     const { apiUrl } = React.useContext(ApiUrlContext);
-    const { setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
+    const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
     const [articleCategories, setArticleCategories] = useState<WP_Category[]>([]);
 
     const history = useHistory();
@@ -33,15 +33,15 @@ const ArticleCategoryListingPage: React.FC = () => {
     useEffect(() => {
 
         // Set the title of the page to the title of the article
-        document.title = "Article Categories";
-        setCurrentBasePage('Article Categories');
-        setCurrentAppPage('Article Categories');
+        document.title = "Article Category Listing";
+        setCurrentBasePage('Article Category Listing');
+        setCurrentAppPage('Article Category Listing');
         logUserFact({
             cadeyUserId: cadeyUserId,
             baseApiUrl: apiUrl,
             userFactTypeName: 'appPageNavigation',
             appPage: 'Article Categories',
-          });
+        });
 
         // Get the article categories from the WP API
         const fetchArticleCategories = async () => {
@@ -70,11 +70,24 @@ const ArticleCategoryListingPage: React.FC = () => {
         history.push(`/App/Library/Articles/Category?id=${categoryId}`);
     }
 
+    const handleBack = ( route: string ) => {
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: currentAppPage,
+            detail1: currentBasePage,
+            detail2: 'Back Button',
+        });
+
+        history.push(route);
+    }
+
     return (
         <IonPage className='article-category-listing'>
             <IonContent fullscreen>
                 <IonHeader class="header">
-                    <a href="/App/Library" className="back-link">Library</a>
+                    <a className="back-link" onClick={() => handleBack("/App/Library")}>Library</a>
                     <h2>Article Categories</h2>
                 </IonHeader>
                 <IonRow>
