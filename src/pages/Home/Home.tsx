@@ -34,6 +34,7 @@ import { tracingEnabled } from "../../variables/Logging";
 // Firebase
 import { firebasePerf } from "../../api/Firebase/InitializeFirebase";
 import { trace } from "firebase/performance";
+import AppUpdateModal from "../../components/Modals/AppUpdateModal";
 
 const HomePage: React.FC<{
   currentTab: string;
@@ -64,6 +65,11 @@ const HomePage: React.FC<{
 
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
+
+  /**
+   * Controls if the error modal should be visible
+   */
+  let genericErrorModal = false;
 
   const history = useHistory();
 
@@ -108,8 +114,9 @@ const HomePage: React.FC<{
       setTrendingVideos(trendingVideos);
       setArticleIds(articleIds);
     } catch (error) {
-      console.error("Error:", error);
+      genericErrorModal = true;
     } finally {
+      setIsLoading(false);
       // Hide the splash screen after data has been fetched
       SplashScreen.hide();
       // Stop the trace
@@ -118,21 +125,6 @@ const HomePage: React.FC<{
       }
     }
   };
-
-  // useEffect to dismiss the loader
-  useEffect(() => {
-    // If the API has returned something, and did not return articles, dismiss the loader. Otherwise, the loader will be dismissed in the onArticlesLoaded callback
-    if (
-      (featuredVideos.length > 0 ||
-        newVideos.length > 0 ||
-        playedVideos.length > 0 ||
-        trendingVideos.length > 0 ||
-        articleIds.length > 0) &&
-      articleIds.length == 0
-    ) {
-      setIsLoading(false);
-    }
-  }, [articleIds, trendingVideos, featuredVideos, newVideos, playedVideos]);
 
   // On mount, check if Messages is the currentTab. If so, set it to Home.
   // This happens when the user navigates to Home from the Messages tab via
@@ -326,6 +318,19 @@ const HomePage: React.FC<{
       });
     }
   };
+
+  if (genericErrorModal) {
+    return (
+      <AppUpdateModal
+        newWindow={false}
+        isOpen={true}
+        title="Error"
+        body="An error has occurred."
+        buttonText="Close"
+        buttonUrl="/App/Home"
+      />
+    );
+  }
 
   return (
     <IonPage className="home">
