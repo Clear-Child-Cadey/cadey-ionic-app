@@ -48,7 +48,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const location = useLocation();
     const history = useHistory();
 
-    const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
+    const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
     const [isLoading, setIsLoading] = useState(false);
     const [userQuery, setUserQuery] = useState<string>("");
     const [searchResults, setSearchResults] = useState<SearchResults>({
@@ -62,6 +62,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     useEffect(() => {
         setCurrentBasePage('Search');
         setCurrentAppPage('Search');
+        console.log("Logging user fact for appPageNavigation");
         logUserFact({
             cadeyUserId: cadeyUserId,
             baseApiUrl: apiUrl,
@@ -82,7 +83,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             query = queryFromParams;
         }
         
-        // If so, either perform the search or store the query in state and show the age group modal
+        // If so, perform the search
         if (query && query !== "") {
             // Add the query to the search bar
             const searchField = document.querySelector(".search-bar") as HTMLIonSearchbarElement;
@@ -91,7 +92,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             // Perform the search for the user
             performSearch(query, cadeyUserAgeGroup);
         }
-    }, [apiUrl, cadeyUserId, location.state]);
+    }, [apiUrl, cadeyUserId]);
 
     const handleInputChange = (e: any) => {
         const inputValue = e.detail.value;
@@ -154,90 +155,97 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
         setIsLoading(false);
     }
 
+    const handleBack = ( route: string ) => {
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: currentAppPage,
+            detail1: currentBasePage,
+            detail2: 'Back Button',
+        });
+
+        history.push(route);
+    }
+
     return (
-    <IonPage className="search">
-        <IonHeader>
-        <IonToolbar>
-            <IonTitle>Search</IonTitle>
-        </IonToolbar>
-        </IonHeader>
-        <IonContent fullscreen>
-            <IonHeader collapse="condense">
-                <IonToolbar>
-                <IonTitle size="large">Search</IonTitle>
-                </IonToolbar>
-            </IonHeader>
-        
-            {/* Show loading state */}
-            <IonLoading isOpen={isLoading} message={'Loading Results...'} />
+        <IonPage className="article-category-listing">
+            <IonContent fullscreen>
+                <IonHeader class="header">
+                    <a className="back-link" onClick={() => handleBack("/App/Library")}>Library</a>
+                    <h2>Search</h2>
+                </IonHeader>
             
-            <IonRow className="search-container">
-                {/* Search bar */}
-                <IonSearchbar 
-                    className="search-bar" 
-                    onIonChange={handleInputChange}
-                    onKeyDown={handleSearchInput}
-                    mode="ios"
-                ></IonSearchbar>
-            </IonRow>
-
-            {/* Explanatory copy */}
-            <IonRow className="search-directions">
-                {/* Show results copy if there are results */}
-                {(searchResults.videos.length == 0 && searchResults.articleIds.length == 0 && searchResults.message == "") && (
-                    <IonText>
-                        <p>Try keywords like 'tantrum', or 'having trouble focusing at school'.</p>
-                    </IonText>
-                )}
-                {(searchResults.videos.length > 0 || searchResults.articleIds.length > 0)  && (
-                    <IonText>
-                        <p>Here are a few suggestions, based on your search:</p>
-                    </IonText>
-                )}
-            </IonRow>
-
-            {/* Message (usually indicating no results) */}
-            {searchResults.message && (
-                <IonRow className="search-message search-results">
-                    <IonText>
-                        <p>{searchResults.message}</p>
-                    </IonText>
-                    <IonButton
-                        onClick={() => {
-                            setSearchResults({
-                                message: "",
-                                videos: [],
-                                articleIds: [],
-                            });
-                            const searchField = document.querySelector(".search-bar") as HTMLIonSearchbarElement;
-                            searchField.setFocus();
-                        }}
-                    >Try Again</IonButton>
+                {/* Show loading state */}
+                <IonLoading isOpen={isLoading} message={'Loading Results...'} />
+                
+                <IonRow className="search-container">
+                    {/* Search bar */}
+                    <IonSearchbar 
+                        className="search-bar" 
+                        onIonChange={handleInputChange}
+                        onKeyDown={handleSearchInput}
+                        mode="ios"
+                    ></IonSearchbar>
                 </IonRow>
-            )}
 
-            {/* Video Results */}
-            {searchResults.videos.length > 0 && (
-                <IonRow className="video-list-row search-results">
-                    <h2>Videos</h2>
-                    <VideoList videos={searchResults.videos} listType='vertical' />
-                </IonRow>  
-            )}
-
-            {/* Article Results */}
-            {articleResults.length > 0 && (
-                <IonRow className="article-list-row search-results">
-                    <IonText><h2>Articles</h2></IonText>
-                    <IonList>
-                        {articleResults.map((article) => (
-                            <ArticleItem article={article} key={article.id} />
-                        ))}
-                    </IonList>
+                {/* Explanatory copy */}
+                <IonRow className="search-directions">
+                    {/* Show results copy if there are results */}
+                    {(searchResults.videos.length == 0 && searchResults.articleIds.length == 0 && searchResults.message == "") && (
+                        <IonText>
+                            <p>Try keywords like 'tantrum', or 'having trouble focusing at school'.</p>
+                        </IonText>
+                    )}
+                    {(searchResults.videos.length > 0 || searchResults.articleIds.length > 0)  && (
+                        <IonText>
+                            <p>Here are a few suggestions, based on your search:</p>
+                        </IonText>
+                    )}
                 </IonRow>
-            )}
-            
-        </IonContent>
-    </IonPage>
+
+                {/* Message (usually indicating no results) */}
+                {searchResults.message && (
+                    <IonRow className="search-message search-results">
+                        <IonText>
+                            <p>{searchResults.message}</p>
+                        </IonText>
+                        <IonButton
+                            onClick={() => {
+                                setSearchResults({
+                                    message: "",
+                                    videos: [],
+                                    articleIds: [],
+                                });
+                                const searchField = document.querySelector(".search-bar") as HTMLIonSearchbarElement;
+                                searchField.setFocus();
+                            }}
+                        >Try Again</IonButton>
+                    </IonRow>
+                )}
+
+                {/* Video Results */}
+                {searchResults.videos.length > 0 && (
+                    <IonRow className="video-list-row search-results">
+                        <h2>Videos</h2>
+                        <VideoList videos={searchResults.videos} listType='vertical' />
+                    </IonRow>  
+                )}
+
+                {/* Article Results */}
+                {articleResults.length > 0 && (
+                    <IonRow className="article-list-row search-results">
+                        <IonText><h2>Articles</h2></IonText>
+                        <IonList>
+                            {articleResults.map((article) => (
+                                <ArticleItem article={article} key={article.id} />
+                            ))}
+                        </IonList>
+                    </IonRow>
+                )}
+                
+            </IonContent>
+        </IonPage>
     );
 };
 

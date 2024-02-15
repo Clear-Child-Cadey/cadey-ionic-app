@@ -118,32 +118,32 @@ const HomePage: React.FC<{ }> = ({  }) => {
   // This runs on mount and every time currentTab changes or the video modal opens/closes
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
-    let timeoutId: any;
+    // let timeoutId: any;
 
-    // Start a timer
-    timeoutId = setTimeout(() => {
-      if (!dataLoaded) {
-        // TODO: Implement logic for handling long load times
+    // // // Start a timer
+    // // timeoutId = setTimeout(() => {
+    // //   if (!dataLoaded) {
+    // //     // TODO: Implement logic for handling long load times
 
-        // Log a user fact
-        logUserFact({
-          cadeyUserId: cadeyUserId,
-          baseApiUrl: apiUrl,
-          userFactTypeName: 'ErrorLog',
-          appPage: 'App Open',
-          detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
-        });
+    // //     // Log a user fact
+    // //     logUserFact({
+    // //       cadeyUserId: cadeyUserId,
+    // //       baseApiUrl: apiUrl,
+    // //       userFactTypeName: 'ErrorLog',
+    // //       appPage: 'App Open',
+    // //       detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
+    // //     });
         
-        logErrorToFirestore({
-          userID: cadeyUserId,
-          timestamp: new Date().toISOString(),
-          error: 'getAppData call (/appopened) took longer than 10 seconds',
-          context: "Fetching App Data"
-        });
+    // //     logErrorToFirestore({
+    // //       userID: cadeyUserId,
+    // //       timestamp: new Date().toISOString(),
+    // //       error: 'getAppData call (/appopened) took longer than 10 seconds',
+    // //       context: "Fetching App Data"
+    // //     });
 
-        setIsLoading(false); // Optionally stop the loader
-      }
-    }, 10000); // Set timeout for 10 seconds
+    // //     setIsLoading(false); // Optionally stop the loader
+    // //   }
+    // // }, 10000); // Set timeout for 10 seconds
 
     fetchData(); // Fetch the homepage data
     

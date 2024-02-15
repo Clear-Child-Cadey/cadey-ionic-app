@@ -19,6 +19,7 @@ import { CadeyUserContext } from '../../main';
 import { useAppPage } from '../../context/AppPageContext';
 import { usePathContext } from '../../context/PathContext';
 import { useModalContext } from '../../context/ModalContext';
+import { useTabContext } from '../../context/TabContext';
 //  API
 import { logUserFact } from '../../api/UserFacts';
 import { getQuiz } from '../../api/Quiz';
@@ -60,6 +61,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
     const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
     const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
     const { apiUrl } = useContext(ApiUrlContext);
+    const { setIsTabBarVisible } = useTabContext();
     const [canShare, setCanShare] = useState(false);
 
     // By default, use the route as the source
@@ -111,6 +113,9 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
     // On mount:
     useEffect(() => {
+        // Ensure the tab bar is visible. It should already be, but this is a good place to ensure it since it's the first place a user arrives following Welcome
+        setIsTabBarVisible(true);
+
         // Check if the user's device has sharing capabilities
         Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));
 
@@ -253,6 +258,16 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
         
         // Get a quiz
         await requestQuiz();
+
+        // Log a UserTap user fact
+        logUserFact({
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'UserTap',
+            appPage: currentAppPage + " | Path " + pathId.toString() + " " + pathTitle,
+            detail1: currentBasePage,
+            detail2: "Video ID: " + entity.entityId.toString() + ", position " + entity.entityOrder + " (From Video ID: " + pathEntity?.entityId.toString() + ", position " + pathEntity?.entityOrder + ")",
+        });
 
         // Set the next entity in sequence
         setPathEntity(entity);

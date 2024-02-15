@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import { 
   IonTabs, 
   IonRouterOutlet, 
@@ -65,7 +65,8 @@ const RouterTabs: React.FC = () => {
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { currentAppPage } = useAppPage();
-  // const location = useLocation();
+  const location = useLocation();
+  const history = useHistory();
   const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
 
   // Use effect to update setIsWelcomeSequence
@@ -92,7 +93,7 @@ const RouterTabs: React.FC = () => {
     fetchMessages();
   }, []);
 
-  const handleTabClick = async (tabName: string) => {
+  const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
     logUserFact({
       cadeyUserId: cadeyUserId,
@@ -101,12 +102,15 @@ const RouterTabs: React.FC = () => {
       appPage: currentAppPage,
       detail1: tabName,
     });
+
+    history.push(route);
   };
 
-  // Console log if the tab bar is visible
-  useEffect(() => {
-    console.log('Tab bar visibility:', isTabBarVisible);
-  }, [isTabBarVisible]);
+  // Determine if a tab should be highlighted based on the current path
+  const isTabActive = (tabPath: string): boolean => {
+    // You might need more sophisticated logic depending on your routes
+    return location.pathname.startsWith(tabPath);
+  };
 
   return (
     <>
@@ -187,8 +191,8 @@ const RouterTabs: React.FC = () => {
           <IonTabBar slot="bottom" className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}>
             <IonTabButton 
               tab="Home" 
-              href="/App/Home"
-              onClick={() => handleTabClick('Home')}
+              onClick={() => handleTabClick('Home', '/App/Home')}
+              selected={isTabActive('/App/Home')}
             >
               <HomeIcon />
               <IonLabel>Home</IonLabel>
@@ -197,8 +201,8 @@ const RouterTabs: React.FC = () => {
             {/* Paths */}
             <IonTabButton 
               tab="Paths" 
-              href="/App/Paths/"
-              onClick={() => handleTabClick('Paths')}
+              onClick={() => handleTabClick('Path Listing', '/App/Paths')}
+              selected={isTabActive('/App/Paths')}
             >
               <PathsIcon />
               <IonLabel>Paths</IonLabel>
@@ -207,8 +211,8 @@ const RouterTabs: React.FC = () => {
             {/* Library */}
             <IonTabButton 
               tab="Library" 
-              href="/App/Library"
-              onClick={() => handleTabClick('Library')}
+              onClick={() => handleTabClick('Library', '/App/Library')}
+              selected={isTabActive('/App/Library')}
             >
               <LibraryIcon />
               <IonLabel>Library</IonLabel>

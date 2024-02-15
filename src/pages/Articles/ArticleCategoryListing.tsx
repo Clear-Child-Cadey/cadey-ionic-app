@@ -33,9 +33,9 @@ const ArticleCategoryListingPage: React.FC = () => {
     useEffect(() => {
 
         // Set the title of the page to the title of the article
-        document.title = "Article Category Listing";
-        setCurrentBasePage('Article Category Listing');
-        setCurrentAppPage('Article Category Listing');
+        document.title = "Article Categories";
+        setCurrentBasePage('Article Categories');
+        setCurrentAppPage('Article Categories');
         logUserFact({
             cadeyUserId: cadeyUserId,
             baseApiUrl: apiUrl,

@@ -54,10 +54,10 @@ const LibraryPage: React.FC = () => {
         setCurrentBasePage('Library');
         setCurrentAppPage('Library');
         logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
-        userFactTypeName: 'appPageNavigation',
-        appPage: 'Library',
+            cadeyUserId: cadeyUserId,
+            baseApiUrl: apiUrl,
+            userFactTypeName: 'appPageNavigation',
+            appPage: 'Library',
         });
     }, []);
 
