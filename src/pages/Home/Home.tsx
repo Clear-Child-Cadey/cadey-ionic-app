@@ -34,7 +34,6 @@ import { tracingEnabled } from "../../variables/Logging";
 // Firebase
 import { firebasePerf } from "../../api/Firebase/InitializeFirebase";
 import { trace } from "firebase/performance";
-import AppUpdateModal from "../../components/Modals/AppUpdateModal";
 
 const HomePage: React.FC<{
   currentTab: string;
@@ -69,7 +68,6 @@ const HomePage: React.FC<{
   /**
    * Controls if the error modal should be visible
    */
-  let genericErrorModal = false;
 
   const history = useHistory();
 
@@ -84,6 +82,9 @@ const HomePage: React.FC<{
     setCurrentArticleId,
     setQuizModalData,
     setWelcomeModalOpen,
+    setGenericModalData,
+    setGenericModalOpen,
+    genericModalData,
   } = useModalContext();
 
   // Get the latest data from the API
@@ -94,6 +95,7 @@ const HomePage: React.FC<{
     setIsLoading(true);
     try {
       // Start a Firebase trace
+
       if (tracingEnabled) {
         getHomeDataTrace = trace(firebasePerf, "getHomeDataTrace");
         await getHomeDataTrace.start();
@@ -114,7 +116,14 @@ const HomePage: React.FC<{
       setTrendingVideos(trendingVideos);
       setArticleIds(articleIds);
     } catch (error) {
-      genericErrorModal = true;
+      setGenericModalData({
+        title: "Error",
+        body: "We're sorry, but we couldn't load the data for this page. Please try again later.",
+        buttonText: "Close",
+        buttonAction: () => {
+          history.go(0);
+        },
+      });
     } finally {
       setIsLoading(false);
       // Hide the splash screen after data has been fetched
@@ -319,17 +328,8 @@ const HomePage: React.FC<{
     }
   };
 
-  if (genericErrorModal) {
-    return (
-      <AppUpdateModal
-        newWindow={false}
-        isOpen={true}
-        title="Error"
-        body="An error has occurred."
-        buttonText="Close"
-        buttonUrl="/App/Home"
-      />
-    );
+  if (genericModalData) {
+    setGenericModalOpen(true);
   }
 
   return (

@@ -14,7 +14,6 @@ interface AppUpdateModalProps {
   body: string;
   buttonText: string;
   buttonUrl: string;
-  newWindow?: boolean;
 }
 
 const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
@@ -23,7 +22,6 @@ const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
   body,
   buttonText,
   buttonUrl,
-  newWindow = true,
 }) => {
   return (
     <IonModal isOpen={isOpen} backdropDismiss={false}>
@@ -36,7 +34,7 @@ const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
         <p>{body}</p>
         <IonButton
           expand="full"
-          onClick={() => window.open(buttonUrl, newWindow ? "_blank" : "_self")}
+          onClick={() => window.open(buttonUrl, "_blank")}
         >
           {buttonText}
         </IonButton>

@@ -2,8 +2,12 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 import { QuizModalData } from "../components/Modals/QuizModal/QuizModal";
 // Interfaces
 import { PopularSymptomVideo } from "../components/SymptomsList/PopularSymptomsList";
+import { GenericModalData } from "../components/Modals/GenericModal";
 
 interface ModalContextProps {
+  genericModalData: GenericModalData | undefined;
+  isGenericModalOpen: boolean;
+  setGenericModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isVideoModalOpen: boolean;
   setVideoModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isArticleDetailModalOpen: boolean;
@@ -14,6 +18,7 @@ interface ModalContextProps {
   setQuizModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   quizModalData: QuizModalData | null;
   setQuizModalData: React.Dispatch<React.SetStateAction<QuizModalData | null>>;
+  setGenericModalData: React.Dispatch<React.SetStateAction<GenericModalData>>;
   currentArticleId: number | null;
   setCurrentArticleId: React.Dispatch<React.SetStateAction<number | null>>;
   currentVimeoId: string | null;
@@ -53,6 +58,10 @@ interface ModalProviderProps {
 }
 
 const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
+  const [genericModalData, setGenericModalData] = useState<
+    GenericModalData | undefined
+  >(undefined);
+  const [isGenericModalOpen, setGenericModalOpen] = useState<boolean>(false);
   const [isVideoModalOpen, setVideoModalOpen] = useState<boolean>(false);
   const [isArticleDetailModalOpen, setArticleDetailModalOpen] =
     useState<boolean>(false);
@@ -79,6 +88,10 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState<boolean>(false);
 
   const contextValue = {
+    setGenericModalData,
+    genericModalData,
+    isGenericModalOpen,
+    setGenericModalOpen,
     isVideoModalOpen,
     setVideoModalOpen,
     isArticleDetailModalOpen,

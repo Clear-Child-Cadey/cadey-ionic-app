@@ -1,54 +1,71 @@
 // Contexts
-import { useContext } from 'react';
-import ApiUrlContext from '../context/ApiUrlContext';
-import { CadeyUserContext } from '../main';
+import { useContext } from "react";
+import ApiUrlContext from "../context/ApiUrlContext";
+import { CadeyUserContext } from "../main";
 // Firebase
-import { firebasePerf } from './Firebase/InitializeFirebase';
+import { firebasePerf } from "./Firebase/InitializeFirebase";
 import { trace } from "firebase/performance";
 // Variables
-import { tracingEnabled } from '../variables/Logging';
+import { tracingEnabled } from "../variables/Logging";
 
+const getHomeData = () => {
+  const { apiUrl } = useContext(ApiUrlContext);
+  const { cadeyUserId } = useContext(CadeyUserContext);
 
-const getHomeData = () => {  
-    const { apiUrl } = useContext(ApiUrlContext);
-    const { cadeyUserId } = useContext(CadeyUserContext);
-
-    const getHomeDataFromApi = async () => {
-        const url = `${apiUrl}/homepage/${cadeyUserId}`;
-
-        const response = await fetch(url, {
-        method: 'GET',
+  const getHomeDataFromApi = async () => {
+    const url = `${apiUrl}/homepage/${cadeyUserId}`;
+    let data;
+    try {
+      const response = await fetch(url, {
+        method: "GET",
         headers: {
-            'accept': 'text/plain',
-            'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+          accept: "text/plain",
+          apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
         },
-        });
+      });
+      data = await response.json();
 
-        if (!response.ok) {
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-        }
+      }
+    } catch (error) {
+      throw new Error(`HTTP error! status: ${error}`);
+    }
 
-        const data = await response.json();
+    const mapVideos = (videos: any, videoType: string) =>
+      videos.map(
+        (video: {
+          sourceId: any;
+          mediaId: any;
+          title: any;
+          audience: any;
+          thumbnail: any;
+        }) => ({
+          sourceId: video.sourceId,
+          mediaId: String(video.mediaId), // Convert the mediaId to a string
+          title: video.title,
+          audience: video.audience,
+          videoType: videoType,
+          thumbnail: video.thumbnail,
+        }),
+      );
 
-        const mapVideos = (videos: any, videoType: string) => videos.map((video: { sourceId: any; mediaId: any; title: any; audience: any; thumbnail: any; }) => ({
-            sourceId: video.sourceId,
-            mediaId: String(video.mediaId), // Convert the mediaId to a string
-            title: video.title,
-            audience: video.audience,
-            videoType: videoType,
-            thumbnail: video.thumbnail,
-        }));
-
-        return { 
-            featuredVideos: data.featuredVideos ? mapVideos(data.featuredVideos, "featuredVideos") : [], 
-            newVideos: data.newVideos ? mapVideos(data.newVideos, "newVideos") : [], 
-            playedVideos: data.playedVideos ? mapVideos(data.playedVideos, "playedVideos") : [],
-            trendingVideos: data.trendingVideos ? mapVideos(data.trendingVideos, "trendingVideos") : [],
-            articleIds: data.articleIds ? data.articleIds : [],
-        };
+    return {
+      featuredVideos: data.featuredVideos
+        ? mapVideos(data.featuredVideos, "featuredVideos")
+        : [],
+      newVideos: data.newVideos ? mapVideos(data.newVideos, "newVideos") : [],
+      playedVideos: data.playedVideos
+        ? mapVideos(data.playedVideos, "playedVideos")
+        : [],
+      trendingVideos: data.trendingVideos
+        ? mapVideos(data.trendingVideos, "trendingVideos")
+        : [],
+      articleIds: data.articleIds ? data.articleIds : [],
     };
+  };
 
-    return { getHomeDataFromApi };
+  return { getHomeDataFromApi };
 };
 
 export default getHomeData;
