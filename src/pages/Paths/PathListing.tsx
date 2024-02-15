@@ -81,12 +81,12 @@ const PathListingPage: React.FC = () => {
 
   return (
     <IonPage className="path-listing">
+        <IonHeader class="header">
+            <IonToolbar className="header-toolbar">
+                <h2>Paths</h2>
+            </IonToolbar>
+        </IonHeader>
         <IonContent fullscreen>
-            <IonHeader class="header">
-                <IonToolbar className="header-toolbar">
-                    <h2>Paths</h2>
-                </IonToolbar>
-            </IonHeader>
             <div className="path-list">
 
                 {/* Show a loading state if necessary */}

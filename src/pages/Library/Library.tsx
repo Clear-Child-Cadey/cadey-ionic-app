@@ -110,10 +110,12 @@ const LibraryPage: React.FC = () => {
     // Render the screen
     return (
         <IonPage className='library'>
-            <IonContent fullscreen>
-                <IonHeader class="header">
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
                     <h2>Library</h2>
-                </IonHeader>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
                 <IonRow className="library-home">
                     <IonRow className="search-container">
                         {/* Search bar */}

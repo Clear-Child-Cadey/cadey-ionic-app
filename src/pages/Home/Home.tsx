@@ -190,18 +190,17 @@ const HomePage: React.FC<{ }> = ({  }) => {
 
   return (
     <IonPage className="home">
+      <IonHeader class="header">
+          <IonToolbar className="header-toolbar">
+              <h2>Home</h2>
+          </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen className='page'>
 
         {/* Show a loading state if necessary */}
         {isLoading && (
           <IonLoading isOpen={true} message={'Loading your data...'} />
         )}
-
-        <IonHeader class="header">
-            <IonToolbar className="header-toolbar">
-                <h2>Home</h2>
-            </IonToolbar>
-        </IonHeader>
 
         <IonRow>
             <IonText className="subcopy">Welcome</IonText>

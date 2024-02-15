@@ -85,11 +85,13 @@ const ArticleCategoryListingPage: React.FC = () => {
 
     return (
         <IonPage className='article-category-listing'>
-            <IonContent fullscreen>
-                <IonHeader class="header">
-                    <a className="back-link" onClick={() => handleBack("/App/Library")}>Library</a>
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
+                    <a className="back-link" onClick={() => handleBack("/App/Library/")}>Library</a>
                     <h2>Article Categories</h2>
-                </IonHeader>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
                 <IonRow>
                     {articleCategories && (
                         <div className="article-categories">

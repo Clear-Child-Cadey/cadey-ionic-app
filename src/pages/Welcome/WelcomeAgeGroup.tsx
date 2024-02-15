@@ -66,12 +66,12 @@ const WelcomeAgeGroupSelect: React.FC = () => {
 
     return (
         <IonPage className="welcome-age-group" >
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
+                    <h2>How old is your child?</h2>
+                </IonToolbar>
+            </IonHeader>
             <IonContent fullscreen>
-                <IonHeader class="header">
-                    <IonToolbar className="header-toolbar">
-                        <h2>How old is your child?</h2>
-                    </IonToolbar>
-                </IonHeader>
                 <IonRow className="age-group-container">
                     <IonRow className="age-buttons-row">
                         <IonButton 

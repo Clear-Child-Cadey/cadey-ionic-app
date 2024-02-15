@@ -110,12 +110,12 @@ const WelcomePush: React.FC = () => {
 
     return (
         <IonPage className="welcome-push" >
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
+                    <h2>Turn on notifications to get the most out of Cadey</h2>
+                </IonToolbar>
+            </IonHeader>
             <IonContent fullscreen>
-                <IonHeader class="header">
-                    <IonToolbar className="header-toolbar">
-                        <h2>Turn on notifications to get the most out of Cadey</h2>
-                    </IonToolbar>
-                </IonHeader>
                 <div className='optin-icon'>
                     <img src="assets/svgs/bell.svg" />
                 </div>

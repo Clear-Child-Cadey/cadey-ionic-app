@@ -1,7 +1,3 @@
-.welcome-push {
-  padding: 0 16px;
-}
-
 .optin-icon {
     text-align: center;
     margin-top: 75px;
@@ -17,7 +13,7 @@
 .welcome-push .continue-row {
     position: fixed;
     bottom: 40px;
-    width: calc(100% - 32px);
+    width: 100%;
     background: #F9F6EF;
 }
 

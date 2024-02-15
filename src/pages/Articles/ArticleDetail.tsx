@@ -109,10 +109,12 @@ const ArticleDetailPage: React.FC = () => {
 
     return (
         <IonPage className='article-detail'>
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
+                    <a className="back-link" onClick={() => handleBack("/App/Library/Articles")}>Library</a>
+                </IonToolbar>
+            </IonHeader>
             <IonContent fullscreen>
-                <IonHeader class="header">
-                <a className="back-link" onClick={() => handleBack("/App/Library/Articles")}>Library</a>
-                </IonHeader>
                 <IonRow>
                     {article && (
                         <div className="article-detail">

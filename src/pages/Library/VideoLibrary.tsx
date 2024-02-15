@@ -3,6 +3,7 @@ import {
     IonContent, 
     IonHeader, 
     IonPage,
+    IonToolbar,
 } from '@ionic/react';
 // Icons
 
@@ -167,12 +168,13 @@ const VideoLibraryPage: React.FC = () => {
     // Render the screen
     return (
         <IonPage className='video-library'>
-            <IonContent fullscreen>
-                <IonHeader class="header">
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
                     <a className="back-link" onClick={() => handleBack("/App/Library/")}>Library</a>
                     <h2>{pageTitle}</h2>
-                </IonHeader>
-
+                </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
                 {/* Call the renderComponent function to render the correct component */}
                 {renderComponent()}
             </IonContent>

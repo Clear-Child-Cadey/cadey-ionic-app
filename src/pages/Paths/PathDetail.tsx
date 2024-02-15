@@ -333,13 +333,13 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
     return (
         <IonPage className="path-detail">
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
+                    <a className="back-link" onClick={() => handleBack("/App/Paths/")}>Paths</a>
+                    <h2>{pathTitle}</h2>
+                </IonToolbar>
+            </IonHeader>
             <IonContent fullscreen ref={contentRef}>
-                <IonHeader class="header">
-                    <IonToolbar className="header-toolbar">
-                        <a className="back-link" onClick={() => handleBack("/App/Paths/")}>Paths</a>
-                        <h2>{pathTitle}</h2>
-                    </IonToolbar>
-                </IonHeader>
                 {pathEntity && pathEntity.sourceId && (
                     <IonRow className="video-player-row">
                         <div className="current" key={pathEntity.sourceId} ref={videoRef}>

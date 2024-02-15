@@ -97,17 +97,12 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
   return (
     <IonPage className="messages">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Messages</IonTitle>
-        </IonToolbar>
+      <IonHeader class="header">
+          <IonToolbar className="header-toolbar">
+              <h2>Messages</h2>
+          </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Messages</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         {messagesLoaded && (
           <IonRow>
               {/* "subcopy" that changes depending on whether the user has messages or not */}

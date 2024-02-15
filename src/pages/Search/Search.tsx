@@ -170,11 +170,13 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     return (
         <IonPage className="article-category-listing">
-            <IonContent fullscreen>
-                <IonHeader class="header">
+            <IonHeader class="header">
+                <IonToolbar className="header-toolbar">
                     <a className="back-link" onClick={() => handleBack("/App/Library")}>Library</a>
                     <h2>Search</h2>
-                </IonHeader>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
             
                 {/* Show loading state */}
                 <IonLoading isOpen={isLoading} message={'Loading Results...'} />

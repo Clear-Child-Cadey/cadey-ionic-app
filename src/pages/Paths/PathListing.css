@@ -1,9 +1,4 @@
-#root .header-toolbar {
-    --border-width: 0 0 0 0;
-    --padding-start: 0;
-}
-
-.path-listing {
+.path-list {
     padding: 0 16px;
 }
 

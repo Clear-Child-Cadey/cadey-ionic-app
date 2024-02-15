@@ -83,12 +83,12 @@ const WelcomePathSelect: React.FC = () => {
 
   return (
     <IonPage className="welcome-path-listing">
+        <IonHeader class="header">
+            <IonToolbar className="header-toolbar">
+                <h2>Hi there! What is your child struggling with most?</h2>
+            </IonToolbar>
+        </IonHeader>
         <IonContent fullscreen>
-            <IonHeader class="header">
-                <IonToolbar className="header-toolbar">
-                    <h2>Hi there! What is your child struggling with most?</h2>
-                </IonToolbar>
-            </IonHeader>
             <div className="path-list">
 
                 {/* Show a loading state if necessary */}
