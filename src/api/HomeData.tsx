@@ -1,3 +1,5 @@
+import fetchWithTimeout from "../utils/fetchWithTimeout";
+
 export interface HomeData {
   numPathsInProgress: number;
   numCompletedPaths: number;
@@ -14,13 +16,17 @@ const getHomeData = async (apiUrl: string, cadeyUserId: string) => {
   const url = `${apiUrl}/homepage/${cadeyUserId}`;
 
   try {
-    response = await fetch(url, {
-      method: "GET",
-      headers: {
-        accept: "text/plain",
-        apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+    response = await fetchWithTimeout(
+      url,
+      {
+        method: "GET",
+        headers: {
+          accept: "text/plain",
+          apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+        },
       },
-    });
+      { cadeyUserId, requestName: "getHomeData" },
+    );
   } catch (error) {
     throw new Error(`HTTP error! status: ${error}`);
   }
