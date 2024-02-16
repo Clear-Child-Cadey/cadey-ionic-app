@@ -40,7 +40,7 @@ import { trace } from "firebase/performance";
 // Interfaces
 import { HomeData } from '../../api/HomeData';
 
-const HomePage: React.FC<{ }> = ({  }) => {
+const HomePage = () => {
   
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
@@ -127,7 +127,6 @@ const HomePage: React.FC<{ }> = ({  }) => {
       // Stop the trace
       if (tracingEnabled) {
         getHomeDataTrace.stop();
-      }
       }
     }
   };

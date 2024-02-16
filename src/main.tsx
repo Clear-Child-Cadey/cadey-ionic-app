@@ -105,7 +105,6 @@ function MainComponent() {
           setMinimumSupportedVersion,
           setOneSignalId,
           apiUrl,
-          setIsHomeTabVisible,
         );
         setDataLoaded(true); // Indicate that data has been loaded
         clearTimeout(timeoutId); // Clear the timeout if data is loaded in time
