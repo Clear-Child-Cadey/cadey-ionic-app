@@ -2,7 +2,7 @@
 <circle cx="39" cy="38.4" r="36" fill="#F9F6EF"/>
 <path d="M45.7438 18.5626L54.4342 27.2426L47.0516 29.2226C47.0516 29.2226 44.3342 24.5487 44.389 24.3861C44.4438 24.2235 45.7438 18.5626 45.7438 18.5626Z" fill="#0478ED"/>
 <path d="M53.1653 26.6958H47.9479C46.9871 26.6958 46.2088 25.9175 46.2088 24.9566V19.7393C46.2088 18.7784 45.4305 18.0001 44.4697 18.0001H25.3392C24.3784 18.0001 23.6001 18.7784 23.6001 19.7393V56.261C23.6001 57.2219 24.3784 58.0001 25.3392 58.0001H53.1653C54.1262 58.0001 54.9044 57.2219 54.9044 56.261V28.4349C54.9044 27.474 54.1262 26.6958 53.1653 26.6958Z" fill="#51ADEF"/>
-<path d="M32.2959 41.4783H46.2089" stroke="#F9F6EF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="square"/>
-<path d="M36.6436 31.0436H41.8609" stroke="#F9F6EF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="square"/>
-<path d="M32.2959 36.261H46.2089" stroke="#F9F6EF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="square"/>
+<path d="M32.2959 41.4783H46.2089" stroke="#F9F6EF" strokeWidth="2" stroke-miterlimit="10" stroke-linecap="square"/>
+<path d="M36.6436 31.0436H41.8609" stroke="#F9F6EF" strokeWidth="2" stroke-miterlimit="10" stroke-linecap="square"/>
+<path d="M32.2959 36.261H46.2089" stroke="#F9F6EF" strokeWidth="2" stroke-miterlimit="10" stroke-linecap="square"/>
 </svg>
