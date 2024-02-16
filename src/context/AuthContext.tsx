@@ -1,6 +1,11 @@
 // AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInAnonymously,
+  User,
+} from "firebase/auth";
 import { firebaseApp } from "../api/Firebase/InitializeFirebase"; // Adjust the import path as needed
 
 type AuthContextType = {
@@ -29,9 +34,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const auth = getAuth(firebaseApp);
+    // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
+      if (user) {
+        // User is signed in, or was just signed in.
+        setUser(user);
+        setLoading(false);
+      } else {
+        // No user is signed in, try to sign in anonymously
+        signInAnonymously(auth)
+          .then((result) => {
+            // Signed in
+            setUser(result.user); // This might be redundant if onAuthStateChanged picks it up
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error(
+              `Error signing in anonymously: ${errorCode}`,
+              errorMessage,
+            );
+            setLoading(false); // Ensure loading is set to false even if sign-in fails
+          });
+      }
     });
     return () => unsubscribe(); // Cleanup subscription
   }, []);
