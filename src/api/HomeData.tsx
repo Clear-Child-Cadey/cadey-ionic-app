@@ -10,15 +10,20 @@ export interface HomeData {
 }
 
 const getHomeData = async (apiUrl: string, cadeyUserId: string) => {
+  let response;
   const url = `${apiUrl}/homepage/${cadeyUserId}`;
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      accept: "text/plain",
-      apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
-    },
-  });
+  try {
+    response = await fetch(url, {
+      method: "GET",
+      headers: {
+        accept: "text/plain",
+        apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+      },
+    });
+  } catch (error) {
+    throw new Error(`HTTP error! status: ${error}`);
+  }
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
