@@ -19,7 +19,7 @@ import {
 } from 'ionicons/icons';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Routing
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 // Contexts
 import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
@@ -33,9 +33,9 @@ import getHomeData from '../../api/HomeData';
 import { logUserFact } from '../../api/UserFacts';
 import { logErrorToFirestore } from '../../api/Firebase/LogErrorToFirestore';
 // Variables
-import { tracingEnabled } from '../../variables/Logging';
+import { tracingEnabled } from "../../variables/Logging";
 // Firebase
-import { firebasePerf } from '../../api/Firebase/InitializeFirebase';
+import { firebasePerf } from "../../api/Firebase/InitializeFirebase";
 import { trace } from "firebase/performance";
 // Interfaces
 import { HomeData } from '../../api/HomeData';
@@ -56,6 +56,10 @@ const HomePage: React.FC<{ }> = ({  }) => {
 
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
+
+  /**
+   * Controls if the error modal should be visible
+   */
 
   const history = useHistory();
 
@@ -78,20 +82,24 @@ const HomePage: React.FC<{ }> = ({  }) => {
   };
 
   // Get all the props from the modal context
-  const { 
+  const {
     isVideoModalOpen,
+    setGenericModalData,
+    setGenericModalOpen,
+    genericModalData,
   } = useModalContext();
 
   const fetchData = async () => {
     // Start loader
     setIsLoading(true);
     try {
-      // Start a Firebase trace      
+      // Start a Firebase trace
+
       if (tracingEnabled) {
-          getHomeDataTrace = trace(firebasePerf, "getHomeDataTrace");
-          await getHomeDataTrace.start();
+        getHomeDataTrace = trace(firebasePerf, "getHomeDataTrace");
+        await getHomeDataTrace.start();
       }
-      
+
       // Get the data from the API
       homeData = await getHomeData(apiUrl, cadeyUserId);
 
@@ -104,13 +112,22 @@ const HomePage: React.FC<{ }> = ({  }) => {
       setNewVideos(homeData.newVideos);
       setPlayedVideos(homeData.playedVideos);
     } catch (error) {
-      console.error('Error:', error);
+      setGenericModalData({
+        title: "Error",
+        body: "We're sorry, but we couldn't load the data for this page. Please try again later.",
+        buttonText: "Close",
+        buttonAction: () => {
+          history.go(0);
+        },
+      });
     } finally {
+      setIsLoading(false);
       // Hide the splash screen after data has been fetched
       SplashScreen.hide();
       // Stop the trace
       if (tracingEnabled) {
         getHomeDataTrace.stop();
+      }
       }
     }
   };
@@ -151,14 +168,14 @@ const HomePage: React.FC<{ }> = ({  }) => {
 
   // On component mount:
   useEffect(() => {
-    document.title = 'Home'; // Set the page title
-    setCurrentBasePage('Home'); // Set the current base page
-    setCurrentAppPage('Home'); // Set the current app page
+    document.title = "Home"; // Set the page title
+    setCurrentBasePage("Home"); // Set the current base page
+    setCurrentAppPage("Home"); // Set the current app page
     logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: 'appPageNavigation',
-      appPage: 'Home',
+      userFactTypeName: "appPageNavigation",
+      appPage: "Home",
     });
 
     // Function to load the Bugherd script
@@ -188,6 +205,10 @@ const HomePage: React.FC<{ }> = ({  }) => {
     history.push('/App' + route);
   }
 
+  if (genericModalData) {
+    setGenericModalOpen(true);
+  }
+
   return (
     <IonPage className="home">
       <IonHeader class="header">
@@ -199,7 +220,7 @@ const HomePage: React.FC<{ }> = ({  }) => {
 
         {/* Show a loading state if necessary */}
         {isLoading && (
-          <IonLoading isOpen={true} message={'Loading your data...'} />
+          <IonLoading isOpen={true} message={"Loading your data..."} />
         )}
 
         <IonRow>

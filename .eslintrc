@@ -1,0 +1,14 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+  },
+  "extends": ["plugin:react/recommended", "eslint:recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+  },
+  "rules": {
+    "no-console": "off",
+    "no-debugger": "off",
+  },
+}
