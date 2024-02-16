@@ -16,7 +16,7 @@ export interface GenericModalData {
   buttonAction: Function;
 }
 
-const GenericModal: React.FC<GenericModalData> = () => {
+const GenericModal: React.FC<GenericModalData | {}> = () => {
   const { isGenericModalOpen, genericModalData } = useModalContext();
   const { title, body, buttonText, buttonAction } = genericModalData || {};
   return (
