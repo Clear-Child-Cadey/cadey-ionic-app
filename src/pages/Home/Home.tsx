@@ -48,6 +48,15 @@ const HomePage: React.FC<{
   vimeoIdFromUrl,
   articleIdFromUrl,
 }) => {
+  useEffect(() => {
+    logErrorToFirestore({
+      userID: cadeyUserId,
+      timestamp: new Date().toISOString(),
+      error: "Test Error Logging",
+      context: "Error Logging",
+    });
+  }, []);
+
   const [featuredVideos, setFeaturedVideos] = useState([]);
   const [newVideos, setNewVideos] = useState([]);
   const [playedVideos, setPlayedVideos] = useState([]);

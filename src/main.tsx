@@ -1,57 +1,61 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
+import React, { createContext, useState, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
 
 // Contexts
-import DeviceIdContext from './context/DeviceIdContext';
-import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
-import { HomeTabVisibilityContext } from './context/TabContext';
-import UnreadContext from './context/UnreadContext';
-import { TabBarSpotlightProvider } from './context/SpotlightContext';
-import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
-import { ModalProvider } from './context/ModalContext';
-import { AppPageProvider } from './context/AppPageContext';
+import DeviceIdContext from "./context/DeviceIdContext";
+import ApiUrlContext, { ApiUrlProvider } from "./context/ApiUrlContext";
+import { HomeTabVisibilityContext } from "./context/TabContext";
+import UnreadContext from "./context/UnreadContext";
+import { TabBarSpotlightProvider } from "./context/SpotlightContext";
+import {
+  LoadingStateProvider,
+  useLoadingState,
+} from "./context/LoadingStateContext";
+import { ModalProvider } from "./context/ModalContext";
+import { AppPageProvider } from "./context/AppPageContext";
 
 // API
-import getAppData from './api/AppOpen';
-import { logUserFact } from './api/UserFacts';
+import getAppData from "./api/AppOpen";
+import { logUserFact } from "./api/UserFacts";
 
 // Variables
-import { tracingEnabled } from './variables/Logging';
+import { tracingEnabled } from "./variables/Logging";
 
 /* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+import "@ionic/react/css/core.css";
 
 /* Basic CSS for apps built with Ionic */
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
 
 /* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/display.css";
 
 /* Theme variables */
-import './theme/main.css';
+import "./theme/main.css";
 
 // UUID Library (Used to generate a unique ID for the device)
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // Firebase
-import { firebasePerf, firestore } from './api/Firebase/InitializeFirebase';
+import { firebasePerf, firestore } from "./api/Firebase/InitializeFirebase";
 import { addDoc, collection } from "firebase/firestore";
 import { trace } from "firebase/performance";
-import { logErrorToFirestore } from './api/Firebase/logErrorToFirestore';
+import { logErrorToFirestore } from "./api/Firebase/LogErrorToFirestore";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 // Generate a unique ID for the device
-let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
+let cadeyUserDeviceId = localStorage.getItem("cadey_user_device_id");
 if (!cadeyUserDeviceId) {
   cadeyUserDeviceId = uuidv4();
-  localStorage.setItem('cadey_user_device_id', cadeyUserDeviceId);
+  localStorage.setItem("cadey_user_device_id", cadeyUserDeviceId);
 }
 
 // create context for cadeyUserId and minimumSupportedVersion
@@ -88,16 +92,22 @@ function MainComponent() {
     let timeoutId: any;
 
     const fetchData = async () => {
-      
       var getAppDataTrace: any;
       // Start a Firebase trace
       if (tracingEnabled) {
         getAppDataTrace = trace(firebasePerf, "getAppDataTrace");
         await getAppDataTrace.start();
       }
-      
+
       try {
-        await getAppData(setCadeyUserId, setCadeyUserAgeGroup, setMinimumSupportedVersion, setOneSignalId, apiUrl, setIsHomeTabVisible);
+        await getAppData(
+          setCadeyUserId,
+          setCadeyUserAgeGroup,
+          setMinimumSupportedVersion,
+          setOneSignalId,
+          apiUrl,
+          setIsHomeTabVisible,
+        );
         setDataLoaded(true); // Indicate that data has been loaded
         clearTimeout(timeoutId); // Clear the timeout if data is loaded in time
       } catch (error) {
@@ -122,35 +132,55 @@ function MainComponent() {
         logUserFact({
           cadeyUserId: cadeyUserId,
           baseApiUrl: apiUrl,
-          userFactTypeName: 'ErrorLog',
-          appPage: 'App Open',
-          detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
+          userFactTypeName: "ErrorLog",
+          appPage: "App Open",
+          detail1:
+            "getAppData call (/appopened) took longer than 10 seconds. Time: " +
+            new Date().toISOString(),
         });
-        
+
         logErrorToFirestore({
           userID: cadeyUserId,
           timestamp: new Date().toISOString(),
-          error: 'getAppData call (/appopened) took longer than 10 seconds',
-          context: "Fetching App Data"
+          error: "getAppData call (/appopened) took longer than 10 seconds",
+          context: "Fetching App Data",
         });
 
         setIsLoading(false); // Optionally stop the loader
       }
     }, 10000); // Set timeout for 10 seconds
-    
+
     fetchData();
   }, [apiUrl]);
 
-  if (isLoading) {
+  const { loading: firebaseAuthLoading } = useAuth();
+  if (isLoading || firebaseAuthLoading) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
     return;
   }
 
   return (
-    <CadeyUserContext.Provider value={{ cadeyUserId, cadeyUserAgeGroup, setCadeyUserAgeGroup, minimumSupportedVersion, oneSignalId }}>
+    <CadeyUserContext.Provider
+      value={{
+        cadeyUserId,
+        cadeyUserAgeGroup,
+        setCadeyUserAgeGroup,
+        minimumSupportedVersion,
+        oneSignalId,
+      }}
+    >
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
-        <HomeTabVisibilityContext.Provider value={{ isHomeTabVisible, setIsHomeTabVisible }}>
-          <UnreadContext.Provider value={{ unreadMessagesCount, setUnreadMessagesCount, unreadGoals, setUnreadGoals }}>
+        <HomeTabVisibilityContext.Provider
+          value={{ isHomeTabVisible, setIsHomeTabVisible }}
+        >
+          <UnreadContext.Provider
+            value={{
+              unreadMessagesCount,
+              setUnreadMessagesCount,
+              unreadGoals,
+              setUnreadGoals,
+            }}
+          >
             <AppPageProvider>
               <TabBarSpotlightProvider>
                 <LoadingStateProvider>
@@ -167,12 +197,14 @@ function MainComponent() {
   );
 }
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const root = createRoot(container!);
 root.render(
   // <React.StrictMode>
+  <AuthProvider>
     <ApiUrlProvider>
       <MainComponent />
     </ApiUrlProvider>
+  </AuthProvider>,
   // </React.StrictMode>
 );
