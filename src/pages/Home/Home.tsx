@@ -86,12 +86,15 @@ const HomePage = () => {
     isVideoModalOpen,
     setGenericModalData,
     setGenericModalOpen,
+    isGenericModalOpen,
     genericModalData,
   } = useModalContext();
 
   const fetchData = async () => {
     // Start loader
-    setIsLoading(true);
+    setIsLoading(() => {
+      return true;
+    });
     try {
       // Start a Firebase trace
 
@@ -103,7 +106,9 @@ const HomePage = () => {
       // Get the data from the API
       homeData = await getHomeData(apiUrl, cadeyUserId);
 
-      setIsLoading(false);
+      setIsLoading(() => {
+        return false;
+      });
 
       setPathsInProgress(homeData.numPathsInProgress);
       setCompletedPaths(homeData.numCompletedPaths);
@@ -121,7 +126,9 @@ const HomePage = () => {
         },
       });
     } finally {
-      setIsLoading(false);
+      setIsLoading(() => {
+        return false;
+      });
       // Hide the splash screen after data has been fetched
       SplashScreen.hide();
       // Stop the trace
@@ -216,9 +223,11 @@ const HomePage = () => {
       </IonHeader>
       <IonContent fullscreen className="page">
         {/* Show a loading state if necessary */}
-        {isLoading && (
-          <IonLoading isOpen={true} message={"Loading your data..."} />
-        )}
+
+        <IonLoading
+          isOpen={isLoading}
+          message={`Loading your data.....${JSON.stringify(isGenericModalOpen)}`}
+        />
 
         <IonRow>
           <IonText className="subcopy">Welcome</IonText>
