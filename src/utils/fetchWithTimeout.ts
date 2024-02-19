@@ -12,11 +12,7 @@ const fetchWithTimeout = async (
   opts: RequestInit = {},
   context: FetchWithTimeoutOptions = {}, // Default to an empty object if context is not provided
 ): Promise<Response> => {
-  const {
-    timeout = 10000,
-    cadeyUserId,
-    requestName = "Not Provided",
-  } = context; // Default timeout to 10000ms if not provided
+  const { timeout = 6500, cadeyUserId, requestName = "Not Provided" } = context; // Default timeout to if not provided
   let { currentUrl } = context;
   if (!currentUrl) {
     // set to current window URL
