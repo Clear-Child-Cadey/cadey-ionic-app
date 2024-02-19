@@ -12,7 +12,7 @@ export const logErrorToFirestore = async (errorDetails: any) => {
       await addDoc(collection(firestore, AppMeta.firestoreCollection), {
         ...errorDetails,
         firebaseUser: user ? user.uid : "anonymous",
-        firebaseTimestamp: new Date(),
+        timestamp: new Date().toISOString(),
       });
       console.log("Error logged to Firestore");
     } catch (error) {

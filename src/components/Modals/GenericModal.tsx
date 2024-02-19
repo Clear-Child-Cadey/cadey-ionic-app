@@ -27,7 +27,7 @@ const GenericModal: React.FC<GenericModalData | {}> = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <p>{body}</p>
+        <div>{body}</div>
         <IonButton expand="full" onClick={() => buttonAction && buttonAction()}>
           {buttonText}
         </IonButton>

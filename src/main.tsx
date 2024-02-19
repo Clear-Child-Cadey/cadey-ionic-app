@@ -1,17 +1,20 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-import { IonReactRouter } from '@ionic/react-router';
+import React, { createContext, useState, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import { IonReactRouter } from "@ionic/react-router";
 // Contexts
-import DeviceIdContext from './context/DeviceIdContext';
-import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
-import { TabProvider } from './context/TabContext';
-import UnreadContext from './context/UnreadContext';
-import { TabBarSpotlightProvider } from './context/SpotlightContext';
-import { LoadingStateProvider, useLoadingState } from './context/LoadingStateContext';
-import { ModalProvider } from './context/ModalContext';
-import { AppPageProvider } from './context/AppPageContext';
-import { PathProvider } from './context/PathContext';
+import DeviceIdContext from "./context/DeviceIdContext";
+import ApiUrlContext, { ApiUrlProvider } from "./context/ApiUrlContext";
+import { TabProvider } from "./context/TabContext";
+import UnreadContext from "./context/UnreadContext";
+import { TabBarSpotlightProvider } from "./context/SpotlightContext";
+import {
+  LoadingStateProvider,
+  useLoadingState,
+} from "./context/LoadingStateContext";
+import { ModalProvider } from "./context/ModalContext";
+import { AppPageProvider } from "./context/AppPageContext";
+import { PathProvider } from "./context/PathContext";
 
 // API
 import getAppData from "./api/AppOpen";
@@ -84,8 +87,6 @@ function MainComponent() {
 
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  
-
   // App startup logic
   useEffect(() => {
     let timeoutId: any;
@@ -134,7 +135,7 @@ function MainComponent() {
     //       appPage: 'App Open',
     //       detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
     //     });
-        
+
     //     logErrorToFirestore({
     //       userID: cadeyUserId,
     //       timestamp: new Date().toISOString(),
@@ -145,7 +146,7 @@ function MainComponent() {
     //     setIsLoading(false); // Optionally stop the loader
     //   }
     // }, 10000); // Set timeout for 10 seconds
-    
+
     fetchData();
   }, [apiUrl]);
 
@@ -167,7 +168,14 @@ function MainComponent() {
     >
       <DeviceIdContext.Provider value={cadeyUserDeviceId}>
         <TabProvider>
-          <UnreadContext.Provider value={{ unreadMessagesCount, setUnreadMessagesCount, unreadGoals, setUnreadGoals }}>
+          <UnreadContext.Provider
+            value={{
+              unreadMessagesCount,
+              setUnreadMessagesCount,
+              unreadGoals,
+              setUnreadGoals,
+            }}
+          >
             <AppPageProvider>
               <TabBarSpotlightProvider>
                 <LoadingStateProvider>

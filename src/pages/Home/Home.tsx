@@ -1,47 +1,44 @@
-import React, { useEffect, useState, useContext } from 'react';
-import './Home.css';
-import { 
-    IonPage, 
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonRow,
-    IonLoading,
-    IonButton,
-    IonText,
-    IonIcon,
-    IonBadge,
-} from '@ionic/react';
+import React, { useEffect, useState, useContext } from "react";
+import "./Home.css";
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonRow,
+  IonLoading,
+  IonButton,
+  IonText,
+  IonIcon,
+  IonBadge,
+} from "@ionic/react";
 // Icons
-import { 
-    chevronForwardOutline, home,
-} from 'ionicons/icons';
-import { SplashScreen } from '@capacitor/splash-screen';
+import { chevronForwardOutline, home } from "ionicons/icons";
+import { SplashScreen } from "@capacitor/splash-screen";
 // Routing
 import { useHistory } from "react-router-dom";
 // Contexts
-import { useModalContext } from '../../context/ModalContext';
-import { useAppPage } from '../../context/AppPageContext';
-import { CadeyUserContext } from '../../main';
-import ApiUrlContext from '../../context/ApiUrlContext';
-import UnreadContext from '../../context/UnreadContext';
+import { useModalContext } from "../../context/ModalContext";
+import { useAppPage } from "../../context/AppPageContext";
+import { CadeyUserContext } from "../../main";
+import ApiUrlContext from "../../context/ApiUrlContext";
+import UnreadContext from "../../context/UnreadContext";
 // Components
-import VideoList from '../../components/Videos/VideoList';
+import VideoList from "../../components/Videos/VideoList";
 // API
-import getHomeData from '../../api/HomeData';
-import { logUserFact } from '../../api/UserFacts';
-import { logErrorToFirestore } from '../../api/Firebase/LogErrorToFirestore';
+import getHomeData from "../../api/HomeData";
+import { logUserFact } from "../../api/UserFacts";
+import { logErrorToFirestore } from "../../api/Firebase/LogErrorToFirestore";
 // Variables
 import { tracingEnabled } from "../../variables/Logging";
 // Firebase
 import { firebasePerf } from "../../api/Firebase/InitializeFirebase";
 import { trace } from "firebase/performance";
 // Interfaces
-import { HomeData } from '../../api/HomeData';
+import { HomeData } from "../../api/HomeData";
 
 const HomePage = () => {
-  
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
   const [totalPaths, setTotalPaths] = useState(0);
@@ -52,7 +49,12 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
+  const {
+    currentBasePage,
+    setCurrentBasePage,
+    currentAppPage,
+    setCurrentAppPage,
+  } = useAppPage();
 
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
@@ -63,10 +65,8 @@ const HomePage = () => {
 
   const history = useHistory();
 
-  const { 
-    unreadMessagesCount, 
-    setUnreadMessagesCount,
-  } = useContext(UnreadContext); // Get the current unread count
+  const { unreadMessagesCount, setUnreadMessagesCount } =
+    useContext(UnreadContext); // Get the current unread count
 
   var getHomeDataTrace: any;
 
@@ -86,12 +86,15 @@ const HomePage = () => {
     isVideoModalOpen,
     setGenericModalData,
     setGenericModalOpen,
+    isGenericModalOpen,
     genericModalData,
   } = useModalContext();
 
   const fetchData = async () => {
     // Start loader
-    setIsLoading(true);
+    setIsLoading(() => {
+      return true;
+    });
     try {
       // Start a Firebase trace
 
@@ -103,7 +106,9 @@ const HomePage = () => {
       // Get the data from the API
       homeData = await getHomeData(apiUrl, cadeyUserId);
 
-      setIsLoading(false);
+      setIsLoading(() => {
+        return false;
+      });
 
       setPathsInProgress(homeData.numPathsInProgress);
       setCompletedPaths(homeData.numCompletedPaths);
@@ -121,7 +126,9 @@ const HomePage = () => {
         },
       });
     } finally {
-      setIsLoading(false);
+      setIsLoading(() => {
+        return false;
+      });
       // Hide the splash screen after data has been fetched
       SplashScreen.hide();
       // Stop the trace
@@ -149,7 +156,7 @@ const HomePage = () => {
     // //       appPage: 'App Open',
     // //       detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
     // //     });
-        
+
     // //     logErrorToFirestore({
     // //       userID: cadeyUserId,
     // //       timestamp: new Date().toISOString(),
@@ -162,7 +169,6 @@ const HomePage = () => {
     // // }, 10000); // Set timeout for 10 seconds
 
     fetchData(); // Fetch the homepage data
-    
   }, [isVideoModalOpen]);
 
   // On component mount:
@@ -179,14 +185,14 @@ const HomePage = () => {
 
     // Function to load the Bugherd script
     const loadBugherdScript = () => {
-      const script = document.createElement('script');
-      script.src = "https://www.bugherd.com/sidebarv2.js?apikey=stkrojaqmtujmlrixuxddw";
+      const script = document.createElement("script");
+      script.src =
+        "https://www.bugherd.com/sidebarv2.js?apikey=stkrojaqmtujmlrixuxddw";
       script.async = true;
       document.body.appendChild(script);
     };
 
     loadBugherdScript();
-
   }, []);
 
   const handleButtonClick = (route: string, entity: string) => () => {
@@ -194,15 +200,15 @@ const HomePage = () => {
     logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: 'UserTap',
+      userFactTypeName: "UserTap",
       appPage: currentAppPage,
       detail1: currentBasePage,
       detail2: entity,
     });
 
     // Navigate to the page
-    history.push('/App' + route);
-  }
+    history.push("/App" + route);
+  };
 
   if (genericModalData) {
     setGenericModalOpen(true);
@@ -211,64 +217,88 @@ const HomePage = () => {
   return (
     <IonPage className="home">
       <IonHeader class="header">
-          <IonToolbar className="header-toolbar">
-              <h2>Home</h2>
-          </IonToolbar>
+        <IonToolbar className="header-toolbar">
+          <h2>Home</h2>
+        </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen className='page'>
-
+      <IonContent fullscreen className="page">
         {/* Show a loading state if necessary */}
-        {isLoading && (
-          <IonLoading isOpen={true} message={"Loading your data..."} />
-        )}
+
+        <IonLoading
+          isOpen={isLoading}
+          message={`Loading your data.....${JSON.stringify(isGenericModalOpen)}`}
+        />
 
         <IonRow>
-            <IonText className="subcopy">Welcome</IonText>
+          <IonText className="subcopy">Welcome</IonText>
         </IonRow>
 
-        <IonRow className='content'>
-          <IonRow className='dashboard'>
-            <div className='paths dashboard-item full-width'>
-              <div className='dashboard-button' onClick={handleButtonClick("/Paths", "Paths Button")}>
-                <img src="assets/svgs/icn-paths.svg" className='icon paths-icon' />
-                <div className='text-container'>
-                  <div className='text-title'>Your Paths</div>
+        <IonRow className="content">
+          <IonRow className="dashboard">
+            <div className="paths dashboard-item full-width">
+              <div
+                className="dashboard-button"
+                onClick={handleButtonClick("/Paths", "Paths Button")}
+              >
+                <img
+                  src="assets/svgs/icn-paths.svg"
+                  className="icon paths-icon"
+                />
+                <div className="text-container">
+                  <div className="text-title">Your Paths</div>
                   {(completedPaths > 0 || pathsInProgress > 0) && (
-                    <IonBadge className='progress-indicator'>
+                    <IonBadge className="progress-indicator">
                       {completedPaths > 0 && (
-                        <span className='completed-paths'>
+                        <span className="completed-paths">
                           {completedPaths} of {totalPaths} complete
                         </span>
                       )}
                       {completedPaths > 0 && pathsInProgress > 0 && (
-                        <span>
-                          &nbsp;&bull;&nbsp;
-                        </span>
+                        <span>&nbsp;&bull;&nbsp;</span>
                       )}
                       {pathsInProgress > 0 && (
-                        <span className='in-progress'>
+                        <span className="in-progress">
                           {pathsInProgress} in progress
                         </span>
                       )}
                     </IonBadge>
                   )}
                 </div>
-                <IonIcon className='icon arrow-icon' icon={chevronForwardOutline} />
+                <IonIcon
+                  className="icon arrow-icon"
+                  icon={chevronForwardOutline}
+                />
               </div>
             </div>
-            <div className='library dashboard-item half-width'>
-              <div className='dashboard-button' onClick={handleButtonClick("/Library", "Library Button")}>
-                <img src="assets/svgs/icn-library.svg" className='icon library-icon' />
+            <div className="library dashboard-item half-width">
+              <div
+                className="dashboard-button"
+                onClick={handleButtonClick("/Library", "Library Button")}
+              >
+                <img
+                  src="assets/svgs/icn-library.svg"
+                  className="icon library-icon"
+                />
                 Library
               </div>
             </div>
-            <div className='messages dashboard-item half-width'>
-              <div className='dashboard-button' onClick={handleButtonClick("/Home/Messages", "Messages Button")}>
-                <div className='messages-content'>
-                  <div className='content-wrapper'>
-                    <img src="assets/svgs/icn-messages.svg" className='icon messages-icon' />
+            <div className="messages dashboard-item half-width">
+              <div
+                className="dashboard-button"
+                onClick={handleButtonClick("/Home/Messages", "Messages Button")}
+              >
+                <div className="messages-content">
+                  <div className="content-wrapper">
+                    <img
+                      src="assets/svgs/icn-messages.svg"
+                      className="icon messages-icon"
+                    />
                     Messages
-                    {unreadMessagesCount > 0 && <IonBadge color="danger" className="unread-messages">{unreadMessagesCount}</IonBadge>}
+                    {unreadMessagesCount > 0 && (
+                      <IonBadge color="danger" className="unread-messages">
+                        {unreadMessagesCount}
+                      </IonBadge>
+                    )}
                   </div>
                 </div>
               </div>
@@ -277,15 +307,15 @@ const HomePage = () => {
           {/* If user has watched videos, show this. Else, skip it */}
           {playedVideos.length > 0 && (
             <IonRow className="video-list-row recently-viewed">
-                <h2>Recently Viewed</h2>
-                <VideoList videos={playedVideos} listType='horizontal' />
+              <h2>Recently Viewed</h2>
+              <VideoList videos={playedVideos} listType="horizontal" />
             </IonRow>
           )}
           {/* If user has featured videos, show this. Else, skip it */}
           {featuredVideos.length > 0 && (
             <IonRow className="video-list-row featured">
-                <h2>Watch Now</h2>
-                <VideoList videos={featuredVideos} listType='horizontal' /> 
+              <h2>Watch Now</h2>
+              <VideoList videos={featuredVideos} listType="horizontal" />
             </IonRow>
           )}
         </IonRow>
