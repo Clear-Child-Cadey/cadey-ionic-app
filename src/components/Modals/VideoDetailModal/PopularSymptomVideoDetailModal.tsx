@@ -21,9 +21,7 @@ import { CadeyUserContext } from '../../../main';
 import { useModalContext } from '../../../context/ModalContext';
 import { useAppPage } from '../../../context/AppPageContext';
 //  API
-import { getVideoDetailData } from '../../../api/VideoDetail';
 import { logUserFact } from '../../../api/UserFacts';
-import { getUserMessages } from '../../../api/UserMessages';
 import { getQuiz } from '../../../api/Quiz';
 // CSS
 import './PopularSymptomVideoDetailModal.css';

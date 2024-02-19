@@ -4,7 +4,6 @@ import { Share } from '@capacitor/share';
 import { 
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonContent,
     IonRow,
     IonText,
@@ -12,7 +11,7 @@ import {
     IonPage,
  } from '@ionic/react';
  //  Icons
-import { arrowRedoOutline, playCircleOutline, barChartOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { arrowRedoOutline } from 'ionicons/icons';
 //  Contexts
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
@@ -23,7 +22,6 @@ import { useTabContext } from '../../context/TabContext';
 //  API
 import { logUserFact } from '../../api/UserFacts';
 import { getQuiz } from '../../api/Quiz';
-import { getPopularSeries } from '../../api/Playlists';
 import { getPathDetail } from '../../api/Paths';
 // CSS
 import './PathDetail.css';

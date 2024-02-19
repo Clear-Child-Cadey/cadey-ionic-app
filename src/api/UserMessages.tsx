@@ -1,20 +1,28 @@
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
+import fetchWithTimeout from "../utils/fetchWithTimeout";
 
-export const getUserMessages = async (apiUrl: string, userId: string) => {
-    const url = `${apiUrl}/notificationmessages/${userId}`;
+export const getUserMessages = async (apiUrl: string, cadeyUserId: string) => {
+    let response;
+    const url = `${apiUrl}/notificationmessages/${cadeyUserId}`;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-        },
-    });
-
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "GET",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+            },
+          },
+          { cadeyUserId, requestName: "getUserMessages" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     return await response.json();
 };

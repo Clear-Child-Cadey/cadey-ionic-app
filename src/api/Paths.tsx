@@ -1,4 +1,4 @@
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
+import fetchWithTimeout from "../utils/fetchWithTimeout";
 
 export interface PathListing {
     userId: number;
@@ -33,27 +33,36 @@ export interface PathEntity {
     isCurrent: boolean;
 }
 
-export const getPathListing = async (apiUrl: string, userId: number) => {
-    const url = `${apiUrl}/paths/${userId}`;
+let response;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-        },
-    });
+export const getPathListing = async (apiUrl: string, cadeyUserId: number) => {
+    const url = `${apiUrl}/paths/${cadeyUserId}`;
 
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "GET",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+            },
+          },
+          { cadeyUserId, requestName: "getPathListing" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     const data = await response.json();
 
     // Map data to the Path Listing interface
     const pathListing: PathListing = {
-        userId: userId,
+        userId: cadeyUserId,
         paths: data.paths.map((path: Path) => ({
             id: path.id,
             pathName: path.pathName,
@@ -67,21 +76,28 @@ export const getPathListing = async (apiUrl: string, userId: number) => {
     return pathListing;
 };
 
-export const getPathDetail = async (apiUrl: string, userId: number, pathId: number) => {
-    const url = `${apiUrl}/pathdetail/${userId}/${pathId}`;
+export const getPathDetail = async (apiUrl: string, cadeyUserId: number, pathId: number) => {
+    const url = `${apiUrl}/pathdetail/${cadeyUserId}/${pathId}`;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-        },
-    });
-
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "GET",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+            },
+          },
+          { cadeyUserId, requestName: "getPathDetail" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     const data = await response.json();
 
@@ -106,24 +122,32 @@ export const getPathDetail = async (apiUrl: string, userId: number, pathId: numb
     return pathDetail;
 };
 
-export const postPathSelect = async (apiUrl: string, userId: number, appPage: string, pathId: number, pathName: string) => {
+export const postPathSelect = async (apiUrl: string, cadeyUserId: number, appPage: string, pathId: number, pathName: string) => {
         
-        const url = `${apiUrl}/pathselect/${userId}`;
-    
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'accept': 'text/plain',
-                'apiKey': API_KEY,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                appPage: appPage,
-                pathId: pathId,
-                pathName: pathName,
-            }),
-        });
-    
+        const url = `${apiUrl}/pathselect/${cadeyUserId}`;
+
+        try {
+            response = await fetchWithTimeout(
+              url,
+              {
+                method: "POST",
+                headers: {
+                    accept: "text/plain",
+                    apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    appPage: appPage,
+                    pathId: pathId,
+                    pathName: pathName,
+                }),
+              },
+              { cadeyUserId, requestName: "postPathSelect" },
+            );
+        } catch (error) {
+            throw new Error(`HTTP error! status: ${error}`);
+        }
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

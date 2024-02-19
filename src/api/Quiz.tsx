@@ -1,5 +1,8 @@
 const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 import { QuizResponse } from '../components/Modals/QuizModal/QuizModal';
+import fetchWithTimeout from '../utils/fetchWithTimeout';
+
+let response;
 
 export const getQuiz = async (
     apiUrl: string, 
@@ -12,24 +15,32 @@ export const getQuiz = async (
 ) => {
     const url = `${apiUrl}/quiz`;
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            cadeyUserId: cadeyUserId,
-            clientContext: clientContext,
-            entityType: entityType,
-            entityId: entityId,
-        }),
-    });
-
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "POST",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cadeyUserId: cadeyUserId,
+                clientContext: clientContext,
+                entityType: entityType,
+                entityId: entityId,
+            }),
+          },
+          { cadeyUserId, requestName: "getQuiz" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     return await response.json();
 };
@@ -49,32 +60,40 @@ export const postQuizResponse = async (
     
     const url = `${apiUrl}/quizquestionresponse`;
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            quizRequest: {
-                cadeyUserId: cadeyUserId,
-                clientContext: clientContext,
-                entityType: entityType,
-                entityId: entityId,
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "POST",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+              'Content-Type': 'application/json',
             },
-            cadeyUserId: cadeyUserId,
-            quizId: quizId,
-            questionId: questionId,
-            questionWasSkipped: questionWasSkipped,
-            quizWasCancelled: quizWasCancelled,
-            responses: responses,
-        }),
-    });
-
-    if (!response.ok) {
+            body: JSON.stringify({
+                quizRequest: {
+                    cadeyUserId: cadeyUserId,
+                    clientContext: clientContext,
+                    entityType: entityType,
+                    entityId: entityId,
+                },
+                cadeyUserId: cadeyUserId,
+                quizId: quizId,
+                questionId: questionId,
+                questionWasSkipped: questionWasSkipped,
+                quizWasCancelled: quizWasCancelled,
+                responses: responses,
+            }),
+          },
+          { cadeyUserId, requestName: "postQuizResponse" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     return await response.json();
 };

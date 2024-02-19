@@ -1,3 +1,5 @@
+import fetchWithTimeout from "../utils/fetchWithTimeout";
+
 const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 const headers = {
   'accept': 'text/plain',
@@ -56,7 +58,23 @@ export const logUserFact = async ({
   };
 
   try {
-    const response = await fetch(`${baseApiUrl}/userfact`, requestOptions);
+    let response;
+    const url = `${baseApiUrl}/userfact`;
+
+    try {
+      response = await fetchWithTimeout(
+        url,
+        requestOptions,
+        { cadeyUserId, requestName: "postUserFact" },
+      );
+    } catch (error) {
+      throw new Error(`HTTP error! status: ${error}`);
+    }
+  
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
     return data;
   } catch (error) {

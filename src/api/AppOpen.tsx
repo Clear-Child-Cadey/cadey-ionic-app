@@ -2,6 +2,8 @@
 import { isPlatform } from '@ionic/react'; // Helps to identify the platform (iOS, Android, Web) the app is running on
 import { v4 as uuidv4 } from 'uuid'; // Used for generating unique ids
 
+import fetchWithTimeout from '../utils/fetchWithTimeout';
+
 // Try to retrieve a previously stored device id, if not available then generate a new unique id for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
 if (!cadeyUserDeviceId) {
@@ -16,53 +18,63 @@ export const getAppData = async (
     setMinimumSupportedVersion: any, 
     setOneSignalId: any,
     apiUrl: any,
-  ) => {
+) => {
   
     // Define the url for the request
-  const url = `${apiUrl}/appopened`;
+    const url = `${apiUrl}/appopened`;
 
-  // Determine the platform on which the app is running
-  let devicePlatform;
-  if (isPlatform('ios')) {
-    devicePlatform = 'iOS';
-  } else if (isPlatform('android')) {
-    devicePlatform = 'Android';
-  } else {
-    devicePlatform = 'Web';
-  }
+    // Determine the platform on which the app is running
+    let devicePlatform;
+    if (isPlatform('ios')) {
+      devicePlatform = 'iOS';
+    } else if (isPlatform('android')) {
+      devicePlatform = 'Android';
+    } else {
+      devicePlatform = 'Web';
+    }
 
-  // Prepare the body of the request
-  const bodyObject = {
-    cadeyUserId: 0,
-    cadeyUserDeviceId: cadeyUserDeviceId,
-    cadeyMinimumSupportedAppVersion: "",
-    cadeyLatestAppVersion: "",
-    cadeyDevicePlatform: devicePlatform
-  };
+    // Prepare the body of the request
+    const bodyObject = {
+      cadeyUserId: 0,
+      cadeyUserDeviceId: cadeyUserDeviceId,
+      cadeyMinimumSupportedAppVersion: "",
+      cadeyLatestAppVersion: "",
+      cadeyDevicePlatform: devicePlatform
+    };
 
-  // Define the request options
-  const requestOptions = {
-    method: 'POST',
-    headers: { 
-      'accept': 'text/plain', 
-      'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(bodyObject)
-  };
+  let response;
 
-  // Try to perform the request and handle the response
   try {
-    const response = await fetch(url, requestOptions); // Perform the request
+    response = await fetchWithTimeout(url, 
+      {
+          method: 'POST',
+          cache: 'no-cache',
+          headers: { 
+            'accept': 'text/plain', 
+            'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bodyObject)
+      },
+      { requestName: 'appOpen' }
+    );
+
     const data = await response.json(); // Parse the response data as json
 
     setCadeyUserId(data.cadeyUserId); // Update the Cadey User ID state
     setCadeyUserAgeGroup(data.ageGroup); // Update the Cadey User Age state
     setMinimumSupportedVersion(data.cadeyMinimumSupportedAppVersion); // Update the Minimum Supported Version state
     setOneSignalId(data.oneSignalId); // Update the OneSignal ID state
+  } catch (error) {
+    throw new Error(`HTTP error! status: ${error}`);
+  }
 
-  } catch (error) { // Handle any errors during the request
-    console.error('Error during API call', error);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
 };
 

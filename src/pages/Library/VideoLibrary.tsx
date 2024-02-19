@@ -20,7 +20,6 @@ import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
-import { getNewGoalsIndicator } from '../../api/Goals';
 import { logUserFact } from '../../api/UserFacts';
 import { getRecommendations } from '../../api/GetRecommendations';
 // Modals
@@ -43,7 +42,6 @@ const VideoLibraryPage: React.FC = () => {
     const [results, setResults] = useState<any | null>(null);
 
     // Context variables
-    const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
     const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const { apiUrl } = useContext(ApiUrlContext);
     const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
@@ -121,16 +119,6 @@ const VideoLibraryPage: React.FC = () => {
         });
     };
 
-    // Set the goals badge
-    const setGoalsBadge = async () => {
-        const unreadGoalsCount = await getNewGoalsIndicator(apiUrl, cadeyUserId);
-        if (unreadGoalsCount > 0) {
-        setUnreadGoals?.(true);
-        } else {
-        setUnreadGoals?.(false);
-        }
-    }
-
     // Handler for when the user starts over
     const handleRestart = () => {
             setShowAgeForm(false);
@@ -149,7 +137,6 @@ const VideoLibraryPage: React.FC = () => {
             userFactTypeName: 'appPageNavigation',
             appPage: 'Concerns',
         });
-        setGoalsBadge();
     };
 
     const handleBack = (route: string) => {

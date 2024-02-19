@@ -21,9 +21,22 @@
 
 .symptoms-container .bottom-row {
     display: flex;
-    width: 190px;
+    width: 100%;
     border: none;
     margin: 0 auto;
+}
+
+.symptoms-container .bottom-row .button {
+    width: 190px;
+    margin: 0 auto;
+    /* padding: 15px 0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background-color: #51ADEF;
+    border: none;
+    cursor: pointer; */
 }
 
 .symptom-items {

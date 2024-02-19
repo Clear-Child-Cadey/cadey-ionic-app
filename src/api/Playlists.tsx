@@ -1,22 +1,32 @@
 const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 import { Symptom } from "../components/ConcernsList/ConcernsList";
 import { PopularSymptomSeries, PopularSymptomVideo } from "../components/SymptomsList/PopularSymptomsList";
+import fetchWithTimeout from "../utils/fetchWithTimeout";
 
-export const getPopularSeriesSymptoms = async (apiUrl: string) => {
+let response;
+
+export const getPopularSeriesSymptoms = async (apiUrl: string, cadeyUserId: string) => {
     const url = `${apiUrl}/popularseriessymptoms/`;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-        },
-    });
-
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "GET",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+            },
+          },
+          { cadeyUserId, requestName: "getPopularSeriesSymptoms" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     const data = await response.json();
 
@@ -27,21 +37,28 @@ export const getPopularSeriesSymptoms = async (apiUrl: string) => {
     }));
 };
 
-export const getPopularSeries = async (apiUrl: string, symptom: number) => {
+export const getPopularSeries = async (apiUrl: string, cadeyUserId: string, symptom: number) => {
     const url = `${apiUrl}/popularseries/${symptom}`;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-        },
-    });
-
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "GET",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+            },
+          },
+          { cadeyUserId, requestName: "getPopularSeries" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     const data = await response.json();
 

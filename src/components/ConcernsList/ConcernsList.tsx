@@ -15,6 +15,7 @@ import { CadeyUserContext } from '../../main';
 import { useAppPage } from '../../context/AppPageContext';
 // API
 import { logUserFact } from '../../api/UserFacts';
+import { getConcerns } from '../../api/GetConcerns';
 
 // Define a TypeScript interface for the ConcernsList component's props
 interface ConcernsListProps {
@@ -38,29 +39,17 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
 
         // Fetch data from API
         useEffect(() => {
-                setIsLoading(true);  // Start the loader here
                 
-                // Get the concerns and symptoms from the API
-                const url = `${apiUrl}/getconcerns`;
-
-                fetch(url, {
-                method: 'GET',
-                headers: {
-                        'accept': 'text/plain',
-                        'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-                },
-                })
-                .then(response => response.json())
-                .then(data => {
-                        setConcernsList(data);
+                const fetchConcerns = async () => {
+                        setIsLoading(true);  // Start the loader
+                        const response = await getConcerns(apiUrl, cadeyUserId);
+                        setConcernsList(response);
                         setIsLoading(false);  // Stop the loader after data has been fetched
                         SplashScreen.hide();  // Hide the splash screen after data has been fetched
-                })
-                .catch(error => {
-                        console.error('Error:', error);
-                        setIsLoading(false);  // Stop the loader in case of error
-                });
-        
+                };
+                
+                // Get the concerns and symptoms from the API
+                fetchConcerns();
         }, []);
         
         // Create a list of Concerns by mapping over the payload entries

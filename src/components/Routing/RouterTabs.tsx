@@ -44,12 +44,9 @@ import UnreadContext from '../../context/UnreadContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
-import { getNewGoalsIndicator } from '../../api/Goals';
 // Interfaces
 import MessagesPage, { Message } from '../../pages/Messages/Messages';
 import { logUserFact } from '../../api/UserFacts';
-import ArticlesList from '../Articles/ArticlesList';
-import ArticleDetail from '../Articles/ArticleDetail';
 
 const RouterTabs: React.FC = () => {
   // Tab bar visibility

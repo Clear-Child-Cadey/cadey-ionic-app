@@ -1,20 +1,28 @@
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
+import fetchWithTimeout from "../utils/fetchWithTimeout";
 
-export const getUserSymptoms = async (apiUrl: string, userId: string) => {
-    const url = `${apiUrl}/usersymptoms/${userId}`;
+export const getUserSymptoms = async (apiUrl: string, cadeyUserId: string) => {
+    let response;
+    const url = `${apiUrl}/usersymptoms/${cadeyUserId}`;
 
-    const response = await fetch(url, {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-        },
-    });
-
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "GET",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+            },
+          },
+          { cadeyUserId, requestName: "getUserSymptoms" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     const data = await response.json();
 

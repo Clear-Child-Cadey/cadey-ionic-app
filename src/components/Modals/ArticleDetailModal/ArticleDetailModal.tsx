@@ -153,7 +153,7 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
             <IonContent fullscreen>
                 <IonRow>
                     {article && (
-                        <div className="article-detail">
+                        <div className="article-detail-modal">
                             <h2>{decodeHtmlEntities(article.title.rendered)}</h2>
                             {article.featured_image_url && (
                                 <img src={article.featured_image_url} alt={decodeHtmlEntities(article.title.rendered)} className="featured-image" />

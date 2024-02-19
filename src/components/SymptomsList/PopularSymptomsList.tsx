@@ -18,8 +18,6 @@ import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
 import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
-// Modals
-import AgeGroupModal from '../../components/Modals/AgeGroupModal/AgeGroupModal';
 // API
 import { getPopularSeries, getPopularSeriesSymptoms } from '../../api/Playlists';
 
@@ -50,7 +48,7 @@ const PopularSymptomsList: React.FC = () => {
     // When the component loads
     useEffect(() => {
         const getSymptoms = async () => {
-            setPopularSeriesSymptoms(await getPopularSeriesSymptoms(apiUrl));
+            setPopularSeriesSymptoms(await getPopularSeriesSymptoms(apiUrl, cadeyUserId));
         };
 
         // Get popular symptoms from the API  
@@ -117,7 +115,7 @@ const PopularSymptomsList: React.FC = () => {
     const getPopularVideoData = async () => {        
         
         // Get the popular symptom playlist from the API
-        const popularSeries = await getPopularSeries(apiUrl, selectedSymptoms[0].id);
+        const popularSeries = await getPopularSeries(apiUrl, cadeyUserId, selectedSymptoms[0].id);
 
         // Set the popular symptom playlist to the videos returned from the API
         setPopularSymptomPlaylist(popularSeries.items);
@@ -141,8 +139,6 @@ const PopularSymptomsList: React.FC = () => {
           <IonLoading isOpen={true} message={'Loading data...'} />
         )}
 
-        {/* Show an age group modal if context dictates */}
-        <AgeGroupModal isOpen={isAgeGroupModalOpen} onAgeGroupSelected={onAgeGroupSelected} />
         <IonRow>
             <IonText className="subcopy">Is your child...</IonText>
         </IonRow>

@@ -1,7 +1,8 @@
-.article-detail {
+.article-detail-modal {
     padding: 0 16px;
+    background-color: #F9F6EF;
 }
 
-.article-detail .wp-element-caption {
+.article-detail-modal .wp-element-caption {
     display: none; /* hide the caption for YouTube embeds */
 }

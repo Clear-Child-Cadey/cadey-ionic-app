@@ -67,6 +67,7 @@
     display: flex;
     align-items: center; /* Vertically aligns text to center if there is more than one line */
     text-align: left;
+    line-height: 17px;
 }
 
 .quiz-modal .response.selected {
@@ -76,9 +77,10 @@
 .quiz-modal .continue-row {
     position: fixed;
     height: 40px;
-    bottom: 40px;
-    width: 100%;
+    bottom: 34px;
+    width: calc(100% - 32px);
     background: #F9F6EF;
+    padding-top: 16px;
 }
 
 .quiz-modal .continue-button {

@@ -127,7 +127,7 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
       if(!currentVimeoId) return; // Early return if no vimeoId is present
 
       try {
-        const data = await getVideoDetailData(apiUrl, currentVimeoId);
+        const data = await getVideoDetailData(apiUrl, cadeyUserId, currentVimeoId);
 
         // Ensure relatedMedia is always an array
         if (data && data.relatedMedia && !Array.isArray(data.relatedMedia)) {

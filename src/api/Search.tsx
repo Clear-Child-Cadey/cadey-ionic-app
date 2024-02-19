@@ -1,26 +1,34 @@
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
+import fetchWithTimeout from "../utils/fetchWithTimeout";
 
-export const postUserSearch = async (apiUrl: string, userId: string, searchString: string, ageGroup: number) => {
+export const postUserSearch = async (apiUrl: string, cadeyUserId: string, searchString: string, ageGroup: number) => {
+    let response;
     const url = `${apiUrl}/search`;
 
-    const response = await fetch(url, {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-            'accept': 'text/plain',
-            'apiKey': API_KEY,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            userId: userId,
-            searchString: searchString,
-            ageGroup: ageGroup,
-        }),
-    });
-
-    if (!response.ok) {
+    try {
+        response = await fetchWithTimeout(
+          url,
+          {
+            method: "POST",
+            headers: {
+              accept: "text/plain",
+              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: cadeyUserId,
+                searchString: searchString,
+                ageGroup: ageGroup,
+            }),
+          },
+          { cadeyUserId, requestName: "postUserSearch" },
+        );
+      } catch (error) {
+        throw new Error(`HTTP error! status: ${error}`);
+      }
+    
+      if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-    }
+      }
 
     const data = await response.json();
 
