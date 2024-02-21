@@ -70,7 +70,13 @@ ion-progress-bar {
 }
 
 .search-results h3 {
+    margin-top: 0;
     margin-bottom: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: -.2px;
+    color: #484443;
 }
 
 .search-container {

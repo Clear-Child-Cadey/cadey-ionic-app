@@ -6,6 +6,7 @@
 .article-detail {
     padding: 0 16px;
     background-color: #F9F6EF;
+    width: 100%;
 }
 
 .article-detail h1 {
