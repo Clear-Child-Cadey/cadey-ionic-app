@@ -18,7 +18,7 @@ interface ModalContextProps {
   setQuizModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   quizModalData: QuizModalData | null;
   setQuizModalData: React.Dispatch<React.SetStateAction<QuizModalData | null>>;
-  setGenericModalData: React.Dispatch<React.SetStateAction<GenericModalData>>;
+  setGenericModalData: React.Dispatch<React.SetStateAction<GenericModalData | undefined>>;
   currentArticleId: number | null;
   setCurrentArticleId: React.Dispatch<React.SetStateAction<number | null>>;
   currentVimeoId: string | null;

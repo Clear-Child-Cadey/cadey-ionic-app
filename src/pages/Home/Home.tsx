@@ -222,12 +222,12 @@ const HomePage = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="page">
-        {/* Show a loading state if necessary */}
+        {/* Show a loading state if necessary - commenting out because we don't need it in the revised homepage*/}
 
-        <IonLoading
+        {/* <IonLoading
           isOpen={isLoading}
           message={`Loading your data.....${JSON.stringify(isGenericModalOpen)}`}
-        />
+        /> */}
 
         <IonRow>
           <IonText className="subcopy">Welcome</IonText>

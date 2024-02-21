@@ -150,8 +150,9 @@ function MainComponent() {
     fetchData();
   }, [apiUrl]);
 
-  const { loading: firebaseAuthLoading } = useAuth();
-  if (isLoading || firebaseAuthLoading) {
+  // const { loading: firebaseAuthLoading } = useAuth();
+  // if (isLoading || firebaseAuthLoading) {
+  if (isLoading) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
     return;
   }
@@ -200,10 +201,10 @@ const container = document.getElementById("root");
 const root = createRoot(container!);
 root.render(
   // <React.StrictMode>
-  <AuthProvider>
+  // <AuthProvider>
     <ApiUrlProvider>
       <MainComponent />
     </ApiUrlProvider>
-  </AuthProvider>,
+  // </AuthProvider>,
   // </React.StrictMode>
 );

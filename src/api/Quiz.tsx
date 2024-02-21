@@ -16,7 +16,7 @@ export const getQuiz = async (
     const url = `${apiUrl}/quiz`;
 
     try {
-        response = await fetchWithTimeout(
+      response = await fetchWithTimeout(
           url,
           {
             method: "POST",
