@@ -236,6 +236,12 @@ const HomePage = () => {
         <IonRow className="content">
           <IonRow className="dashboard">
             <div className="paths dashboard-item full-width">
+              <button
+                style={{ padding: "3rem" }}
+                onClick={() => logErrorToFirestore({ error: "test123" })}
+              >
+                test
+              </button>
               <div
                 className="dashboard-button"
                 onClick={handleButtonClick("/Paths", "Paths Button")}

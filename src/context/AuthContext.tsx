@@ -1,12 +1,7 @@
 // AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInAnonymously,
-  User,
-} from "firebase/auth";
-import { firebaseApp } from "../api/Firebase/InitializeFirebase"; // Adjust the import path as needed
+import { onAuthStateChanged, signInAnonymously, User } from "firebase/auth";
+import decoratedGetAuth from "../utils/decoratedGetAuth";
 
 type AuthContextType = {
   user: User | null;
@@ -33,7 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const auth = getAuth(firebaseApp);
+    const auth = decoratedGetAuth();
     // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {

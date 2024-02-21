@@ -5,6 +5,7 @@
 const AppMeta = {
   firestoreCollection: "ErrorLogs2024",
   firebaseApiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+  fetchTimeout: 6500,
 };
 
 export default AppMeta;
