@@ -24,6 +24,9 @@
 #root .path-detail .header-toolbar {
     --border-width: 0;
     position: fixed;
+    padding-top: env(safe-area-inset-top); /* Adjust top padding */
+    padding-left: env(safe-area-inset-left); /* Adjust left padding, if necessary */
+    padding-right: env(safe-area-inset-right); /* Adjust right padding, if necessary */
 }
 
 .path-detail .header {
