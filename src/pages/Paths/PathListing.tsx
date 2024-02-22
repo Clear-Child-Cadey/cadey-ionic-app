@@ -48,11 +48,16 @@ const PathListingPage: React.FC = () => {
     // When the component loads
     useEffect(() => {
         const getPaths = async () => {
-            // Get the path listing from the API and set it to state
-            setPathListing(await getPathListing(apiUrl, Number(cadeyUserId)));
-
-            // Stop the loader
-            setIsLoading(false);
+            try {
+                // Get the path listing from the API and set it to state
+                setPathListing(await getPathListing(apiUrl, Number(cadeyUserId)));
+            } catch (error) {
+                console.error('Error getting path listing:', error);
+                // Handle the error here, e.g. show an error message to the user
+            } finally {
+                // Stop the loader
+                setIsLoading(false);
+            }
         };
 
         // Set the current app page
@@ -91,7 +96,7 @@ const PathListingPage: React.FC = () => {
 
                 {/* Show a loading state if necessary */}
                 {isLoading && (
-                <IonLoading isOpen={true} message={'Loading data...'} />
+                    <IonLoading isOpen={true} message={'Loading data...'} />
                 )}
 
                 <IonRow>
