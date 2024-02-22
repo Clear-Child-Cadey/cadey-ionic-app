@@ -348,19 +348,6 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
                                 onVideoEnd={handleVideoEnd}
                                 on75PercentProgress={handle75PercentProgress}
                             />
-                            <div className="video-metadata" style={{ marginTop: videoHeight || 0 }}>
-                                <div className="tag-share">
-                                    {canShare && pathEntity.sourceId && (
-                                        <div className="share" onClick={(event) => handleShare(event, pathEntity.sourceId, pathEntity.entityId.toString())}>
-                                            <p>Share </p>
-                                            <div className="share-button">
-                                                <IonIcon icon={arrowRedoOutline} />
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                                <h3>{pathEntity.title}</h3>
-                            </div>
                         </div>
                     </IonRow>
                 )}
