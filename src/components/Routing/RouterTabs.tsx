@@ -128,10 +128,6 @@ const RouterTabs: React.FC = () => {
               <Redirect to="/App/Welcome" />
             </Route>
 
-            <Route exact path="/App/Home">
-              <Redirect to="/App/Welcome" />
-            </Route>
-
             {/* Welcome sequence routes */}
             <Route exact path="/App/Welcome/Path" component={WelcomePathSelect} />
             <Route exact path="/App/Welcome/AgeGroup" component={WelcomeAgeGroupSelect} />
@@ -151,7 +147,18 @@ const RouterTabs: React.FC = () => {
               {/* Define all of the specific routes */}
 
               {/* Home routes */}
-              <Route exact path="/App/Home" component={HomePage} />
+              <Route exact path="/App/Home" render={(routeProps) => {
+                const vimeoId = routeProps.location.search.split('video=')[1];
+                const articleId = routeProps.location.search.split('article=')[1];
+
+                return (
+                  
+                    <HomePage 
+                      vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
+                      articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
+                    />
+                );
+              }} />
               <Route exact path="/">
                   <Redirect to="/App/Home" />
               </Route>

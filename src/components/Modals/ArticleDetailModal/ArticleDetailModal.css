@@ -1,6 +1,7 @@
 .article-detail-modal {
     padding: 0 16px;
     background-color: #F9F6EF;
+    max-width: 100%;
 }
 
 .article-detail-modal .wp-element-caption {

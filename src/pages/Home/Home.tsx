@@ -38,7 +38,10 @@ import { trace } from "firebase/performance";
 // Interfaces
 import { HomeData } from "../../api/HomeData";
 
-const HomePage = () => {
+const HomePage: React.FC<{
+  vimeoIdFromUrl?: string,
+  articleIdFromUrl?: string,
+}> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
   const [totalPaths, setTotalPaths] = useState(0);
@@ -83,7 +86,11 @@ const HomePage = () => {
 
   // Get all the props from the modal context
   const {
+    setCurrentVimeoId,
+    setCurrentArticleId,
     isVideoModalOpen,
+    setVideoModalOpen,
+    setArticleDetailModalOpen,
     setGenericModalData,
     setGenericModalOpen,
     isGenericModalOpen,
@@ -141,33 +148,6 @@ const HomePage = () => {
   // This runs on mount and every time currentTab changes or the video modal opens/closes
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
-    // let timeoutId: any;
-
-    // // // Start a timer
-    // // timeoutId = setTimeout(() => {
-    // //   if (!dataLoaded) {
-    // //     // TODO: Implement logic for handling long load times
-
-    // //     // Log a user fact
-    // //     logUserFact({
-    // //       cadeyUserId: cadeyUserId,
-    // //       baseApiUrl: apiUrl,
-    // //       userFactTypeName: 'ErrorLog',
-    // //       appPage: 'App Open',
-    // //       detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
-    // //     });
-
-    // //     logErrorToFirestore({
-    // //       userID: cadeyUserId,
-    // //       timestamp: new Date().toISOString(),
-    // //       error: 'getAppData call (/appopened) took longer than 10 seconds',
-    // //       context: "Fetching App Data"
-    // //     });
-
-    // //     setIsLoading(false); // Optionally stop the loader
-    // //   }
-    // // }, 10000); // Set timeout for 10 seconds
-
     fetchData(); // Fetch the homepage data
   }, [isVideoModalOpen]);
 
@@ -194,6 +174,23 @@ const HomePage = () => {
 
     loadBugherdScript();
   }, []);
+
+  // Show the modal if a vimeoId is passed in via query string
+  useEffect(() => {
+    console.log("vimeoIdFromUrl: ", vimeoIdFromUrl);
+    if (vimeoIdFromUrl) {
+      setCurrentVimeoId(vimeoIdFromUrl);
+      setVideoModalOpen(true);
+    }
+  }, [vimeoIdFromUrl]);
+
+  // Show the modal if an articleId is passed in via query string
+  useEffect(() => {
+    if (articleIdFromUrl) {
+      setCurrentArticleId(Number(articleIdFromUrl));
+      setArticleDetailModalOpen(true);
+    }
+  }, [articleIdFromUrl]);
 
   const handleButtonClick = (route: string, entity: string) => () => {
     // Log user fact that the user clicked on the button

@@ -21,8 +21,6 @@ import { useTabContext } from '../../../context/TabContext';
 import { usePathContext } from '../../../context/PathContext';
 // API
 import { postQuizResponse } from '../../../api/Quiz';
-// Icons
-import { chevronForwardOutline } from 'ionicons/icons';
 
 export interface QuizModalData {
     quizRequest: QuizRequest;
@@ -278,11 +276,12 @@ const QuizModal: React.FC = ({ }) => {
                                     // If the option type is 2, and displayIfOptionIdSelected is null, show a text input
                                     return (
                                         <IonRow key={index} className="text-input-row">
+                                            <div className="button-text">{option.label}</div>
                                             <textarea
                                                 className="text-input"
-                                                placeholder={option.label}
+                                                placeholder='Type your response here'
                                                 onFocus={(e) => e.target.placeholder = ''}
-                                                onBlur={(e) => e.target.placeholder = option.label}
+                                                onBlur={(e) => e.target.placeholder = 'Type your response here'}
                                                 onChange={(e) => handleTextChange(option.id, e.target.value)}
                                             />
                                         </IonRow>
@@ -296,9 +295,9 @@ const QuizModal: React.FC = ({ }) => {
                                             <IonRow key={index} className="text-input-row">
                                                 <textarea
                                                     className="text-input"
-                                                    placeholder={option.label}
+                                                    placeholder='Type your response here'
                                                     onFocus={(e) => e.target.placeholder = ''}
-                                                    onBlur={(e) => e.target.placeholder = option.label}
+                                                    onBlur={(e) => e.target.placeholder = 'Type your response here'}
                                                     onChange={(e) => handleTextChange(option.id, e.target.value)}
                                                 />
                                             </IonRow>

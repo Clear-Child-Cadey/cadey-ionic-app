@@ -67,7 +67,6 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
 
     // Refs for the video and modal container elements
     const videoRef = useRef<HTMLDivElement | null>(null);
-    const contentRef = useRef<HTMLIonContentElement>(null);
 
     // State to store the calculated height for the video
     const [videoHeight, setVideoHeight] = useState<number | null>(null);
@@ -337,7 +336,7 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
                     <h2>{pathTitle}</h2>
                 </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen ref={contentRef}>
+            <IonContent fullscreen>
                 {pathEntity && pathEntity.sourceId && (
                     <IonRow className="video-player-row">
                         <div className="current" key={pathEntity.sourceId} ref={videoRef}>
