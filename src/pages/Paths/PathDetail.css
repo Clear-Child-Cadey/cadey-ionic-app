@@ -28,7 +28,7 @@
 #root .path-detail .header {
     padding-left: 16px;
     padding-right: 16px;
-    padding-top: 20px;
+    padding-top: 30px;
     background: #F9F6EF;
 }
 
@@ -136,7 +136,7 @@
 }
 
 .path-detail .path-sequence {
-    margin-top: 207px;
+    margin-top: 235px;
 }
 
 .path-detail h3 {
