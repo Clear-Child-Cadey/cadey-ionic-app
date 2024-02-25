@@ -37,11 +37,17 @@ import { firebasePerf } from "../../api/Firebase/InitializeFirebase";
 import { trace } from "firebase/performance";
 // Interfaces
 import { HomeData } from "../../api/HomeData";
+import { useDispatch, useSelector } from "react-redux";
+import { setHttpError, errorSlice } from "../../features/error/slice";
 
 const HomePage: React.FC<{
-  vimeoIdFromUrl?: string,
-  articleIdFromUrl?: string,
+  vimeoIdFromUrl?: string;
+  articleIdFromUrl?: string;
 }> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
+  const httpError = useSelector(
+    ({ error }: { error: errorSlice }) => error.httpError,
+  );
+
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
   const [totalPaths, setTotalPaths] = useState(0);
@@ -174,6 +180,7 @@ const HomePage: React.FC<{
 
     loadBugherdScript();
   }, []);
+  const dispatch = useDispatch();
 
   // Show the modal if a vimeoId is passed in via query string
   useEffect(() => {
@@ -216,6 +223,7 @@ const HomePage: React.FC<{
       <IonHeader class="header">
         <IonToolbar className="header-toolbar">
           <h2>Home</h2>
+          {JSON.stringify(httpError)}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="page">
