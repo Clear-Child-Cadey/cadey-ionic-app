@@ -46,12 +46,12 @@ import "./theme/main.css";
 import { v4 as uuidv4 } from "uuid";
 
 // Firebase
-import { firebasePerf, firestore } from "./api/Firebase/InitializeFirebase";
+import { firebasePerf, firestore, auth } from "./api/Firebase/InitializeFirebase";
 import { addDoc, collection } from "firebase/firestore";
 import { trace } from "firebase/performance";
 import { logErrorToFirestore } from "./api/Firebase/LogErrorToFirestore";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
 
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem("cadey_user_device_id");
@@ -88,8 +88,6 @@ function MainComponent() {
 
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const auth = getAuth();
-
   // App startup logic
   useEffect(() => {
     let timeoutId: any;
@@ -103,7 +101,6 @@ function MainComponent() {
       .catch((error) => {
         console.error("Error signing in anonymously:", error);
       });
-
       
       var getAppDataTrace: any;
       // Start a Firebase trace
@@ -146,6 +143,7 @@ function MainComponent() {
         console.log("User is signed out");
       }
     });
+
   }, [apiUrl, auth]);
 
   // const { loading: firebaseAuthLoading } = useAuth();

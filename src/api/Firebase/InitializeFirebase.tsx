@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getPerformance } from "firebase/performance";
 import { getFirestore } from "firebase/firestore";
+import { getAuth, initializeAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBcqwDAbWGh25wog7XpbV9gtjV4HEA_Fys",
@@ -19,8 +20,9 @@ const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAnalytics = getAnalytics(firebaseApp);
 const firebasePerf = getPerformance(firebaseApp);
 const firestore = getFirestore(firebaseApp);
+const auth = initializeAuth(firebaseApp);
 
-export { firebaseApp, firebaseAnalytics, firebasePerf, firestore };
+export { firebaseApp, firebaseAnalytics, firebasePerf, firestore, auth };
 
 // TODO: Crashlytics - this still isn't working
 // Best link I've found so far: https://github.com/capacitor-community/firebase-crashlytics
