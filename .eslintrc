@@ -12,6 +12,7 @@
   "rules": {
     "no-console": "off",
     "no-debugger": "off",
+    "quotes": ["error", "single", { "avoidEscape": true }],
   },
   "settings": {
     "react": {

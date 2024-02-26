@@ -1,7 +1,7 @@
-import { logErrorToFirestore } from "../api/Firebase/LogErrorToFirestore";
-import AppMeta from "../variables/AppMeta";
-import store from "../store";
-import { setHttpError, setHttpErrorData } from "../features/error/slice";
+import { logErrorToFirestore } from '../api/Firebase/LogErrorToFirestore';
+import AppMeta from '../variables/AppMeta';
+import store from '../store';
+import { setHttpError, setHttpErrorModalData } from '../features/error/slice';
 
 interface FetchWithTimeoutOptions {
   timeout?: number;
@@ -18,7 +18,7 @@ const fetchWithTimeout = async (
   const {
     timeout = AppMeta?.fetchTimeout || 6500,
     cadeyUserId,
-    requestName = "Not Provided",
+    requestName = 'Not Provided',
   } = context; // Default timeout to if not provided
   let { currentUrl } = context;
   if (!currentUrl) {
@@ -30,7 +30,7 @@ const fetchWithTimeout = async (
       const response = await fetch(url, opts);
       return response;
     } catch (error) {
-      store.dispatch(setHttpError(AppMeta.httpErrorData));
+      store.dispatch(setHttpError(AppMeta.httpErrorModalData));
       throw error; // Rethrow the error for the caller to handle
     }
   }
@@ -47,16 +47,16 @@ const fetchWithTimeout = async (
     return response;
   } catch (error) {
     const e = error as Error; // Type assertion to Error
-    if (e.name === "AbortError") {
+    if (e.name === 'AbortError') {
       logErrorToFirestore({
         url: currentUrl,
-        userID: cadeyUserId || "Not Provided", // Use a default or ensure cadeyUserId is provided
+        userID: cadeyUserId || 'Not Provided', // Use a default or ensure cadeyUserId is provided
         error: `Request took longer than ${timeout} milliseconds`,
         request: requestName,
-        context: "Fetching App Data",
+        context: 'Fetching App Data',
       });
-      store.dispatch(setHttpErrorData(AppMeta.httpErrorData));
-      throw new Error("Request timed out");
+      store.dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
+      throw new Error('Request timed out');
     } else {
       throw error;
     }

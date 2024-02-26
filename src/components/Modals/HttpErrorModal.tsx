@@ -5,16 +5,16 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import React, { MouseEventHandler } from "react";
-import { useSelector } from "react-redux";
-import { errorSlice } from "../../features/error/slice";
+} from '@ionic/react';
+import React, { MouseEventHandler } from 'react';
+import { useSelector } from 'react-redux';
+import { errorSlice } from '../../features/error/slice';
 
 const HttpErrorModal: React.FC<object> = () => {
   const error = useSelector(({ error }: { error: errorSlice }) => error);
 
-  const { httpError, httpErrorData } = error;
-  const { title, body, buttonAction, buttonText } = httpErrorData;
+  const { httpError, httpErrorModalData } = error;
+  const { title, body, buttonAction, buttonText } = httpErrorModalData;
 
   return (
     <IonModal isOpen={httpError} backdropDismiss={false}>
@@ -23,11 +23,11 @@ const HttpErrorModal: React.FC<object> = () => {
           <IonTitle>{title}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent className='ion-padding'>
         <div>{body}</div>
 
         <IonButton
-          expand="full"
+          expand='full'
           onClick={buttonAction as MouseEventHandler<HTMLIonButtonElement>}
         >
           {buttonText}

@@ -1,8 +1,8 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice, current } from '@reduxjs/toolkit';
 
 export interface errorSlice {
   httpError: boolean;
-  httpErrorData: {
+  httpErrorModalData: {
     title: string;
     body: string;
     buttonText: string;
@@ -12,10 +12,10 @@ export interface errorSlice {
 
 const initialState: errorSlice = {
   httpError: false,
-  httpErrorData: {
-    title: "",
-    body: "",
-    buttonText: "",
+  httpErrorModalData: {
+    title: '',
+    body: '',
+    buttonText: '',
     buttonAction: () => {
       /* Default implementation */
     },
@@ -23,21 +23,21 @@ const initialState: errorSlice = {
 };
 
 const errorSlice = createSlice({
-  name: "error",
+  name: 'error',
   initialState,
   reducers: {
     setHttpError: (state, action) => {
       state.httpError = action.payload;
     },
-    setHttpErrorData: (state, action) => {
+    setHttpErrorModalData: (state, action) => {
       state.httpError = true;
-      state.httpErrorData = action.payload;
+      state.httpErrorModalData = action.payload;
     },
   },
 });
 
-const { setHttpError, setHttpErrorData } = errorSlice.actions;
+const { setHttpError, setHttpErrorModalData } = errorSlice.actions;
 
-export { setHttpError, setHttpErrorData };
+export { setHttpError, setHttpErrorModalData };
 
 export default errorSlice.reducer;

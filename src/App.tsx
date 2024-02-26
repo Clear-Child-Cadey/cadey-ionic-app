@@ -1,34 +1,34 @@
-import React, { useState, useEffect, useContext } from "react";
-import { IonApp, setupIonicReact } from "@ionic/react";
-import { useHistory } from "react-router-dom";
-import semver from "semver";
+import React, { useState, useEffect, useContext } from 'react';
+import { IonApp, setupIonicReact } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
+import semver from 'semver';
 // Components
-import { SplashScreen } from "@capacitor/splash-screen";
-import RouterTabs from "./components/Routing/RouterTabs";
+import { SplashScreen } from '@capacitor/splash-screen';
+import RouterTabs from './components/Routing/RouterTabs';
 // Modals
-import AppUpdateModal from "./components/Modals/AppUpdateModal";
-import VideoDetailModal from "./components/Modals/VideoDetailModal/VideoDetailModal";
-import ArticleDetailModal from "./components/Modals/ArticleDetailModal/ArticleDetailModal";
-import QuizModal from "./components/Modals/QuizModal/QuizModal";
-import WelcomeModal from "./pages/Welcome/Welcome";
+import AppUpdateModal from './components/Modals/AppUpdateModal';
+import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
+import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
+import QuizModal from './components/Modals/QuizModal/QuizModal';
+import WelcomeModal from './pages/Welcome/Welcome';
 // Contexts
-import { CadeyUserContext } from "./main";
-import { useModalContext } from "./context/ModalContext";
-import ApiUrlContext from "./context/ApiUrlContext";
-import { useAppPage } from "./context/AppPageContext";
-import { useTabContext } from "./context/TabContext";
+import { CadeyUserContext } from './main';
+import { useModalContext } from './context/ModalContext';
+import ApiUrlContext from './context/ApiUrlContext';
+import { useAppPage } from './context/AppPageContext';
+import { useTabContext } from './context/TabContext';
 // Variables
-import { AppVersion } from "./variables/AppVersion";
+import { AppVersion } from './variables/AppVersion';
 // API
-import { setExternalUserId } from "./api/OneSignal/SetExternalUserId";
-import { logUserFact } from "./api/UserFacts";
-import PopularSymptomVideoDetailModal from "./components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal";
-import GenericModal from "./components/Modals/GenericModal";
-import { getQuiz } from "./api/Quiz";
+import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
+import { logUserFact } from './api/UserFacts';
+import PopularSymptomVideoDetailModal from './components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal';
+import GenericModal from './components/Modals/GenericModal';
+import { getQuiz } from './api/Quiz';
 // Pages
-import WelcomePage from "./pages/Welcome/Welcome";
-import { HttpStatusCode } from "axios";
-import HttpErrorModal from "./components/Modals/HttpErrorModal";
+import WelcomePage from './pages/Welcome/Welcome';
+import { HttpStatusCode } from 'axios';
+import HttpErrorModal from './components/Modals/HttpErrorModal';
 
 setupIonicReact();
 
@@ -62,11 +62,11 @@ const App: React.FC = () => {
 
     if (/android/i.test(userAgent)) {
       url =
-        "https://play.google.com/store/apps/details?id=co.cadey.liteapp&hl=en_US&gl=US";
+        'https://play.google.com/store/apps/details?id=co.cadey.liteapp&hl=en_US&gl=US';
     } else if (/iPad|iPhone|iPod/.test(userAgent)) {
-      url = "https://apps.apple.com/app/cadeylite/id6449231819";
+      url = 'https://apps.apple.com/app/cadeylite/id6449231819';
     } else {
-      url = "https://cadey.co/app"; // fallback for desktop browsers and other devices
+      url = 'https://cadey.co/app'; // fallback for desktop browsers and other devices
     }
 
     return url;
@@ -103,7 +103,7 @@ const App: React.FC = () => {
           setIsTabBarVisible(false);
 
           // Route the user to the welcome page
-          history.push("/App/Welcome");
+          history.push('/App/Welcome');
         } else {
           // Show the tab bar
           setIsTabBarVisible(true);
@@ -117,7 +117,7 @@ const App: React.FC = () => {
   // Show the upgrade modal if the current app version is not the latest
   // Set the version to 1.0.0 if we can't even get minimumSupportedVersion (i.e., internet is down)
   useEffect(() => {
-    if (semver.lt(AppVersion, minimumSupportedVersion || "1.0.0")) {
+    if (semver.lt(AppVersion, minimumSupportedVersion || '1.0.0')) {
       SplashScreen.hide(); // Hide the splash screen
       setShowUpgradeModal(true);
     }
@@ -140,8 +140,8 @@ const App: React.FC = () => {
     const response = await logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: "VideoDetailPageClosed",
-      appPage: "Video Detail",
+      userFactTypeName: 'VideoDetailPageClosed',
+      appPage: 'Video Detail',
     });
   };
 
@@ -151,9 +151,9 @@ const App: React.FC = () => {
       <HttpErrorModal />
       <AppUpdateModal
         isOpen={showUpgradeModal}
-        title="Update Required"
-        body="You need to update the app to the latest version to continue using it."
-        buttonText="Upgrade"
+        title='Update Required'
+        body='You need to update the app to the latest version to continue using it.'
+        buttonText='Upgrade'
         buttonUrl={getStoreLink()}
       />
 

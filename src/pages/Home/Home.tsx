@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import "./Home.css";
+import React, { useEffect, useState, useContext } from 'react';
+import './Home.css';
 import {
   IonPage,
   IonHeader,
@@ -9,34 +9,34 @@ import {
   IonText,
   IonIcon,
   IonBadge,
-} from "@ionic/react";
+} from '@ionic/react';
 // Icons
-import { chevronForwardOutline, home } from "ionicons/icons";
-import { SplashScreen } from "@capacitor/splash-screen";
+import { chevronForwardOutline, home } from 'ionicons/icons';
+import { SplashScreen } from '@capacitor/splash-screen';
 // Routing
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 // Contexts
-import { useModalContext } from "../../context/ModalContext";
-import { useAppPage } from "../../context/AppPageContext";
-import { CadeyUserContext } from "../../main";
-import ApiUrlContext from "../../context/ApiUrlContext";
-import UnreadContext from "../../context/UnreadContext";
+import { useModalContext } from '../../context/ModalContext';
+import { useAppPage } from '../../context/AppPageContext';
+import { CadeyUserContext } from '../../main';
+import ApiUrlContext from '../../context/ApiUrlContext';
+import UnreadContext from '../../context/UnreadContext';
 // Components
-import VideoList from "../../components/Videos/VideoList";
+import VideoList from '../../components/Videos/VideoList';
 // API
-import getHomeData from "../../api/HomeData";
-import { logUserFact } from "../../api/UserFacts";
-import { logErrorToFirestore } from "../../api/Firebase/LogErrorToFirestore";
+import getHomeData from '../../api/HomeData';
+import { logUserFact } from '../../api/UserFacts';
+import { logErrorToFirestore } from '../../api/Firebase/LogErrorToFirestore';
 // Variables
-import { tracingEnabled } from "../../variables/Logging";
+import { tracingEnabled } from '../../variables/Logging';
 // Firebase
-import { firebasePerf } from "../../api/Firebase/InitializeFirebase";
-import { trace } from "firebase/performance";
+import { firebasePerf } from '../../api/Firebase/InitializeFirebase';
+import { trace } from 'firebase/performance';
 // Interfaces
-import { HomeData } from "../../api/HomeData";
-import { useDispatch, useSelector } from "react-redux";
-import { setHttpErrorData } from "../../features/error/slice";
-import AppMeta from "../../variables/AppMeta";
+import { HomeData } from '../../api/HomeData';
+import { useDispatch, useSelector } from 'react-redux';
+import { setHttpErrorModalData } from '../../features/error/slice';
+import AppMeta from '../../variables/AppMeta';
 
 const HomePage: React.FC<{
   vimeoIdFromUrl?: string;
@@ -105,7 +105,7 @@ const HomePage: React.FC<{
       // Start a Firebase trace
 
       if (tracingEnabled) {
-        getHomeDataTrace = trace(firebasePerf, "getHomeDataTrace");
+        getHomeDataTrace = trace(firebasePerf, 'getHomeDataTrace');
         await getHomeDataTrace.start();
       }
 
@@ -123,7 +123,7 @@ const HomePage: React.FC<{
       setNewVideos(homeData.newVideos);
       setPlayedVideos(homeData.playedVideos);
     } catch (error) {
-      dispatch(setHttpErrorData(AppMeta.httpErrorData));
+      dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
     } finally {
       setIsLoading(() => {
         return false;
@@ -145,21 +145,21 @@ const HomePage: React.FC<{
 
   // On component mount:
   useEffect(() => {
-    document.title = "Home"; // Set the page title
-    setCurrentBasePage("Home"); // Set the current base page
-    setCurrentAppPage("Home"); // Set the current app page
+    document.title = 'Home'; // Set the page title
+    setCurrentBasePage('Home'); // Set the current base page
+    setCurrentAppPage('Home'); // Set the current app page
     logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: "appPageNavigation",
-      appPage: "Home",
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Home',
     });
 
     // Function to load the Bugherd script
     const loadBugherdScript = () => {
-      const script = document.createElement("script");
+      const script = document.createElement('script');
       script.src =
-        "https://www.bugherd.com/sidebarv2.js?apikey=stkrojaqmtujmlrixuxddw";
+        'https://www.bugherd.com/sidebarv2.js?apikey=stkrojaqmtujmlrixuxddw';
       script.async = true;
       document.body.appendChild(script);
     };
@@ -170,7 +170,7 @@ const HomePage: React.FC<{
 
   // Show the modal if a vimeoId is passed in via query string
   useEffect(() => {
-    console.log("vimeoIdFromUrl: ", vimeoIdFromUrl);
+    console.log('vimeoIdFromUrl: ', vimeoIdFromUrl);
     if (vimeoIdFromUrl) {
       setCurrentVimeoId(vimeoIdFromUrl);
       setVideoModalOpen(true);
@@ -190,14 +190,14 @@ const HomePage: React.FC<{
     logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: "UserTap",
+      userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,
       detail2: entity,
     });
 
     // Navigate to the page
-    history.push("/App" + route);
+    history.push('/App' + route);
   };
 
   if (genericModalData) {
@@ -205,13 +205,13 @@ const HomePage: React.FC<{
   }
 
   return (
-    <IonPage className="home">
-      <IonHeader class="header">
-        <IonToolbar className="header-toolbar">
+    <IonPage className='home'>
+      <IonHeader class='header'>
+        <IonToolbar className='header-toolbar'>
           <h2>Home</h2>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen className="page">
+      <IonContent fullscreen className='page'>
         {/* Show a loading state if necessary - commenting out because we don't need it in the revised homepage*/}
 
         {/* <IonLoading
@@ -220,26 +220,26 @@ const HomePage: React.FC<{
         /> */}
 
         <IonRow>
-          <IonText className="subcopy">Welcome</IonText>
+          <IonText className='subcopy'>Welcome</IonText>
         </IonRow>
 
-        <IonRow className="content">
-          <IonRow className="dashboard">
-            <div className="paths dashboard-item full-width">
+        <IonRow className='content'>
+          <IonRow className='dashboard'>
+            <div className='paths dashboard-item full-width'>
               <div
-                className="dashboard-button"
-                onClick={handleButtonClick("/Paths", "Paths Button")}
+                className='dashboard-button'
+                onClick={handleButtonClick('/Paths', 'Paths Button')}
               >
                 <img
-                  src="assets/svgs/icn-paths.svg"
-                  className="icon paths-icon"
+                  src='assets/svgs/icn-paths.svg'
+                  className='icon paths-icon'
                 />
-                <div className="text-container">
-                  <div className="text-title">Your Paths</div>
+                <div className='text-container'>
+                  <div className='text-title'>Your Paths</div>
                   {(completedPaths > 0 || pathsInProgress > 0) && (
-                    <IonBadge className="progress-indicator">
+                    <IonBadge className='progress-indicator'>
                       {completedPaths > 0 && (
-                        <span className="completed-paths">
+                        <span className='completed-paths'>
                           {completedPaths} of {totalPaths} complete
                         </span>
                       )}
@@ -247,7 +247,7 @@ const HomePage: React.FC<{
                         <span>&nbsp;&bull;&nbsp;</span>
                       )}
                       {pathsInProgress > 0 && (
-                        <span className="in-progress">
+                        <span className='in-progress'>
                           {pathsInProgress} in progress
                         </span>
                       )}
@@ -255,37 +255,37 @@ const HomePage: React.FC<{
                   )}
                 </div>
                 <IonIcon
-                  className="icon arrow-icon"
+                  className='icon arrow-icon'
                   icon={chevronForwardOutline}
                 />
               </div>
             </div>
-            <div className="library dashboard-item half-width">
+            <div className='library dashboard-item half-width'>
               <div
-                className="dashboard-button"
-                onClick={handleButtonClick("/Library", "Library Button")}
+                className='dashboard-button'
+                onClick={handleButtonClick('/Library', 'Library Button')}
               >
                 <img
-                  src="assets/svgs/icn-library.svg"
-                  className="icon library-icon"
+                  src='assets/svgs/icn-library.svg'
+                  className='icon library-icon'
                 />
                 Library
               </div>
             </div>
-            <div className="messages dashboard-item half-width">
+            <div className='messages dashboard-item half-width'>
               <div
-                className="dashboard-button"
-                onClick={handleButtonClick("/Home/Messages", "Messages Button")}
+                className='dashboard-button'
+                onClick={handleButtonClick('/Home/Messages', 'Messages Button')}
               >
-                <div className="messages-content">
-                  <div className="content-wrapper">
+                <div className='messages-content'>
+                  <div className='content-wrapper'>
                     <img
-                      src="assets/svgs/icn-messages.svg"
-                      className="icon messages-icon"
+                      src='assets/svgs/icn-messages.svg'
+                      className='icon messages-icon'
                     />
                     Messages
                     {unreadMessagesCount > 0 && (
-                      <IonBadge color="danger" className="unread-messages">
+                      <IonBadge color='danger' className='unread-messages'>
                         {unreadMessagesCount}
                       </IonBadge>
                     )}
@@ -296,16 +296,16 @@ const HomePage: React.FC<{
           </IonRow>
           {/* If user has watched videos, show this. Else, skip it */}
           {playedVideos.length > 0 && (
-            <IonRow className="video-list-row recently-viewed">
+            <IonRow className='video-list-row recently-viewed'>
               <h2>Recently Viewed</h2>
-              <VideoList videos={playedVideos} listType="horizontal" />
+              <VideoList videos={playedVideos} listType='horizontal' />
             </IonRow>
           )}
           {/* If user has featured videos, show this. Else, skip it */}
           {featuredVideos.length > 0 && (
-            <IonRow className="video-list-row featured">
+            <IonRow className='video-list-row featured'>
               <h2>Watch Now</h2>
-              <VideoList videos={featuredVideos} listType="horizontal" />
+              <VideoList videos={featuredVideos} listType='horizontal' />
             </IonRow>
           )}
         </IonRow>

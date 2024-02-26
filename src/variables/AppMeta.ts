@@ -3,13 +3,13 @@
 //MG this should be refactored into env variables
 
 const AppMeta = {
-  firestoreCollection: "ErrorLogs2024",
-  firebaseApiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+  firestoreCollection: 'ErrorLogs2024',
+  firebaseApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
   fetchTimeout: -1,
-  httpErrorData: {
-    title: "Error",
+  httpErrorModalData: {
+    title: 'Error',
     body: "We're sorry, but we couldn't load the data for this page. Please try again later.",
-    buttonText: "Retry",
+    buttonText: 'Retry',
     buttonAction: () => {
       history.go(0);
     },
