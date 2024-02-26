@@ -3,8 +3,8 @@
 //MG this should be refactored into env variables
 
 const AppMeta = {
-  firestoreCollection: "ErrorLogs2024",
-  firebaseApiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
+  firestoreCollection: 'ErrorLogs2024',
+  firebaseApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
   fetchTimeout: -1,
 };
 

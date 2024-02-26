@@ -1,5 +1,5 @@
-import { logErrorToFirestore } from "../api/Firebase/LogErrorToFirestore";
-import AppMeta from "../variables/AppMeta";
+import { logErrorToFirestore } from '../api/Firebase/LogErrorToFirestore';
+import AppMeta from '../variables/AppMeta';
 
 interface FetchWithTimeoutOptions {
   timeout?: number;
@@ -16,7 +16,7 @@ const fetchWithTimeout = async (
   const {
     timeout = AppMeta?.fetchTimeout || 6500,
     cadeyUserId,
-    requestName = "Not Provided",
+    requestName = 'Not Provided',
   } = context; // Default timeout to if not provided
   let { currentUrl } = context;
   if (!currentUrl) {
@@ -32,7 +32,7 @@ const fetchWithTimeout = async (
     }
   }
 
-  let controller: AbortController | undefined = new AbortController();
+  const controller: AbortController | undefined = new AbortController();
   setTimeout(() => {
     if (controller) {
       controller.abort();
@@ -44,15 +44,15 @@ const fetchWithTimeout = async (
     return response;
   } catch (error) {
     const e = error as Error; // Type assertion to Error
-    if (e.name === "AbortError") {
+    if (e.name === 'AbortError') {
       logErrorToFirestore({
         url: currentUrl,
-        userID: cadeyUserId || "Not Provided", // Use a default or ensure cadeyUserId is provided
+        userID: cadeyUserId || 'Not Provided', // Use a default or ensure cadeyUserId is provided
         error: `Request took longer than ${timeout} milliseconds`,
         request: requestName,
-        context: "Fetching App Data",
+        context: 'Fetching App Data',
       });
-      throw new Error("Request timed out");
+      throw new Error('Request timed out');
     } else {
       throw error;
     }

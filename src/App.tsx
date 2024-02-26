@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-import { IonApp, setupIonicReact } from "@ionic/react";
+import React, { useState, useEffect, useContext } from 'react';
+import { IonApp, setupIonicReact } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import semver from "semver";
+import semver from 'semver';
 // Components
-import { SplashScreen } from "@capacitor/splash-screen";
-import RouterTabs from "./components/Routing/RouterTabs";
+import { SplashScreen } from '@capacitor/splash-screen';
+import RouterTabs from './components/Routing/RouterTabs';
 // Modals
 import AppUpdateModal from './components/Modals/AppUpdateModal';
 import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
@@ -12,18 +12,18 @@ import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDe
 import QuizModal from './components/Modals/QuizModal/QuizModal';
 import WelcomeModal from './pages/Welcome/Welcome';
 // Contexts
-import { CadeyUserContext } from "./main";
-import { useModalContext } from "./context/ModalContext";
-import ApiUrlContext from "./context/ApiUrlContext";
-import { useAppPage } from "./context/AppPageContext";
+import { CadeyUserContext } from './main';
+import { useModalContext } from './context/ModalContext';
+import ApiUrlContext from './context/ApiUrlContext';
+import { useAppPage } from './context/AppPageContext';
 import { useTabContext } from './context/TabContext';
 // Variables
-import { AppVersion } from "./variables/AppVersion";
+import { AppVersion } from './variables/AppVersion';
 // API
-import { setExternalUserId } from "./api/OneSignal/SetExternalUserId";
-import { logUserFact } from "./api/UserFacts";
-import PopularSymptomVideoDetailModal from "./components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal";
-import GenericModal from "./components/Modals/GenericModal";
+import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
+import { logUserFact } from './api/UserFacts';
+import PopularSymptomVideoDetailModal from './components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal';
+import GenericModal from './components/Modals/GenericModal';
 import { getQuiz } from './api/Quiz';
 // Pages
 import WelcomePage from './pages/Welcome/Welcome';
@@ -60,11 +60,11 @@ const App: React.FC = () => {
 
     if (/android/i.test(userAgent)) {
       url =
-        "https://play.google.com/store/apps/details?id=co.cadey.liteapp&hl=en_US&gl=US";
+        'https://play.google.com/store/apps/details?id=co.cadey.liteapp&hl=en_US&gl=US';
     } else if (/iPad|iPhone|iPod/.test(userAgent)) {
-      url = "https://apps.apple.com/app/cadeylite/id6449231819";
+      url = 'https://apps.apple.com/app/cadeylite/id6449231819';
     } else {
-      url = "https://cadey.co/app"; // fallback for desktop browsers and other devices
+      url = 'https://cadey.co/app'; // fallback for desktop browsers and other devices
     }
 
     return url;
@@ -87,7 +87,7 @@ const App: React.FC = () => {
           Number(cadeyUserId),
           3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
           0, // Entity Type (1 = video)
-          0  // Entity IDs (The ID of the video)
+          0, // Entity IDs (The ID of the video)
         );
 
         setCheckForWelcome(true); // Prevents re-fetching the quiz
@@ -96,7 +96,7 @@ const App: React.FC = () => {
         if (quizResponse.question !== null && quizResponse.question.id > 0) {
           // Set the quiz data
           setQuizModalData(quizResponse);
-          
+
           // Hide the tab bar
           setIsTabBarVisible(false);
 
@@ -107,7 +107,7 @@ const App: React.FC = () => {
           setIsTabBarVisible(true);
         }
       }
-    }
+    };
 
     requestQuiz();
   }, [cadeyUserId, apiUrl]);
@@ -137,20 +137,19 @@ const App: React.FC = () => {
     const response = await logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: "VideoDetailPageClosed",
-      appPage: "Video Detail",
+      userFactTypeName: 'VideoDetailPageClosed',
+      appPage: 'Video Detail',
     });
-  }
+  };
 
   return (
     <IonApp>
-
       {/* Show a modal if the user needs to update their app*/}
       <AppUpdateModal
         isOpen={showUpgradeModal}
-        title="Update Required"
-        body="You need to update the app to the latest version to continue using it."
-        buttonText="Upgrade"
+        title='Update Required'
+        body='You need to update the app to the latest version to continue using it.'
+        buttonText='Upgrade'
         buttonUrl={getStoreLink()}
       />
 
@@ -158,14 +157,10 @@ const App: React.FC = () => {
       <QuizModal />
 
       {/* Show a video modal if context dictates */}
-      {isVideoModalOpen && currentVimeoId && (
-        <VideoDetailModal />
-      )}
-      
+      {isVideoModalOpen && currentVimeoId && <VideoDetailModal />}
+
       {/* Show an article modal if context dictates */}
       {isArticleDetailModalOpen && currentArticleId && <ArticleDetailModal />}
-
-
 
       {/* Show a quiz modal if context dictates */}
       <QuizModal />
