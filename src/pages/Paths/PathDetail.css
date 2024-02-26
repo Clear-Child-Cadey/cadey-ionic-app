@@ -23,12 +23,13 @@
 
 #root .path-detail .header-toolbar {
     --border-width: 0;
-    position: fixed;
 }
 
-.path-detail .header {
+#root .path-detail .header {
     padding-left: 16px;
-    padding-right:16px;
+    padding-right: 16px;
+    padding-top: 30px;
+    background: #F9F6EF;
 }
 
 .header-toolbar .toolbar-container {
@@ -96,13 +97,10 @@
     letter-spacing: 0.28px;
 }
 
-
-
 .path-detail .video-player-row .current .video-item {
     width: 100vw;
     position: fixed;
     z-index: 1;
-    margin-top: 93px;
 }
 
 .path-detail .video-player-row .current p {
@@ -135,7 +133,10 @@
 
 #root .path-sequence {
     background-color: #F9F6EF;
-    padding-top: 88px;
+}
+
+.path-detail .path-sequence {
+    margin-top: 235px;
 }
 
 .path-detail h3 {
