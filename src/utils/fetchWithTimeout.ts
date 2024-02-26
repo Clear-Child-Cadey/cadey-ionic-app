@@ -1,5 +1,10 @@
 import { logErrorToFirestore } from '../api/Firebase/LogErrorToFirestore';
 import AppMeta from '../variables/AppMeta';
+import store from '../store';
+import {
+  setHttpError,
+  setHttpErrorModalData,
+} from '../features/httpError/slice';
 
 interface FetchWithTimeoutOptions {
   timeout?: number;
@@ -28,6 +33,7 @@ const fetchWithTimeout = async (
       const response = await fetch(url, opts);
       return response;
     } catch (error) {
+      store.dispatch(setHttpError(AppMeta.httpErrorModalData));
       throw error; // Rethrow the error for the caller to handle
     }
   }
@@ -52,6 +58,7 @@ const fetchWithTimeout = async (
         request: requestName,
         context: 'Fetching App Data',
       });
+      store.dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
       throw new Error('Request timed out');
     } else {
       throw error;

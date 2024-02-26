@@ -27,6 +27,7 @@ import GenericModal from './components/Modals/GenericModal';
 import { getQuiz } from './api/Quiz';
 // Pages
 import WelcomePage from './pages/Welcome/Welcome';
+import HttpErrorModal from './components/Modals/HttpErrorModal';
 
 setupIonicReact();
 
@@ -114,7 +115,7 @@ const App: React.FC = () => {
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
-    if (semver.lt(AppVersion, minimumSupportedVersion)) {
+    if (semver.lt(AppVersion, minimumSupportedVersion || '1.0.0')) {
       SplashScreen.hide(); // Hide the splash screen
       setShowUpgradeModal(true);
     }
@@ -145,6 +146,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       {/* Show a modal if the user needs to update their app*/}
+      <HttpErrorModal />
       <AppUpdateModal
         isOpen={showUpgradeModal}
         title='Update Required'

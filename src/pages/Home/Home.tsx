@@ -37,11 +37,15 @@ import { firebasePerf } from '../../api/Firebase/InitializeFirebase';
 import { trace } from 'firebase/performance';
 // Interfaces
 import { HomeData } from '../../api/HomeData';
+import { useDispatch, useSelector } from 'react-redux';
+import { setHttpErrorModalData } from '../../features/httpError/slice';
+import AppMeta from '../../variables/AppMeta';
 
 const HomePage: React.FC<{
   vimeoIdFromUrl?: string;
   articleIdFromUrl?: string;
 }> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
+  const dispatch = useDispatch();
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
   const [totalPaths, setTotalPaths] = useState(0);
@@ -91,10 +95,6 @@ const HomePage: React.FC<{
     isVideoModalOpen,
     setVideoModalOpen,
     setArticleDetailModalOpen,
-    setGenericModalData,
-    setGenericModalOpen,
-    isGenericModalOpen,
-    genericModalData,
   } = useModalContext();
 
   const fetchData = async () => {
@@ -124,14 +124,7 @@ const HomePage: React.FC<{
       setNewVideos(homeData.newVideos);
       setPlayedVideos(homeData.playedVideos);
     } catch (error) {
-      setGenericModalData({
-        title: 'Error',
-        body: "We're sorry, but we couldn't load the data for this page. Please try again later.",
-        buttonText: 'Close',
-        buttonAction: () => {
-          history.go(0);
-        },
-      });
+      dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
     } finally {
       setIsLoading(() => {
         return false;
@@ -206,10 +199,6 @@ const HomePage: React.FC<{
     // Navigate to the page
     history.push('/App' + route);
   };
-
-  if (genericModalData) {
-    setGenericModalOpen(true);
-  }
 
   return (
     <IonPage className='home'>

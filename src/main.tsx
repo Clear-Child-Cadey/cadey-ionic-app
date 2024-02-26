@@ -52,6 +52,10 @@ import { trace } from 'firebase/performance';
 import { logErrorToFirestore } from './api/Firebase/LogErrorToFirestore';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
+// Redux
+import store from './store';
+import { Provider } from 'react-redux';
+
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
 if (!cadeyUserDeviceId) {
@@ -158,42 +162,44 @@ function MainComponent() {
   }
 
   return (
-    <CadeyUserContext.Provider
-      value={{
-        cadeyUserId,
-        cadeyUserAgeGroup,
-        setCadeyUserAgeGroup,
-        minimumSupportedVersion,
-        oneSignalId,
-      }}
-    >
-      <DeviceIdContext.Provider value={cadeyUserDeviceId}>
-        <TabProvider>
-          <UnreadContext.Provider
-            value={{
-              unreadMessagesCount,
-              setUnreadMessagesCount,
-              unreadGoals,
-              setUnreadGoals,
-            }}
-          >
-            <AppPageProvider>
-              <TabBarSpotlightProvider>
-                <LoadingStateProvider>
-                  <ModalProvider>
-                    <PathProvider>
-                      <IonReactRouter>
-                        <App />
-                      </IonReactRouter>
-                    </PathProvider>
-                  </ModalProvider>
-                </LoadingStateProvider>
-              </TabBarSpotlightProvider>
-            </AppPageProvider>
-          </UnreadContext.Provider>
-        </TabProvider>
-      </DeviceIdContext.Provider>
-    </CadeyUserContext.Provider>
+    <Provider store={store}>
+      <CadeyUserContext.Provider
+        value={{
+          cadeyUserId,
+          cadeyUserAgeGroup,
+          setCadeyUserAgeGroup,
+          minimumSupportedVersion,
+          oneSignalId,
+        }}
+      >
+        <DeviceIdContext.Provider value={cadeyUserDeviceId}>
+          <TabProvider>
+            <UnreadContext.Provider
+              value={{
+                unreadMessagesCount,
+                setUnreadMessagesCount,
+                unreadGoals,
+                setUnreadGoals,
+              }}
+            >
+              <AppPageProvider>
+                <TabBarSpotlightProvider>
+                  <LoadingStateProvider>
+                    <ModalProvider>
+                      <PathProvider>
+                        <IonReactRouter>
+                          <App />
+                        </IonReactRouter>
+                      </PathProvider>
+                    </ModalProvider>
+                  </LoadingStateProvider>
+                </TabBarSpotlightProvider>
+              </AppPageProvider>
+            </UnreadContext.Provider>
+          </TabProvider>
+        </DeviceIdContext.Provider>
+      </CadeyUserContext.Provider>
+    </Provider>
   );
 }
 
