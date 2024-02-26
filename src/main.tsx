@@ -15,6 +15,9 @@ import {
 import { ModalProvider } from "./context/ModalContext";
 import { AppPageProvider } from "./context/AppPageContext";
 import { PathProvider } from "./context/PathContext";
+// Components
+import LoginScreen from "./components/Authentication/Login";
+import RegisterScreen from "./components/Authentication/Register";
 
 // API
 import getAppData from "./api/AppOpen";
@@ -78,6 +81,8 @@ export const CadeyUserContext = createContext<{
 function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);
 
+  const [user, setUser]: any = useState(null); // Add this line to manage user state
+
   const [cadeyUserId, setCadeyUserId] = useState("");
   const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState("");
@@ -94,13 +99,13 @@ function MainComponent() {
 
     const fetchData = async () => {
       // Authenticate with Firebase
-      signInAnonymously(auth)
-      .then(() => {
-        console.log("Signed in anonymously");
-      })
-      .catch((error) => {
-        console.error("Error signing in anonymously:", error);
-      });
+      // signInAnonymously(auth)
+      // .then(() => {
+      //   console.log("Signed in anonymously");
+      // })
+      // .catch((error) => {
+      //   console.error("Error signing in anonymously:", error);
+      // });
       
       var getAppDataTrace: any;
       // Start a Firebase trace
@@ -134,15 +139,22 @@ function MainComponent() {
 
     fetchData();
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, you can add additional logic here if needed
-        console.log("User is signed in anonymously, UID: ", user.uid);
-      } else {
-        // User is signed out
-        console.log("User is signed out");
-      }
+    // onAuthStateChanged(auth, (user) => {
+    //   if (user) {
+    //     // User is signed in, you can add additional logic here if needed
+    //     console.log("User is signed in anonymously, UID: ", user.uid);
+    //   } else {
+    //     // User is signed out
+    //     console.log("User is signed out");
+    //   }
+    // });
+
+    // Auth state listener
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser); // Set the user state based on auth state
     });
+
+    return () => unsubscribe(); // Cleanup subscription on unmount
 
   }, [apiUrl, auth]);
 
@@ -151,6 +163,16 @@ function MainComponent() {
   if (isLoading) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
     return;
+  }
+
+  if (!user) {
+    // User is not signed in, show login or registration screen
+    return (
+    <IonReactRouter>
+      <LoginScreen />
+      <RegisterScreen />
+    </IonReactRouter>
+    );
   }
 
   return (
