@@ -4,11 +4,8 @@ import {
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
   IonRow,
-  IonLoading,
-  IonButton,
   IonText,
   IonIcon,
   IonBadge,
@@ -38,25 +35,21 @@ import { trace } from "firebase/performance";
 // Interfaces
 import { HomeData } from "../../api/HomeData";
 import { useDispatch, useSelector } from "react-redux";
-import { setHttpError, errorSlice } from "../../features/error/slice";
+import { setHttpErrorData } from "../../features/error/slice";
+import AppMeta from "../../variables/AppMeta";
 
 const HomePage: React.FC<{
   vimeoIdFromUrl?: string;
   articleIdFromUrl?: string;
 }> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
-  const httpError = useSelector(
-    ({ error }: { error: errorSlice }) => error.httpError,
-  );
-
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
   const [totalPaths, setTotalPaths] = useState(0);
   const [featuredVideos, setFeaturedVideos] = useState<any[]>([]);
-  const [newVideos, setNewVideos] = useState<any[]>([]);
+  const [, setNewVideos] = useState<any[]>([]);
   const [playedVideos, setPlayedVideos] = useState<any[]>([]);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [, setIsLoading] = useState(false);
 
   const {
     currentBasePage,
@@ -77,9 +70,9 @@ const HomePage: React.FC<{
   const { unreadMessagesCount, setUnreadMessagesCount } =
     useContext(UnreadContext); // Get the current unread count
 
-  var getHomeDataTrace: any;
+  let getHomeDataTrace: any;
 
-  var homeData: HomeData = {
+  let homeData: HomeData = {
     numPathsInProgress: 0,
     numCompletedPaths: 0,
     numTotalPaths: 0,
@@ -130,14 +123,7 @@ const HomePage: React.FC<{
       setNewVideos(homeData.newVideos);
       setPlayedVideos(homeData.playedVideos);
     } catch (error) {
-      setGenericModalData({
-        title: "Error",
-        body: "We're sorry, but we couldn't load the data for this page. Please try again later.",
-        buttonText: "Close",
-        buttonAction: () => {
-          history.go(0);
-        },
-      });
+      dispatch(setHttpErrorData(AppMeta.httpErrorData));
     } finally {
       setIsLoading(() => {
         return false;
@@ -223,7 +209,6 @@ const HomePage: React.FC<{
       <IonHeader class="header">
         <IonToolbar className="header-toolbar">
           <h2>Home</h2>
-          {JSON.stringify(httpError)}
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="page">

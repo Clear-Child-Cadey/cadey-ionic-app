@@ -1,14 +1,21 @@
 {
-  "root": true,
-  "env": {
-    "node": true,
-  },
-  "extends": ["plugin:react/recommended", "eslint:recommended", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "parserOptions": {
     "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "tsx": true,
+    },
   },
   "rules": {
     "no-console": "off",
     "no-debugger": "off",
+  },
+  "settings": {
+    "react": {
+      "version": "detect",
+    },
   },
 }

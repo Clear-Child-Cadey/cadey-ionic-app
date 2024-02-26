@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useContext } from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import semver from "semver";
 // Components
 import { SplashScreen } from "@capacitor/splash-screen";
 import RouterTabs from "./components/Routing/RouterTabs";
 // Modals
-import AppUpdateModal from './components/Modals/AppUpdateModal';
-import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
-import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
-import QuizModal from './components/Modals/QuizModal/QuizModal';
-import WelcomeModal from './pages/Welcome/Welcome';
+import AppUpdateModal from "./components/Modals/AppUpdateModal";
+import VideoDetailModal from "./components/Modals/VideoDetailModal/VideoDetailModal";
+import ArticleDetailModal from "./components/Modals/ArticleDetailModal/ArticleDetailModal";
+import QuizModal from "./components/Modals/QuizModal/QuizModal";
+import WelcomeModal from "./pages/Welcome/Welcome";
 // Contexts
 import { CadeyUserContext } from "./main";
 import { useModalContext } from "./context/ModalContext";
 import ApiUrlContext from "./context/ApiUrlContext";
 import { useAppPage } from "./context/AppPageContext";
-import { useTabContext } from './context/TabContext';
+import { useTabContext } from "./context/TabContext";
 // Variables
 import { AppVersion } from "./variables/AppVersion";
 // API
@@ -24,9 +24,11 @@ import { setExternalUserId } from "./api/OneSignal/SetExternalUserId";
 import { logUserFact } from "./api/UserFacts";
 import PopularSymptomVideoDetailModal from "./components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal";
 import GenericModal from "./components/Modals/GenericModal";
-import { getQuiz } from './api/Quiz';
+import { getQuiz } from "./api/Quiz";
 // Pages
-import WelcomePage from './pages/Welcome/Welcome';
+import WelcomePage from "./pages/Welcome/Welcome";
+import { HttpStatusCode } from "axios";
+import HttpErrorModal from "./components/Modals/HttpErrorModal";
 
 setupIonicReact();
 
@@ -87,7 +89,7 @@ const App: React.FC = () => {
           Number(cadeyUserId),
           3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
           0, // Entity Type (1 = video)
-          0  // Entity IDs (The ID of the video)
+          0, // Entity IDs (The ID of the video)
         );
 
         setCheckForWelcome(true); // Prevents re-fetching the quiz
@@ -96,25 +98,26 @@ const App: React.FC = () => {
         if (quizResponse.question !== null && quizResponse.question.id > 0) {
           // Set the quiz data
           setQuizModalData(quizResponse);
-          
+
           // Hide the tab bar
           setIsTabBarVisible(false);
 
           // Route the user to the welcome page
-          history.push('/App/Welcome');
+          history.push("/App/Welcome");
         } else {
           // Show the tab bar
           setIsTabBarVisible(true);
         }
       }
-    }
+    };
 
     requestQuiz();
   }, [cadeyUserId, apiUrl]);
 
   // Show the upgrade modal if the current app version is not the latest
+  // Set the version to 1.0.0 if we can't even get minimumSupportedVersion (i.e., internet is down)
   useEffect(() => {
-    if (semver.lt(AppVersion, minimumSupportedVersion)) {
+    if (semver.lt(AppVersion, minimumSupportedVersion || "1.0.0")) {
       SplashScreen.hide(); // Hide the splash screen
       setShowUpgradeModal(true);
     }
@@ -140,12 +143,12 @@ const App: React.FC = () => {
       userFactTypeName: "VideoDetailPageClosed",
       appPage: "Video Detail",
     });
-  }
+  };
 
   return (
     <IonApp>
-
       {/* Show a modal if the user needs to update their app*/}
+      <HttpErrorModal />
       <AppUpdateModal
         isOpen={showUpgradeModal}
         title="Update Required"
@@ -158,14 +161,10 @@ const App: React.FC = () => {
       <QuizModal />
 
       {/* Show a video modal if context dictates */}
-      {isVideoModalOpen && currentVimeoId && (
-        <VideoDetailModal />
-      )}
-      
+      {isVideoModalOpen && currentVimeoId && <VideoDetailModal />}
+
       {/* Show an article modal if context dictates */}
       {isArticleDetailModalOpen && currentArticleId && <ArticleDetailModal />}
-
-
 
       {/* Show a quiz modal if context dictates */}
       <QuizModal />
