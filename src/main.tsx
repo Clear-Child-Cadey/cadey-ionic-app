@@ -51,6 +51,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { trace } from "firebase/performance";
 import { logErrorToFirestore } from "./api/Firebase/LogErrorToFirestore";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem("cadey_user_device_id");
@@ -87,11 +88,23 @@ function MainComponent() {
 
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  const auth = getAuth();
+
   // App startup logic
   useEffect(() => {
     let timeoutId: any;
 
     const fetchData = async () => {
+      // Authenticate with Firebase
+      signInAnonymously(auth)
+      .then(() => {
+        console.log("Signed in anonymously");
+      })
+      .catch((error) => {
+        console.error("Error signing in anonymously:", error);
+      });
+
+      
       var getAppDataTrace: any;
       // Start a Firebase trace
       if (tracingEnabled) {
@@ -122,33 +135,18 @@ function MainComponent() {
       }
     };
 
-    // Start a timer
-    // timeoutId = setTimeout(() => {
-    //   if (!dataLoaded) {
-    //     // TODO: Implement logic for handling long load times
-
-    //     // Log a user fact
-    //     logUserFact({
-    //       cadeyUserId: cadeyUserId,
-    //       baseApiUrl: apiUrl,
-    //       userFactTypeName: 'ErrorLog',
-    //       appPage: 'App Open',
-    //       detail1: 'getAppData call (/appopened) took longer than 10 seconds. Time: ' + new Date().toISOString(),
-    //     });
-
-    //     logErrorToFirestore({
-    //       userID: cadeyUserId,
-    //       timestamp: new Date().toISOString(),
-    //       error: 'getAppData call (/appopened) took longer than 10 seconds',
-    //       context: "Fetching App Data"
-    //     });
-
-    //     setIsLoading(false); // Optionally stop the loader
-    //   }
-    // }, 10000); // Set timeout for 10 seconds
-
     fetchData();
-  }, [apiUrl]);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, you can add additional logic here if needed
+        console.log("User is signed in anonymously, UID: ", user.uid);
+      } else {
+        // User is signed out
+        console.log("User is signed out");
+      }
+    });
+  }, [apiUrl, auth]);
 
   // const { loading: firebaseAuthLoading } = useAuth();
   // if (isLoading || firebaseAuthLoading) {
