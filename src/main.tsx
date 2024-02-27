@@ -11,13 +11,13 @@ import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import {
   LoadingStateProvider,
   useLoadingState,
-} from "./context/LoadingStateContext";
-import { ModalProvider } from "./context/ModalContext";
-import { AppPageProvider } from "./context/AppPageContext";
-import { PathProvider } from "./context/PathContext";
+} from './context/LoadingStateContext';
+import { ModalProvider } from './context/ModalContext';
+import { AppPageProvider } from './context/AppPageContext';
+import { PathProvider } from './context/PathContext';
 // Components
-import LoginScreen from "./components/Authentication/Login";
-import RegisterScreen from "./components/Authentication/Register";
+import LoginScreen from './components/Authentication/Login';
+import RegisterScreen from './components/Authentication/Register';
 
 // API
 import getAppData from './api/AppOpen';
@@ -161,7 +161,6 @@ function MainComponent() {
     });
 
     return () => unsubscribe(); // Cleanup subscription on unmount
-
   }, [apiUrl, auth]);
 
   // const { loading: firebaseAuthLoading } = useAuth();
@@ -174,10 +173,10 @@ function MainComponent() {
   if (!user) {
     // User is not signed in, show login or registration screen
     return (
-    <IonReactRouter>
-      <LoginScreen />
-      <RegisterScreen />
-    </IonReactRouter>
+      <IonReactRouter>
+        <LoginScreen />
+        <RegisterScreen />
+      </IonReactRouter>
     );
   }
 

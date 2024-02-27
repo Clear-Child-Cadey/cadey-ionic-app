@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // Firebase
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../api/Firebase/InitializeFirebase';
 // CSS
 import './Register.css'; // Adjust the path as necessary
@@ -26,19 +26,19 @@ function RegisterScreen() {
   return (
     <div>
       <form onSubmit={handleRegister}>
-        <input 
-          type="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          placeholder="Email"
+        <input
+          type='email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder='Email'
         />
-        <input 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          placeholder="Password"
+        <input
+          type='password'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder='Password'
         />
-        <button type="submit">Register</button>
+        <button type='submit'>Register</button>
         {error && <p>{error}</p>}
       </form>
     </div>
