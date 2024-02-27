@@ -13,6 +13,7 @@ import {
   IonIcon,
   IonBadge,
 } from '@ionic/react';
+
 // Icons
 import { chevronForwardOutline, home } from 'ionicons/icons';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -40,11 +41,13 @@ import { HomeData } from '../../api/HomeData';
 import { useDispatch, useSelector } from 'react-redux';
 import { setHttpErrorModalData } from '../../features/httpError/slice';
 import AppMeta from '../../variables/AppMeta';
+import useCadeyAuth from '../../hooks/useCadeyAuth';
 
 const HomePage: React.FC<{
   vimeoIdFromUrl?: string;
   articleIdFromUrl?: string;
 }> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
+  const { user } = useCadeyAuth();
   const dispatch = useDispatch();
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
@@ -216,7 +219,7 @@ const HomePage: React.FC<{
         /> */}
 
         <IonRow>
-          <IonText className='subcopy'>Welcome</IonText>
+          <IonText className='subcopy'>Welcome {JSON.stringify(user)}</IonText>
         </IonRow>
 
         <IonRow className='content'>
