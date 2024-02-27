@@ -26,10 +26,6 @@ const useCadeyAuth = () => {
 
   useEffect(() => {
     signInAnonymouslyDecorated();
-  }, []);
-
-  useEffect(() => {
-    signInAnonymouslyDecorated();
   }, [user]);
 
   onAuthStateChanged(auth, (user) => {
