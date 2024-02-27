@@ -11,7 +11,6 @@ import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import {
   LoadingStateProvider,
   useLoadingState,
-<<<<<<< HEAD
 } from "./context/LoadingStateContext";
 import { ModalProvider } from "./context/ModalContext";
 import { AppPageProvider } from "./context/AppPageContext";
@@ -19,12 +18,6 @@ import { PathProvider } from "./context/PathContext";
 // Components
 import LoginScreen from "./components/Authentication/Login";
 import RegisterScreen from "./components/Authentication/Register";
-=======
-} from './context/LoadingStateContext';
-import { ModalProvider } from './context/ModalContext';
-import { AppPageProvider } from './context/AppPageContext';
-import { PathProvider } from './context/PathContext';
->>>>>>> redux-3
 
 // API
 import getAppData from './api/AppOpen';
@@ -94,13 +87,9 @@ export const CadeyUserContext = createContext<{
 function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);
 
-<<<<<<< HEAD
   const [user, setUser]: any = useState(null); // Add this line to manage user state
 
-  const [cadeyUserId, setCadeyUserId] = useState("");
-=======
   const [cadeyUserId, setCadeyUserId] = useState('');
->>>>>>> redux-3
   const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState('');
   const [oneSignalId, setOneSignalId] = useState('');
@@ -116,7 +105,6 @@ function MainComponent() {
 
     const fetchData = async () => {
       // Authenticate with Firebase
-<<<<<<< HEAD
       // signInAnonymously(auth)
       // .then(() => {
       //   console.log("Signed in anonymously");
@@ -124,12 +112,8 @@ function MainComponent() {
       // .catch((error) => {
       //   console.error("Error signing in anonymously:", error);
       // });
-      
-      var getAppDataTrace: any;
-=======
 
       let getAppDataTrace: any;
->>>>>>> redux-3
       // Start a Firebase trace
       if (tracingEnabled) {
         getAppDataTrace = trace(firebasePerf, 'getAppDataTrace');
@@ -160,7 +144,6 @@ function MainComponent() {
     };
 
     fetchData();
-<<<<<<< HEAD
 
     // onAuthStateChanged(auth, (user) => {
     //   if (user) {
@@ -179,8 +162,6 @@ function MainComponent() {
 
     return () => unsubscribe(); // Cleanup subscription on unmount
 
-=======
->>>>>>> redux-3
   }, [apiUrl, auth]);
 
   // const { loading: firebaseAuthLoading } = useAuth();
