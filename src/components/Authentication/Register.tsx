@@ -5,7 +5,7 @@ import { auth } from '../../api/Firebase/InitializeFirebase';
 // CSS
 import './Register.css'; // Adjust the path as necessary
 
-function RegisterScreen() {
+function RegisterComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -45,4 +45,4 @@ function RegisterScreen() {
   );
 }
 
-export default RegisterScreen;
+export default RegisterComponent;

@@ -8,7 +8,7 @@ import { auth } from '../../api/Firebase/InitializeFirebase';
 // CSS
 import './Login.css'; // Adjust the path as necessary
 
-function LoginScreen() {
+function LoginComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -69,4 +69,4 @@ function LoginScreen() {
   );
 }
 
-export default LoginScreen;
+export default LoginComponent;

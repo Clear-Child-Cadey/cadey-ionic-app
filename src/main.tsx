@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { IonReactRouter } from '@ionic/react-router';
+import { Route, useLocation } from 'react-router-dom';
+import { Provider } from 'react-redux';
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
@@ -15,9 +17,11 @@ import {
 import { ModalProvider } from './context/ModalContext';
 import { AppPageProvider } from './context/AppPageContext';
 import { PathProvider } from './context/PathContext';
-// Components
-import LoginScreen from './components/Authentication/Login';
-import RegisterScreen from './components/Authentication/Register';
+// Pages
+import LandingPage from './pages/Authentication/Landing';
+import PasswordResetPage from './pages/Authentication/PasswordResetPage';
+
+import store from './store';
 
 // API
 import getAppData from './api/AppOpen';
@@ -59,8 +63,6 @@ import { trace } from 'firebase/performance';
 import { logErrorToFirestore } from './api/Firebase/LogErrorToFirestore';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import store from './store';
-import { Provider } from 'react-redux';
 
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
@@ -86,6 +88,8 @@ export const CadeyUserContext = createContext<{
 
 function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);
+
+  const location = useLocation();
 
   const [user, setUser]: any = useState(null); // Add this line to manage user state
 
@@ -145,16 +149,6 @@ function MainComponent() {
 
     fetchData();
 
-    // onAuthStateChanged(auth, (user) => {
-    //   if (user) {
-    //     // User is signed in, you can add additional logic here if needed
-    //     console.log("User is signed in anonymously, UID: ", user.uid);
-    //   } else {
-    //     // User is signed out
-    //     console.log("User is signed out");
-    //   }
-    // });
-
     // Auth state listener
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); // Set the user state based on auth state
@@ -170,12 +164,21 @@ function MainComponent() {
     return;
   }
 
-  if (!user) {
-    // User is not signed in, show login or registration screen
+  // Check the route to see if the user is trying to reset their password
+  if (location.pathname.startsWith('/password-reset')) {
     return (
       <IonReactRouter>
-        <LoginScreen />
-        <RegisterScreen />
+        <PasswordResetPage />
+      </IonReactRouter>
+    );
+  }
+
+  if (!user) {
+    // User is not signed in, show login or registration screen
+
+    return (
+      <IonReactRouter>
+        <LandingPage />
       </IonReactRouter>
     );
   }
@@ -227,7 +230,9 @@ root.render(
   // <AuthProvider>
   <Provider store={store}>
     <ApiUrlProvider>
-      <MainComponent />
+      <IonReactRouter>
+        <MainComponent />
+      </IonReactRouter>
     </ApiUrlProvider>
   </Provider>,
   // </AuthProvider>,
