@@ -108,15 +108,6 @@ function MainComponent() {
     let timeoutId: any;
 
     const fetchData = async () => {
-      // Authenticate with Firebase
-      // signInAnonymously(auth)
-      // .then(() => {
-      //   console.log("Signed in anonymously");
-      // })
-      // .catch((error) => {
-      //   console.error("Error signing in anonymously:", error);
-      // });
-
       let getAppDataTrace: any;
       // Start a Firebase trace
       if (tracingEnabled) {
