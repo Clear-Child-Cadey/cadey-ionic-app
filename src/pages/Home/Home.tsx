@@ -219,7 +219,9 @@ const HomePage: React.FC<{
         /> */}
 
         <IonRow>
-          <IonText className='subcopy'>Welcome {JSON.stringify(user)}</IonText>
+          <IonText className='subcopy'>
+            Welcome <pre>{JSON.stringify(user, 0, 1)}</pre>
+          </IonText>
         </IonRow>
 
         <IonRow className='content'>

@@ -53,16 +53,11 @@ import './theme/main.css';
 import { v4 as uuidv4 } from 'uuid';
 
 // Firebase
-import {
-  firebasePerf,
-  firestore,
-  auth,
-} from './api/Firebase/InitializeFirebase';
+import { firebasePerf } from './api/Firebase/InitializeFirebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { trace } from 'firebase/performance';
 import { logErrorToFirestore } from './api/Firebase/LogErrorToFirestore';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import useCadeyAuth from './hooks/useCadeyAuth';
 
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
@@ -91,8 +86,6 @@ function MainComponent() {
 
   const location = useLocation();
 
-  const [user, setUser]: any = useState(null); // Add this line to manage user state
-
   const [cadeyUserId, setCadeyUserId] = useState('');
   const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState('');
@@ -102,6 +95,8 @@ function MainComponent() {
   const [unreadGoals, setUnreadGoals] = useState(false);
 
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  const { user, isUserAnonymous } = useCadeyAuth();
 
   // App startup logic
   useEffect(() => {
@@ -139,17 +134,8 @@ function MainComponent() {
     };
 
     fetchData();
+  }, [apiUrl]);
 
-    // Auth state listener
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Set the user state based on auth state
-    });
-
-    return () => unsubscribe(); // Cleanup subscription on unmount
-  }, [apiUrl, auth]);
-
-  // const { loading: firebaseAuthLoading } = useAuth();
-  // if (isLoading || firebaseAuthLoading) {
   if (isLoading) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
     return;
@@ -164,9 +150,7 @@ function MainComponent() {
     );
   }
 
-  if (!user) {
-    // User is not signed in, show login or registration screen
-
+  if (!user || isUserAnonymous()) {
     return (
       <IonReactRouter>
         <LandingPage />
@@ -217,8 +201,6 @@ function MainComponent() {
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
-  // <React.StrictMode>
-  // <AuthProvider>
   <Provider store={store}>
     <ApiUrlProvider>
       <IonReactRouter>
@@ -226,6 +208,4 @@ root.render(
       </IonReactRouter>
     </ApiUrlProvider>
   </Provider>,
-  // </AuthProvider>,
-  // </React.StrictMode>
 );

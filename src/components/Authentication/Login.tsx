@@ -1,51 +1,52 @@
 import React, { useState } from 'react';
-// Firebase
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from 'firebase/auth';
-import { auth } from '../../api/Firebase/InitializeFirebase';
-// CSS
+
 import './Login.css'; // Adjust the path as necessary
+import useCadeyAuth from '../../hooks/useCadeyAuth';
+import LoginErrors from '../notices/LoginErrors';
+import LoginMessages from '../notices/LoginMessages';
 
 function LoginComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
+  const {
+    user,
+    messages,
+    errors,
+    signInWithEmailAndPasswordDecorated,
+    sendPasswordResetEmailDecorated,
+  } = useCadeyAuth();
 
-  const handleLogin = async (e: any) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(''); // Clear any existing errors
+    setLocalError(''); // Clear any existing errors
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPasswordDecorated(email, password);
       // Navigation to another component upon success can be handled here
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const handleForgotPassword = async (e: any) => {
+  const handleForgotPassword = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     e.preventDefault();
 
     if (!email) {
-      setError('Please enter your email address to reset your password.');
+      setLocalError('Please enter your email address to reset your password.');
       return;
     }
 
-    try {
-      await sendPasswordResetEmail(auth, email);
-      alert('Password reset email sent! Check your inbox.');
-    } catch (error) {
-      setError(
-        'Failed to send password reset email. Please make sure the email is correct.',
-      );
-      console.error(error);
-    }
+    await sendPasswordResetEmailDecorated(email);
+    alert('Password reset email sent! Check your inbox.');
   };
 
   return (
     <div>
+      <LoginMessages messages={messages} />
+      <LoginErrors errors={errors} />
       <form onSubmit={handleLogin}>
         <input
           type='email'
@@ -63,7 +64,7 @@ function LoginComponent() {
         <button type='button' onClick={handleForgotPassword}>
           Forgot Password?
         </button>
-        {error && <p>{error}</p>}
+        {localError && <p>{localError}</p>}
       </form>
     </div>
   );
