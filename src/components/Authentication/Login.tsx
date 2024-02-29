@@ -20,7 +20,6 @@ function LoginComponent() {
     errors,
     signInWithEmailAndPasswordDecorated,
     sendPasswordResetEmailDecorated,
-    loading,
   } = useCadeyAuth();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {

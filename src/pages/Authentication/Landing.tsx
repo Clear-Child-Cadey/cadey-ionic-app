@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // Styles
 import './Landing.css';
 // Components
@@ -25,8 +25,11 @@ const LandingPage = () => {
     forgotPassword: ForgotPasswordComponent,
   };
 
-  const { loading } = useCadeyAuth();
+  const { authLoading } = useCadeyAuth();
 
+  useEffect(() => {
+    console.log(authLoading, 'LOADING!');
+  }, [authLoading]);
   const [tab, setTab] = useState<UserAction>('login');
 
   const handleLoginClick = () => {
@@ -69,8 +72,8 @@ const LandingPage = () => {
           Forgot Password
         </button>
       </div>
-      <p style={{ color: 'red' }}>{JSON.stringify(loading)}</p>
-      <div className={loading ? 'action-loading' : ''}>
+
+      <div className={authLoading ? 'action-loading' : ''}>
         {React.createElement(components[tab])}
       </div>
     </div>
