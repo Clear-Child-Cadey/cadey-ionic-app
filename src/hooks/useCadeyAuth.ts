@@ -5,6 +5,7 @@ import {
   signInAnonymously,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { auth } from '../api/Firebase/InitializeFirebase';
 
@@ -49,15 +50,19 @@ const useCadeyAuth = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser);
         console.log('User is signed in, UID:', currentUser.uid);
+        setUser(currentUser); // This will set the user state with the current user
+        // Here, you no longer need to explicitly check for non-anonymous users to avoid signing in anonymously
+        // as this condition is now inherently considered by placing the signInAnonymously call in the else block below
       } else {
-        console.log('User is signed out');
-        setUser(null);
+        console.log('User is signed out or not yet loaded');
+        // Since there's no user, attempt to sign in anonymously
+        console.log('Signing in anonymously');
+        signInAnonymouslyDecorated(); // This will only trigger if there's no current user at all
       }
     });
-    return unsubscribe; // Clean up subscription on unmount
-  }, []);
+    return () => unsubscribe(); // Clean up subscription on unmount
+  }, []); // The empty dependency array ensures this effect only runs once at mount
 
   // Function to sign in anonymously
   const signInAnonymouslyDecorated = async () => {
@@ -91,6 +96,22 @@ const useCadeyAuth = () => {
     setMessageDecorated('Logged in successfully!');
   };
 
+  const createUserWithEmailAndPasswordDecorated = async (
+    email: string,
+    password: string,
+  ) => {
+    runBeforeRequest();
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorDecorated(e);
+      }
+      throw e;
+    }
+    setMessageDecorated('Account created');
+  };
+
   // Enhanced: Function to send password reset email
   const sendPasswordResetEmailDecorated = async (email: string) => {
     runBeforeRequest();
@@ -104,11 +125,6 @@ const useCadeyAuth = () => {
     }
     setMessageDecorated('Password reset email sent!');
   };
-
-  // Automatically sign in anonymously
-  useEffect(() => {
-    signInAnonymouslyDecorated();
-  }, [user]);
 
   const resetUser = () => {
     setUser(null);
@@ -132,6 +148,7 @@ const useCadeyAuth = () => {
     resetUser,
     signInWithEmailAndPasswordDecorated,
     sendPasswordResetEmailDecorated,
+    createUserWithEmailAndPasswordDecorated,
     isUserAnonymous,
     getUid,
     getEmailVerified,
