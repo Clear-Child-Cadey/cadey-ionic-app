@@ -95,7 +95,6 @@ const useCadeyAuth = () => {
     email: string,
     password: string,
   ) {
-    debugger;
     runBeforeRequest();
     try {
       await signInWithEmailAndPassword(auth, email, password);

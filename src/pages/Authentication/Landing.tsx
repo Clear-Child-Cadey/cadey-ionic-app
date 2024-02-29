@@ -30,6 +30,7 @@ const LandingPage = () => {
   useEffect(() => {
     console.log(authLoading, 'LOADING!');
   }, [authLoading]);
+
   const [tab, setTab] = useState<UserAction>('login');
 
   const handleLoginClick = () => {
