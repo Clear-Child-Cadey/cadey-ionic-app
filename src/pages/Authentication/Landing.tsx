@@ -21,7 +21,9 @@ export const actionOuterWrap = 'action-outer-wrap';
 export const actionFormFieldsWrap = 'action-form-fields-wrap';
 
 const LandingPage = () => {
-  const authLoading = useSelector((state: RootState) => state.authLoading);
+  const authLoading = useSelector(
+    (state: RootState) => state.authLoading.authLoading,
+  );
 
   console.log('LandingPage rendering', { authLoading }); // Log every re-render
 

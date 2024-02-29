@@ -77,7 +77,7 @@ const useCadeyAuth = () => {
   };
 
   const runAfterRequest = () => {
-    // dispatch(setAuthLoading(false)); // Update global authLoading state
+    dispatch(setAuthLoading(false)); // Update global authLoading state
   };
 
   // Subscribe to auth state changes
