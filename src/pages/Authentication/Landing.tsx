@@ -27,8 +27,14 @@ const LandingPage = () => {
     setShowForgotPassword(true);
   };
 
+  const loginWrapStyles = {
+    display: 'flex',
+    gap: '1rem',
+    marginTop: '100px',
+  };
+
   return (
-    <div>
+    <div style={loginWrapStyles}>
       <button onClick={handleLoginClick}>Login</button>
       <button onClick={handleRegisterClick}>Register</button>
       <button onClick={handleForgotPasswordClick}>Forgot Password</button>
