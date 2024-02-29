@@ -25,8 +25,6 @@ const LandingPage = () => {
     (state: RootState) => state.authLoading.authLoading,
   );
 
-  console.log('LandingPage rendering', { authLoading }); // Log every re-render
-
   const components = {
     login: LoginComponent,
     register: RegisterComponent,
@@ -79,6 +77,8 @@ const LandingPage = () => {
           Forgot Password
         </button>
       </div>
+
+      {authLoading && <div>Loading...</div>}
 
       <div className={authLoading ? 'action-loading' : ''}>
         {React.createElement(components[tab])}
