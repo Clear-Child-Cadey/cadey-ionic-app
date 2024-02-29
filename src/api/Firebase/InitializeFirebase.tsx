@@ -4,11 +4,14 @@ import { getAnalytics } from 'firebase/analytics';
 import { getPerformance } from 'firebase/performance';
 import { getFirestore } from 'firebase/firestore';
 import {
+  Auth,
   browserLocalPersistence,
   getAuth,
+  indexedDBLocalPersistence,
   initializeAuth,
   setPersistence,
 } from 'firebase/auth';
+import { Capacitor } from '@capacitor/core';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBcqwDAbWGh25wog7XpbV9gtjV4HEA_Fys',
@@ -25,7 +28,16 @@ const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAnalytics = getAnalytics(firebaseApp);
 const firebasePerf = getPerformance(firebaseApp);
 const firestore = getFirestore(firebaseApp);
-const auth = initializeAuth(firebaseApp);
+
+let auth: Auth;
+if (Capacitor.isNativePlatform()) {
+  auth = initializeAuth(firebaseApp, {
+    persistence: indexedDBLocalPersistence,
+  });
+} else {
+  auth = getAuth(firebaseApp);
+}
+
 setPersistence(auth, browserLocalPersistence);
 
 export { firebaseApp, firebaseAnalytics, firebasePerf, firestore, auth };
