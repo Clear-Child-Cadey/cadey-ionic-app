@@ -4,8 +4,13 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../api/Firebase/InitializeFirebase';
 // CSS
 import './Register.css'; // Adjust the path as necessary
+import LoginMessages from '../notices/LoginMessages';
+import LoginErrors from '../notices/LoginErrors';
+import useCadeyAuth from '../../hooks/useCadeyAuth';
 
 function RegisterComponent() {
+  const { messages, errors, createUserWithEmailAndPasswordDecorated } =
+    useCadeyAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,7 +20,7 @@ function RegisterComponent() {
     setError(''); // Clear any existing errors
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPasswordDecorated(email, password);
       // Navigation to another component upon success can be handled here
       console.log('User registered');
     } catch (error) {
@@ -25,6 +30,8 @@ function RegisterComponent() {
 
   return (
     <div>
+      <LoginMessages messages={messages} />
+      <LoginErrors errors={errors} />
       <form onSubmit={handleRegister}>
         <input
           type='email'
