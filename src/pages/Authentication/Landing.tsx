@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+// Redux
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 // Styles
 import './Landing.css';
 // Components
 import LoginComponent from '../../components/Authentication/Login';
 import RegisterComponent from '../../components/Authentication/Register';
 import ForgotPasswordComponent from '../../components/Authentication/ForgotPassword';
-import useCadeyAuth from '../../hooks/useCadeyAuth';
 
 type UserAction = 'login' | 'register' | 'forgotPassword';
 
@@ -19,13 +21,15 @@ export const actionOuterWrap = 'action-outer-wrap';
 export const actionFormFieldsWrap = 'action-form-fields-wrap';
 
 const LandingPage = () => {
+  const authLoading = useSelector((state: RootState) => state.authLoading);
+
+  console.log('LandingPage rendering', { authLoading }); // Log every re-render
+
   const components = {
     login: LoginComponent,
     register: RegisterComponent,
     forgotPassword: ForgotPasswordComponent,
   };
-
-  const { authLoading } = useCadeyAuth();
 
   useEffect(() => {
     console.log(authLoading, 'LOADING!');

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// Firebase
 import {
   User,
   onAuthStateChanged,
@@ -8,15 +10,20 @@ import {
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { auth } from '../api/Firebase/InitializeFirebase';
+// Redux
+import { RootState } from '../store';
+import { setAuthLoading } from '../features/authLoading/slice';
 
 const useCadeyAuth = () => {
+  const dispatch = useDispatch();
+  const authLoading = useSelector((state: RootState) => state.authLoading); // Access global authLoading state
+
   const initialErrorsState: string[] = [];
   const initialMessagesState: string[] = [];
   type UserState = User | null;
   const [user, setUser] = useState<UserState>(null);
   const [errors, setErrors] = useState<[] | Array<string>>(initialErrorsState);
   const [messages, setMessages] = useState(initialMessagesState);
-  const [authLoading, setAuthLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -28,12 +35,16 @@ const useCadeyAuth = () => {
       } else {
         console.log('User is signed out or not yet loaded');
         // Since there's no user, attempt to sign in anonymously
-        console.log('Signing in anonymously');
         signInAnonymouslyDecorated(); // This will only trigger if there's no current user at all
       }
     });
     return () => unsubscribe(); // Clean up subscription on unmount
   }, []); // The empty dependency array ensures this effect only runs once at mount
+
+  // Log the value of authLoading whenever it changes
+  useEffect(() => {
+    console.log(authLoading, 'LOADING! (useCadeyAuth)');
+  }, [authLoading]);
 
   const setMessageDecorated = (m: string) => {
     setMessages((prevMessagesArray) => {
@@ -60,13 +71,13 @@ const useCadeyAuth = () => {
   };
 
   const runBeforeRequest = () => {
-    setAuthLoading(true);
+    dispatch(setAuthLoading(true)); // Update global authLoading state
     setErrors(initialErrorsState);
     setMessages(initialMessagesState);
   };
 
   const runAfterRequest = () => {
-    setAuthLoading(false);
+    // dispatch(setAuthLoading(false)); // Update global authLoading state
   };
 
   // Subscribe to auth state changes
@@ -163,7 +174,6 @@ const useCadeyAuth = () => {
   };
 
   return {
-    authLoading,
     errors,
     user,
     resetUser,
