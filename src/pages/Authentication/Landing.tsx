@@ -22,7 +22,7 @@ export const actionFormFieldsWrap = 'action-form-fields-wrap';
 
 const LandingPage = () => {
   const authLoading = useSelector(
-    (state: RootState) => state.authLoading.authLoading,
+    (state: RootState) => state.authStatus.authLoading,
   );
 
   const components = {

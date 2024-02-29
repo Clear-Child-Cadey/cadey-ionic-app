@@ -16,7 +16,7 @@ import { setAuthLoading } from '../features/authLoading/slice';
 
 const useCadeyAuth = () => {
   const dispatch = useDispatch();
-  const authLoading = useSelector((state: RootState) => state.authLoading); // Access global authLoading state
+  const authLoading = useSelector((state: RootState) => state.authStatus); // Access global authLoading state
 
   const initialErrorsState: string[] = [];
   const initialMessagesState: string[] = [];

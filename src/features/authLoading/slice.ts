@@ -1,4 +1,3 @@
-// src/store/features/authStatus/slice.ts
 import { createSlice } from '@reduxjs/toolkit';
 
 interface AuthStatusState {

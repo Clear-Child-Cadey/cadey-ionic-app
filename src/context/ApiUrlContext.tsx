@@ -14,16 +14,18 @@ const API_PATH = '/api/cadey290';
 const API_FULL_PATH = `${STAGING_API_URL}${API_PATH}`;
 
 type ApiUrlContextType = {
-    apiUrl: string;
-    setApiUrl: (value: string) => void;
-  };
+  apiUrl: string;
+  setApiUrl: (value: string) => void;
+};
 
 const ApiUrlContext = React.createContext<ApiUrlContextType>({
-    apiUrl: API_FULL_PATH, 
-    setApiUrl: () => {},
+  apiUrl: API_FULL_PATH,
+  setApiUrl: () => {},
 });
 
-export const ApiUrlProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+export const ApiUrlProvider: React.FC<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [apiUrl, setApiUrl] = useState(API_FULL_PATH);
 
   return (
@@ -34,4 +36,10 @@ export const ApiUrlProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
 };
 
 export default ApiUrlContext;
-export { EDGE_API_URL, STAGING_API_URL, PRODUCTION_API_URL, API_PATH, API_FULL_PATH };
+export {
+  EDGE_API_URL,
+  STAGING_API_URL,
+  PRODUCTION_API_URL,
+  API_PATH,
+  API_FULL_PATH,
+};

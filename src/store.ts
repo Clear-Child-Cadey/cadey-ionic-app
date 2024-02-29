@@ -1,10 +1,10 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import httpErrorReducer from './features/httpError/slice';
-import authLoadingReducer from './features/authLoading/slice';
+import authStatusReducer from './features/authLoading/slice';
 
 const rootReducer = combineReducers({
   httpError: httpErrorReducer,
-  authLoading: authLoadingReducer,
+  authStatus: authStatusReducer,
 });
 
 // Create the store
