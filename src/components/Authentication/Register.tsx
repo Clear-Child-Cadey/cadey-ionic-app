@@ -7,17 +7,24 @@ import './Register.css'; // Adjust the path as necessary
 import LoginMessages from '../notices/LoginMessages';
 import LoginErrors from '../notices/LoginErrors';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
+import {
+  actionButton,
+  actionButtonWrap,
+  actionError,
+  actionFormFieldsWrap,
+  actionOuterWrap,
+} from '../../pages/Authentication/Landing';
 
 function RegisterComponent() {
-  const { messages, errors, createUserWithEmailAndPasswordDecorated } =
+  const { messages, errors, createUserWithEmailAndPasswordDecorated, loading } =
     useCadeyAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
 
   const handleRegister = async (e: any) => {
     e.preventDefault();
-    setError(''); // Clear any existing errors
+    setLocalError(''); // Clear any existing localErrors
 
     try {
       await createUserWithEmailAndPasswordDecorated(email, password);
@@ -29,25 +36,29 @@ function RegisterComponent() {
   };
 
   return (
-    <div>
+    <div className={actionOuterWrap}>
       <LoginMessages messages={messages} />
       <LoginErrors errors={errors} />
-      <form onSubmit={handleRegister}>
+      <form className={actionFormFieldsWrap} onSubmit={handleRegister}>
         <input
+          required
           type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Email'
         />
         <input
+          required
           type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder='Password'
         />
-        <button type='submit'>Register</button>
-        {error && <p>{error}</p>}
+        <button className={actionButton} type='submit'>
+          Register
+        </button>
       </form>
+      {localError && <p className={actionError}>{localError}</p>}
     </div>
   );
 }

@@ -5,11 +5,13 @@ const LoginErrors = ({ errors }: { errors: string[] }) => {
   {
     return (
       errors.length > 0 && (
-        <p>
+        <div style={{ textAlign: 'center' }}>
           {errors.map((e) => (
-            <IonText key={e}>{firebaseErrorMapper(e)}</IonText>
+            <IonText style={{ color: '#FF0000' }} key={e}>
+              {firebaseErrorMapper(e)}
+            </IonText>
           ))}
-        </p>
+        </div>
       )
     );
   }

@@ -45,6 +45,8 @@ const firebaseErrorMapper = (error: string) => {
     'auth/operation-not-supported-in-this-environment':
       'This operation is not supported in the environment this application is running on. "location.protocol" must be http, https, or chrome-extension and web storage must be enabled.',
     'auth/timeout': 'The operation has timed out.',
+    'auth/missing-password': 'A password must be provided.',
+    'auth/missing-email': 'An email address must be provided.',
     'auth/missing-android-pkg-name':
       'An Android Package Name must be provided if the Android App is required to be installed.',
     'auth/missing-continue-uri':

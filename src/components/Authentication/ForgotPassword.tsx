@@ -4,11 +4,21 @@ import './ForgotPassword.css'; // Adjust the path as necessary
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
+import {
+  actionButton,
+  actionButtonWrap,
+  actionError,
+  actionErrorText,
+  actionFormFieldsWrap,
+  actionMessageText,
+  actionOuterWrap,
+} from '../../pages/Authentication/Landing';
 
 function ForgotPasswordComponent() {
   const [email, setEmail] = useState('');
   const [localError, setLocalError] = useState('');
-  const { sendPasswordResetEmailDecorated, errors, messages } = useCadeyAuth();
+  const { sendPasswordResetEmailDecorated, errors, messages, loading } =
+    useCadeyAuth();
 
   const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -30,21 +40,27 @@ function ForgotPasswordComponent() {
   };
 
   return (
-    <>
+    <div className={actionOuterWrap}>
       <LoginMessages messages={messages} />
       <LoginErrors errors={errors} />
 
-      <form onSubmit={handleForgotPassword}>
+      <p className={actionMessageText}>
+        Enter Your Email to Reset Your Password
+      </p>
+      <form className={actionFormFieldsWrap} onSubmit={handleForgotPassword}>
         <input
+          required
           type='email'
           placeholder='Enter your email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button type='submit'>Reset Password</button>
-        {localError && <p>{localError}</p>}
+        <button className={actionButton} type='submit'>
+          Reset Password
+        </button>
       </form>
-    </>
+      {localError && <p className={actionError}>{localError}</p>}
+    </div>
   );
 }
 

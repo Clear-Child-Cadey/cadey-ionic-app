@@ -4,7 +4,7 @@ const LoginMessages = ({ messages }: { messages: string[] }) => {
   {
     return (
       messages.length > 0 && (
-        <p>
+        <p style={{ color: 'red', textAlign: 'center' }}>
           {messages.map((e) => (
             <IonText key={e}>{e}</IonText>
           ))}

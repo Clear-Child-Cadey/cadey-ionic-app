@@ -16,6 +16,7 @@ const useCadeyAuth = () => {
   const [user, setUser] = useState<UserState>(null);
   const [errors, setErrors] = useState<[] | Array<string>>(initialErrorsState);
   const [messages, setMessages] = useState(initialMessagesState);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const setMessageDecorated = (m: string) => {
     setMessages((prevMessagesArray) => {
@@ -44,6 +45,11 @@ const useCadeyAuth = () => {
   const runBeforeRequest = () => {
     setErrors(initialErrorsState);
     setMessages(initialMessagesState);
+    setLoading(true);
+  };
+
+  const runAfterRequest = () => {
+    setLoading(false);
   };
 
   // Subscribe to auth state changes
@@ -66,16 +72,20 @@ const useCadeyAuth = () => {
 
   // Function to sign in anonymously
   const signInAnonymouslyDecorated = async () => {
-    runBeforeRequest();
     if (user) return;
+    runBeforeRequest();
+
     try {
       await signInAnonymously(auth);
       console.log('Signed in anonymously');
     } catch (e: unknown) {
       if (e instanceof Error) {
         setErrorDecorated(e);
+        throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
   };
 
@@ -90,8 +100,11 @@ const useCadeyAuth = () => {
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
+        throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
     setMessageDecorated('Logged in successfully!');
   };
@@ -103,13 +116,16 @@ const useCadeyAuth = () => {
     runBeforeRequest();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      setMessageDecorated('Account created');
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
+        throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
-    setMessageDecorated('Account created');
   };
 
   // Enhanced: Function to send password reset email
@@ -117,13 +133,16 @@ const useCadeyAuth = () => {
     runBeforeRequest();
     try {
       await sendPasswordResetEmail(auth, email);
+      setMessageDecorated('Password reset email sent!');
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
+        throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
-    setMessageDecorated('Password reset email sent!');
   };
 
   const resetUser = () => {
@@ -153,6 +172,7 @@ const useCadeyAuth = () => {
     getUid,
     getEmailVerified,
     messages,
+    loading,
   };
 };
 

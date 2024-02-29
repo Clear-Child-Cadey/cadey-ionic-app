@@ -4,17 +4,23 @@ import './Login.css'; // Adjust the path as necessary
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
+import {
+  actionButton,
+  actionError,
+  actionFormFieldsWrap,
+  actionOuterWrap,
+} from '../../pages/Authentication/Landing';
 
 function LoginComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
   const {
-    user,
     messages,
     errors,
     signInWithEmailAndPasswordDecorated,
     sendPasswordResetEmailDecorated,
+    loading,
   } = useCadeyAuth();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,28 +50,38 @@ function LoginComponent() {
   };
 
   return (
-    <div>
+    <div className={actionOuterWrap}>
       <LoginMessages messages={messages} />
       <LoginErrors errors={errors} />
-      <form onSubmit={handleLogin}>
+      <form className={actionFormFieldsWrap} onSubmit={handleLogin}>
         <input
+          required
           type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Email'
         />
         <input
+          required
           type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder='Password'
         />
-        <button type='submit'>Login</button>
-        <button type='button' onClick={handleForgotPassword}>
-          Forgot Password?
+        <button className={actionButton} type='submit'>
+          Login
         </button>
-        {localError && <p>{localError}</p>}
       </form>
+      {localError && <p className={actionError}>{localError}</p>}
+      <p style={{ textAlign: 'center' }}>
+        <span
+          role='button'
+          style={{ color: '#6B6B6B', cursor: 'pointer' }}
+          onClick={handleForgotPassword}
+        >
+          Forgot Password?
+        </span>
+      </p>
     </div>
   );
 }
