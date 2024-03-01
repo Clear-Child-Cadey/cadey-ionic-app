@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Firebase
 import {
@@ -13,6 +13,9 @@ import { auth } from '../api/Firebase/InitializeFirebase';
 // Redux
 import { RootState } from '../store';
 import { setAuthLoading } from '../features/authLoading/slice';
+// API
+import { postLogin } from '../api/Authentication';
+import ApiUrlContext from '../context/ApiUrlContext';
 
 const useCadeyAuth = () => {
   const dispatch = useDispatch();
@@ -24,6 +27,8 @@ const useCadeyAuth = () => {
   const [user, setUser] = useState<UserState>(null);
   const [errors, setErrors] = useState<[] | Array<string>>(initialErrorsState);
   const [messages, setMessages] = useState(initialMessagesState);
+
+  const { apiUrl } = React.useContext(ApiUrlContext);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -40,11 +45,6 @@ const useCadeyAuth = () => {
     });
     return () => unsubscribe(); // Clean up subscription on unmount
   }, []); // The empty dependency array ensures this effect only runs once at mount
-
-  // Log the value of authLoading whenever it changes
-  useEffect(() => {
-    console.log(authLoading, 'LOADING! (useCadeyAuth)');
-  }, [authLoading]);
 
   const setMessageDecorated = (m: string) => {
     setMessages((prevMessagesArray) => {
@@ -70,10 +70,12 @@ const useCadeyAuth = () => {
     });
   };
 
-  const runBeforeRequest = () => {
+  const runBeforeRequest = async () => {
     dispatch(setAuthLoading(true)); // Update global authLoading state
     setErrors(initialErrorsState);
     setMessages(initialMessagesState);
+    // Simulate a delay (Return a promise that resolves after a 2-second delay)
+    return new Promise((resolve) => setTimeout(resolve, 2000)); // 2000 milliseconds = 2 seconds
   };
 
   const runAfterRequest = () => {
@@ -106,9 +108,11 @@ const useCadeyAuth = () => {
     email: string,
     password: string,
   ) {
-    runBeforeRequest();
+    let firebaseId = '';
+    await runBeforeRequest();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      firebaseId = user.uid; // Get the Firebase ID
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
@@ -118,8 +122,28 @@ const useCadeyAuth = () => {
     } finally {
       runAfterRequest();
     }
-    setMessageDecorated('Logged in successfully!');
+    const authorized = await authenticateWithApi(firebaseId, email);
+    if (authorized) {
+      setMessageDecorated('Logged in successfully!');
+      console.log('Logged in successfully!');
+    } else {
+      setErrorDecorated(new Error('User is not active'));
+      console.error('User is not active');
+    }
   }
+
+  const authenticateWithApi = async (firebaseId: string, email: string) => {
+    try {
+      const response = await postLogin(apiUrl, firebaseId, email);
+      if (response.cadeyUserIsActive) {
+        return true;
+      } else {
+        throw new Error('User is not active');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const createUserWithEmailAndPasswordDecorated = async (
     email: string,
