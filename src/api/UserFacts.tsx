@@ -1,13 +1,14 @@
-import fetchWithTimeout from "../utils/fetchWithTimeout";
+import fetchWithTimeout from '../utils/fetchWithTimeout';
 
 const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 const headers = {
-  'accept': 'text/plain',
-  'apiKey': API_KEY,
+  accept: 'text/plain',
+  apiKey: API_KEY,
   'Content-Type': 'application/json',
 };
 
 interface LogUserFactOptions {
+  deviceId: string;
   cadeyUserId: string;
   baseApiUrl: string;
   userFactTypeName: string;
@@ -24,25 +25,27 @@ interface LogUserFactOptions {
 }
 
 export const logUserFact = async ({
+  deviceId,
   cadeyUserId,
   baseApiUrl,
   userFactTypeName,
   appPage,
-  detail1 = "",
-  detail2 = "",
-  detail3 = "",
-  detail4 = "",
-  detail5 = "",
-  detail6 = "",
-  detail7 = "",
-  detail8 = "",
-  detail9 = ""
+  detail1 = '',
+  detail2 = '',
+  detail3 = '',
+  detail4 = '',
+  detail5 = '',
+  detail6 = '',
+  detail7 = '',
+  detail8 = '',
+  detail9 = '',
 }: LogUserFactOptions) => {
   const requestOptions = {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
       userid: cadeyUserId,
+      deviceId: deviceId,
       userFactTypeName: userFactTypeName,
       appPage: appPage,
       detail1,
@@ -57,20 +60,21 @@ export const logUserFact = async ({
     }),
   };
 
+  console.log('logUserFact requestOptions: ', requestOptions);
+
   try {
     let response;
     const url = `${baseApiUrl}/userfact`;
 
     try {
-      response = await fetchWithTimeout(
-        url,
-        requestOptions,
-        { cadeyUserId, requestName: "postUserFact" },
-      );
+      response = await fetchWithTimeout(url, requestOptions, {
+        cadeyUserId,
+        requestName: 'postUserFact',
+      });
     } catch (error) {
       throw new Error(`HTTP error! status: ${error}`);
     }
-  
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -81,4 +85,4 @@ export const logUserFact = async ({
     console.error('Error calling userfact: ', error);
     throw error;
   }
-}
+};

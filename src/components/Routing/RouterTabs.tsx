@@ -1,13 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route, Switch, useLocation, useHistory } from 'react-router-dom';
-import { 
-  IonTabs, 
-  IonRouterOutlet, 
-  IonTabBar, 
-  IonTabButton, 
-  IonIcon, 
-  IonLabel, 
+import {
+  Redirect,
+  Route,
+  Switch,
+  useLocation,
+  useHistory,
+} from 'react-router-dom';
+import {
+  IonTabs,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonIcon,
+  IonLabel,
   IonBadge,
 } from '@ionic/react';
 // CSS
@@ -32,6 +38,7 @@ import WelcomePage from '../../pages/Welcome/Welcome';
 import WelcomePathSelect from '../../pages/Welcome/WelcomePathSelect';
 import WelcomeAgeGroupSelect from '../../pages/Welcome/WelcomeAgeGroup';
 import WelcomePush from '../../pages/Welcome/WelcomePush';
+import LoginPage from '../../pages/Authentication/Login';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -52,8 +59,8 @@ const RouterTabs: React.FC = () => {
   // Tab bar visibility
   const { isTabBarVisible, setIsTabBarVisible } = useTabContext();
 
-  const { 
-    unreadMessagesCount, 
+  const {
+    unreadMessagesCount,
     setUnreadMessagesCount,
     unreadGoals,
     setUnreadGoals,
@@ -71,24 +78,6 @@ const RouterTabs: React.FC = () => {
     // Update the state based on the current path
     setIsWelcomeSequence(location.pathname.startsWith('/App/Welcome'));
   }, [location]);
-
-  // On component mount: 
-  // - Set the page title
-  // - Get the user's messages
-  useEffect(() => {
-    const fetchMessages = async () => {
-        try {
-          // Getting messages
-          const messagesData: Message[] = await getUserMessages(apiUrl, cadeyUserId);
-          const unreadMessages = messagesData.filter(messagesData => !messagesData.isRead).length;
-          setUnreadMessagesCount?.(unreadMessages);
-        } catch (error) {
-            console.error("Error fetching video details:", error);
-        }
-    };
-    // Get data when the component mounts
-    fetchMessages();
-  }, []);
 
   const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
@@ -122,19 +111,33 @@ const RouterTabs: React.FC = () => {
         <IonRouterOutlet>
           <Switch>
             {/* If the user is in the welcome sequence, show the welcome page */}
-            <Route exact path="/App/Welcome" component={WelcomePage} />
+            <Route exact path='/App/Welcome' component={WelcomePage} />
 
-            <Route exact path="/">
-              <Redirect to="/App/Welcome" />
+            <Route exact path='/'>
+              <Redirect to='/App/Welcome' />
             </Route>
 
             {/* Welcome sequence routes */}
-            <Route exact path="/App/Welcome/Path" component={WelcomePathSelect} />
-            <Route exact path="/App/Welcome/AgeGroup" component={WelcomeAgeGroupSelect} />
-            <Route exact path="/App/Welcome/Push" component={WelcomePush} />
+            <Route
+              exact
+              path='/App/Welcome/Path'
+              component={WelcomePathSelect}
+            />
+            <Route
+              exact
+              path='/App/Welcome/AgeGroup'
+              component={WelcomeAgeGroupSelect}
+            />
+            <Route exact path='/App/Welcome/Push' component={WelcomePush} />
+
+            <Route
+              exact
+              path='/App/Authentication/Login'
+              component={LoginPage}
+            />
 
             {/* Miscellaneous routes */}
-            <Route exact path="/App/Admin" component={AdminPage} />
+            <Route exact path='/App/Admin' component={AdminPage} />
           </Switch>
         </IonRouterOutlet>
       )}
@@ -147,44 +150,72 @@ const RouterTabs: React.FC = () => {
               {/* Define all of the specific routes */}
 
               {/* Home routes */}
-              <Route exact path="/App/Home" render={(routeProps) => {
-                const vimeoId = routeProps.location.search.split('video=')[1];
-                const articleId = routeProps.location.search.split('article=')[1];
+              <Route
+                exact
+                path='/App/Home'
+                render={(routeProps) => {
+                  const vimeoId = routeProps.location.search.split('video=')[1];
+                  const articleId =
+                    routeProps.location.search.split('article=')[1];
 
-                return (
-                  
-                    <HomePage 
+                  return (
+                    <HomePage
                       vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
                       articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
                     />
-                );
-              }} />
-              <Route exact path="/">
-                  <Redirect to="/App/Home" />
+                  );
+                }}
+              />
+              <Route exact path='/'>
+                <Redirect to='/App/Home' />
               </Route>
-              <Route exact path="/App/Home/Messages" component={MessagesPage} />
-              
+              <Route exact path='/App/Home/Messages' component={MessagesPage} />
+
               {/* Library routes */}
-              <Route exact path="/App/Library" component={LibraryPage} />
-              <Route exact path="/App/Library/Search" component={SearchPage} />
-              <Route exact path="/App/Library/Articles" component={ArticleCategoryListingPage} />
-              <Route exact path="/App/Library/Articles/Category" component={ArticlesPage} />
-              <Route exact path="/App/Library/Articles/Article" component={ArticleDetailPage} />
-              <Route exact path="/App/Library/Videos" component={VideoLibraryPage} />
-              
+              <Route exact path='/App/Library' component={LibraryPage} />
+              <Route exact path='/App/Library/Search' component={SearchPage} />
+              <Route
+                exact
+                path='/App/Library/Articles'
+                component={ArticleCategoryListingPage}
+              />
+              <Route
+                exact
+                path='/App/Library/Articles/Category'
+                component={ArticlesPage}
+              />
+              <Route
+                exact
+                path='/App/Library/Articles/Article'
+                component={ArticleDetailPage}
+              />
+              <Route
+                exact
+                path='/App/Library/Videos'
+                component={VideoLibraryPage}
+              />
+
               {/* Paths routes */}
-              <Route exact path="/App/Paths">
-                <Redirect to="/App/Paths/PathListing" />
+              <Route exact path='/App/Paths'>
+                <Redirect to='/App/Paths/PathListing' />
               </Route>
-              <Route exact path="/App/Paths/PathListing" component={PathListingPage} />
-              <Route exact path="/App/Paths/PathDetail" component={PathDetailPage} />
-              
+              <Route
+                exact
+                path='/App/Paths/PathListing'
+                component={PathListingPage}
+              />
+              <Route
+                exact
+                path='/App/Paths/PathDetail'
+                component={PathDetailPage}
+              />
+
               {/* Miscellaneous routes */}
-              <Route exact path="/App/Admin" component={AdminPage} />
+              <Route exact path='/App/Admin' component={AdminPage} />
 
               {/* Re-route any route with "/App/Welcome" to the home screen */}
-              <Route path="/App/Welcome">
-                <Redirect to="/App/Home" />
+              <Route path='/App/Welcome'>
+                <Redirect to='/App/Home' />
               </Route>
 
               {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
@@ -192,19 +223,22 @@ const RouterTabs: React.FC = () => {
             </Switch>
           </IonRouterOutlet>
           {/* Tab Bar */}
-          <IonTabBar slot="bottom" className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}>
-            <IonTabButton 
-              tab="Home" 
+          <IonTabBar
+            slot='bottom'
+            className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}
+          >
+            <IonTabButton
+              tab='Home'
               onClick={() => handleTabClick('Home', '/App/Home')}
               selected={isTabActive('/App/Home')}
             >
               <HomeIcon />
               <IonLabel>Home</IonLabel>
             </IonTabButton>
-            
+
             {/* Paths */}
-            <IonTabButton 
-              tab="Paths" 
+            <IonTabButton
+              tab='Paths'
               onClick={() => handleTabClick('Path Listing', '/App/Paths')}
               selected={isTabActive('/App/Paths')}
             >
@@ -213,8 +247,8 @@ const RouterTabs: React.FC = () => {
             </IonTabButton>
 
             {/* Library */}
-            <IonTabButton 
-              tab="Library" 
+            <IonTabButton
+              tab='Library'
               onClick={() => handleTabClick('Library', '/App/Library')}
               selected={isTabActive('/App/Library')}
             >
@@ -222,10 +256,10 @@ const RouterTabs: React.FC = () => {
               <IonLabel>Library</IonLabel>
             </IonTabButton>
           </IonTabBar>
-        </IonTabs>  
+        </IonTabs>
       )}
     </>
   );
-}
+};
 
 export default RouterTabs;

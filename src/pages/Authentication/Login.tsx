@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 // Styles
-import './Landing.css';
+import './Login.css';
 // Components
 import LoginComponent from '../../components/Authentication/Login';
 import RegisterComponent from '../../components/Authentication/Register';
@@ -20,7 +20,7 @@ export const actionErrorText = 'action-error-text';
 export const actionOuterWrap = 'action-outer-wrap';
 export const actionFormFieldsWrap = 'action-form-fields-wrap';
 
-const LandingPage = () => {
+const LoginPage = () => {
   const authLoading = useSelector(
     (state: RootState) => state.authStatus.authLoading,
   );
@@ -87,4 +87,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default LoginPage;

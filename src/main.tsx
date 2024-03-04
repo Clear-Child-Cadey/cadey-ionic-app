@@ -18,10 +18,14 @@ import { ModalProvider } from './context/ModalContext';
 import { AppPageProvider } from './context/AppPageContext';
 import { PathProvider } from './context/PathContext';
 // Pages
-import LandingPage from './pages/Authentication/Landing';
+import WelcomePage from './pages/Welcome/Welcome';
 import PasswordResetPage from './pages/Authentication/PasswordResetPage';
-
-import store from './store';
+// Components
+import RouterTabs from './components/Routing/RouterTabs';
+// Redux
+import { useDispatch } from 'react-redux';
+import store, { RootState } from './store';
+import { setDeviceId } from './features/deviceId/slice';
 
 // API
 import getAppData from './api/AppOpen';
@@ -82,6 +86,7 @@ export const CadeyUserContext = createContext<{
 });
 
 function MainComponent() {
+  const dispatch = useDispatch(); // Get the dispatch function
   const { apiUrl } = React.useContext(ApiUrlContext);
 
   const location = useLocation();
@@ -133,6 +138,8 @@ function MainComponent() {
       }
     };
 
+    dispatch(setDeviceId(cadeyUserDeviceId)); // Set the device ID in the Redux store
+
     fetchData();
   }, [apiUrl]);
 
@@ -153,7 +160,7 @@ function MainComponent() {
   if (!user || isUserAnonymous()) {
     return (
       <IonReactRouter>
-        <LandingPage />
+        <WelcomePage />
       </IonReactRouter>
     );
   }
@@ -168,32 +175,26 @@ function MainComponent() {
         oneSignalId,
       }}
     >
-      <DeviceIdContext.Provider value={cadeyUserDeviceId}>
-        <TabProvider>
-          <UnreadContext.Provider
-            value={{
-              unreadMessagesCount,
-              setUnreadMessagesCount,
-              unreadGoals,
-              setUnreadGoals,
-            }}
-          >
-            <AppPageProvider>
-              <TabBarSpotlightProvider>
-                <LoadingStateProvider>
-                  <ModalProvider>
-                    <PathProvider>
-                      <IonReactRouter>
-                        <App />
-                      </IonReactRouter>
-                    </PathProvider>
-                  </ModalProvider>
-                </LoadingStateProvider>
-              </TabBarSpotlightProvider>
-            </AppPageProvider>
-          </UnreadContext.Provider>
-        </TabProvider>
-      </DeviceIdContext.Provider>
+      <UnreadContext.Provider
+        value={{
+          unreadMessagesCount,
+          setUnreadMessagesCount,
+          unreadGoals,
+          setUnreadGoals,
+        }}
+      >
+        <TabBarSpotlightProvider>
+          <LoadingStateProvider>
+            <ModalProvider>
+              <PathProvider>
+                <IonReactRouter>
+                  <App />
+                </IonReactRouter>
+              </PathProvider>
+            </ModalProvider>
+          </LoadingStateProvider>
+        </TabBarSpotlightProvider>
+      </UnreadContext.Provider>
     </CadeyUserContext.Provider>
   );
 }
@@ -203,9 +204,14 @@ const root = createRoot(container!);
 root.render(
   <Provider store={store}>
     <ApiUrlProvider>
-      <IonReactRouter>
-        <MainComponent />
-      </IonReactRouter>
+      <AppPageProvider>
+        <IonReactRouter>
+          <TabProvider>
+            <RouterTabs />
+            <MainComponent />
+          </TabProvider>
+        </IonReactRouter>
+      </AppPageProvider>
     </ApiUrlProvider>
   </Provider>,
 );

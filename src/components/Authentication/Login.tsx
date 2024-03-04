@@ -9,7 +9,7 @@ import {
   actionError,
   actionFormFieldsWrap,
   actionOuterWrap,
-} from '../../pages/Authentication/Landing';
+} from '../../pages/Authentication/Login';
 
 function LoginComponent() {
   const [email, setEmail] = useState('');

@@ -170,9 +170,6 @@ const App: React.FC = () => {
       {/* Show a Welcome modal if context dictates */}
       <WelcomeModal />
       <GenericModal />
-
-      {/* Router Tabs */}
-      <RouterTabs />
     </IonApp>
   );
 };

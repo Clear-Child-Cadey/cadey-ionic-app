@@ -12,7 +12,7 @@ import {
   actionFormFieldsWrap,
   actionMessageText,
   actionOuterWrap,
-} from '../../pages/Authentication/Landing';
+} from '../../pages/Authentication/Login';
 
 function ForgotPasswordComponent() {
   const [email, setEmail] = useState('');

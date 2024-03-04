@@ -13,7 +13,7 @@ import {
   actionError,
   actionFormFieldsWrap,
   actionOuterWrap,
-} from '../../pages/Authentication/Landing';
+} from '../../pages/Authentication/Login';
 
 function RegisterComponent() {
   const { messages, errors, createUserWithEmailAndPasswordDecorated, loading } =
