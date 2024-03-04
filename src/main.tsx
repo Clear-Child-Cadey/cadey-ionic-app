@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import { IonReactRouter } from '@ionic/react-router';
 import { Route, useLocation } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { IonApp } from '@ionic/react';
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
@@ -17,13 +17,10 @@ import {
 import { ModalProvider } from './context/ModalContext';
 import { AppPageProvider } from './context/AppPageContext';
 import { PathProvider } from './context/PathContext';
-// Pages
-import WelcomePage from './pages/Welcome/Welcome';
-import PasswordResetPage from './pages/Authentication/PasswordResetPage';
 // Components
 import RouterTabs from './components/Routing/RouterTabs';
 // Redux
-import { useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import store, { RootState } from './store';
 import { setDeviceId } from './features/deviceId/slice';
 
@@ -148,23 +145,6 @@ function MainComponent() {
     return;
   }
 
-  // Check the route to see if the user is trying to reset their password
-  if (location.pathname.startsWith('/password-reset')) {
-    return (
-      <IonReactRouter>
-        <PasswordResetPage />
-      </IonReactRouter>
-    );
-  }
-
-  if (!user || isUserAnonymous()) {
-    return (
-      <IonReactRouter>
-        <WelcomePage />
-      </IonReactRouter>
-    );
-  }
-
   return (
     <CadeyUserContext.Provider
       value={{
@@ -187,9 +167,8 @@ function MainComponent() {
           <LoadingStateProvider>
             <ModalProvider>
               <PathProvider>
-                <IonReactRouter>
-                  <App />
-                </IonReactRouter>
+                <div></div>
+                <App />
               </PathProvider>
             </ModalProvider>
           </LoadingStateProvider>
@@ -202,16 +181,19 @@ function MainComponent() {
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
-  <Provider store={store}>
-    <ApiUrlProvider>
-      <AppPageProvider>
-        <IonReactRouter>
-          <TabProvider>
-            <RouterTabs />
-            <MainComponent />
-          </TabProvider>
-        </IonReactRouter>
-      </AppPageProvider>
-    </ApiUrlProvider>
-  </Provider>,
+  <IonApp>
+    <Provider store={store}>
+      <ApiUrlProvider>
+        <AppPageProvider>
+          <IonReactRouter>
+            <TabProvider>
+              <div></div>
+              <RouterTabs />
+              <MainComponent />
+            </TabProvider>
+          </IonReactRouter>
+        </AppPageProvider>
+      </ApiUrlProvider>
+    </Provider>
+  </IonApp>,
 );

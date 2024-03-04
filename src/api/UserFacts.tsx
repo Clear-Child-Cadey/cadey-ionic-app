@@ -60,8 +60,6 @@ export const logUserFact = async ({
     }),
   };
 
-  console.log('logUserFact requestOptions: ', requestOptions);
-
   try {
     let response;
     const url = `${baseApiUrl}/userfact`;

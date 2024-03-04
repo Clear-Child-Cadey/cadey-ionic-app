@@ -4,14 +4,8 @@ import './Login.css'; // Adjust the path as necessary
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
-import {
-  actionButton,
-  actionError,
-  actionFormFieldsWrap,
-  actionOuterWrap,
-} from '../../pages/Authentication/Login';
 
-function LoginComponent() {
+const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
@@ -49,10 +43,10 @@ function LoginComponent() {
   };
 
   return (
-    <div className={actionOuterWrap}>
+    <div>
       <LoginMessages messages={messages} />
       <LoginErrors errors={errors} />
-      <form className={actionFormFieldsWrap} onSubmit={handleLogin}>
+      <form onSubmit={handleLogin}>
         <input
           required
           type='email'
@@ -67,11 +61,9 @@ function LoginComponent() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder='Password'
         />
-        <button className={actionButton} type='submit'>
-          Login
-        </button>
+        <button type='submit'>Login</button>
       </form>
-      {localError && <p className={actionError}>{localError}</p>}
+      {localError && <p>{localError}</p>}
       <p style={{ textAlign: 'center' }}>
         <span
           role='button'
@@ -83,6 +75,6 @@ function LoginComponent() {
       </p>
     </div>
   );
-}
+};
 
-export default LoginComponent;
+export default LoginPage;

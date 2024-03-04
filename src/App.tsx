@@ -4,13 +4,11 @@ import { useHistory } from 'react-router-dom';
 import semver from 'semver';
 // Components
 import { SplashScreen } from '@capacitor/splash-screen';
-import RouterTabs from './components/Routing/RouterTabs';
 // Modals
 import AppUpdateModal from './components/Modals/AppUpdateModal';
 import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
 import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
 import QuizModal from './components/Modals/QuizModal/QuizModal';
-import WelcomeModal from './pages/Welcome/Welcome';
 // Contexts
 import { CadeyUserContext } from './main';
 import { useModalContext } from './context/ModalContext';
@@ -22,37 +20,35 @@ import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 import { logUserFact } from './api/UserFacts';
-import PopularSymptomVideoDetailModal from './components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal';
 import GenericModal from './components/Modals/GenericModal';
 import { getQuiz } from './api/Quiz';
 // Pages
-import WelcomePage from './pages/Welcome/Welcome';
 import HttpErrorModal from './components/Modals/HttpErrorModal';
+// Redux
+import { useSelector } from 'react-redux';
+import { RootState } from './store';
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  const deviceId = useSelector(
+    (state: RootState) => state.deviceIdStatus.deviceId,
+  );
   const { cadeyUserId, minimumSupportedVersion, oneSignalId } =
     useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
-  const { currentBasePage, currentAppPage } = useAppPage();
   const history = useHistory();
   const [checkForWelcome, setCheckForWelcome] = useState(false);
-  const [showWelcomePage, setShowWelcomePage] = useState(false);
   const { setIsTabBarVisible } = useTabContext();
 
   const {
     isVideoModalOpen,
     isArticleDetailModalOpen,
-    isQuizModalOpen,
-    quizModalData,
     setQuizModalData,
     currentVimeoId,
     currentArticleId,
-    isPopularSymptomVideoModalOpen,
-    popularSymptomVideo,
   } = useModalContext();
 
   const getStoreLink = () => {
@@ -82,6 +78,7 @@ const App: React.FC = () => {
   // Route the user to the welcome page if they haven't completed the welcome sequence
   useEffect(() => {
     const requestQuiz = async () => {
+      console.log('Checking for welcome sequence');
       if (!checkForWelcome) {
         const quizResponse = await getQuiz(
           apiUrl,
@@ -100,9 +97,6 @@ const App: React.FC = () => {
 
           // Hide the tab bar
           setIsTabBarVisible(false);
-
-          // Route the user to the welcome page
-          history.push('/App/Welcome');
         } else {
           // Show the tab bar
           setIsTabBarVisible(true);
@@ -110,7 +104,7 @@ const App: React.FC = () => {
       }
     };
 
-    requestQuiz();
+    // requestQuiz();
   }, [cadeyUserId, apiUrl]);
 
   // Show the upgrade modal if the current app version is not the latest
@@ -136,6 +130,7 @@ const App: React.FC = () => {
 
   const onVideoDetailPageClosed = async () => {
     const response = await logUserFact({
+      deviceId: deviceId,
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'VideoDetailPageClosed',
@@ -144,7 +139,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <IonApp>
+    <>
       {/* Show a modal if the user needs to update their app*/}
       <HttpErrorModal />
       <AppUpdateModal
@@ -167,10 +162,9 @@ const App: React.FC = () => {
       {/* Show a quiz modal if context dictates */}
       <QuizModal />
 
-      {/* Show a Welcome modal if context dictates */}
-      <WelcomeModal />
+      {/* Show a generic modal if context dictates */}
       <GenericModal />
-    </IonApp>
+    </>
   );
 };
 

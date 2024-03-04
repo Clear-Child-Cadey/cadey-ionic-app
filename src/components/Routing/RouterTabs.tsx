@@ -19,7 +19,6 @@ import {
 // CSS
 import './RouterTabs.css';
 // Icons
-import { homeOutline, libraryOutline, walkOutline } from 'ionicons/icons';
 import { HomeIcon } from '../../svgs/NavHome';
 import { PathsIcon } from '../../svgs/NavPaths';
 import { LibraryIcon } from '../../svgs/NavLibrary';
@@ -47,24 +46,21 @@ import OneSignalInitializer from '../../api/OneSignal/OneSignalInitializerCompon
 import { useTabContext } from '../../context/TabContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
-import UnreadContext from '../../context/UnreadContext';
 import { useAppPage } from '../../context/AppPageContext';
-// API
-import { getUserMessages } from '../../api/UserMessages';
 // Interfaces
 import MessagesPage, { Message } from '../../pages/Messages/Messages';
 import { logUserFact } from '../../api/UserFacts';
+// Redux
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const RouterTabs: React.FC = () => {
+  const deviceId = useSelector(
+    (state: RootState) => state.deviceIdStatus.deviceId,
+  );
+
   // Tab bar visibility
   const { isTabBarVisible, setIsTabBarVisible } = useTabContext();
-
-  const {
-    unreadMessagesCount,
-    setUnreadMessagesCount,
-    unreadGoals,
-    setUnreadGoals,
-  } = useContext(UnreadContext); // Get the current unread count
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
@@ -82,6 +78,7 @@ const RouterTabs: React.FC = () => {
   const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
     logUserFact({
+      deviceId: deviceId,
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'TapBarNavClick',
