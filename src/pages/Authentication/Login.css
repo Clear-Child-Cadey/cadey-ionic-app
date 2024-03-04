@@ -73,3 +73,9 @@
   text-align: center;
   color: #6b6b6b;
 }
+
+.login-page .login-instructions {
+  font-size: 14px;
+  color: #7a716c;
+  margin: 16px 0 60px;
+}

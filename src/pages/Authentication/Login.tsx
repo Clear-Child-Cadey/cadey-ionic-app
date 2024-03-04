@@ -28,15 +28,18 @@ const LoginPage = () => {
     <IonPage className='login-page'>
       <IonHeader class='header'>
         <IonToolbar className='header-toolbar'>
-          <h2>Login</h2>
+          <h2>Sign in to Cadey</h2>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonRow>
-          <div className={authLoading ? 'action-loading' : ''}>
+        <div className={authLoading ? 'action-loading content' : 'content'}>
+          <IonRow>
+            <p className='login-instructions'>
+              Please enter your registered email address.
+            </p>
             <LoginComponent />
-          </div>
-        </IonRow>
+          </IonRow>
+        </div>
       </IonContent>
     </IonPage>
   );

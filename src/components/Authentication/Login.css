@@ -1,0 +1,44 @@
+.login-component {
+  width: 100%;
+}
+
+.login-component label {
+  font-size: 14px;
+  color: #484443;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.login-component input {
+  background: #fff;
+  padding: 15px;
+  border: 1px solid #cac6c4;
+  border-radius: 4px;
+  display: block;
+  color: #7a716c;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Input placeholder text should be 14px size and color #CAC6C4 */
+.login-component input::placeholder {
+  color: #cac6c4;
+}
+
+.login-component .continue {
+  width: 100%;
+  border-radius: 100px;
+  padding: 10px 16px;
+  background-color: #51adef;
+  color: #fff;
+  font-size: 14px;
+  margin: 40px 0 50px;
+}
+
+.login-component .continue:disabled {
+  opacity: 0.3;
+}
+
+.login-component p {
+  font-size: 14px;
+}
