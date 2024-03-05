@@ -14,7 +14,6 @@ import { auth } from '../api/Firebase/InitializeFirebase';
 import { RootState } from '../store';
 import { setAuthLoading } from '../features/authLoading/slice';
 // API
-import { postLogin } from '../api/Authentication';
 import ApiUrlContext from '../context/ApiUrlContext';
 
 const useCadeyAuth = () => {
@@ -122,28 +121,7 @@ const useCadeyAuth = () => {
     } finally {
       runAfterRequest();
     }
-    const authorized = await authenticateWithApi(firebaseId, email);
-    if (authorized) {
-      setMessageDecorated('Logged in successfully!');
-      console.log('Logged in successfully!');
-    } else {
-      setErrorDecorated(new Error('User is not active'));
-      console.error('User is not active');
-    }
   }
-
-  const authenticateWithApi = async (firebaseId: string, email: string) => {
-    try {
-      const response = await postLogin(apiUrl, firebaseId, email);
-      if (response.cadeyUserIsActive) {
-        return true;
-      } else {
-        throw new Error('User is not active');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const createUserWithEmailAndPasswordDecorated = async (
     email: string,

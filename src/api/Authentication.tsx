@@ -2,12 +2,8 @@ import fetchWithTimeout from '../utils/fetchWithTimeout';
 
 let response;
 
-export const postLogin = async (
-  apiUrl: string,
-  authId: string,
-  cadeyUserEmail: string,
-) => {
-  const url = `${apiUrl}/login`;
+export const postUserAuth = async (apiUrl: string, cadeyUserEmail: string) => {
+  const url = `${apiUrl}/userauth`;
 
   try {
     response = await fetchWithTimeout(
@@ -20,11 +16,10 @@ export const postLogin = async (
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          authId: authId,
           cadeyUserEmail: cadeyUserEmail,
         }),
       },
-      { requestName: 'postLogin' },
+      { requestName: 'postUserAuth' },
     );
   } catch (error) {
     throw new Error(`HTTP error! status: ${error}`);

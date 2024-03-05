@@ -102,8 +102,6 @@ function MainComponent() {
 
   // App startup logic
   useEffect(() => {
-    let timeoutId: any;
-
     const fetchData = async () => {
       let getAppDataTrace: any;
       // Start a Firebase trace
@@ -121,7 +119,6 @@ function MainComponent() {
           apiUrl,
         );
         setDataLoaded(true); // Indicate that data has been loaded
-        clearTimeout(timeoutId); // Clear the timeout if data is loaded in time
       } catch (error) {
         console.error('Error fetching app data:', error);
       } finally {
@@ -163,16 +160,10 @@ function MainComponent() {
           setUnreadGoals,
         }}
       >
-        <TabBarSpotlightProvider>
-          <LoadingStateProvider>
-            <ModalProvider>
-              <PathProvider>
-                <div></div>
-                <App />
-              </PathProvider>
-            </ModalProvider>
-          </LoadingStateProvider>
-        </TabBarSpotlightProvider>
+        <LoadingStateProvider>
+          <RouterTabs />
+          <App />
+        </LoadingStateProvider>
       </UnreadContext.Provider>
     </CadeyUserContext.Provider>
   );
@@ -187,9 +178,11 @@ root.render(
         <AppPageProvider>
           <IonReactRouter>
             <TabProvider>
-              <div></div>
-              <RouterTabs />
-              <MainComponent />
+              <ModalProvider>
+                <PathProvider>
+                  <MainComponent />
+                </PathProvider>
+              </ModalProvider>
             </TabProvider>
           </IonReactRouter>
         </AppPageProvider>
