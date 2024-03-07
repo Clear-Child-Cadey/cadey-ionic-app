@@ -38,6 +38,7 @@ import WelcomePathSelect from '../../pages/Welcome/WelcomePathSelect';
 import WelcomeAgeGroupSelect from '../../pages/Welcome/WelcomeAgeGroup';
 import WelcomePush from '../../pages/Welcome/WelcomePush';
 import LoginPage from '../../pages/Authentication/Login';
+import RegistrationPage from '../../pages/Authentication/Register';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -131,6 +132,12 @@ const RouterTabs: React.FC = () => {
               exact
               path='/App/Authentication/Login'
               component={LoginPage}
+            />
+
+            <Route
+              exact
+              path='/App/Authentication/Register'
+              component={RegistrationPage}
             />
 
             {/* Miscellaneous routes */}

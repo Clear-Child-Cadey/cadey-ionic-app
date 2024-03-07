@@ -29,21 +29,25 @@ const useCadeyAuth = () => {
 
   const { apiUrl } = React.useContext(ApiUrlContext);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        console.log('User is signed in, UID:', currentUser.uid);
-        setUser(currentUser); // This will set the user state with the current user
-        // Here, you no longer need to explicitly check for non-anonymous users to avoid signing in anonymously
-        // as this condition is now inherently considered by placing the signInAnonymously call in the else block below
-      } else {
-        console.log('User is signed out or not yet loaded');
-        // Since there's no user, attempt to sign in anonymously
-        signInAnonymouslyDecorated(); // This will only trigger if there's no current user at all
-      }
+  const getFirebaseLoginStatus = async (): Promise<User | null> => {
+    return new Promise<User | null>((resolve) => {
+      onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser && currentUser.isAnonymous === false) {
+          // User is signed in as a registered user
+          console.log('User is signed in, UID:', currentUser.uid);
+          setUser(currentUser); // This will set the user state with the current user
+          resolve(currentUser);
+        } else if (currentUser && currentUser.isAnonymous === true) {
+          // User is signed in anonymously
+          resolve(null);
+        } else {
+          // No user, attempt to sign in anonymously
+          signInAnonymouslyDecorated(); // This will only trigger if there's no current user at all
+          resolve(null);
+        }
+      });
     });
-    return () => unsubscribe(); // Clean up subscription on unmount
-  }, []); // The empty dependency array ensures this effect only runs once at mount
+  };
 
   const setMessageDecorated = (m: string) => {
     setMessages((prevMessagesArray) => {
@@ -73,8 +77,6 @@ const useCadeyAuth = () => {
     dispatch(setAuthLoading(true)); // Update global authLoading state
     setErrors(initialErrorsState);
     setMessages(initialMessagesState);
-    // Simulate a delay (Return a promise that resolves after a 2-second delay)
-    return new Promise((resolve) => setTimeout(resolve, 2000)); // 2000 milliseconds = 2 seconds
   };
 
   const runAfterRequest = () => {
@@ -186,6 +188,7 @@ const useCadeyAuth = () => {
     getUid,
     getEmailVerified,
     messages,
+    getFirebaseLoginStatus,
   };
 };
 

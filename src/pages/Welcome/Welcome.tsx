@@ -56,7 +56,7 @@ const WelcomePage: React.FC = () => {
             </IonButton>
             <IonButton
               className='continue-button'
-              onClick={() => handleContinue('/App/Authentication/Signup')}
+              onClick={() => handleContinue('/App/Authentication/Register')}
             >
               Signup
             </IonButton>

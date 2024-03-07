@@ -2,14 +2,13 @@ import React, { createContext, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { IonReactRouter } from '@ionic/react-router';
-import { Route, useLocation } from 'react-router-dom';
+import { Route, useLocation, useHistory } from 'react-router-dom';
 import { IonApp } from '@ionic/react';
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
 import { TabProvider } from './context/TabContext';
 import UnreadContext from './context/UnreadContext';
-import { TabBarSpotlightProvider } from './context/SpotlightContext';
 import {
   LoadingStateProvider,
   useLoadingState,
@@ -17,6 +16,8 @@ import {
 import { ModalProvider } from './context/ModalContext';
 import { AppPageProvider } from './context/AppPageContext';
 import { PathProvider } from './context/PathContext';
+import { useTabContext } from './context/TabContext';
+import { useModalContext } from './context/ModalContext';
 // Components
 import RouterTabs from './components/Routing/RouterTabs';
 // Redux
@@ -27,6 +28,8 @@ import { setDeviceId } from './features/deviceId/slice';
 // API
 import getAppData from './api/AppOpen';
 import { logUserFact } from './api/UserFacts';
+import { getQuiz } from './api/Quiz';
+import { postUserAuth } from './api/Authentication';
 
 // Variables
 import { tracingEnabled } from './variables/Logging';
@@ -85,8 +88,11 @@ export const CadeyUserContext = createContext<{
 function MainComponent() {
   const dispatch = useDispatch(); // Get the dispatch function
   const { apiUrl } = React.useContext(ApiUrlContext);
+  const { setIsTabBarVisible } = useTabContext();
+  const { setQuizModalData } = useModalContext();
 
   const location = useLocation();
+  const history = useHistory();
 
   const [cadeyUserId, setCadeyUserId] = useState('');
   const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
@@ -98,7 +104,7 @@ function MainComponent() {
 
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const { user, isUserAnonymous } = useCadeyAuth();
+  const { user, isUserAnonymous, getFirebaseLoginStatus } = useCadeyAuth();
 
   // App startup logic
   useEffect(() => {
@@ -131,6 +137,56 @@ function MainComponent() {
         setIsLoading(false);
       }
     };
+
+    const handleFirebaseLoginStatus = async () => {
+      const previousUser = await getFirebaseLoginStatus(); // This gets the Firease user. If none exists, the user will be signed in anonymously
+
+      if (previousUser && previousUser.email) {
+        // User already signed in as a real user - Check for authorization
+        const userAuthResponse = await postUserAuth(apiUrl, previousUser.email);
+
+        if (userAuthResponse.cadeyUserId > 0) {
+          // User exists in the database
+          setCadeyUserId(userAuthResponse.cadeyUserId);
+
+          if (
+            userAuthResponse.regStatus === 0 &&
+            userAuthResponse.authStatus === 0
+          ) {
+            // User is registered and authorized - Check for onboarding quiz
+            requestQuiz();
+          }
+        }
+      }
+    };
+
+    const requestQuiz = async () => {
+      const quizResponse = await getQuiz(
+        apiUrl,
+        Number(cadeyUserId),
+        3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
+        0, // Entity Type (1 = video)
+        0, // Entity IDs (The ID of the video)
+      );
+
+      // If the user has not completed the welcome sequence, take them to the welcome sequence
+      if (quizResponse.question !== null && quizResponse.question.id > 0) {
+        // Set the quiz data
+        setQuizModalData(quizResponse);
+
+        // Hide the tab bar
+        setIsTabBarVisible(false);
+
+        // Redirect user to Welcome sequence - Path selection
+        history.push('/App/Welcome/Path');
+      } else {
+        // Show the tab bar and redirect to the home page
+        setIsTabBarVisible(true);
+        history.push('/App/Home');
+      }
+    };
+
+    handleFirebaseLoginStatus();
 
     dispatch(setDeviceId(cadeyUserDeviceId)); // Set the device ID in the Redux store
 

@@ -37,7 +37,8 @@ const LoginComponent: React.FC = () => {
     setLocalError(''); // Clear any existing errors
 
     // Handle email submission with the API
-    // const userAuthResponse = await postUserAuth(apiUrl, email);
+    const userAuthResponse = await postUserAuth(apiUrl, email);
+    console.log('userAuthResponse: ', userAuthResponse);
     // if (userAuthResponse.cadeyUserId > 0) {
     //   // User exists
     //   if (userAuthResponse.regStatus === 0) {
@@ -89,8 +90,7 @@ const LoginComponent: React.FC = () => {
 
     try {
       await signInWithEmailAndPasswordDecorated(email, password);
-      // Navigation to another component upon success can be handled here
-      // history.push('/App/Home'); // Redirect to Home
+
       // Check for onboarding quiz
       requestQuiz();
     } catch (e) {
@@ -114,7 +114,6 @@ const LoginComponent: React.FC = () => {
   };
 
   const requestQuiz = async () => {
-    console.log('Checking for welcome sequence');
     const quizResponse = await getQuiz(
       apiUrl,
       Number(cadeyUserId),
