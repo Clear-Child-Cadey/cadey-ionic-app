@@ -79,7 +79,6 @@ const RouterTabs: React.FC = () => {
   const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
     logUserFact({
-      deviceId: deviceId,
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'TapBarNavClick',

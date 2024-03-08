@@ -65,7 +65,6 @@ const WelcomePathSelect: React.FC = () => {
 
     // appPageNavigation user fact
     logUserFact({
-      deviceId: deviceId,
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'appPageNavigation',

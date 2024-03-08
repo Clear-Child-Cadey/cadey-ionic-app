@@ -8,7 +8,6 @@ const headers = {
 };
 
 interface LogUserFactOptions {
-  deviceId: string;
   cadeyUserId: string;
   baseApiUrl: string;
   userFactTypeName: string;
@@ -25,7 +24,6 @@ interface LogUserFactOptions {
 }
 
 export const logUserFact = async ({
-  deviceId,
   cadeyUserId,
   baseApiUrl,
   userFactTypeName,
@@ -45,7 +43,6 @@ export const logUserFact = async ({
     headers: headers,
     body: JSON.stringify({
       userid: cadeyUserId,
-      deviceId: deviceId,
       userFactTypeName: userFactTypeName,
       appPage: appPage,
       detail1,

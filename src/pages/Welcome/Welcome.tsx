@@ -25,7 +25,6 @@ const WelcomePage: React.FC = () => {
   useEffect(() => {
     // appPageNavigation user fact
     logUserFact({
-      deviceId: deviceId,
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'appPageNavigation',
