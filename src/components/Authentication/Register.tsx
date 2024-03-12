@@ -25,8 +25,12 @@ const RegistrationComponent: React.FC = () => {
   const [localError, setLocalError] = useState('');
   const history = useHistory();
 
-  const { messages, errors, createUserWithEmailAndPasswordDecorated } =
-    useCadeyAuth();
+  const {
+    resetErrors,
+    messages,
+    errors,
+    createUserWithEmailAndPasswordDecorated,
+  } = useCadeyAuth();
 
   const handleEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,8 +134,16 @@ const RegistrationComponent: React.FC = () => {
 
   return (
     <div className='login-component'>
-      {/* <LoginMessages messages={messages} />
-      <LoginErrors errors={errors} /> */}
+      <LoginMessages messages={messages} />
+      <LoginErrors
+        errors={errors}
+        goBack={() => {
+          setEmail('');
+          setPassword('');
+          setLoginState('email');
+          resetErrors();
+        }}
+      />
       {localError && <p className='error-message'>{localError}</p>}
 
       <form onSubmit={loginState === 'email' ? handleEmail : handlePassword}>

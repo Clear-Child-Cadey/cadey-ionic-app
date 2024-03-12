@@ -30,6 +30,7 @@ import { logUserFact } from '../../api/UserFacts';
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import useCadeyAuth from '../../hooks/useCadeyAuth';
 
 const WelcomePathSelect: React.FC = () => {
   // Get the Cadey User data from the context

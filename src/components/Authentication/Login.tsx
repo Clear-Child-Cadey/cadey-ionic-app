@@ -32,58 +32,6 @@ const LoginComponent: React.FC = () => {
     sendPasswordResetEmailDecorated,
   } = useCadeyAuth();
 
-  const handleEmail = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLocalError(''); // Clear any existing errors
-
-    // Handle email submission with the API
-    const userAuthResponse = await postUserAuth(apiUrl, email);
-    console.log('userAuthResponse: ', userAuthResponse);
-    // if (userAuthResponse.cadeyUserId > 0) {
-    //   // User exists
-    //   if (userAuthResponse.regStatus === 0) {
-    //     // User is registered
-    //     // Create a switch based on authStatus. If 0, user is registered. If 1, user's trial has expired. If 2, user is inactive and has no permissions.
-    //     switch (userAuthResponse.authStatus) {
-    //       case 0:
-    //         // User is registered
-    //         setLoginState('password');
-    //         break;
-    //       case 1:
-    //         // User's trial has expired
-    //         setLocalError(
-    //           'Your trial has expired. Please contact support to continue using Cadey.',
-    //         );
-    //         console.log('User trial expired');
-    //         break;
-    //       case 2:
-    //         // User is inactive and has no permissions
-    //         setLocalError(
-    //           'Your account is inactive. Please contact support to continue using Cadey.',
-    //         );
-    //         console.log('User is inactive');
-    //         break;
-    //       default:
-    //         setLocalError('An unknown error occurred.');
-    //         console.log('Unknown error');
-    //         break;
-    //     }
-    //   } else {
-    //     // User is not registered
-    //     setLocalError('User not registered. Please create an account.');
-    //     console.log('User not registered');
-    //     return;
-    //   }
-    // } else {
-    //   // User does not exist
-    //   setLocalError('User not found. Please create an account.');
-    //   console.log('User not found');
-    //   return;
-    // }
-
-    setLoginState('password');
-  };
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLocalError(''); // Clear any existing errors
@@ -141,34 +89,32 @@ const LoginComponent: React.FC = () => {
 
   return (
     <div className='login-component'>
-      {/* <LoginMessages messages={messages} />
-      <LoginErrors errors={errors} /> */}
+      <LoginMessages messages={messages} />
+      <LoginErrors errors={errors} />
       {localError && <p className='error-message'>{localError}</p>}
-      <form onSubmit={loginState === 'email' ? handleEmail : handleLogin}>
-        {loginState === 'email' && (
-          <>
-            <label>Email</label>
-            <input
-              required
-              type='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder='Email'
-            />
-          </>
-        )}
-        {loginState === 'password' && (
-          <>
-            <label>Password</label>
-            <input
-              required
-              type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder='Password'
-            />
-          </>
-        )}
+      <form onSubmit={handleLogin}>
+        <>
+          <label>Email</label>
+          <input
+            required
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder='Email'
+          />
+        </>
+
+        <div style={{ marginTop: '1rem' }}>
+          <label>Password</label>
+          <input
+            required
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder='Password'
+          />
+        </div>
+
         <button
           className='continue'
           type='submit'

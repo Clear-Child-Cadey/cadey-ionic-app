@@ -109,11 +109,9 @@ const useCadeyAuth = () => {
     email: string,
     password: string,
   ) {
-    let firebaseId = '';
     await runBeforeRequest();
     try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password);
-      firebaseId = user.uid; // Get the Firebase ID
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
@@ -189,6 +187,8 @@ const useCadeyAuth = () => {
     getEmailVerified,
     messages,
     getFirebaseLoginStatus,
+    loading: authLoading,
+    resetErrors: () => setErrors([]),
   };
 };
 
