@@ -91,6 +91,8 @@ function MainComponent() {
   const { setIsTabBarVisible } = useTabContext();
   const { setQuizModalData } = useModalContext();
 
+  const { userFullyLoaded } = useCadeyAuth();
+
   const location = useLocation();
   const history = useHistory();
 
@@ -104,8 +106,6 @@ function MainComponent() {
 
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const { user, isUserAnonymous, getFirebaseLoginStatus } = useCadeyAuth();
-
   // App startup logic
   useEffect(() => {
     const fetchData = async () => {
@@ -117,6 +117,7 @@ function MainComponent() {
       }
 
       try {
+        setIsLoading(true); // Enable the loader
         await getAppData(
           setCadeyUserId,
           setCadeyUserAgeGroup,
@@ -129,33 +130,10 @@ function MainComponent() {
         console.error('Error fetching app data:', error);
       } finally {
         // Stop the trace
-        if (tracingEnabled) {
-          getAppDataTrace.stop();
-        }
-
         // Disable the loader
         setIsLoading(false);
-      }
-    };
-
-    const handleFirebaseLoginStatus = async () => {
-      const previousUser = await getFirebaseLoginStatus(); // This gets the Firease user. If none exists, the user will be signed in anonymously
-
-      if (previousUser && previousUser.email) {
-        // User already signed in as a real user - Check for authorization
-        const userAuthResponse = await postUserAuth(apiUrl, previousUser.email);
-
-        if (userAuthResponse.cadeyUserId > 0) {
-          // User exists in the database
-          setCadeyUserId(userAuthResponse.cadeyUserId);
-
-          if (
-            userAuthResponse.regStatus === 0 &&
-            userAuthResponse.authStatus === 0
-          ) {
-            // User is registered and authorized - Check for onboarding quiz
-            requestQuiz();
-          }
+        if (tracingEnabled) {
+          getAppDataTrace.stop();
         }
       }
     };
@@ -186,14 +164,12 @@ function MainComponent() {
       }
     };
 
-    handleFirebaseLoginStatus();
-
     dispatch(setDeviceId(cadeyUserDeviceId)); // Set the device ID in the Redux store
 
     fetchData();
   }, [apiUrl]);
 
-  if (isLoading) {
+  if (isLoading || userFullyLoaded) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
     return;
   }

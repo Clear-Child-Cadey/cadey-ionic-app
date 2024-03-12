@@ -47,7 +47,6 @@ const HomePage: React.FC<{
   vimeoIdFromUrl?: string;
   articleIdFromUrl?: string;
 }> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
-  const { user } = useCadeyAuth();
   const dispatch = useDispatch();
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
@@ -202,6 +201,8 @@ const HomePage: React.FC<{
     // Navigate to the page
     history.push('/App' + route);
   };
+
+  const [data, setData] = useState(null);
 
   return (
     <IonPage className='home'>

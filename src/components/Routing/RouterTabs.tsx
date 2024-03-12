@@ -56,6 +56,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 const RouterTabs: React.FC = () => {
+  debugger;
   const deviceId = useSelector(
     (state: RootState) => state.deviceIdStatus.deviceId,
   );
