@@ -9,9 +9,14 @@ const rootReducer = combineReducers({
   deviceIdStatus: deviceIdStatusReducer,
 });
 
-// Create the store
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['authStatus', 'payload'],
+      },
+    }),
 });
 
 // Define and export RootState type

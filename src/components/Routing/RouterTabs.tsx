@@ -54,9 +54,23 @@ import { logUserFact } from '../../api/UserFacts';
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { trileanResolve } from '../../types/Trilean';
 
 const RouterTabs: React.FC = () => {
-  debugger;
+  const userLoggedIn = useSelector((state: RootState) => {
+    return (
+      state.authStatus.userData.firebaseUser !== null &&
+      !state.authStatus.userData.firebaseUser.isAnonymous &&
+      state.authStatus.userData.cadeyUser !== null
+    );
+  });
+  const firebaseResolved = useSelector((state: RootState) => {
+    return trileanResolve(state.authStatus.firebaseResolved);
+  });
+  const cadeyResolved = useSelector((state: RootState) => {
+    return trileanResolve(state.authStatus.cadeyResolved);
+  });
+
   const deviceId = useSelector(
     (state: RootState) => state.deviceIdStatus.deviceId,
   );
@@ -70,6 +84,21 @@ const RouterTabs: React.FC = () => {
   const location = useLocation();
   const history = useHistory();
   const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
+
+  useEffect(() => {
+    const nonLoggedInUsersAllowedPaths = [
+      '/App/Authentication/Login',
+      '/App/Authentication/Register',
+      '/App/Welcome',
+    ];
+    console.log(location.pathname);
+    if (
+      !userLoggedIn &&
+      !nonLoggedInUsersAllowedPaths.includes(location.pathname)
+    ) {
+      history.push('/App/Welcome');
+    }
+  }, [userLoggedIn, location]);
 
   // Use effect to update setIsWelcomeSequence
   useEffect(() => {

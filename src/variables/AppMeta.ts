@@ -4,11 +4,17 @@
 
 const AppMeta = {
   firestoreCollection: 'ErrorLogs2024',
-  firebaseApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+  cadeyApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
   fetchTimeout: -1,
   httpErrorModalData: {
     title: 'Error',
     body: "We're sorry, but we couldn't load the data for this page. Please try again later.",
+    buttonText: 'Retry',
+    actionType: 'RELOAD_PAGE',
+  },
+  httpErrorModalDataFirebaseTooManyRequests: {
+    title: 'Error',
+    body: 'We are experiencing high traffic. Please try again later.',
     buttonText: 'Retry',
     actionType: 'RELOAD_PAGE',
   },

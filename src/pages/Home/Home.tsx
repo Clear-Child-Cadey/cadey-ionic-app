@@ -42,11 +42,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setHttpErrorModalData } from '../../features/httpError/slice';
 import AppMeta from '../../variables/AppMeta';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
+import { RootState } from '../../store';
 
 const HomePage: React.FC<{
   vimeoIdFromUrl?: string;
   articleIdFromUrl?: string;
 }> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
+  const { userData } = useSelector((state: RootState) => state.authStatus);
+
   const dispatch = useDispatch();
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
@@ -56,7 +59,6 @@ const HomePage: React.FC<{
   const [playedVideos, setPlayedVideos] = useState<any[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
 
   const {
     currentBasePage,
@@ -201,8 +203,6 @@ const HomePage: React.FC<{
     // Navigate to the page
     history.push('/App' + route);
   };
-
-  const [data, setData] = useState(null);
 
   return (
     <IonPage className='home'>

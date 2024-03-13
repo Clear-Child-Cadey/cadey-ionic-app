@@ -21,7 +21,7 @@ import { useModalContext } from './context/ModalContext';
 // Components
 import RouterTabs from './components/Routing/RouterTabs';
 // Redux
-import { Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from './store';
 import { setDeviceId } from './features/deviceId/slice';
 
@@ -62,6 +62,8 @@ import { addDoc, collection } from 'firebase/firestore';
 import { trace } from 'firebase/performance';
 import { logErrorToFirestore } from './api/Firebase/LogErrorToFirestore';
 import useCadeyAuth from './hooks/useCadeyAuth';
+import { trileanResolve } from './types/Trilean';
+import HttpErrorModal from './components/Modals/HttpErrorModal';
 
 // Generate a unique ID for the device
 let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
@@ -86,13 +88,18 @@ export const CadeyUserContext = createContext<{
 });
 
 function MainComponent() {
-  const dispatch = useDispatch(); // Get the dispatch function
+  const dispatch = useDispatch();
+  const cadeyAuth = useCadeyAuth();
+
+  const userResolved = useSelector(
+    (state: RootState) =>
+      trileanResolve(state.authStatus.cadeyResolved) &&
+      trileanResolve(state.authStatus.firebaseResolved),
+  );
+
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setIsTabBarVisible } = useTabContext();
   const { setQuizModalData } = useModalContext();
-
-  const { userFullyLoaded } = useCadeyAuth();
-
   const location = useLocation();
   const history = useHistory();
 
@@ -105,6 +112,36 @@ function MainComponent() {
   const [unreadGoals, setUnreadGoals] = useState(false);
 
   const [dataLoaded, setDataLoaded] = useState(false);
+  useEffect(() => {
+    const requestQuiz = async () => {
+      const quizResponse = await getQuiz(
+        apiUrl,
+        Number(cadeyUserId),
+        3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
+        0, // Entity Type (1 = video)
+        0, // Entity IDs (The ID of the video)
+      );
+
+      debugger;
+
+      // If the user has not completed the welcome sequence, take them to the welcome sequence
+      if (quizResponse.question !== null && quizResponse.question.id > 0) {
+        // Set the quiz data
+        setQuizModalData(quizResponse);
+
+        // Hide the tab bar
+        setIsTabBarVisible(false);
+
+        // Redirect user to Welcome sequence - Path selection
+        history.push('/App/Welcome/Path');
+      } else {
+        // Show the tab bar and redirect to the home page
+        setIsTabBarVisible(true);
+        history.push('/App/Home');
+      }
+    };
+    requestQuiz();
+  }, [userResolved]);
 
   // App startup logic
   useEffect(() => {
@@ -138,40 +175,37 @@ function MainComponent() {
       }
     };
 
-    const requestQuiz = async () => {
-      const quizResponse = await getQuiz(
-        apiUrl,
-        Number(cadeyUserId),
-        3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
-        0, // Entity Type (1 = video)
-        0, // Entity IDs (The ID of the video)
-      );
-
-      // If the user has not completed the welcome sequence, take them to the welcome sequence
-      if (quizResponse.question !== null && quizResponse.question.id > 0) {
-        // Set the quiz data
-        setQuizModalData(quizResponse);
-
-        // Hide the tab bar
-        setIsTabBarVisible(false);
-
-        // Redirect user to Welcome sequence - Path selection
-        history.push('/App/Welcome/Path');
-      } else {
-        // Show the tab bar and redirect to the home page
-        setIsTabBarVisible(true);
-        history.push('/App/Home');
-      }
-    };
-
     dispatch(setDeviceId(cadeyUserDeviceId)); // Set the device ID in the Redux store
 
     fetchData();
   }, [apiUrl]);
 
-  if (isLoading || userFullyLoaded) {
+  if (!userResolved) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
-    return;
+    return (
+      <CadeyUserContext.Provider
+        value={{
+          cadeyUserId,
+          cadeyUserAgeGroup,
+          setCadeyUserAgeGroup,
+          minimumSupportedVersion,
+          oneSignalId,
+        }}
+      >
+        <UnreadContext.Provider
+          value={{
+            unreadMessagesCount,
+            setUnreadMessagesCount,
+            unreadGoals,
+            setUnreadGoals,
+          }}
+        >
+          <LoadingStateProvider>
+            <p>Loading!</p>
+          </LoadingStateProvider>
+        </UnreadContext.Provider>
+      </CadeyUserContext.Provider>
+    );
   }
 
   return (
@@ -212,6 +246,7 @@ root.render(
             <TabProvider>
               <ModalProvider>
                 <PathProvider>
+                  <HttpErrorModal />
                   <MainComponent />
                 </PathProvider>
               </ModalProvider>

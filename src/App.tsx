@@ -104,7 +104,7 @@ const App: React.FC = () => {
       }
     };
 
-    // requestQuiz();
+    requestQuiz();
   }, [cadeyUserId, apiUrl]);
 
   // Show the upgrade modal if the current app version is not the latest

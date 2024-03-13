@@ -40,6 +40,9 @@ const WelcomePathSelect: React.FC = () => {
   const deviceId = useSelector(
     (state: RootState) => state.deviceIdStatus.deviceId,
   );
+  const userData = useSelector((state: RootState) => {
+    return state.authStatus;
+  });
 
   // Create an empty set of PopularSeriesSymptoms to populate
   const [pathListing, setPathListing] = React.useState<PathListing>();
