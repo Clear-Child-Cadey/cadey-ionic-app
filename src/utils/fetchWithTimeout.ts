@@ -33,7 +33,7 @@ const fetchWithTimeout = async (
       const response = await fetch(url, opts);
       return response;
     } catch (error) {
-      store.dispatch(setHttpError(AppMeta.httpErrorModalData));
+      store.dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
       throw error; // Rethrow the error for the caller to handle
     }
   }

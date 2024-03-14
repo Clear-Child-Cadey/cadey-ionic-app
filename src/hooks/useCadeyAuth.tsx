@@ -26,18 +26,14 @@ import AppMeta from '../variables/AppMeta';
 import { RootState } from '../store';
 import { useHistory } from 'react-router';
 import { setHttpErrorModalData } from '../features/httpError/slice';
-import firebaseErrorMapper from '../utils/firebaseErrorMapper';
+import getDeviceId from '../utils/getDeviceId';
 
 const useCadeyAuth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const loginRequestAlreadyFired = useSelector(
-    (state: RootState) =>
-      state.authStatus.cadeyResolved !== 'pending' ||
-      state.authStatus.firebaseResolved !== 'pending',
+  const cadeyUserId = useSelector(
+    (state: RootState) => state.authStatus.appOpenCadeyId,
   );
-
   const initialErrorsState: string[] = [];
   const initialMessagesState: string[] = [];
 
@@ -158,7 +154,14 @@ const useCadeyAuth = () => {
   ) {
     await runBeforeRequest();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const { user: currentUser } = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
+      dispatch(setCadeyUser(cadeyUser));
+      dispatch(setCadeyResolved(true));
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
@@ -174,11 +177,18 @@ const useCadeyAuth = () => {
   ) => {
     runBeforeRequest();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      setMessageDecorated('Account created');
+      const firebaseCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const cadeyUser = await handleCadeyRegistrationUser(
+        firebaseCredential.user,
+      );
+      setMessageDecorated('Account created, Logging You In');
       setTimeout(() => {
         history.push('/App/Welcome/Path');
-      }, 4000);
+      }, 2000);
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
@@ -203,8 +213,46 @@ const useCadeyAuth = () => {
     }
   };
 
-  const handleCadeyLoginAndReturnUser = async (firebaseUser: User) => {
+  const handleCadeyLoginAndReturnUser = async (
+    firebaseUser: User,
+    cadeyUserId = 0,
+  ) => {
     const url = `${apiUrl}/userauth`;
+    let response;
+    try {
+      response = await fetchWithTimeout(
+        url,
+        {
+          method: 'POST',
+          headers: {
+            accept: 'text/plain',
+            apiKey: AppMeta.cadeyApiKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            cadeyUserEmail: firebaseUser.email,
+            authId: firebaseUser.uid,
+            cadeyUserDeviceId: getDeviceId(),
+            cadeyUserId,
+          }),
+        },
+        { requestName: 'postUserAuth' },
+      );
+    } catch (error) {
+      throw new Error(`HTTP error! status: ${error}`);
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const cadeyUserLocal = await response.json();
+    dispatch(setCadeyUser(cadeyUserLocal));
+    return cadeyUserLocal;
+  };
+
+  const handleCadeyRegistrationUser = async (firebaseUser: User) => {
+    const url = `${apiUrl}/userreg`;
 
     let response;
     try {
@@ -219,6 +267,9 @@ const useCadeyAuth = () => {
           },
           body: JSON.stringify({
             cadeyUserEmail: firebaseUser.email,
+            authId: firebaseUser.uid,
+            cadeyUserDeviceId: getDeviceId(),
+            cadeyUserId,
           }),
         },
         { requestName: 'postUserAuth' },

@@ -22,8 +22,7 @@ import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 import { logUserFact } from './api/UserFacts';
 import GenericModal from './components/Modals/GenericModal';
 import { getQuiz } from './api/Quiz';
-// Pages
-import HttpErrorModal from './components/Modals/HttpErrorModal';
+
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
@@ -141,7 +140,7 @@ const App: React.FC = () => {
   return (
     <>
       {/* Show a modal if the user needs to update their app*/}
-      <HttpErrorModal />
+
       <AppUpdateModal
         isOpen={showUpgradeModal}
         title='Update Required'

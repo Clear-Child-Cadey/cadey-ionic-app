@@ -26,7 +26,7 @@ import store, { RootState } from './store';
 import { setDeviceId } from './features/deviceId/slice';
 
 // API
-import getAppData from './api/AppOpen';
+
 import { logUserFact } from './api/UserFacts';
 import { getQuiz } from './api/Quiz';
 import { postUserAuth } from './api/Authentication';
@@ -64,13 +64,13 @@ import { logErrorToFirestore } from './api/Firebase/LogErrorToFirestore';
 import useCadeyAuth from './hooks/useCadeyAuth';
 import { trileanResolve } from './types/Trilean';
 import HttpErrorModal from './components/Modals/HttpErrorModal';
+import getDeviceId from './utils/getDeviceId';
+import useAppOpened from './hooks/useAppOpened';
+import { setHttpErrorModalData } from './features/httpError/slice';
+import AppMeta from './variables/AppMeta';
 
-// Generate a unique ID for the device
-let cadeyUserDeviceId = localStorage.getItem('cadey_user_device_id');
-if (!cadeyUserDeviceId) {
-  cadeyUserDeviceId = uuidv4();
-  localStorage.setItem('cadey_user_device_id', cadeyUserDeviceId);
-}
+// Make sure we generate a unique ID for the device
+getDeviceId();
 
 // create context for cadeyUserId and minimumSupportedVersion
 export const CadeyUserContext = createContext<{
@@ -88,9 +88,23 @@ export const CadeyUserContext = createContext<{
 });
 
 function MainComponent() {
+  const { appOpenAction } = useAppOpened();
+  useCadeyAuth();
   const dispatch = useDispatch();
-  const cadeyAuth = useCadeyAuth();
+  useEffect(() => {
+    const asyncFunction = async () => {
+      try {
+        await appOpenAction();
+      } catch {
+        dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
+      }
+    };
+    asyncFunction();
+  }, []);
 
+  const cadeyUser = useSelector(
+    (state: RootState) => state.authStatus.userData.cadeyUser,
+  );
   const userResolved = useSelector(
     (state: RootState) =>
       trileanResolve(state.authStatus.cadeyResolved) &&
@@ -100,29 +114,29 @@ function MainComponent() {
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setIsTabBarVisible } = useTabContext();
   const { setQuizModalData } = useModalContext();
-  const location = useLocation();
   const history = useHistory();
 
   const [cadeyUserId, setCadeyUserId] = useState('');
   const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState('');
   const [oneSignalId, setOneSignalId] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [unreadGoals, setUnreadGoals] = useState(false);
 
-  const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     const requestQuiz = async () => {
+      if (!userResolved || !cadeyUser?.cadeyUserId) {
+        return;
+      }
+
       const quizResponse = await getQuiz(
         apiUrl,
-        Number(cadeyUserId),
+        Number(cadeyUser.cadeyUserId),
         3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
         0, // Entity Type (1 = video)
         0, // Entity IDs (The ID of the video)
       );
-
-      debugger;
 
       // If the user has not completed the welcome sequence, take them to the welcome sequence
       if (quizResponse.question !== null && quizResponse.question.id > 0) {
@@ -142,43 +156,6 @@ function MainComponent() {
     };
     requestQuiz();
   }, [userResolved]);
-
-  // App startup logic
-  useEffect(() => {
-    const fetchData = async () => {
-      let getAppDataTrace: any;
-      // Start a Firebase trace
-      if (tracingEnabled) {
-        getAppDataTrace = trace(firebasePerf, 'getAppDataTrace');
-        await getAppDataTrace.start();
-      }
-
-      try {
-        setIsLoading(true); // Enable the loader
-        await getAppData(
-          setCadeyUserId,
-          setCadeyUserAgeGroup,
-          setMinimumSupportedVersion,
-          setOneSignalId,
-          apiUrl,
-        );
-        setDataLoaded(true); // Indicate that data has been loaded
-      } catch (error) {
-        console.error('Error fetching app data:', error);
-      } finally {
-        // Stop the trace
-        // Disable the loader
-        setIsLoading(false);
-        if (tracingEnabled) {
-          getAppDataTrace.stop();
-        }
-      }
-    };
-
-    dispatch(setDeviceId(cadeyUserDeviceId)); // Set the device ID in the Redux store
-
-    fetchData();
-  }, [apiUrl]);
 
   if (!userResolved) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
@@ -200,6 +177,7 @@ function MainComponent() {
             setUnreadGoals,
           }}
         >
+          <HttpErrorModal />
           <LoadingStateProvider>
             <p>Loading!</p>
           </LoadingStateProvider>
@@ -226,6 +204,7 @@ function MainComponent() {
           setUnreadGoals,
         }}
       >
+        <HttpErrorModal />
         <LoadingStateProvider>
           <RouterTabs />
           <App />
