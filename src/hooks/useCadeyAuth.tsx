@@ -18,6 +18,7 @@ import {
   setIsAnonymous,
   setCadeyUser,
   setFirebaseUser,
+  setEmailVerified,
 } from '../features/authLoading/slice';
 // API
 import ApiUrlContext from '../context/ApiUrlContext';
@@ -43,7 +44,6 @@ const useCadeyAuth = () => {
 
   const { apiUrl } = React.useContext(ApiUrlContext);
 
-<<<<<<< HEAD
   useEffect(() => {
     // This effect replaces the waitForAuthStateChange mechanism
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -52,6 +52,7 @@ const useCadeyAuth = () => {
         dispatch(setIsAnonymous(currentUser.isAnonymous));
         dispatch(setFirebaseUser(currentUser));
         dispatch(setFirebaseResolved(true));
+        dispatch(setEmailVerified(currentUser.emailVerified));
 
         if (!currentUser.isAnonymous) {
           // Handle logged in user
@@ -64,20 +65,6 @@ const useCadeyAuth = () => {
             setErrors([...errors, error.message]);
             // Handle any additional error state updates or dispatches here
           }
-=======
-  const getFirebaseLoginStatus = async (): Promise<User | null> => {
-    return new Promise<User | null>((resolve) => {
-      onAuthStateChanged(auth, (currentUser) => {
-        if (currentUser && currentUser.isAnonymous === false) {
-          // User is signed in as a registered user
-          console.log('User is signed in, UID:', currentUser.uid);
-          console.log('User is registered', currentUser.emailVerified);
-          setUser(currentUser); // This will set the user state with the current user
-          resolve(currentUser);
-        } else if (currentUser && currentUser.isAnonymous === true) {
-          // User is signed in anonymously
-          resolve(null);
->>>>>>> 3.0.0-email-verification
         } else {
           // Handle anonymous user
           dispatch(setCadeyResolved(true));
@@ -193,17 +180,13 @@ const useCadeyAuth = () => {
   ) => {
     runBeforeRequest();
     try {
-
       const userCredential = await createUserWithEmailAndPassword(
-
         auth,
         email,
         password,
       );
       const user = userCredential.user;
-      const cadeyUser = await handleCadeyRegistrationUser(
-        userCredential.user,
-      );
+      const cadeyUser = await handleCadeyRegistrationUser(userCredential.user);
       dispatch(setCadeyUser(cadeyUser));
       const actionCodeSettings = {
         url: 'http://localhost:8100/App/Home', //Change this to our own url
@@ -314,7 +297,6 @@ const useCadeyAuth = () => {
     dispatch(setCadeyUser(cadeyUserLocal));
     return cadeyUserLocal;
   };
-
 
   return {
     errors,

@@ -3,6 +3,7 @@
 //MG this should be refactored into env variables
 
 const AppMeta = {
+  forceEmailVerification: false,
   firestoreCollection: 'ErrorLogs2024',
   cadeyApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
   fetchTimeout: -1,

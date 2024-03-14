@@ -12,6 +12,7 @@ interface AuthStatusState {
   };
   appOpenCadeyId: 'pending' | number | 'retrieved';
   isAnonymous: Trilean;
+  emailVerified: Trilean;
 }
 
 const initialState: AuthStatusState = {
@@ -23,6 +24,7 @@ const initialState: AuthStatusState = {
   },
   isAnonymous: 'pending',
   appOpenCadeyId: 'pending',
+  emailVerified: 'pending',
 };
 
 export const authStatusSlice = createSlice({
@@ -47,6 +49,9 @@ export const authStatusSlice = createSlice({
     setCadeyUser: (state, action) => {
       state.userData.cadeyUser = action.payload;
     },
+    setEmailVerified: (state, action) => {
+      state.emailVerified = action.payload;
+    },
   },
 });
 
@@ -58,6 +63,7 @@ export const {
   setFirebaseUser,
   setIsAnonymous,
   setAppOpenCadeyId,
+  setEmailVerified,
 } = authStatusSlice.actions;
 
 // Export the reducer

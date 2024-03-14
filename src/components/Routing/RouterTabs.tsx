@@ -58,6 +58,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { trileanResolve } from '../../types/Trilean';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
+import AppMeta from '../../variables/AppMeta';
 
 const RouterTabs: React.FC = () => {
   const userLoggedIn = useSelector((state: RootState) => {
@@ -67,12 +68,16 @@ const RouterTabs: React.FC = () => {
       state.authStatus.userData.cadeyUser !== null
     );
   });
+
+  const emailVerified = useSelector((state: RootState) => {
+    return state.authStatus.emailVerified;
+  });
+
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
 
   // Check email address is verified
-  const { getEmailVerified, user } = useCadeyAuth();
 
   // Tab bar visibility
   const { isTabBarVisible, setIsTabBarVisible } = useTabContext();
@@ -130,8 +135,9 @@ const RouterTabs: React.FC = () => {
 
   // Redirect user back to welcome page and refresh its data
   const handleRedirectHome = () => {
-    user?.reload();
-    history.push('/App/Welcome');
+    // user?.reload(); redux issue!
+    // history.push('/App/Welcome');
+    window.location.href = '/App/Welcome';
   };
 
   return (
@@ -188,7 +194,7 @@ const RouterTabs: React.FC = () => {
       )}
 
       {isTabBarVisible &&
-        (!getEmailVerified() ? (
+        (AppMeta.forceEmailVerification && !emailVerified ? (
           <div className='email-verification-message'>
             <h2>UH-OH!</h2>
             <p>Before you can continue, please verify your email address</p>
