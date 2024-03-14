@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
 } from 'firebase/auth';
 import { auth } from '../api/Firebase/InitializeFirebase';
 // Redux
@@ -35,6 +36,7 @@ const useCadeyAuth = () => {
         if (currentUser && currentUser.isAnonymous === false) {
           // User is signed in as a registered user
           console.log('User is signed in, UID:', currentUser.uid);
+          console.log('User is registered', currentUser.emailVerified);
           setUser(currentUser); // This will set the user state with the current user
           resolve(currentUser);
         } else if (currentUser && currentUser.isAnonymous === true) {
@@ -129,7 +131,20 @@ const useCadeyAuth = () => {
   ) => {
     runBeforeRequest();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      const user = userCredential.user;
+      const actionCodeSettings = {
+        url: 'http://localhost:8100/App/Home', //Change this to our own url
+      };
+
+      await sendEmailVerification(user, actionCodeSettings).then(() => {
+        console.log('Verification sent successfully', user);
+      });
       setMessageDecorated('Account created');
     } catch (e) {
       if (e instanceof Error) {
@@ -175,6 +190,11 @@ const useCadeyAuth = () => {
     return user?.emailVerified;
   };
 
+  // User Data was not being set properly so whenever calling user outside of hook it breaks
+  useEffect(() => {
+    setUser(auth.currentUser);
+  }, [auth.currentUser]);
+
   return {
     errors,
     user,
@@ -189,6 +209,7 @@ const useCadeyAuth = () => {
     getFirebaseLoginStatus,
     loading: authLoading,
     resetErrors: () => setErrors([]),
+    setErrorDecorated,
   };
 };
 

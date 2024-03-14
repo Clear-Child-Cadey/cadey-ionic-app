@@ -81,3 +81,13 @@
 .tab-bar.welcome {
     display: none;
 }
+
+.email-verification-message {
+    display: flex;
+    flex-direction: column;
+    color: #384F5F;
+    padding: 18px;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}

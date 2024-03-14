@@ -54,7 +54,7 @@ const LoginComponent: React.FC = () => {
     }
 
     await sendPasswordResetEmailDecorated(email);
-    alert('Password reset email sent! Check your inbox.');
+    // alert('Password reset email sent! Check your inbox.'); //Can be commented out, but this seemed a bit reduntant since there is already a message notifying the user on the page
   };
 
   const handleCreateAccount = () => {
