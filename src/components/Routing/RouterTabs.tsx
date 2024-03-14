@@ -15,6 +15,7 @@ import {
   IonIcon,
   IonLabel,
   IonBadge,
+  IonButton,
 } from '@ionic/react';
 // CSS
 import './RouterTabs.css';
@@ -39,6 +40,7 @@ import WelcomeAgeGroupSelect from '../../pages/Welcome/WelcomeAgeGroup';
 import WelcomePush from '../../pages/Welcome/WelcomePush';
 import LoginPage from '../../pages/Authentication/Login';
 import RegistrationPage from '../../pages/Authentication/Register';
+import HandlerPage from '../../pages/Authentication/Handler';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -55,6 +57,7 @@ import { logUserFact } from '../../api/UserFacts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { trileanResolve } from '../../types/Trilean';
+import useCadeyAuth from '../../hooks/useCadeyAuth';
 
 const RouterTabs: React.FC = () => {
   const userLoggedIn = useSelector((state: RootState) => {
@@ -67,6 +70,9 @@ const RouterTabs: React.FC = () => {
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
+
+  // Check email address is verified
+  const { getEmailVerified, user } = useCadeyAuth();
 
   // Tab bar visibility
   const { isTabBarVisible, setIsTabBarVisible } = useTabContext();
@@ -96,6 +102,11 @@ const RouterTabs: React.FC = () => {
   useEffect(() => {
     // Update the state based on the current path
     setIsWelcomeSequence(location.pathname.startsWith('/App/Welcome'));
+    setIsTabBarVisible(
+      location.pathname.includes('/App/Home') ||
+        location.pathname.includes('/App/Library') ||
+        location.pathname.includes('/App/Paths'),
+    );
   }, [location]);
 
   const handleTabClick = async (tabName: string, route: string) => {
@@ -115,6 +126,12 @@ const RouterTabs: React.FC = () => {
   const isTabActive = (tabPath: string): boolean => {
     // You might need more sophisticated logic depending on your routes
     return location.pathname.startsWith(tabPath);
+  };
+
+  // Redirect user back to welcome page and refresh its data
+  const handleRedirectHome = () => {
+    user?.reload();
+    history.push('/App/Welcome');
   };
 
   return (
@@ -163,126 +180,147 @@ const RouterTabs: React.FC = () => {
 
             {/* Miscellaneous routes */}
             <Route exact path='/App/Admin' component={AdminPage} />
+
+            {/* Route for handler to handle all deep links */}
+            <Route exact path='/App/Authentication' component={HandlerPage} />
           </Switch>
         </IonRouterOutlet>
       )}
 
-      {isTabBarVisible && (
-        // If the tab bar is visible, show the tabs
-        <IonTabs>
-          <IonRouterOutlet>
-            <Switch>
-              {/* Define all of the specific routes */}
+      {isTabBarVisible &&
+        (!getEmailVerified() ? (
+          <div className='email-verification-message'>
+            <h2>UH-OH!</h2>
+            <p>Before you can continue, please verify your email address</p>
+            <IonButton onClick={handleRedirectHome}>
+              I already verified
+            </IonButton>
+          </div>
+        ) : (
+          // If the tab bar is visible, show the tabs
+          <IonTabs>
+            <IonRouterOutlet>
+              <Switch>
+                {/* Define all of the specific routes */}
 
-              {/* Home routes */}
-              <Route
-                exact
-                path='/App/Home'
-                render={(routeProps) => {
-                  const vimeoId = routeProps.location.search.split('video=')[1];
-                  const articleId =
-                    routeProps.location.search.split('article=')[1];
+                {/* Home routes */}
+                <Route
+                  exact
+                  path='/App/Home'
+                  render={(routeProps) => {
+                    const vimeoId =
+                      routeProps.location.search.split('video=')[1];
+                    const articleId =
+                      routeProps.location.search.split('article=')[1];
 
-                  return (
-                    <HomePage
-                      vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
-                      articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
-                    />
-                  );
-                }}
-              />
-              <Route exact path='/'>
-                <Redirect to='/App/Home' />
-              </Route>
-              <Route exact path='/App/Home/Messages' component={MessagesPage} />
+                    return (
+                      <HomePage
+                        vimeoIdFromUrl={vimeoId} // Pass extracted videoId to the HomePage component
+                        articleIdFromUrl={articleId} // Pass extracted articleId to the HomePage component
+                      />
+                    );
+                  }}
+                />
+                <Route exact path='/'>
+                  <Redirect to='/App/Home' />
+                </Route>
+                <Route
+                  exact
+                  path='/App/Home/Messages'
+                  component={MessagesPage}
+                />
 
-              {/* Library routes */}
-              <Route exact path='/App/Library' component={LibraryPage} />
-              <Route exact path='/App/Library/Search' component={SearchPage} />
-              <Route
-                exact
-                path='/App/Library/Articles'
-                component={ArticleCategoryListingPage}
-              />
-              <Route
-                exact
-                path='/App/Library/Articles/Category'
-                component={ArticlesPage}
-              />
-              <Route
-                exact
-                path='/App/Library/Articles/Article'
-                component={ArticleDetailPage}
-              />
-              <Route
-                exact
-                path='/App/Library/Videos'
-                component={VideoLibraryPage}
-              />
+                {/* Library routes */}
+                <Route exact path='/App/Library' component={LibraryPage} />
+                <Route
+                  exact
+                  path='/App/Library/Search'
+                  component={SearchPage}
+                />
+                <Route
+                  exact
+                  path='/App/Library/Articles'
+                  component={ArticleCategoryListingPage}
+                />
+                <Route
+                  exact
+                  path='/App/Library/Articles/Category'
+                  component={ArticlesPage}
+                />
+                <Route
+                  exact
+                  path='/App/Library/Articles/Article'
+                  component={ArticleDetailPage}
+                />
+                <Route
+                  exact
+                  path='/App/Library/Videos'
+                  component={VideoLibraryPage}
+                />
 
-              {/* Paths routes */}
-              <Route exact path='/App/Paths'>
-                <Redirect to='/App/Paths/PathListing' />
-              </Route>
-              <Route
-                exact
-                path='/App/Paths/PathListing'
-                component={PathListingPage}
-              />
-              <Route
-                exact
-                path='/App/Paths/PathDetail'
-                component={PathDetailPage}
-              />
+                {/* Paths routes */}
+                <Route exact path='/App/Paths'>
+                  <Redirect to='/App/Paths/PathListing' />
+                </Route>
+                <Route
+                  exact
+                  path='/App/Paths/PathListing'
+                  component={PathListingPage}
+                />
+                <Route
+                  exact
+                  path='/App/Paths/PathDetail'
+                  component={PathDetailPage}
+                />
 
-              {/* Miscellaneous routes */}
-              <Route exact path='/App/Admin' component={AdminPage} />
+                {/* Miscellaneous routes */}
+                <Route exact path='/App/Admin' component={AdminPage} />
 
-              {/* Re-route any route with "/App/Welcome" to the home screen */}
-              <Route path='/App/Welcome'>
-                <Redirect to='/App/Home' />
-              </Route>
+                {/* Re-route any route with "/App/Welcome" to the home screen */}
+                <Route path='/App/Welcome'>
+                  <Redirect to='/App/Home' />
+                </Route>
 
-              {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
-              <Route component={RedirectToWeb} />
-            </Switch>
-          </IonRouterOutlet>
-          {/* Tab Bar */}
-          <IonTabBar
-            slot='bottom'
-            className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}
-          >
-            <IonTabButton
-              tab='Home'
-              onClick={() => handleTabClick('Home', '/App/Home')}
-              selected={isTabActive('/App/Home')}
+                {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
+                <Route component={RedirectToWeb} />
+              </Switch>
+            </IonRouterOutlet>
+            {/* Tab Bar */}
+            <IonTabBar
+              slot='bottom'
+              className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}
             >
-              <HomeIcon />
-              <IonLabel>Home</IonLabel>
-            </IonTabButton>
+              <IonTabButton
+                tab='Home'
+                onClick={() => handleTabClick('Home', '/App/Home')}
+                selected={isTabActive('/App/Home')}
+              >
+                <HomeIcon />
+                <IonLabel>Home</IonLabel>
+              </IonTabButton>
 
-            {/* Paths */}
-            <IonTabButton
-              tab='Paths'
-              onClick={() => handleTabClick('Path Listing', '/App/Paths')}
-              selected={isTabActive('/App/Paths')}
-            >
-              <PathsIcon />
-              <IonLabel>Paths</IonLabel>
-            </IonTabButton>
+              {/* Paths */}
+              <IonTabButton
+                tab='Paths'
+                onClick={() => handleTabClick('Path Listing', '/App/Paths')}
+                selected={isTabActive('/App/Paths')}
+              >
+                <PathsIcon />
+                <IonLabel>Paths</IonLabel>
+              </IonTabButton>
 
-            {/* Library */}
-            <IonTabButton
-              tab='Library'
-              onClick={() => handleTabClick('Library', '/App/Library')}
-              selected={isTabActive('/App/Library')}
-            >
-              <LibraryIcon />
-              <IonLabel>Library</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      )}
+              {/* Library */}
+              <IonTabButton
+                tab='Library'
+                onClick={() => handleTabClick('Library', '/App/Library')}
+                selected={isTabActive('/App/Library')}
+              >
+                <LibraryIcon />
+                <IonLabel>Library</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        ))}
     </>
   );
 };

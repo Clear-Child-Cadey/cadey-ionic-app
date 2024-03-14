@@ -48,8 +48,6 @@ const HomePage: React.FC<{
   vimeoIdFromUrl?: string;
   articleIdFromUrl?: string;
 }> = ({ vimeoIdFromUrl, articleIdFromUrl }) => {
-  const { userData } = useSelector((state: RootState) => state.authStatus);
-
   const dispatch = useDispatch();
   const [pathsInProgress, setPathsInProgress] = useState(0);
   const [completedPaths, setCompletedPaths] = useState(0);
@@ -218,7 +216,6 @@ const HomePage: React.FC<{
           isOpen={isLoading}
           message={`Loading your data.....${JSON.stringify(isGenericModalOpen)}`}
         /> */}
-
         <IonRow>
           <IonText className='subcopy'>Welcome</IonText>
         </IonRow>
