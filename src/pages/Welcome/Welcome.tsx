@@ -15,22 +15,29 @@ import { RootState } from '../../store';
 const WelcomePage: React.FC = () => {
   const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
-  const deviceId = useSelector(
-    (state: RootState) => state.deviceIdStatus.deviceId,
-  );
+  const deviceId = useSelector((state: RootState) => {
+    return state.deviceIdStatus.deviceId;
+  });
+
+  const cadeyUser = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser;
+  });
 
   const history = useHistory();
 
   // When the component loads
   useEffect(() => {
+    if (!cadeyUser || !cadeyUser.cadeyUserId) {
+      return;
+    }
     // appPageNavigation user fact
     logUserFact({
-      cadeyUserId: cadeyUserId,
+      cadeyUserId: cadeyUser?.cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Welcome - Intro Screen',
     });
-  }, [apiUrl]);
+  }, [apiUrl, cadeyUser, cadeyUser?.cadeyUserId]);
 
   const handleContinue = (url: string) => {
     history.push(url);

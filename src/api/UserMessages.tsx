@@ -1,28 +1,29 @@
-import fetchWithTimeout from "../utils/fetchWithTimeout";
+import fetchWithTimeout from '../utils/fetchWithTimeout';
+import AppMeta from '../variables/AppMeta';
 
-export const getUserMessages = async (apiUrl: string, cadeyUserId: string) => {
-    let response;
-    const url = `${apiUrl}/notificationmessages/${cadeyUserId}`;
+export const getUserMessages = async (apiUrl: string, cadeyUserId: number) => {
+  let response;
+  const url = `${apiUrl}/notificationmessages/${cadeyUserId}`;
 
-    try {
-        response = await fetchWithTimeout(
-          url,
-          {
-            method: "GET",
-            headers: {
-              accept: "text/plain",
-              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
-            },
-          },
-          { cadeyUserId, requestName: "getUserMessages" },
-        );
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-    
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  try {
+    response = await fetchWithTimeout(
+      url,
+      {
+        method: 'GET',
+        headers: {
+          accept: 'text/plain',
+          apiKey: AppMeta.cadeyApiKey,
+        },
+      },
+      { cadeyUserId, requestName: 'getUserMessages' },
+    );
+  } catch (error) {
+    throw new Error(`HTTP error! status: ${error}`);
+  }
 
-    return await response.json();
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
 };

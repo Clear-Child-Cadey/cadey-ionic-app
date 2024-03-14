@@ -13,10 +13,11 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 import { useModalContext } from '../../context/ModalContext';
 import { useTabContext } from '../../context/TabContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const RegistrationComponent: React.FC = () => {
   const { apiUrl } = useContext(ApiUrlContext);
-  const { cadeyUserId } = useContext(CadeyUserContext);
   const { setIsTabBarVisible } = useTabContext();
   const { setQuizModalData } = useModalContext();
   const [loginState, setLoginState] = useState('email'); // 'email' or 'password'
@@ -24,6 +25,9 @@ const RegistrationComponent: React.FC = () => {
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
   const history = useHistory();
+  const cadeyUserId = useSelector(
+    (state: RootState) => state.authStatus.userData.cadeyUser?.cadeyUserId,
+  );
 
   const {
     resetErrors,
@@ -102,6 +106,7 @@ const RegistrationComponent: React.FC = () => {
   };
 
   const handleLogin = () => {
+    debugger;
     history.push('/App/Authentication/Login');
   };
 

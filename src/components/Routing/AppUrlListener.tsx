@@ -10,61 +10,67 @@ import { CadeyUserContext } from '../../main';
 import { getUserMessages } from '../../api/UserMessages';
 // Interfaces
 import { Message } from '../../pages/Messages/Messages';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const AppUrlListener: React.FC<any> = () => {
-    let history = useHistory();
-    const location = useLocation();
-    const unreadCount = useContext(UnreadCountContext); // Get the current unread count
-    const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  const history = useHistory();
+  const location = useLocation();
+  const unreadCount = useContext(UnreadCountContext); // Get the current unread count
+  const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
 
-    useEffect(() => {
-        // Listener for detecting URL on app open
-        App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
-            const urlObject = new URL(event.url);
-            const host = urlObject.hostname;
-            const path = urlObject.pathname;
-            const queryString = urlObject.search; // Grabs the query string
-            var fullSlug = `/${host}${path}${queryString}`;
-            
-            if (fullSlug) {
-                while (fullSlug.startsWith('//')) {
-                    // iOS and Android handle these differently
-                    fullSlug = fullSlug.replace('//', '/');
-                }
-                history.push(fullSlug);
-            }
-        });
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  ); // either grab the ID from cadey user, if set, otherwise, get the appOpen cadeyUserId
 
-        // Listener for the appStateChange event
-        const handleAppStateChange = (state: AppState) => {
-            // If app becomes active
-            if (state.isActive) {
-                // Get latest messages and update the unread count
-                const fetchMessages = async () => {
-                    try {
-                      // Getting messages
-                      const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
-                      const unread = data.filter(data => !data.isRead).length;
-                      unreadCount.setUnreadMessagesCount?.(unread);
-                    } catch (error) {
-                        console.error("Error fetching video details:", error);
-                    }
-                };
-                fetchMessages(); // Get data when the component mounts
-            }
-        };
-        
-        App.addListener('appStateChange', handleAppStateChange);
-        
-        // Cleanup when the component unmounts
-        return () => {
-            App.removeAllListeners();
+  useEffect(() => {
+    // Listener for detecting URL on app open
+    App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+      const urlObject = new URL(event.url);
+      const host = urlObject.hostname;
+      const path = urlObject.pathname;
+      const queryString = urlObject.search; // Grabs the query string
+      let fullSlug = `/${host}${path}${queryString}`;
+
+      if (fullSlug) {
+        while (fullSlug.startsWith('//')) {
+          // iOS and Android handle these differently
+          fullSlug = fullSlug.replace('//', '/');
         }
-        
-    }, [history, location]);
-  
-    return null;
-  };
-  
-  export default AppUrlListener;
+        history.push(fullSlug);
+      }
+    });
+
+    // Listener for the appStateChange event
+    const handleAppStateChange = (state: AppState) => {
+      // If app becomes active
+      if (state.isActive) {
+        // Get latest messages and update the unread count
+        const fetchMessages = async () => {
+          try {
+            // Getting messages
+            const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+            const unread = data.filter((data) => !data.isRead).length;
+            unreadCount.setUnreadMessagesCount?.(unread);
+          } catch (error) {
+            console.error('Error fetching video details:', error);
+          }
+        };
+        fetchMessages(); // Get data when the component mounts
+      }
+    };
+
+    App.addListener('appStateChange', handleAppStateChange);
+
+    // Cleanup when the component unmounts
+    return () => {
+      App.removeAllListeners();
+    };
+  }, [history, location]);
+
+  return null;
+};
+
+export default AppUrlListener;

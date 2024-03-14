@@ -74,13 +74,13 @@ getDeviceId();
 
 // create context for cadeyUserId and minimumSupportedVersion
 export const CadeyUserContext = createContext<{
-  cadeyUserId: string;
+  cadeyUserId: number;
   cadeyUserAgeGroup: number;
   setCadeyUserAgeGroup: React.Dispatch<React.SetStateAction<number>>;
   minimumSupportedVersion: string;
   oneSignalId: string;
 }>({
-  cadeyUserId: '',
+  cadeyUserId: 0,
   cadeyUserAgeGroup: 0,
   setCadeyUserAgeGroup: () => {},
   minimumSupportedVersion: '',
@@ -102,8 +102,12 @@ function MainComponent() {
     asyncFunction();
   }, []);
 
+  const cadeyUserId = useSelector(
+    (state: RootState) => state?.authStatus?.userData?.cadeyUser?.cadeyUserId,
+  );
+
   const cadeyUser = useSelector(
-    (state: RootState) => state.authStatus.userData.cadeyUser,
+    (state: RootState) => state?.authStatus?.userData?.cadeyUser,
   );
   const userResolved = useSelector(
     (state: RootState) =>
@@ -116,7 +120,6 @@ function MainComponent() {
   const { setQuizModalData } = useModalContext();
   const history = useHistory();
 
-  const [cadeyUserId, setCadeyUserId] = useState('');
   const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
   const [minimumSupportedVersion, setMinimumSupportedVersion] = useState('');
   const [oneSignalId, setOneSignalId] = useState('');
@@ -126,13 +129,13 @@ function MainComponent() {
 
   useEffect(() => {
     const requestQuiz = async () => {
-      if (!userResolved || !cadeyUser?.cadeyUserId) {
+      if (!userResolved || !cadeyUser || !cadeyUserId) {
         return;
       }
 
       const quizResponse = await getQuiz(
         apiUrl,
-        Number(cadeyUser.cadeyUserId),
+        Number(cadeyUserId),
         3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
         0, // Entity Type (1 = video)
         0, // Entity IDs (The ID of the video)

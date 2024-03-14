@@ -64,22 +64,14 @@ const RouterTabs: React.FC = () => {
       state.authStatus.userData.cadeyUser !== null
     );
   });
-  const firebaseResolved = useSelector((state: RootState) => {
-    return trileanResolve(state.authStatus.firebaseResolved);
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
-  const cadeyResolved = useSelector((state: RootState) => {
-    return trileanResolve(state.authStatus.cadeyResolved);
-  });
-
-  const deviceId = useSelector(
-    (state: RootState) => state.deviceIdStatus.deviceId,
-  );
 
   // Tab bar visibility
   const { isTabBarVisible, setIsTabBarVisible } = useTabContext();
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const { currentAppPage } = useAppPage();
   const location = useLocation();
   const history = useHistory();

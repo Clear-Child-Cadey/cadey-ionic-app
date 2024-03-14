@@ -14,7 +14,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredPaths: ['authStatus', 'payload'],
+        ignoredPaths: ['authStatus', 'payload', 'authStatus.firebaseUser'],
+        ignoredActions: ['authStatus/setFirebaseUser'],
       },
     }),
 });

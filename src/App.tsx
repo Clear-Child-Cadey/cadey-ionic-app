@@ -30,11 +30,13 @@ import { RootState } from './store';
 setupIonicReact();
 
 const App: React.FC = () => {
+  const cadeyUser = useSelector(
+    (state: RootState) => state.authStatus.userData.cadeyUser,
+  );
   const deviceId = useSelector(
     (state: RootState) => state.deviceIdStatus.deviceId,
   );
-  const { cadeyUserId, minimumSupportedVersion, oneSignalId } =
-    useContext(CadeyUserContext);
+  const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
@@ -76,12 +78,15 @@ const App: React.FC = () => {
 
   // Route the user to the welcome page if they haven't completed the welcome sequence
   useEffect(() => {
+    if (!cadeyUser?.cadeyUserId) {
+      return;
+    }
     const requestQuiz = async () => {
       console.log('Checking for welcome sequence');
       if (!checkForWelcome) {
         const quizResponse = await getQuiz(
           apiUrl,
-          Number(cadeyUserId),
+          Number(cadeyUser.cadeyUserId),
           3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
           0, // Entity Type (1 = video)
           0, // Entity IDs (The ID of the video)
@@ -104,7 +109,7 @@ const App: React.FC = () => {
     };
 
     requestQuiz();
-  }, [cadeyUserId, apiUrl]);
+  }, [apiUrl, cadeyUser, cadeyUser?.cadeyUserId]);
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
@@ -115,6 +120,9 @@ const App: React.FC = () => {
   }, [minimumSupportedVersion, AppVersion]);
 
   useEffect(() => {
+    if (!cadeyUser?.cadeyUserId) {
+      return;
+    }
     if (!isVideoModalOpen && !videoModalEverOpened) {
       // Modal closed, hasn't ever been opened
       // Currently, do nothing in this case
@@ -125,12 +133,12 @@ const App: React.FC = () => {
       // Modal closed, but has been opened before
       onVideoDetailPageClosed();
     }
-  }, [isVideoModalOpen]);
+  }, [isVideoModalOpen, cadeyUser]);
 
   const onVideoDetailPageClosed = async () => {
     const response = await logUserFact({
       deviceId: deviceId,
-      cadeyUserId: cadeyUserId,
+      cadeyUserId: cadeyUser.cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'VideoDetailPageClosed',
       appPage: 'Video Detail',

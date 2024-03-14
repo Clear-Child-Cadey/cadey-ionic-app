@@ -41,7 +41,7 @@ const WelcomePathSelect: React.FC = () => {
     (state: RootState) => state.deviceIdStatus.deviceId,
   );
   const userData = useSelector((state: RootState) => {
-    return state.authStatus;
+    return state.authStatus.userData;
   });
 
   // Create an empty set of PopularSeriesSymptoms to populate
@@ -57,10 +57,16 @@ const WelcomePathSelect: React.FC = () => {
   useEffect(() => {
     const getPaths = async () => {
       // Get the path listing from the API and set it to state
-      setPathListing(await getPathListing(apiUrl, Number(cadeyUserId)));
+      const pathListingLocal = await getPathListing(
+        apiUrl,
+        Number(cadeyUserId),
+      );
+      setIsLoading(() => true);
+
+      setPathListing(pathListingLocal);
 
       // Stop the loader
-      setIsLoading(false);
+      setIsLoading(() => false);
     };
 
     setCurrentAppPage('Welcome - Path Select');
@@ -75,7 +81,6 @@ const WelcomePathSelect: React.FC = () => {
     });
 
     // Start a loader
-    setIsLoading(true);
 
     // Get popular symptoms from the API
     getPaths();
@@ -104,7 +109,7 @@ const WelcomePathSelect: React.FC = () => {
         <div className='path-list'>
           {/* Show a loading state if necessary */}
           {isLoading && (
-            <IonLoading isOpen={true} message={'Loading data...'} />
+            <IonLoading isOpen={isLoading} message={'Loading data...'} />
           )}
 
           {/* Create a list of rows with an icon on the left, then text, and a play icon on the right for each path in pathListing */}

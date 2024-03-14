@@ -185,9 +185,12 @@ const useCadeyAuth = () => {
       const cadeyUser = await handleCadeyRegistrationUser(
         firebaseCredential.user,
       );
+      dispatch(setCadeyUser(cadeyUser));
       setMessageDecorated('Account created, Logging You In');
       setTimeout(() => {
-        history.push('/App/Welcome/Path');
+        history.push('/App/Welcome/Path', {
+          cadeyUserId: cadeyUser.cadeyUserId,
+        });
       }, 2000);
     } catch (e) {
       if (e instanceof Error) {

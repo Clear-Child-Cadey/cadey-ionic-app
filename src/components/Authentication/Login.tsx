@@ -13,10 +13,12 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
 import { useModalContext } from '../../context/ModalContext';
 import { useTabContext } from '../../context/TabContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const LoginComponent: React.FC = () => {
   const { apiUrl } = useContext(ApiUrlContext);
-  const { cadeyUserId } = useContext(CadeyUserContext);
+
   const { setIsTabBarVisible } = useTabContext();
   const { setQuizModalData } = useModalContext();
   const [loginState, setLoginState] = useState('email'); // 'email' or 'password'
@@ -25,6 +27,11 @@ const LoginComponent: React.FC = () => {
   const [localError, setLocalError] = useState('');
   const history = useHistory();
 
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  ); // either grab the ID from cadey user, if set, otherwise, get the appOpen cadeyUserId
   const {
     messages,
     errors,
