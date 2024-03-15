@@ -127,9 +127,18 @@ function MainComponent() {
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [unreadGoals, setUnreadGoals] = useState(false);
 
+  const emailVerified = useSelector((state: RootState) => {
+    return state.authStatus.emailVerified;
+  });
+
   useEffect(() => {
     const requestQuiz = async () => {
-      if (!userResolved || !cadeyUser || !cadeyUserId) {
+      if (
+        !userResolved ||
+        !cadeyUser ||
+        !cadeyUserId ||
+        (AppMeta.forceEmailVerification && 'pending' === emailVerified)
+      ) {
         return;
       }
 
@@ -142,7 +151,11 @@ function MainComponent() {
       );
 
       // If the user has not completed the welcome sequence, take them to the welcome sequence
-      if (quizResponse.question !== null && quizResponse.question.id > 0) {
+      if (
+        quizResponse.question !== null &&
+        quizResponse.question.id > 0 &&
+        (!AppMeta.forceEmailVerification || emailVerified)
+      ) {
         // Set the quiz data
         setQuizModalData(quizResponse);
 

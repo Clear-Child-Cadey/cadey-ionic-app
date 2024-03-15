@@ -194,12 +194,9 @@ const useCadeyAuth = () => {
       await sendEmailVerification(user, actionCodeSettings).then(() => {
         console.log('Verification sent successfully', user);
       });
-      setMessageDecorated('Account created, Logging You In');
-      setTimeout(() => {
-        history.push('/App/Welcome/Path', {
-          cadeyUserId: cadeyUser.cadeyUserId,
-        });
-      }, 2000);
+      setMessageDecorated(
+        'Account created, check your inbox on this device to validate your account',
+      );
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);

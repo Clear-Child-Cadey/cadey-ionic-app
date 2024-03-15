@@ -28,6 +28,8 @@ const AppUrlListener: React.FC<any> = () => {
   useEffect(() => {
     // Listener for detecting URL on app open
     App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+      console.log('DEEP LINK');
+      console.log(event.url);
       const urlObject = new URL(event.url);
       const host = urlObject.hostname;
       const path = urlObject.pathname;
@@ -51,7 +53,10 @@ const AppUrlListener: React.FC<any> = () => {
         const fetchMessages = async () => {
           try {
             // Getting messages
-            const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+            const data: Message[] = await getUserMessages(
+              apiUrl,
+              Number(cadeyUserId),
+            );
             const unread = data.filter((data) => !data.isRead).length;
             unreadCount.setUnreadMessagesCount?.(unread);
           } catch (error) {

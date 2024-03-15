@@ -106,7 +106,6 @@ const RegistrationComponent: React.FC = () => {
   };
 
   const handleLogin = () => {
-    debugger;
     history.push('/App/Authentication/Login');
   };
 

@@ -54,7 +54,7 @@ import { useAppPage } from '../../context/AppPageContext';
 import MessagesPage, { Message } from '../../pages/Messages/Messages';
 import { logUserFact } from '../../api/UserFacts';
 // Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { trileanResolve } from '../../types/Trilean';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
@@ -68,6 +68,8 @@ const RouterTabs: React.FC = () => {
       state.authStatus.userData.cadeyUser !== null
     );
   });
+
+  const dispatch = useDispatch();
 
   const emailVerified = useSelector((state: RootState) => {
     return state.authStatus.emailVerified;
@@ -196,11 +198,13 @@ const RouterTabs: React.FC = () => {
       {isTabBarVisible &&
         (AppMeta.forceEmailVerification && !emailVerified ? (
           <div className='email-verification-message'>
-            <h2>UH-OH!</h2>
             <p>Before you can continue, please verify your email address</p>
-            <IonButton onClick={handleRedirectHome}>
-              I already verified
-            </IonButton>
+
+            <div>
+              <IonButton onClick={handleRedirectHome}>
+                I already verified
+              </IonButton>
+            </div>
           </div>
         ) : (
           // If the tab bar is visible, show the tabs
