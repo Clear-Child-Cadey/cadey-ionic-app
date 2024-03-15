@@ -14,6 +14,8 @@ import { useAppPage } from '../../context/AppPageContext';
 import { logUserFact } from '../../api/UserFacts';
 // CSS
 import './VideoList.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 export interface VideoItem {
   mediaId: string;
@@ -30,7 +32,12 @@ interface VideoListProps {
 }
 
 const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
-  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/userfact`
   const [canShare, setCanShare] = useState(false);

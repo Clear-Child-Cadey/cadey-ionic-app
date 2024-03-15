@@ -26,6 +26,8 @@ import { getRecommendations } from '../../api/GetRecommendations';
 import { useModalContext } from '../../context/ModalContext';
 // Routing
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 // Define the Concerns component
 const VideoLibraryPage: React.FC = () => {
@@ -42,7 +44,12 @@ const VideoLibraryPage: React.FC = () => {
     const [results, setResults] = useState<any | null>(null);
 
     // Context variables
-    const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+    // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = useContext(ApiUrlContext);
     const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 

@@ -27,6 +27,8 @@ import { logUserFact } from '../../api/UserFacts';
 import { getRecommendations } from '../../api/GetRecommendations';
 // Routing
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const LibraryPage: React.FC = () => {
   // State variable flags to indicate which component to display
@@ -39,7 +41,12 @@ const LibraryPage: React.FC = () => {
 
   // Context variables
   const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
-  const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
   const { apiUrl } = useContext(ApiUrlContext);
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 

@@ -30,6 +30,8 @@ import VideoPlayer from '../../../components/Videos/VideoPlayer';
 // Interfaces
 import { Message } from '../../../pages/Messages/Messages';
 import { WP_Article, getArticlesByIds } from '../../../api/WordPress/GetArticles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 interface PopularSymptomVideoDetailModalProps {
     
@@ -61,8 +63,13 @@ const PopularSymptomVideoDetailModal: React.FC<PopularSymptomVideoDetailModalPro
     
     const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
-    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
 
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = useContext(ApiUrlContext);
 
     const [canShare, setCanShare] = useState(false);

@@ -11,6 +11,8 @@ import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface VideoPlayerProps {
   videoId: string;
@@ -29,7 +31,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
 
   const mediaIdStr = String(mediaId);
 
-  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const userFactUrl = `${apiUrl}/userfact`
 

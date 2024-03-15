@@ -21,12 +21,20 @@ import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 // API
 import { logUserFact } from '../../api/UserFacts';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const ArticlesPage: React.FC = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
-    const { cadeyUserId } = React.useContext(CadeyUserContext);
+    // const { cadeyUserId } = React.useContext(CadeyUserContext);
+
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = React.useContext(ApiUrlContext);
     
     const categoryId = Number(queryParams.get('id'));

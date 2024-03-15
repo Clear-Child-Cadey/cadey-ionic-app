@@ -23,6 +23,8 @@ import { useAppPage } from '../../context/AppPageContext';
 // API
 import { getUserMessages } from '../../api/UserMessages';
 import { logUserFact } from '../../api/UserFacts';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 export interface Message {
   mediaId: number;
@@ -36,7 +38,12 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const userFactUrl = `${apiUrl}/userfact`
     const unreadCount = useContext(UnreadCountContext); // Get the current unread count
     const [messagesLoaded, setMessagesLoaded] = useState(false); // Used to determine if the messages have been loaded yet

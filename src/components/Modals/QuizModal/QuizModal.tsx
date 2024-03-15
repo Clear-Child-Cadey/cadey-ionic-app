@@ -21,6 +21,8 @@ import { useTabContext } from '../../../context/TabContext';
 import { usePathContext } from '../../../context/PathContext';
 // API
 import { postQuizResponse } from '../../../api/Quiz';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 export interface QuizModalData {
     quizRequest: QuizRequest;
@@ -76,7 +78,13 @@ export interface QuizSubmissionResponse {
 const QuizModal: React.FC = ({ }) => {
 
     const { isQuizModalOpen, setQuizModalOpen, quizModalData, setQuizModalData } = useModalContext();
-    const { cadeyUserId } = React.useContext(CadeyUserContext);
+    // const { cadeyUserId } = React.useContext(CadeyUserContext);
+
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = React.useContext(ApiUrlContext);
     const { pathId } = usePathContext();
 

@@ -30,6 +30,8 @@ import { VideoItem } from '../../components/Videos/VideoList';
 import VideoList from '../../components/Videos/VideoList';
 import ArticleItem from '../../components/Articles/ArticleItem';
 import { WP_Article, getArticlesByIds } from '../../api/WordPress/GetArticles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface SearchResults {
     message: string;
@@ -43,7 +45,12 @@ interface LocationState {
 
 const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext);                               // Get the API URL from the context
-    const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
+    const { cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
 
     const location = useLocation();
     const history = useHistory();

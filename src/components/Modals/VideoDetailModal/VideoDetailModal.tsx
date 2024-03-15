@@ -33,6 +33,8 @@ import ArticleItem from '../../Articles/ArticleItem';
 // Interfaces
 import { Message } from '../../../pages/Messages/Messages';
 import { WP_Article, getArticlesByIds } from '../../../api/WordPress/GetArticles';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 interface VideoDetailModalProps {
     
@@ -56,7 +58,12 @@ const VideoDetailModal: React.FC<VideoDetailModalProps> = () => {
 
   const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
-  const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+  const cadeyUserId = useSelector((state: RootState) =>
+  state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+    ? state.authStatus.userData.cadeyUser.cadeyUserId
+    : state.authStatus.appOpenCadeyId,
+);
 
   const { apiUrl } = useContext(ApiUrlContext);
 

@@ -29,6 +29,8 @@ import './PathDetail.css';
 import VideoPlayer from '../../components/Videos/VideoPlayer';
 // Interfaces
 import { PathDetail, PathEntity } from '../../api/Paths';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 interface PathDetailModalProps {
     
@@ -57,7 +59,12 @@ const PathDetailPage: React.FC<PathDetailModalProps> = () => {
     } = useModalContext();
     
     const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
-    const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = useContext(ApiUrlContext);
     const { setIsTabBarVisible } = useTabContext();
     const [canShare, setCanShare] = useState(false);

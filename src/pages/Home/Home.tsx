@@ -65,7 +65,14 @@ const HomePage: React.FC<{
     setCurrentAppPage,
   } = useAppPage();
 
-  const { cadeyUserId } = React.useContext(CadeyUserContext);
+  // const { cadeyUserId } = React.useContext(CadeyUserContext);
+
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
+
   const { apiUrl } = React.useContext(ApiUrlContext);
 
   /**

@@ -11,6 +11,8 @@ import { readerOutline } from 'ionicons/icons';
 import { useModalContext } from '../../context/ModalContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { CadeyUserContext } from '../../main';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 // Setup the interface
 interface ArticleProps {
@@ -23,8 +25,13 @@ const ArticleItem: React.FC<ArticleProps> = ({ article, videoId }) => {
     null,
   );
   const { apiUrl } = React.useContext(ApiUrlContext);
-  const { cadeyUserId } = React.useContext(CadeyUserContext);
+  // const { cadeyUserId } = React.useContext(CadeyUserContext);
 
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
   // Get all the props from the modal context
   const {
     isVideoModalOpen,

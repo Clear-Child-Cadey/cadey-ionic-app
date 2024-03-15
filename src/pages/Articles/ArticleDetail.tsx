@@ -18,13 +18,21 @@ import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useAppPage } from '../../context/AppPageContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 
 const ArticleDetailPage: React.FC = () => {
     const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
     const { state: loadingState, dispatch } = useLoadingState();
 
-    const { cadeyUserId } = React.useContext(CadeyUserContext);
+    // const { cadeyUserId } = React.useContext(CadeyUserContext);
+
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = React.useContext(ApiUrlContext);
     
     const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();

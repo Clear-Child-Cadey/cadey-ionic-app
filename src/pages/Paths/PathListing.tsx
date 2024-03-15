@@ -26,10 +26,17 @@ import { getPathListing } from '../../api/Paths';
 import { postPathSelect } from '../../api/Paths';
 import { logUserFact } from '../../api/UserFacts';
 import { useAppPage } from '../../context/AppPageContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const PathListingPage: React.FC = () => {
   // Get the Cadey User data from the context
-  const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
   const { apiUrl } = useContext(ApiUrlContext);
   const { currentAppPage, setCurrentAppPage } = useAppPage();
 
