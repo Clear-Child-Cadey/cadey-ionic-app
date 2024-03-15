@@ -30,34 +30,47 @@ const VerifyEmailPage: React.FC<Props> = ({
     if (auth && actionCode) {
       applyActionCode(auth, actionCode)
         .then(() => {
-          console.log('user registered');
-          if (auth.currentUser) {
-            auth.currentUser.reload();
-          }
+          auth.currentUser?.reload();
+          // if (auth.currentUser) {
+          //   auth.currentUser.reload();
+          setTimeout(() => {
+            if (auth.currentUser && auth.currentUser.emailVerified) {
+              // Send the user to the home page if they are on the same device and have the same login session
+              history.push('/App/Welcome');
+              auth.signOut();
+            } else {
+              history.push('/App/Welcome');
+            }
+          }, 5000);
+          // }
         })
         .catch((err) => {
           console.log(err.message);
+          console.log(auth, actionCode);
         });
     }
 
-    if (!loading) {
-      const timeoutId = setTimeout(() => {
-        if (auth.currentUser && auth.currentUser.emailVerified) {
-          // Send the user to the home page if they are on the same device and have the same login session
-          history.push('/App/Home');
-        } else {
-          history.push('/App/Welcome');
-        }
-      }, 5000);
+    // if (!loading) {
+    //   const timeoutId = setTimeout(() => {
+    //     if (auth.currentUser && auth.currentUser.emailVerified) {
+    //       console.log('this is firing');
+    //       // Send the user to the home page if they are on the same device and have the same login session
+    //       history.push('/App/Welcome');
+    //       auth.signOut();
+    //     } else {
+    //       history.push('/App/Welcome');
+    //     }
+    //   }, 5000);
 
-      return () => clearTimeout(timeoutId);
-    }
+    //   return () => clearTimeout(timeoutId);
+    // }
   }, [auth.currentUser, actionCode, loading]);
 
   if (loading) {
     return <IonLoading isOpen={true} message={'Loading...'} />;
   }
 
+  console.log(auth.currentUser?.emailVerified);
   return (
     <IonPage>
       <IonContent fullscreen>
@@ -71,7 +84,7 @@ const VerifyEmailPage: React.FC<Props> = ({
                 <IonButton
                   onClick={() =>
                     auth.currentUser?.uid
-                      ? history.push('/App/Home')
+                      ? history.push('/App/Welcome')
                       : history.push('/App/Welcome')
                   }
                 >
@@ -90,7 +103,7 @@ const VerifyEmailPage: React.FC<Props> = ({
                 There seems to have been a problem verifying your email address
               </p>
               <IonRow className='content'>
-                <IonButton onClick={() => location.reload()}>
+                <IonButton onClick={() => history.push('/App/Welcome')}>
                   Please try again
                 </IonButton>
                 <p className='info-text'>

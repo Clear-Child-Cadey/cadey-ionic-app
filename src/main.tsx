@@ -133,7 +133,7 @@ function MainComponent() {
 
   useEffect(() => {
     const requestQuiz = async () => {
-      debugger;
+      // debugger;
       if (
         !userResolved ||
         !cadeyUser ||

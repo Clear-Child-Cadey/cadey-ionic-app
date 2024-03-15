@@ -14,7 +14,7 @@ const HandlerPage: React.FC = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 3000);
 
     return () => clearTimeout(timeoutId);
   }, [auth]);

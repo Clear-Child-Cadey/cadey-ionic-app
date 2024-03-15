@@ -23,12 +23,20 @@ import { postCadeyUserAgeGroup } from '../../api/AgeGroup';
 import { logUserFact } from '../../api/UserFacts';
 // Icons
 import { chevronForwardOutline } from 'ionicons/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const WelcomeAgeGroupSelect: React.FC = () => {
   const { setCadeyUserAgeGroup } = React.useContext(CadeyUserContext);
-  const { cadeyUserId } = React.useContext(CadeyUserContext);
+  // const { cadeyUserId } = React.useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
+
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
 
   const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
 

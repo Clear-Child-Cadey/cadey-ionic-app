@@ -19,10 +19,18 @@ import { useAppPage } from '../../context/AppPageContext';
 import OneSignal from 'onesignal-cordova-plugin';
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
 import { logUserFact } from '../../api/UserFacts';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 // Icons
 
 const WelcomePush: React.FC = () => {
-  const { cadeyUserId } = React.useContext(CadeyUserContext);
+  // const { cadeyUserId } = React.useContext(CadeyUserContext);
+
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
