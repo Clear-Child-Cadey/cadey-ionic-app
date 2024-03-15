@@ -133,11 +133,13 @@ function MainComponent() {
 
   useEffect(() => {
     const requestQuiz = async () => {
+      debugger;
       if (
         !userResolved ||
         !cadeyUser ||
         !cadeyUserId ||
-        (AppMeta.forceEmailVerification && 'pending' === emailVerified)
+        (AppMeta.forceEmailVerification &&
+          ('pending' === emailVerified || !emailVerified))
       ) {
         return;
       }

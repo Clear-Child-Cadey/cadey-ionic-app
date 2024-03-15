@@ -30,10 +30,28 @@ import { logUserFact } from '../../api/UserFacts';
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import VerificationPage from '../../components/VerificationMessage';
+import AppMeta from '../../variables/AppMeta';
+import { trileanResolve } from '../../types/Trilean';
 
 const WelcomePathSelect: React.FC = () => {
+  const handleRedirectHome = () => {
+    // user?.reload(); redux issue!
+    // history.push('/App/Welcome');
+    window.location.href = '/App/Welcome';
+  };
+
+  const emailVerified = useSelector((state: RootState) => {
+    return state.authStatus.emailVerified;
+  });
+
   // Get the Cadey User data from the context
-  const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
   const { apiUrl } = useContext(ApiUrlContext);
   const { currentAppPage, setCurrentAppPage, setCurrentBasePage } =
     useAppPage();
@@ -97,6 +115,10 @@ const WelcomePathSelect: React.FC = () => {
     );
     history.push('/App/Welcome/AgeGroup');
   };
+
+  if (AppMeta.forceEmailVerification && !trileanResolve(emailVerified)) {
+    return <VerificationPage handleRedirectHome={handleRedirectHome} />;
+  }
 
   return (
     <IonPage className='welcome-path-listing'>

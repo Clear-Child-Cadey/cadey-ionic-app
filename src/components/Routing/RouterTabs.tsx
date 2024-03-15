@@ -59,6 +59,7 @@ import { RootState } from '../../store';
 import { trileanResolve } from '../../types/Trilean';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import AppMeta from '../../variables/AppMeta';
+import VerificationPage from '../VerificationMessage';
 
 const RouterTabs: React.FC = () => {
   const userLoggedIn = useSelector((state: RootState) => {
@@ -197,15 +198,7 @@ const RouterTabs: React.FC = () => {
 
       {isTabBarVisible &&
         (AppMeta.forceEmailVerification && !emailVerified ? (
-          <div className='email-verification-message'>
-            <p>Before you can continue, please verify your email address</p>
-
-            <div>
-              <IonButton onClick={handleRedirectHome}>
-                I already verified
-              </IonButton>
-            </div>
-          </div>
+          <VerificationPage handleRedirectHome={handleRedirectHome} />
         ) : (
           // If the tab bar is visible, show the tabs
           <IonTabs>
