@@ -135,6 +135,7 @@ const RegistrationComponent: React.FC = () => {
       history.push('/App/Home');
     }
   };
+  console.log(messages);
 
   return (
     <div className='login-component'>
@@ -163,29 +164,40 @@ const RegistrationComponent: React.FC = () => {
             />
           </>
         )}
-        {loginState === 'password' && (
-          <>
-            <label>Password</label>
-            <input
-              required
-              type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder='Password'
-            />
-          </>
+        {loginState === 'password' &&
+          !messages.includes(
+            'Account created, check your inbox on this device to validate your account',
+          ) && (
+            <>
+              <label>Password</label>
+              <input
+                required
+                type='password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder='Password'
+              />
+            </>
+          )}
+        {!messages.includes(
+          'Account created, check your inbox on this device to validate your account',
+        ) && (
+          <button
+            className='continue'
+            type='submit'
+            disabled={!email && !password}
+          >
+            Continue
+          </button>
         )}
-        <button
-          className='continue'
-          type='submit'
-          disabled={!email && !password}
-        >
-          Continue
-        </button>
       </form>
-      <p>
-        Already have an account? <a onClick={handleLogin}>Login</a>
-      </p>
+      {!messages.includes(
+        'Account created, check your inbox on this device to validate your account',
+      ) && (
+        <p>
+          Already have an account? <a onClick={handleLogin}>Login</a>
+        </p>
+      )}
     </div>
   );
 };
