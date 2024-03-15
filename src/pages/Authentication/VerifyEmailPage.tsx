@@ -46,7 +46,6 @@ const VerifyEmailPage: React.FC<Props> = ({
         })
         .catch((err) => {
           console.log(err.message);
-          console.log(auth, actionCode);
         });
     }
 
@@ -70,7 +69,6 @@ const VerifyEmailPage: React.FC<Props> = ({
     return <IonLoading isOpen={true} message={'Loading...'} />;
   }
 
-  console.log(auth.currentUser?.emailVerified);
   return (
     <IonPage>
       <IonContent fullscreen>
@@ -92,7 +90,7 @@ const VerifyEmailPage: React.FC<Props> = ({
                 </IonButton>
                 <p className='info-text'>
                   If you aren't automatically redirected within the next 5
-                  seconds, please manually redirect
+                  seconds, please click the button
                 </p>
               </IonRow>
             </>

@@ -29,6 +29,9 @@ const RegistrationComponent: React.FC = () => {
   const cadeyUserId = useSelector(
     (state: RootState) => state.authStatus.userData.cadeyUser?.cadeyUserId,
   );
+  const emailVerified = useSelector((state: RootState) => {
+    return state.authStatus.emailVerified;
+  });
 
   const {
     resetErrors,
@@ -111,29 +114,30 @@ const RegistrationComponent: React.FC = () => {
   };
 
   const requestQuiz = async () => {
-    console.log('Checking for welcome sequence');
-    const quizResponse = await getQuiz(
-      apiUrl,
-      Number(cadeyUserId),
-      3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
-      0, // Entity Type (1 = video)
-      0, // Entity IDs (The ID of the video)
-    );
+    if (!AppMeta.forceEmailVerification && emailVerified) {
+      const quizResponse = await getQuiz(
+        apiUrl,
+        Number(cadeyUserId),
+        3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
+        0, // Entity Type (1 = video)
+        0, // Entity IDs (The ID of the video)
+      );
 
-    // If the user has not completed the welcome sequence, take them to the welcome sequence
-    if (quizResponse.question !== null && quizResponse.question.id > 0) {
-      // Set the quiz data
-      setQuizModalData(quizResponse);
+      // If the user has not completed the welcome sequence, take them to the welcome sequence
+      if (quizResponse.question !== null && quizResponse.question.id > 0) {
+        // Set the quiz data
+        setQuizModalData(quizResponse);
 
-      // Hide the tab bar
-      setIsTabBarVisible(false);
+        // Hide the tab bar
+        setIsTabBarVisible(false);
 
-      // Redirect user to Welcome sequence - Age group
-      history.push('/App/Welcome/Path');
-    } else {
-      // Show the tab bar and redirect to the home page
-      setIsTabBarVisible(true);
-      history.push('/App/Home');
+        // Redirect user to Welcome sequence - Age group
+        history.push('/App/Welcome/Path');
+      } else {
+        // Show the tab bar and redirect to the home page
+        setIsTabBarVisible(true);
+        history.push('/App/Home');
+      }
     }
   };
 

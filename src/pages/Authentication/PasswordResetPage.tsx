@@ -29,12 +29,18 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
     }
 
     try {
-      console.log(newPassword);
       await confirmPasswordReset(auth, actionCode, newPassword);
-      if (auth.currentUser) {
-        auth.currentUser?.reload();
-      }
       setSuccess('Your password has been reset successfully.');
+
+      setTimeout(() => {
+        if (auth.currentUser) {
+          // Send the user to the home page if they are on the same device and have the same login session
+          history.push('/App/Welcome');
+          auth.signOut();
+        } else {
+          history.push('/App/Welcome');
+        }
+      }, 3000);
       // Optionally, navigate to the login screen or elsewhere as needed
       // navigation.navigate('LoginScreen');
     } catch (error) {
@@ -48,24 +54,35 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
         <div className='password-reset-content'>
           <h2>Reset Your Password</h2>
           {error && <p className='error'>{error}</p>}
-          {success && <p className='success'>{success}</p>}
-          <input
-            type='password'
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder='New Password'
-            className='password-reset-input'
-          />
-          <input
-            type='password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder='Confirm New Password'
-            className='password-reset-input'
-          />
-          <IonButton onClick={handleResetPassword} className='reset-button'>
-            Reset Password
-          </IonButton>
+          {success ? (
+            <>
+              <p className='success'>{success}</p>
+              <p className='additional-success'>
+                If you aren't automatically redirected within the next 5
+                seconds, please click the link below
+              </p>
+            </>
+          ) : (
+            <>
+              <input
+                type='password'
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder='New Password'
+                className='password-reset-input'
+              />
+              <input
+                type='password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder='Confirm New Password'
+                className='password-reset-input'
+              />
+              <IonButton onClick={handleResetPassword} className='reset-button'>
+                Reset Password
+              </IonButton>
+            </>
+          )}
           <a
             onClick={() => history.push('Authentication/Login')}
             className='login-link'

@@ -26,6 +26,7 @@ import { getQuiz } from './api/Quiz';
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
+import AppMeta from './variables/AppMeta';
 
 setupIonicReact();
 
@@ -43,6 +44,9 @@ const App: React.FC = () => {
   const history = useHistory();
   const [checkForWelcome, setCheckForWelcome] = useState(false);
   const { setIsTabBarVisible } = useTabContext();
+  const emailVerified = useSelector((state: RootState) => {
+    return state.authStatus.emailVerified;
+  });
 
   const {
     isVideoModalOpen,
@@ -82,8 +86,11 @@ const App: React.FC = () => {
       return;
     }
     const requestQuiz = async () => {
-      console.log('Checking for welcome sequence');
-      if (!checkForWelcome) {
+      if (
+        !checkForWelcome &&
+        !AppMeta.forceEmailVerification &&
+        emailVerified
+      ) {
         const quizResponse = await getQuiz(
           apiUrl,
           Number(cadeyUser.cadeyUserId),
@@ -166,8 +173,8 @@ const App: React.FC = () => {
       {/* Show an article modal if context dictates */}
       {isArticleDetailModalOpen && currentArticleId && <ArticleDetailModal />}
 
-      {/* Show a quiz modal if context dictates */}
-      <QuizModal />
+      {/* Show a quiz modal if context dictates
+      <QuizModal /> commented out for now because not seeing specific reason why need to render twice*/}
 
       {/* Show a generic modal if context dictates */}
       <GenericModal />

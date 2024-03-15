@@ -97,7 +97,7 @@ const RouterTabs: React.FC = () => {
       '/App/Authentication/Register',
       '/App/Welcome',
     ];
-    console.log(location.pathname);
+
     if (
       !userLoggedIn &&
       !nonLoggedInUsersAllowedPaths.includes(location.pathname)
