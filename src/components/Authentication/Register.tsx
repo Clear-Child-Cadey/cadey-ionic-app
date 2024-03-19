@@ -179,39 +179,27 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
         )}
         {loginState === 'password' && (
           <>
-            {AppMeta.forceEmailVerification &&
-            messages.includes(AppMeta.emailVerificationMessage) ? null : (
-              <>
-                <label>Password</label>
-                <input
-                  required
-                  type='password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder='Password'
-                />
-              </>
-            )}
+            <label>Password</label>
+            <input
+              required
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder='Password'
+            />
           </>
         )}
-
-        {AppMeta.forceEmailVerification &&
-        messages.includes(AppMeta.emailVerificationMessage) ? null : (
-          <button
-            className='continue'
-            type='submit'
-            disabled={!email && !password}
-          >
-            Continue
-          </button>
-        )}
+        <button
+          className='continue'
+          type='submit'
+          disabled={!email && !password}
+        >
+          Continue
+        </button>
       </form>
-      {AppMeta.forceEmailVerification &&
-      messages.includes(AppMeta.emailVerificationMessage) ? null : (
-        <p>
-          Already have an account? <a onClick={handleLogin}>Login</a>
-        </p>
-      )}
+      <p>
+        Already have an account? <a onClick={handleLogin}>Login</a>
+      </p>
     </div>
   );
 };

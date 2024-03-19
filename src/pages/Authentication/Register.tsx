@@ -20,6 +20,7 @@ import './Login.css';
 import RegistrationComponent from '../../components/Authentication/Register';
 
 import AppMeta from '../../variables/AppMeta';
+import VerificationPage from '../../components/VerificationMessage';
 
 const RegistrationPage = () => {
   const authLoading = useSelector(
@@ -34,16 +35,18 @@ const RegistrationPage = () => {
     setMessages(messages);
   };
 
+  if (
+    AppMeta.forceEmailVerification &&
+    messages.includes(AppMeta.emailVerificationMessage)
+  ) {
+    return <VerificationPage />;
+  }
+
   return (
     <IonPage className='login-page'>
       <IonHeader class='header'>
         <IonToolbar className='header-toolbar'>
-          <h2>
-            {AppMeta.forceEmailVerification &&
-            messages.includes(AppMeta.emailVerificationMessage)
-              ? 'Great! Now, check your email'
-              : 'Sign up for Cadey'}
-          </h2>
+          <h2>Sign up for Cadey</h2>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

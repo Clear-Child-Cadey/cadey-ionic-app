@@ -35,12 +35,6 @@ import AppMeta from '../../variables/AppMeta';
 import { trileanResolve } from '../../types/Trilean';
 
 const WelcomePathSelect: React.FC = () => {
-  const handleRedirectHome = () => {
-    // user?.reload(); redux issue!
-    // history.push('/App/Welcome');
-    window.location.href = '/App/Welcome';
-  };
-
   const emailVerified = useSelector((state: RootState) => {
     return state.authStatus.emailVerified;
   });
@@ -117,7 +111,7 @@ const WelcomePathSelect: React.FC = () => {
   };
 
   if (AppMeta.forceEmailVerification && !trileanResolve(emailVerified)) {
-    return <VerificationPage handleRedirectHome={handleRedirectHome} />;
+    return <VerificationPage />;
   }
 
   return (

@@ -136,13 +136,6 @@ const RouterTabs: React.FC = () => {
     return location.pathname.startsWith(tabPath);
   };
 
-  // Redirect user back to welcome page and refresh its data
-  const handleRedirectHome = () => {
-    // user?.reload(); redux issue!
-    // history.push('/App/Welcome');
-    window.location.href = '/App/Welcome';
-  };
-
   return (
     <>
       {/* Listen for App URLs */}
@@ -198,7 +191,7 @@ const RouterTabs: React.FC = () => {
 
       {isTabBarVisible &&
         (AppMeta.forceEmailVerification && !emailVerified ? (
-          <VerificationPage handleRedirectHome={handleRedirectHome} />
+          <VerificationPage />
         ) : (
           // If the tab bar is visible, show the tabs
           <IonTabs>
