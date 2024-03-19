@@ -194,9 +194,7 @@ const useCadeyAuth = () => {
       await sendEmailVerification(user, actionCodeSettings).then(() => {
         console.log('Verification sent successfully', user);
       });
-      setMessageDecorated(
-        'Account created, check your inbox on this device to validate your account',
-      );
+      setMessageDecorated(AppMeta.emailVerificationMessage);
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);

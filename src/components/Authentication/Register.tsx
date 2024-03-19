@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
 
 import './Login.css'; // Adjust the path as necessary
@@ -17,7 +17,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import AppMeta from '../../variables/AppMeta';
 
-const RegistrationComponent: React.FC = () => {
+interface Props {
+  getValues: (loginStatus: string, messages: string[]) => void;
+}
+
+const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
   const { apiUrl } = useContext(ApiUrlContext);
   const { setIsTabBarVisible } = useTabContext();
   const { setQuizModalData } = useModalContext();
@@ -46,8 +50,8 @@ const RegistrationComponent: React.FC = () => {
 
     // REDO THIS TO MAKE SENSE FOR REGISTRATION ONCE WE HAVE WORKING ENDPOINTS
     // Handle email submission with the API
-    const userAuthResponse = await postUserAuth(apiUrl, email);
-    console.log('userAuthResponse: ', userAuthResponse);
+    await postUserAuth(apiUrl, email);
+    // console.log('userAuthResponse: ', userAuthResponse);
     // if (userAuthResponse.cadeyUserId > 0) {
     //   // User exists
     //   if (userAuthResponse.regStatus === 0) {
@@ -141,6 +145,10 @@ const RegistrationComponent: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    getValues(loginState, messages);
+  }, [loginState, messages]);
+
   //TODO: fix conditional rendering logic and add button to manually trigger email verification
   return (
     <div className='login-component'>
@@ -171,24 +179,8 @@ const RegistrationComponent: React.FC = () => {
         )}
         {loginState === 'password' && (
           <>
-            {AppMeta.forceEmailVerification ? (
-              <>
-                {!messages.includes(
-                  'Account created, check your inbox on this device to validate your account',
-                ) && (
-                  <>
-                    <label>Password</label>
-                    <input
-                      required
-                      type='password'
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder='Password'
-                    />
-                  </>
-                )}
-              </>
-            ) : (
+            {AppMeta.forceEmailVerification &&
+            messages.includes(AppMeta.emailVerificationMessage) ? null : (
               <>
                 <label>Password</label>
                 <input
@@ -203,21 +195,8 @@ const RegistrationComponent: React.FC = () => {
           </>
         )}
 
-        {AppMeta.forceEmailVerification ? (
-          <>
-            {!messages.includes(
-              'Account created, check your inbox on this device to validate your account',
-            ) && (
-              <button
-                className='continue'
-                type='submit'
-                disabled={!email && !password}
-              >
-                Continue
-              </button>
-            )}
-          </>
-        ) : (
+        {AppMeta.forceEmailVerification &&
+        messages.includes(AppMeta.emailVerificationMessage) ? null : (
           <button
             className='continue'
             type='submit'
@@ -227,17 +206,8 @@ const RegistrationComponent: React.FC = () => {
           </button>
         )}
       </form>
-      {AppMeta.forceEmailVerification ? (
-        <>
-          {!messages.includes(
-            'Account created, check your inbox on this device to validate your account',
-          ) && (
-            <p>
-              Already have an account? <a onClick={handleLogin}>Login</a>
-            </p>
-          )}
-        </>
-      ) : (
+      {AppMeta.forceEmailVerification &&
+      messages.includes(AppMeta.emailVerificationMessage) ? null : (
         <p>
           Already have an account? <a onClick={handleLogin}>Login</a>
         </p>

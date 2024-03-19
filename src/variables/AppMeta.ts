@@ -19,6 +19,8 @@ const AppMeta = {
     buttonText: 'Retry',
     actionType: 'RELOAD_PAGE',
   },
+  emailVerificationMessage:
+    'You need to verify your email address. On this device, click on the link we just emailed you. This process helps keep your account secure.',
 };
 
 export default AppMeta;
