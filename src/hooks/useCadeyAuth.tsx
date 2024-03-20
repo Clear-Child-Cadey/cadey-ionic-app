@@ -185,15 +185,10 @@ const useCadeyAuth = () => {
         email,
         password,
       );
-      const user = userCredential.user;
+
       const cadeyUser = await handleCadeyRegistrationUser(userCredential.user);
       dispatch(setCadeyUser(cadeyUser));
-      const actionCodeSettings = {
-        url: 'http://localhost:8100/App/Home', //Change this to our own url
-      };
-      await sendEmailVerification(user, actionCodeSettings).then(() => {
-        console.log('Verification sent successfully', user);
-      });
+      await sendEmailVerification(userCredential.user);
       setMessageDecorated(AppMeta.emailVerificationMessage);
     } catch (e) {
       if (e instanceof Error) {

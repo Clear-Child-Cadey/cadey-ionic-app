@@ -31,8 +31,6 @@ const VerifyEmailPage: React.FC<Props> = ({
       applyActionCode(auth, actionCode)
         .then(() => {
           auth.currentUser?.reload();
-          // if (auth.currentUser) {
-          //   auth.currentUser.reload();
           setTimeout(() => {
             if (auth.currentUser && auth.currentUser.emailVerified) {
               // Send the user to the home page if they are on the same device and have the same login session
@@ -48,21 +46,6 @@ const VerifyEmailPage: React.FC<Props> = ({
           console.log(err.message);
         });
     }
-
-    // if (!loading) {
-    //   const timeoutId = setTimeout(() => {
-    //     if (auth.currentUser && auth.currentUser.emailVerified) {
-    //       console.log('this is firing');
-    //       // Send the user to the home page if they are on the same device and have the same login session
-    //       history.push('/App/Welcome');
-    //       auth.signOut();
-    //     } else {
-    //       history.push('/App/Welcome');
-    //     }
-    //   }, 5000);
-
-    //   return () => clearTimeout(timeoutId);
-    // }
   }, [auth.currentUser, actionCode, loading]);
 
   if (loading) {

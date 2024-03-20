@@ -39,7 +39,7 @@ const RegistrationPage = () => {
     AppMeta.forceEmailVerification &&
     messages.includes(AppMeta.emailVerificationMessage)
   ) {
-    return <VerificationPage />;
+    return <VerificationPage isAfterSignup={true} />;
   }
 
   return (
