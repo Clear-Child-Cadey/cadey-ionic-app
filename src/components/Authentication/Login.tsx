@@ -16,6 +16,7 @@ import LoginMessages from '../notices/LoginMessages';
 // import { useSelector } from 'react-redux';
 // import { RootState } from '../../store';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
+import AppMeta from '../../variables/AppMeta';
 
 const LoginComponent: React.FC = () => {
   // const { apiUrl } = useContext(ApiUrlContext);
@@ -31,6 +32,7 @@ const LoginComponent: React.FC = () => {
     clientContext: 3,
     entityType: 0,
     entityId: 0,
+    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
 
   const {

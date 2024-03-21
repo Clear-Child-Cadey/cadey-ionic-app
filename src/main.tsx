@@ -92,7 +92,7 @@ function MainComponent() {
     clientContext: 3,
     entityType: 0,
     entityId: 0,
-    shouldHaveEmailVerified: true,
+    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
 
   useEffect(() => {
@@ -124,7 +124,9 @@ function MainComponent() {
   const [unreadGoals, setUnreadGoals] = useState(false);
 
   useEffect(() => {
-    requestQuiz();
+    if (userResolved) {
+      requestQuiz();
+    }
   }, [userResolved]);
 
   if (!userResolved) {

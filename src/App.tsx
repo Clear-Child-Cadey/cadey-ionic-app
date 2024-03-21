@@ -23,6 +23,7 @@ import GenericModal from './components/Modals/GenericModal';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import useRequestQuiz from './hooks/useRequestQuiz';
+import AppMeta from './variables/AppMeta';
 
 setupIonicReact();
 
@@ -41,7 +42,7 @@ const App: React.FC = () => {
     clientContext: 3,
     entityType: 0,
     entityId: 0,
-    shouldHaveEmailVerified: true,
+    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
 
   const {

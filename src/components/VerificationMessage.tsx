@@ -17,6 +17,11 @@ const VerificationPage: React.FC<Props> = ({
   const history = useHistory();
   const auth = getAuth();
 
+  // Redirect user back to welcome page and refresh its data
+  // const handleRedirectHome = () => {
+  //   window.location.href = '/App/Welcome';
+  // };
+
   const resendEmail = async () => {
     setDisabled(true);
     setCountdown(60);

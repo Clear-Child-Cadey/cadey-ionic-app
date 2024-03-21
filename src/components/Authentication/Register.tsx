@@ -36,6 +36,7 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
     clientContext: 3,
     entityType: 0,
     entityId: 0,
+    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
 
   const {
