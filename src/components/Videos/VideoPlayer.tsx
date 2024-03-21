@@ -5,14 +5,14 @@ import './VideoPlayer.css';
 // Components
 // API
 import { logUserFact } from '../../api/UserFacts';
-import { getQuiz } from '../../api/Quiz';
 // Contexts
-import { CadeyUserContext } from '../../main';
+// import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import useRequestQuiz from '../../hooks/useRequestQuiz';
 
 interface VideoPlayerProps {
   videoId: string;
@@ -23,8 +23,14 @@ interface VideoPlayerProps {
   on75PercentProgress?: () => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onVideoHeightChange, onVideoEnd, on75PercentProgress }) => {
-
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  videoId,
+  mediaId,
+  source,
+  onVideoHeightChange,
+  onVideoEnd,
+  on75PercentProgress,
+}) => {
   const vimeoVideoId = videoId.split('/')[0];
   const vimeoHashParameter = videoId.split('/')[1];
   const vimeoUrl = `https://player.vimeo.com/video/${vimeoVideoId}?h=${vimeoHashParameter}&autoplay=1`;
@@ -38,10 +44,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       : state.authStatus.appOpenCadeyId,
   );
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/userfact`
+  // const userFactUrl = `${apiUrl}/userfact`; not being used currently
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility
-  
+  // const [isModalOpen, setIsModalOpen] = useState(false); // Control the modal visibility, not being used currently
+
   const playerRef = useRef(null);
   const [videoProgress, setVideoProgress] = useState(0);
   const [logged25, setLogged25] = useState(false);
@@ -50,23 +56,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
   const [callback75, setCallback75] = useState(false);
   const [logged100, setLogged100] = useState(false);
 
-  const { state: loadingState, dispatch } = useLoadingState();
+  const { dispatch } = useLoadingState();
 
   const screenWidth = document.documentElement.clientWidth;
+  const { requestQuiz } = useRequestQuiz({
+    clientContext: 1,
+    entityType: 1,
+    entityId: Number(mediaIdStr),
+  });
 
-  const { 
-    currentVideoType,
-    isQuizModalOpen,
-    setQuizModalOpen,
-    setQuizModalData,
-    isPopularSymptomVideoModalOpen,
-  } = useModalContext();
+  const { currentVideoType, isQuizModalOpen, isPopularSymptomVideoModalOpen } =
+    useModalContext();
 
   const player = useRef<Player | null>(null);
 
   useEffect(() => {
     if (playerRef.current && !player.current) {
-      
       // Initialize the player only once
       player.current = new Player(playerRef.current);
 
@@ -116,7 +121,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       }
     }
     // Dismiss the loader when the player is ready
-    dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: false } });
+    dispatch({
+      type: 'SET_LOADING',
+      payload: { key: 'videoDetail', value: false },
+    });
   };
 
   const onPlay = () => {
@@ -126,7 +134,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
       userFactTypeName: 'StartedMedia',
       appPage: source,
       detail1: mediaIdStr,
-      detail2: currentVideoType
+      detail2: currentVideoType,
     });
   };
 
@@ -135,53 +143,35 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
     if (isPopularSymptomVideoModalOpen) {
       return;
     }
-    await requestQuiz();
+    requestQuiz();
   };
 
   const onEnded = async () => {
-    const response = await logUserFact({
+    await logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'FinishedMedia',
       appPage: source,
       detail1: mediaIdStr,
-      detail2: currentVideoType
+      detail2: currentVideoType,
     });
 
     // Invoke the callback if it exists
     if (onVideoEnd) {
-      onVideoEnd();  
+      onVideoEnd();
     }
   };
 
-  const onClickPreview = () => {
-    // Unused currently
-  }
-
-  const requestQuiz = async () => {
-    const quizResponse = await getQuiz(
-      apiUrl,
-      Number(cadeyUserId),
-      1,                    // Client Context: Where the user is in the app (1 = VideoDetail)
-      1,                    // Entity Type (1 = video)
-      Number(mediaIdStr)    // Entity IDs (The ID of the video)
-    );
-
-    if (quizResponse.question !== null && quizResponse.question.id > 0) {
-      // Set the quiz data
-      setQuizModalData(quizResponse);
-
-      // Open the quiz modal
-      setQuizModalOpen(true);
-    }
-  }
+  // const onClickPreview = () => {
+  //   // Unused currently
+  // };
 
   useEffect(() => {
     if (on75PercentProgress && videoProgress >= 0.75 && callback75 === false) {
       on75PercentProgress();
       setCallback75(true);
     }
-    
+
     // Report video progress
     if (videoProgress >= 1 && !logged100) {
       setLogged100(true);
@@ -192,9 +182,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
         appPage: source,
         detail1: mediaIdStr,
         detail2: '1.00',
-        detail3: currentVideoType
+        detail3: currentVideoType,
       });
-
     } else if (videoProgress >= 0.75 && !logged75) {
       setLogged75(true);
       logUserFact({
@@ -204,7 +193,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
         appPage: source,
         detail1: mediaIdStr,
         detail2: '0.75',
-        detail3: currentVideoType
+        detail3: currentVideoType,
       });
     } else if (videoProgress >= 0.5 && !logged50) {
       setLogged50(true);
@@ -215,7 +204,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
         appPage: source,
         detail1: mediaIdStr,
         detail2: '0.5',
-        detail3: currentVideoType
+        detail3: currentVideoType,
       });
     } else if (videoProgress >= 0.25 && !logged25) {
       setLogged25(true);
@@ -226,29 +215,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoId, mediaId, source, onV
         appPage: source,
         detail1: mediaIdStr,
         detail2: '0.25',
-        detail3: currentVideoType
+        detail3: currentVideoType,
       });
     }
-  }, [videoProgress]); // This effect will run every time videoProgress changes.  
+  }, [videoProgress]); // This effect will run every time videoProgress changes.
 
   const onProgress = (progress: any) => {
     setVideoProgress(progress.percent);
   };
 
-  const onError = (error: any) => {
-    // Currently unused
-  };
+  // const onError = (error: any) => {
+  //   // Currently unused
+  // };
 
   return (
-    <div className="video-item" key={videoId}>
+    <div className='video-item' key={videoId}>
       <div className='player-wrapper'>
-        <div 
-          ref={playerRef} 
-          data-vimeo-url={`${vimeoUrl}`} 
+        <div
+          ref={playerRef}
+          data-vimeo-url={`${vimeoUrl}`}
           data-vimeo-width={`${screenWidth}`}
-          className="video-player"
-        >
-        </div>
+          className='video-player'
+        ></div>
       </div>
     </div>
   );
