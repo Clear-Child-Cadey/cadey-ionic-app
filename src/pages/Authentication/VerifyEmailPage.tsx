@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IonButton,
   IonContent,
@@ -11,40 +11,52 @@ import { Auth, applyActionCode } from 'firebase/auth';
 
 // Styles
 import './VerifyEmailPage.css';
+import { useDispatch } from 'react-redux';
+import { setHttpErrorModalData } from '../../features/httpError/slice';
+import AppMeta from '../../variables/AppMeta';
 
 interface Props {
   auth: Auth;
   actionCode: string | null;
-  loading: boolean;
+  // loading: boolean;
+  // setLoading: (loading: boolean) => void;
 }
 
 // This is a minimum designed Page
-const VerifyEmailPage: React.FC<Props> = ({
-  auth,
-  actionCode,
-  loading,
-}: Props) => {
+const VerifyEmailPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
   const history = useHistory();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    const asyncCode = async (auth, actionCode) => {
+      setLoading(true);
+      try {
+        await applyActionCode(auth, actionCode);
+      } catch (err) {
+        console.log(err.message);
+        dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+          console.log('OK IM HERE');
+        }, 10000);
+      }
+
+      auth.currentUser?.reload();
+      setTimeout(() => {
+        if (auth.currentUser && auth.currentUser.emailVerified) {
+          // Send the user to the home page if they are on the same device and have the same login session
+          history.push('/App/Welcome');
+          auth.signOut();
+        } else {
+          history.push('/App/Welcome');
+        }
+      }, 5000);
+    };
     if (auth && actionCode) {
-      applyActionCode(auth, actionCode)
-        .then(() => {
-          auth.currentUser?.reload();
-          setTimeout(() => {
-            if (auth.currentUser && auth.currentUser.emailVerified) {
-              // Send the user to the home page if they are on the same device and have the same login session
-              history.push('/App/Welcome');
-              auth.signOut();
-            } else {
-              history.push('/App/Welcome');
-            }
-          }, 5000);
-          // }
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+      asyncCode(auth, actionCode);
     }
   }, [auth.currentUser, actionCode, loading]);
 

@@ -2,8 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { IonReactRouter } from '@ionic/react-router';
-import { Route, useLocation, useHistory } from 'react-router-dom';
-import { IonApp } from '@ionic/react';
+import { Route, useLocation, useHistory, Switch } from 'react-router-dom';
+import { IonApp, IonRouterOutlet } from '@ionic/react';
 // Contexts
 import DeviceIdContext from './context/DeviceIdContext';
 import ApiUrlContext, { ApiUrlProvider } from './context/ApiUrlContext';
@@ -68,6 +68,7 @@ import getDeviceId from './utils/getDeviceId';
 import useAppOpened from './hooks/useAppOpened';
 import { setHttpErrorModalData } from './features/httpError/slice';
 import AppMeta from './variables/AppMeta';
+import HandlerPage from './pages/Authentication/Handler';
 
 // Make sure we generate a unique ID for the device
 getDeviceId();
@@ -114,6 +115,7 @@ function MainComponent() {
       trileanResolve(state.authStatus.cadeyResolved) &&
       trileanResolve(state.authStatus.firebaseResolved),
   );
+  const mode = new URLSearchParams(location.search).get('mode');
 
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setIsTabBarVisible } = useTabContext();
@@ -197,7 +199,17 @@ function MainComponent() {
         >
           <HttpErrorModal />
           <LoadingStateProvider>
-            <p>Loading!</p>
+            {mode && (
+              <IonRouterOutlet>
+                <Switch>
+                  <Route
+                    exact
+                    path='/App/Authentication'
+                    component={HandlerPage}
+                  />
+                </Switch>
+              </IonRouterOutlet>
+            )}
           </LoadingStateProvider>
         </UnreadContext.Provider>
       </CadeyUserContext.Provider>

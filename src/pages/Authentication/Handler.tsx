@@ -5,32 +5,18 @@ import VerifyEmailPage from './VerifyEmailPage';
 import PasswordResetPage from './PasswordResetPage';
 
 const HandlerPage: React.FC = () => {
+  console.log('123');
   const auth = getAuth();
   const location = useLocation();
   const mode = new URLSearchParams(location.search).get('mode');
   const actionCode = new URLSearchParams(location.search).get('oobCode');
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timeoutId);
-  }, [auth]);
 
   switch (mode) {
     case 'resetPassword':
       return <PasswordResetPage auth={auth} actionCode={actionCode} />;
       break;
     case 'verifyEmail':
-      return (
-        <VerifyEmailPage
-          auth={auth}
-          actionCode={actionCode}
-          loading={loading}
-        />
-      );
+      return <VerifyEmailPage auth={auth} actionCode={actionCode} />;
       break;
     default:
       return null;

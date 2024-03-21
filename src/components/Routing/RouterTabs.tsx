@@ -191,7 +191,9 @@ const RouterTabs: React.FC = () => {
 
       {isTabBarVisible &&
         (AppMeta.forceEmailVerification && !emailVerified ? (
-          <VerificationPage />
+          <>
+            <VerificationPage />
+          </>
         ) : (
           // If the tab bar is visible, show the tabs
           <IonTabs>
