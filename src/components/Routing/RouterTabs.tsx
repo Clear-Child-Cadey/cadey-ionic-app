@@ -92,19 +92,14 @@ const RouterTabs: React.FC = () => {
   const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
 
   useEffect(() => {
-    const nonLoggedInUsersAllowedPaths = [
-      '/App/Authentication/Login',
-      '/App/Authentication/Register',
-      '/App/Welcome',
-    ];
-
     if (
       !userLoggedIn &&
-      !nonLoggedInUsersAllowedPaths.includes(location.pathname)
+      !AppMeta.nonLoggedInUsersAllowedPaths.includes(location.pathname) &&
+      !AppMeta.forceEmailVerification
     ) {
       history.push('/App/Welcome');
     }
-  }, [userLoggedIn, location]);
+  }, [userLoggedIn, location, AppMeta]);
 
   // Use effect to update setIsWelcomeSequence
   useEffect(() => {

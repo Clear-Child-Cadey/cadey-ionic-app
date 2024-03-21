@@ -19,6 +19,12 @@ const AppMeta = {
     buttonText: 'Retry',
     actionType: 'RELOAD_PAGE',
   },
+  nonLoggedInUsersAllowedPaths: [
+    '/App/Authentication/Login',
+    '/App/Authentication/Register',
+    '/App/Authentication',
+    '/App/Welcome',
+  ],
   emailVerificationMessage:
     'You need to verify your email address. On this device, click on the link we just emailed you. This process helps keep your account secure.',
 };

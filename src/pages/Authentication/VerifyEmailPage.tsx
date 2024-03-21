@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   IonButton,
   IonContent,
@@ -25,28 +25,49 @@ const VerifyEmailPage: React.FC<Props> = ({
   loading,
 }: Props) => {
   const history = useHistory();
+  const [emailverified, setEmailVerified] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(60);
 
   useEffect(() => {
     if (auth && actionCode) {
       applyActionCode(auth, actionCode)
         .then(() => {
+          setEmailVerified(true);
           auth.currentUser?.reload();
           setTimeout(() => {
             if (auth.currentUser && auth.currentUser.emailVerified) {
+              // auth.signOut(); dont sign user out just yet
               // Send the user to the home page if they are on the same device and have the same login session
               history.push('/App/Welcome');
-              auth.signOut();
             } else {
               history.push('/App/Welcome');
             }
-          }, 5000);
+          }, 8000); //To account for the loading spinner on the previous page
           // }
         })
         .catch((err) => {
           console.log(err.message);
+          setEmailVerified(false);
         });
     }
-  }, [auth.currentUser, actionCode, loading]);
+  }, [auth, actionCode]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (disabled && countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    } else {
+      setDisabled(false);
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [disabled, countdown]);
 
   if (loading) {
     return <IonLoading isOpen={true} message={'Loading...'} />;
@@ -56,19 +77,13 @@ const VerifyEmailPage: React.FC<Props> = ({
     <IonPage>
       <IonContent fullscreen>
         <div className='verify-email-content'>
-          {auth.currentUser?.emailVerified ? (
+          {emailverified || auth.currentUser?.emailVerified ? (
             <>
               <h2 className='email-heading'>
                 Your email has been succesfully verified!
               </h2>
               <IonRow className='content'>
-                <IonButton
-                  onClick={() =>
-                    auth.currentUser?.uid
-                      ? history.push('/App/Welcome')
-                      : history.push('/App/Welcome')
-                  }
-                >
+                <IonButton onClick={() => history.push('/App/Welcome')}>
                   Take me back
                 </IonButton>
                 <p className='info-text'>
@@ -79,16 +94,22 @@ const VerifyEmailPage: React.FC<Props> = ({
             </>
           ) : (
             <>
-              <h2 className='email-heading'>Oops!</h2>
+              <h2 className='email-heading'>OOPS!</h2>
               <p className='sub-heading'>
-                There seems to have been a problem verifying your email address
+                There seems to have been a problem verifying your email address,
+                please log in and try the link in your email again.
               </p>
               <IonRow className='content'>
-                <IonButton onClick={() => history.push('/App/Welcome')}>
-                  Please try again
+                <IonButton
+                  disabled={disabled}
+                  onClick={() => history.push('/App/Welcome')}
+                >
+                  Take me back
                 </IonButton>
+                {/* update this to correct email address */}
                 <p className='info-text'>
-                  If the problem presists, please contact support
+                  If the problem presists, please contact support at{' '}
+                  <a href='mailto:support@cadey.com'>support@cadey.com</a>
                 </p>
               </IonRow>
             </>

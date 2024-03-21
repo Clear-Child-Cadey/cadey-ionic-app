@@ -188,8 +188,10 @@ const useCadeyAuth = () => {
 
       const cadeyUser = await handleCadeyRegistrationUser(userCredential.user);
       dispatch(setCadeyUser(cadeyUser));
-      await sendEmailVerification(userCredential.user);
-      setMessageDecorated(AppMeta.emailVerificationMessage);
+      if (AppMeta.forceEmailVerification) {
+        await sendEmailVerification(userCredential.user);
+        setMessageDecorated(AppMeta.emailVerificationMessage);
+      }
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);

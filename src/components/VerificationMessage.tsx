@@ -17,9 +17,9 @@ const VerificationPage: React.FC<Props> = ({
   const auth = getAuth();
 
   // Redirect user back to welcome page and refresh its data
-  const handleRedirectHome = () => {
-    window.location.href = '/App/Welcome';
-  };
+  // const handleRedirectHome = () => {
+  //   window.location.href = '/App/Welcome';
+  // };
 
   const resendEmail = async () => {
     setDisabled(true);
@@ -49,9 +49,6 @@ const VerificationPage: React.FC<Props> = ({
     <div className='email-verification-message'>
       <h2>Great! Now, check your email</h2>
       <p>{AppMeta.emailVerificationMessage}</p>
-      {!isAfterSignup && (
-        <IonButton onClick={handleRedirectHome}>I already verified</IonButton>
-      )}
       <IonButton disabled={disabled} onClick={resendEmail}>
         {disabled
           ? `Please wait ${countdown} seconds to request a resend`
