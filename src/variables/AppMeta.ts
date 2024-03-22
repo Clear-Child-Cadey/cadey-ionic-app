@@ -27,6 +27,7 @@ const AppMeta = {
   ],
   emailVerificationMessage:
     'You need to verify your email address. On this device, click on the link we just emailed you. This process helps keep your account secure.',
+  expiredUserMessage: 'Your trial period has expired.',
 };
 
 export default AppMeta;

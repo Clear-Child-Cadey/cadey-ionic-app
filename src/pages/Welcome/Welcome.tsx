@@ -11,6 +11,7 @@ import { logUserFact } from '../../api/UserFacts';
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import ExpiredUser from '../../components/Authentication/ExpiredUser';
 
 const WelcomePage: React.FC = () => {
   // const { cadeyUserId } = React.useContext(CadeyUserContext);
@@ -47,6 +48,10 @@ const WelcomePage: React.FC = () => {
   const handleContinue = (url: string) => {
     history.push(url);
   };
+
+  if (cadeyUser?.authStatus && cadeyUser?.authStatus >= 1) {
+    return <ExpiredUser />;
+  }
 
   return (
     <IonPage className='welcome'>
