@@ -28,7 +28,14 @@ const ExpiredUser: React.FC = () => {
       <IonContent fullscreen>
         <div className='trial-period-message'>
           <h2>Your trial period has expired</h2>
-          <IonButton onClick={handleRedirect}>Log Out</IonButton>
+          <p>Now, request Cadey as a benefit.</p>
+          <IonButton
+            onClick={() =>
+              window.open("'https://cadey.co/request-benefits'", '_blank')
+            }
+          >
+            Request Benefits
+          </IonButton>
         </div>
       </IonContent>
     </IonPage>
