@@ -4,7 +4,7 @@
 
 const AppMeta = {
   forceEmailVerification: true,
-  enforceTrialUser: false,
+  enforceTrialUser: true,
   firestoreCollection: 'ErrorLogs2024',
   cadeyApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
   fetchTimeout: -1,
