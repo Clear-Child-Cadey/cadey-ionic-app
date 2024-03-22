@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import {
   IonButton,
   IonContent,
+  IonHeader,
   IonLoading,
   IonPage,
   IonRow,
+  IonToolbar,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { Auth, applyActionCode } from 'firebase/auth';
@@ -74,7 +76,12 @@ const VerifyEmailPage: React.FC<Props> = ({
   }
 
   return (
-    <IonPage>
+    <IonPage className='home'>
+      <IonHeader class='header'>
+        <IonToolbar className='header-toolbar'>
+          <h2>&nbsp;</h2>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen>
         <div className='verify-email-content'>
           {emailverified || auth.currentUser?.emailVerified ? (
