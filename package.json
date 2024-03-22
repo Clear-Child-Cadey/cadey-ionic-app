@@ -32,7 +32,6 @@
     "@types/react-router-dom": "^5.3.3",
     "@vimeo/player": "^2.20.1",
     "axios": "^1.4.0",
-    "cordova-plugin-app-version": "^0.1.14",
     "firebase": "^9.23.0",
     "ionicons": "^7.0.0",
     "onesignal-cordova-plugin": "^3.3.1",
