@@ -1,4 +1,10 @@
-import { IonButton } from '@ionic/react';
+import {
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonToolbar,
+} from '@ionic/react';
 import { useState, useEffect } from 'react';
 import './VerificationMessage.css';
 import AppMeta from '../variables/AppMeta';
@@ -46,15 +52,24 @@ const VerificationPage: React.FC<Props> = ({
   }, [disabled, countdown]);
 
   return (
-    <div className='email-verification-message'>
-      <h2>Great! Now, check your email</h2>
-      <p>{AppMeta.emailVerificationMessage}</p>
-      <IonButton disabled={disabled} onClick={resendEmail}>
-        {disabled
-          ? `Please wait ${countdown} seconds to request a resend`
-          : 'Resend Email'}
-      </IonButton>
-    </div>
+    <IonPage className='home'>
+      <IonHeader class='header'>
+        <IonToolbar className='header-toolbar'>
+          <h2>&nbsp;</h2>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen className='page'>
+        <div className='email-verification-message'>
+          <h2>Great! Now, check your email</h2>
+          <p>{AppMeta.emailVerificationMessage}</p>
+          <IonButton disabled={disabled} onClick={resendEmail}>
+            {disabled
+              ? `Please wait ${countdown} seconds to request a resend`
+              : 'Resend Email'}
+          </IonButton>
+        </div>
+      </IonContent>
+    </IonPage>
   );
 };
 
