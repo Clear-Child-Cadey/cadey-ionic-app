@@ -49,10 +49,6 @@ const WelcomePage: React.FC = () => {
     history.push(url);
   };
 
-  if (cadeyUser?.authStatus && cadeyUser?.authStatus >= 1) {
-    return <ExpiredUser />;
-  }
-
   return (
     <IonPage className='welcome'>
       <IonContent fullscreen>

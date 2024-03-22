@@ -60,6 +60,7 @@ import { trileanResolve } from '../../types/Trilean';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import AppMeta from '../../variables/AppMeta';
 import VerificationPage from '../VerificationMessage';
+import ExpiredUser from '../Authentication/ExpiredUser';
 
 const RouterTabs: React.FC = () => {
   const userLoggedIn = useSelector((state: RootState) => {
@@ -79,6 +80,10 @@ const RouterTabs: React.FC = () => {
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
+
+  const cadeyUser = useSelector(
+    (state: RootState) => state?.authStatus?.userData?.cadeyUser,
+  );
 
   // Check email address is verified
 
@@ -154,7 +159,11 @@ const RouterTabs: React.FC = () => {
             <Route
               exact
               path='/App/Welcome/Path'
-              component={WelcomePathSelect}
+              component={
+                cadeyUser?.authStatus && cadeyUser?.authStatus >= 1
+                  ? ExpiredUser
+                  : WelcomePathSelect
+              }
             />
             <Route
               exact
