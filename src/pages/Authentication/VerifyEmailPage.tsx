@@ -37,7 +37,7 @@ const VerifyEmailPage: React.FC<Props> = ({
           auth.currentUser?.reload();
           setTimeout(() => {
             if (auth.currentUser && auth.currentUser.emailVerified) {
-              // auth.signOut(); dont sign user out just yet
+              auth.signOut();
               // Send the user to the home page if they are on the same device and have the same login session
               history.push('/App/Welcome');
             } else {
