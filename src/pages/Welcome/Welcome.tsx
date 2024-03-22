@@ -11,6 +11,7 @@ import { logUserFact } from '../../api/UserFacts';
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import ExpiredUser from '../../components/Authentication/ExpiredUser';
 
 const WelcomePage: React.FC = () => {
   // const { cadeyUserId } = React.useContext(CadeyUserContext);

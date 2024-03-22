@@ -3,7 +3,13 @@ import { useHistory } from 'react-router';
 import { Auth, confirmPasswordReset } from 'firebase/auth';
 // CSS
 import './PasswordResetPage.css'; // Adjust the path as necessary
-import { IonButton, IonContent, IonPage } from '@ionic/react';
+import {
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonToolbar,
+} from '@ionic/react';
 
 interface Props {
   auth: Auth;
@@ -50,6 +56,11 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
 
   return (
     <IonPage>
+      <IonHeader class='header'>
+        <IonToolbar className='header-toolbar'>
+          <h2>&nbsp;</h2>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen>
         <div className='password-reset-content'>
           <h2>Reset Your Password</h2>

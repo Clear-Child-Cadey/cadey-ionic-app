@@ -4,6 +4,7 @@
 
 const AppMeta = {
   forceEmailVerification: true,
+  enforceTrialUser: false,
   firestoreCollection: 'ErrorLogs2024',
   cadeyApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
   fetchTimeout: -1,
@@ -19,8 +20,15 @@ const AppMeta = {
     buttonText: 'Retry',
     actionType: 'RELOAD_PAGE',
   },
+  nonLoggedInUsersAllowedPaths: [
+    '/App/Authentication/Login',
+    '/App/Authentication/Register',
+    '/App/Authentication',
+    '/App/Welcome',
+  ],
   emailVerificationMessage:
     'You need to verify your email address. On this device, click on the link we just emailed you. This process helps keep your account secure.',
+  expiredUserMessage: 'Your trial period has expired.',
 };
 
 export default AppMeta;

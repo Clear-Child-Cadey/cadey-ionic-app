@@ -1,0 +1,9 @@
+.trial-period-message {
+  display: flex;
+  flex-direction: column;
+  color: #384f5f;
+  padding: 18px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}

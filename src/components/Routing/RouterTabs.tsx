@@ -60,6 +60,7 @@ import { trileanResolve } from '../../types/Trilean';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import AppMeta from '../../variables/AppMeta';
 import VerificationPage from '../VerificationMessage';
+import ExpiredUser from '../Authentication/ExpiredUser';
 
 const RouterTabs: React.FC = () => {
   const userLoggedIn = useSelector((state: RootState) => {
@@ -80,6 +81,10 @@ const RouterTabs: React.FC = () => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
 
+  const cadeyUser = useSelector(
+    (state: RootState) => state?.authStatus?.userData?.cadeyUser,
+  );
+
   // Check email address is verified
 
   // Tab bar visibility
@@ -92,19 +97,14 @@ const RouterTabs: React.FC = () => {
   const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
 
   useEffect(() => {
-    const nonLoggedInUsersAllowedPaths = [
-      '/App/Authentication/Login',
-      '/App/Authentication/Register',
-      '/App/Welcome',
-    ];
-
     if (
       !userLoggedIn &&
-      !nonLoggedInUsersAllowedPaths.includes(location.pathname)
+      !AppMeta.nonLoggedInUsersAllowedPaths.includes(location.pathname) &&
+      !AppMeta.forceEmailVerification
     ) {
       history.push('/App/Welcome');
     }
-  }, [userLoggedIn, location]);
+  }, [userLoggedIn, location, AppMeta]);
 
   // Use effect to update setIsWelcomeSequence
   useEffect(() => {
@@ -159,7 +159,13 @@ const RouterTabs: React.FC = () => {
             <Route
               exact
               path='/App/Welcome/Path'
-              component={WelcomePathSelect}
+              component={
+                cadeyUser?.authStatus &&
+                cadeyUser?.authStatus >= 1 &&
+                AppMeta.enforceTrialUser
+                  ? ExpiredUser
+                  : WelcomePathSelect
+              }
             />
             <Route
               exact
