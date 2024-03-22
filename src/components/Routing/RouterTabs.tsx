@@ -162,7 +162,7 @@ const RouterTabs: React.FC = () => {
               component={
                 cadeyUser?.authStatus &&
                 cadeyUser?.authStatus >= 1 &&
-                AppMeta.forceTrialUser
+                AppMeta.enforceTrialUser
                   ? ExpiredUser
                   : WelcomePathSelect
               }
