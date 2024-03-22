@@ -160,7 +160,9 @@ const RouterTabs: React.FC = () => {
               exact
               path='/App/Welcome/Path'
               component={
-                cadeyUser?.authStatus && cadeyUser?.authStatus >= 1
+                cadeyUser?.authStatus &&
+                cadeyUser?.authStatus >= 1 &&
+                AppMeta.forceTrialUser
                   ? ExpiredUser
                   : WelcomePathSelect
               }
