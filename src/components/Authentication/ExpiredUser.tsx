@@ -31,7 +31,7 @@ const ExpiredUser: React.FC = () => {
           <p>Now, request Cadey as a benefit from your employer.</p>
           <IonButton
             onClick={() =>
-              window.open("'https://cadey.co/request-benefits'", '_blank')
+              window.open('https://cadey.co/request-benefits', '_blank')
             }
           >
             Request Benefits
