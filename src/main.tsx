@@ -70,7 +70,6 @@ import { setHttpErrorModalData } from './features/httpError/slice';
 import AppMeta from './variables/AppMeta';
 
 // Make sure we generate a unique ID for the device
-getDeviceId();
 
 // create context for cadeyUserId and minimumSupportedVersion
 export const CadeyUserContext = createContext<{
@@ -86,6 +85,8 @@ export const CadeyUserContext = createContext<{
   minimumSupportedVersion: '',
   oneSignalId: '',
 });
+
+getDeviceId();
 
 function MainComponent() {
   const { appOpenAction } = useAppOpened();

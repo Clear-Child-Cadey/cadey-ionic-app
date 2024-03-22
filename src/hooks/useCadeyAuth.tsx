@@ -222,6 +222,7 @@ const useCadeyAuth = () => {
   ) => {
     const url = `${apiUrl}/userauth`;
     let response;
+    const cadeyUserDeviceId = await getDeviceId();
     try {
       response = await fetchWithTimeout(
         url,
@@ -235,7 +236,7 @@ const useCadeyAuth = () => {
           body: JSON.stringify({
             cadeyUserEmail: firebaseUser.email,
             authId: firebaseUser.uid,
-            cadeyUserDeviceId: getDeviceId(),
+            cadeyUserDeviceId,
             cadeyUserId,
           }),
         },
@@ -258,6 +259,8 @@ const useCadeyAuth = () => {
     const url = `${apiUrl}/userreg`;
 
     let response;
+    const cadeyUserDeviceId = await getDeviceId();
+
     try {
       response = await fetchWithTimeout(
         url,
@@ -271,7 +274,7 @@ const useCadeyAuth = () => {
           body: JSON.stringify({
             cadeyUserEmail: firebaseUser.email,
             authId: firebaseUser.uid,
-            cadeyUserDeviceId: getDeviceId(),
+            cadeyUserDeviceId,
             cadeyUserId,
           }),
         },
