@@ -14,8 +14,7 @@ import { Auth, applyActionCode } from 'firebase/auth';
 
 // Styles
 import './VerifyEmailPage.css';
-import { useDispatch } from 'react-redux';
-import { setSplashScreenMessage } from '../../features/authLoading/slice';
+
 import presentToast from '../../utils/presentToast';
 
 interface Props {
@@ -34,27 +33,37 @@ const VerifyEmailPage: React.FC<Props> = ({
   const [emailverified, setEmailVerified] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
+  const [firingToast, setFiringToast] = useState(false);
 
   const [present] = useIonToast();
 
+  const fireToast = () => {
+    if (firingToast) {
+      return;
+    }
+    setFiringToast(true);
+    presentToast(
+      present,
+      'top',
+      'Email verified successfully, please log in',
+      3000,
+    );
+  };
+
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     if (auth && actionCode) {
       applyActionCode(auth, actionCode)
         .then(() => {
           setEmailVerified(true);
 
           auth.currentUser?.reload();
-          setTimeout(() => {
+          timeoutId = setTimeout(() => {
             if (auth.currentUser && auth.currentUser.emailVerified) {
               auth.signOut();
               // Send the user to the home page if they are on the same device and have the same login session
               history.push('/App/Welcome');
-              presentToast(
-                present,
-                'top',
-                'Email verified successfully, please log in',
-                3000,
-              );
+              fireToast();
             } else {
               history.push('/App/Welcome');
             }
@@ -66,6 +75,11 @@ const VerifyEmailPage: React.FC<Props> = ({
           setEmailVerified(false);
         });
     }
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [auth, actionCode]);
 
   useEffect(() => {
@@ -103,7 +117,12 @@ const VerifyEmailPage: React.FC<Props> = ({
                 Your email has been succesfully verified!
               </h2>
               <IonRow className='content'>
-                <IonButton onClick={() => history.push('/App/Welcome')}>
+                <IonButton
+                  onClick={() => {
+                    fireToast();
+                    history.push('/App/Welcome');
+                  }}
+                >
                   Take me back
                 </IonButton>
                 <p className='info-text'>
