@@ -4,7 +4,7 @@
 
 const AppMeta = {
   forceEmailVerification: true,
-  enforceTrialUser: false,
+  enforceTrialUser: true,
   firestoreCollection: 'ErrorLogs2024',
   cadeyApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
   fetchTimeout: -1,
@@ -27,8 +27,7 @@ const AppMeta = {
     '/App/Welcome',
   ],
   emailVerificationMessage:
-    'You need to verify your email address. On this device, click on the link we just emailed you. This process helps keep your account secure.',
-  expiredUserMessage: 'Your trial period has expired.',
+    'You need to verify your email address. On this device, click on the link we just emailed you. The subject line of the email is "Verify your email for CadeyLite." This process helps keep your account secure.',
 };
 
 export default AppMeta;

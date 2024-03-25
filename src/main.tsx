@@ -67,7 +67,6 @@ import AppMeta from './variables/AppMeta';
 import useRequestQuiz from './hooks/useRequestQuiz';
 
 // Make sure we generate a unique ID for the device
-getDeviceId();
 
 // create context for cadeyUserId and minimumSupportedVersion
 export const CadeyUserContext = createContext<{
@@ -83,6 +82,8 @@ export const CadeyUserContext = createContext<{
   minimumSupportedVersion: '',
   oneSignalId: '',
 });
+
+getDeviceId();
 
 function MainComponent() {
   const { appOpenAction } = useAppOpened();

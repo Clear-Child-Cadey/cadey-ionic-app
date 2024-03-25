@@ -13,6 +13,7 @@ const useAppOpened = () => {
   const appOpenAction = async () => {
     // Define the url for the request
     const url = `${apiUrl}/cadeyappopened`;
+    const cadeyUserDeviceId = await getDeviceId();
 
     // Determine the platform on which the app is running
     // Prepare the body of the request
@@ -20,7 +21,7 @@ const useAppOpened = () => {
       cadeyUserId: 0,
       authId: null,
       cadeyUserEmail: null,
-      cadeyUserDeviceId: getDeviceId(),
+      cadeyUserDeviceId,
     };
 
     let request;

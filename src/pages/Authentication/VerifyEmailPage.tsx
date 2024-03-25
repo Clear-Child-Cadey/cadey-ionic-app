@@ -7,12 +7,16 @@ import {
   IonPage,
   IonRow,
   IonToolbar,
+  useIonToast,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { Auth, applyActionCode } from 'firebase/auth';
 
 // Styles
 import './VerifyEmailPage.css';
+import { useDispatch } from 'react-redux';
+import { setSplashScreenMessage } from '../../features/authLoading/slice';
+import presentToast from '../../utils/presentToast';
 
 interface Props {
   auth: Auth;
@@ -31,17 +35,26 @@ const VerifyEmailPage: React.FC<Props> = ({
   const [disabled, setDisabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
 
+  const [present] = useIonToast();
+
   useEffect(() => {
     if (auth && actionCode) {
       applyActionCode(auth, actionCode)
         .then(() => {
           setEmailVerified(true);
+
           auth.currentUser?.reload();
           setTimeout(() => {
             if (auth.currentUser && auth.currentUser.emailVerified) {
               auth.signOut();
               // Send the user to the home page if they are on the same device and have the same login session
               history.push('/App/Welcome');
+              presentToast(
+                present,
+                'top',
+                'Email verified successfully, please log in',
+                3000,
+              );
             } else {
               history.push('/App/Welcome');
             }

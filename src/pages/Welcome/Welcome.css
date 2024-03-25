@@ -21,6 +21,10 @@
   height: 68%;
 }
 
+.welcome-content .continue-row {
+  flex-direction: column;
+}
+
 .welcome-text {
   font-family: Judson;
   font-size: 25px;
