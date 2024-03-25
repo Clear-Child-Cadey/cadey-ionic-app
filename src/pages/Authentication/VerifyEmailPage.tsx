@@ -120,6 +120,7 @@ const VerifyEmailPage: React.FC<Props> = ({
                 <IonButton
                   onClick={() => {
                     fireToast();
+                    auth.signOut();
                     history.push('/App/Welcome');
                   }}
                 >
