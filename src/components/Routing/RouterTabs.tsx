@@ -90,7 +90,7 @@ const RouterTabs: React.FC = () => {
     const authStatus = state?.authStatus?.userData?.cadeyUser?.authStatus;
     // not sure what to do with regstatus...
     const regStatus = state?.authStatus?.userData?.cadeyUser?.regStatus;
-    return !!authStatus && authStatus > 1;
+    return !!authStatus && authStatus >= 1;
   });
 
   const aUserHasBeenReturned = useSelector((state: RootState) => {
