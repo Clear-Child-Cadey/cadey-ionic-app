@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IonImg, IonIcon } from '@ionic/react';
 // CSS
 import './ArticleItem.css';
 // API & Interface
 import { WP_Article } from '../../api/WordPress/GetArticles';
-import { getQuiz } from '../../api/Quiz';
 // Icons
 import { readerOutline } from 'ionicons/icons';
 // Contexts
 import { useModalContext } from '../../context/ModalContext';
-import ApiUrlContext from '../../context/ApiUrlContext';
-import { CadeyUserContext } from '../../main';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import useRequestQuiz from '../../hooks/useRequestQuiz';
 
 // Setup the interface
 interface ArticleProps {
@@ -24,22 +20,14 @@ const ArticleItem: React.FC<ArticleProps> = ({ article, videoId }) => {
   const [selectedArticle, setSelectedArticle] = useState<WP_Article | null>(
     null,
   );
-  const { apiUrl } = React.useContext(ApiUrlContext);
-  // const { cadeyUserId } = React.useContext(CadeyUserContext);
-
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const { requestQuiz } = useRequestQuiz({
+    clientContext: 1,
+    entityType: 1,
+    entityId: Number(videoId),
+  });
   // Get all the props from the modal context
-  const {
-    isVideoModalOpen,
-    setArticleDetailModalOpen,
-    setCurrentArticleId,
-    setQuizModalOpen,
-    setQuizModalData,
-  } = useModalContext();
+  const { isVideoModalOpen, setArticleDetailModalOpen, setCurrentArticleId } =
+    useModalContext();
 
   // Log a user fact and proceed to the next screen
   const handleArticleClick = (article: WP_Article) => {
@@ -59,24 +47,6 @@ const ArticleItem: React.FC<ArticleProps> = ({ article, videoId }) => {
     ).body.textContent;
     return text || '';
   }
-
-  const requestQuiz = async () => {
-    const quizResponse = await getQuiz(
-      apiUrl,
-      Number(cadeyUserId),
-      1, // Client Context: Where the user is in the app (1 = VideoDetail)
-      1, // Entity Type (1 = video)
-      Number(videoId), // Entity IDs (The ID of the video)
-    );
-
-    if (quizResponse.question !== null && quizResponse.question.id > 0) {
-      // Set the quiz data
-      setQuizModalData(quizResponse);
-
-      // Open the quiz modal
-      setQuizModalOpen(true);
-    }
-  };
 
   return (
     <div>

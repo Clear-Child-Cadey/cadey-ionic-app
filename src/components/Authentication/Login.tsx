@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 
 import './Login.css'; // Adjust the path as necessary
@@ -6,32 +6,35 @@ import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
 // API
-import { postUserAuth } from '../../api/Authentication';
-import { getQuiz } from '../../api/Quiz';
+// import { postUserAuth } from '../../api/Authentication';
+// import { getQuiz } from '../../api/Quiz';
 // Context
-import ApiUrlContext from '../../context/ApiUrlContext';
-import { CadeyUserContext } from '../../main';
-import { useModalContext } from '../../context/ModalContext';
-import { useTabContext } from '../../context/TabContext';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+// import ApiUrlContext from '../../context/ApiUrlContext';
+// // import { CadeyUserContext } from '../../main';
+// import { useModalContext } from '../../context/ModalContext';
+// import { useTabContext } from '../../context/TabContext';
+// import { useSelector } from 'react-redux';
+// import { RootState } from '../../store';
+import useRequestQuiz from '../../hooks/useRequestQuiz';
+import AppMeta from '../../variables/AppMeta';
 
 const LoginComponent: React.FC = () => {
-  const { apiUrl } = useContext(ApiUrlContext);
+  // const { apiUrl } = useContext(ApiUrlContext);
 
-  const { setIsTabBarVisible } = useTabContext();
-  const { setQuizModalData } = useModalContext();
-  const [loginState, setLoginState] = useState('email'); // 'email' or 'password'
+  // const { setIsTabBarVisible } = useTabContext();
+  // const { setQuizModalData } = useModalContext();
+  // const [loginState, setLoginState] = useState('email'); // 'email' or 'password'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
   const history = useHistory();
+  const { requestQuiz } = useRequestQuiz({
+    clientContext: 3,
+    entityType: 0,
+    entityId: 0,
+    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
+  });
 
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  ); // either grab the ID from cadey user, if set, otherwise, get the appOpen cadeyUserId
   const {
     messages,
     errors,
@@ -47,6 +50,8 @@ const LoginComponent: React.FC = () => {
       await signInWithEmailAndPasswordDecorated(email, password);
 
       // Check for onboarding quiz
+      // requestQuiz();
+      console.log('this is supposed to be running');
       requestQuiz();
     } catch (e) {
       console.error(e);
@@ -66,32 +71,6 @@ const LoginComponent: React.FC = () => {
 
   const handleCreateAccount = () => {
     history.push('/App/Authentication/Register');
-  };
-
-  const requestQuiz = async () => {
-    const quizResponse = await getQuiz(
-      apiUrl,
-      Number(cadeyUserId),
-      3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
-      0, // Entity Type (1 = video)
-      0, // Entity IDs (The ID of the video)
-    );
-
-    // If the user has not completed the welcome sequence, take them to the welcome sequence
-    if (quizResponse.question !== null && quizResponse.question.id > 0) {
-      // Set the quiz data
-      setQuizModalData(quizResponse);
-
-      // Hide the tab bar
-      setIsTabBarVisible(false);
-
-      // Redirect user to Welcome sequence - Age group
-      history.push('/App/Welcome/Path');
-    } else {
-      // Show the tab bar and redirect to the home page
-      setIsTabBarVisible(true);
-      history.push('/App/Home');
-    }
   };
 
   return (

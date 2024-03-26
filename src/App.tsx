@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { IonApp, setupIonicReact } from '@ionic/react';
-import { useHistory } from 'react-router-dom';
+import { setupIonicReact } from '@ionic/react';
 import semver from 'semver';
 // Components
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -13,19 +12,17 @@ import QuizModal from './components/Modals/QuizModal/QuizModal';
 import { CadeyUserContext } from './main';
 import { useModalContext } from './context/ModalContext';
 import ApiUrlContext from './context/ApiUrlContext';
-import { useAppPage } from './context/AppPageContext';
-import { useTabContext } from './context/TabContext';
 // Variables
 import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 import { logUserFact } from './api/UserFacts';
 import GenericModal from './components/Modals/GenericModal';
-import { getQuiz } from './api/Quiz';
 
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
+import useRequestQuiz from './hooks/useRequestQuiz';
 import AppMeta from './variables/AppMeta';
 
 setupIonicReact();
@@ -41,17 +38,17 @@ const App: React.FC = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
-  const history = useHistory();
-  const [checkForWelcome, setCheckForWelcome] = useState(false);
-  const { setIsTabBarVisible } = useTabContext();
-  const emailVerified = useSelector((state: RootState) => {
-    return state.authStatus.emailVerified;
+  const { requestQuiz } = useRequestQuiz({
+    clientContext: 3,
+    entityType: 0,
+    entityId: 0,
+    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
 
   const {
     isVideoModalOpen,
     isArticleDetailModalOpen,
-    setQuizModalData,
+    // setQuizModalData,
     currentVimeoId,
     currentArticleId,
   } = useModalContext();
@@ -85,38 +82,9 @@ const App: React.FC = () => {
     if (!cadeyUser?.cadeyUserId) {
       return;
     }
-    const requestQuiz = async () => {
-      if (
-        !checkForWelcome &&
-        !AppMeta.forceEmailVerification &&
-        emailVerified
-      ) {
-        const quizResponse = await getQuiz(
-          apiUrl,
-          Number(cadeyUser.cadeyUserId),
-          3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
-          0, // Entity Type (1 = video)
-          0, // Entity IDs (The ID of the video)
-        );
-
-        setCheckForWelcome(true); // Prevents re-fetching the quiz
-
-        // If the user has not completed the welcome sequence, show the welcome page
-        if (quizResponse.question !== null && quizResponse.question.id > 0) {
-          // Set the quiz data
-          setQuizModalData(quizResponse);
-
-          // Hide the tab bar
-          setIsTabBarVisible(false);
-        } else {
-          // Show the tab bar
-          setIsTabBarVisible(true);
-        }
-      }
-    };
 
     requestQuiz();
-  }, [apiUrl, cadeyUser, cadeyUser?.cadeyUserId]);
+  }, [cadeyUser]);
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
@@ -172,9 +140,6 @@ const App: React.FC = () => {
 
       {/* Show an article modal if context dictates */}
       {isArticleDetailModalOpen && currentArticleId && <ArticleDetailModal />}
-
-      {/* Show a quiz modal if context dictates
-      <QuizModal /> commented out for now because not seeing specific reason why need to render twice*/}
 
       {/* Show a generic modal if context dictates */}
       <GenericModal />
