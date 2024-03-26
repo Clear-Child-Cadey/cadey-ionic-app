@@ -71,7 +71,35 @@ const RouterTabs: React.FC = () => {
     );
   });
 
-  const dispatch = useDispatch();
+  const isExpired = useSelector((state: RootState) => {
+    // reference from Ron's code
+    // regstatus
+    //
+    //     0 = Registered
+    //     1 = NotFound
+    //     2 = FoundNotRegistered
+    //
+    // authstatus
+    //
+    //     0 = Successful
+    //     1 = FailedExpired
+    //     2 = FailedNotActive
+    //     3 = FailedNotRegistered
+    //
+
+    const authStatus = state?.authStatus?.userData?.cadeyUser?.authStatus;
+    // not sure what to do with regstatus...
+    const regStatus = state?.authStatus?.userData?.cadeyUser?.regStatus;
+    return !!authStatus && authStatus > 1;
+  });
+
+  const aUserHasBeenReturned = useSelector((state: RootState) => {
+    return !!state?.authStatus?.userData?.cadeyUser?.cadeyUserId;
+  });
+
+  if (aUserHasBeenReturned && isExpired) {
+    return <ExpiredUser />;
+  }
 
   const emailVerified = useSelector((state: RootState) => {
     return state.authStatus.emailVerified;
@@ -149,6 +177,7 @@ const RouterTabs: React.FC = () => {
         <IonRouterOutlet>
           <Switch>
             {/* If the user is in the welcome sequence, show the welcome page */}
+
             <Route exact path='/App/Welcome' component={WelcomePage} />
 
             <Route exact path='/'>
