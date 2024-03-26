@@ -54,8 +54,7 @@ const RegistrationPage = () => {
           <IonRow>
             {loginState !== 'password' && (
               <p className='login-instructions'>
-                Please enter a valid email address to start your free 7-day
-                trial.
+                Please enter a valid email address to get started.
               </p>
             )}
             <RegistrationComponent getValues={getValues} />
