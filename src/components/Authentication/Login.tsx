@@ -114,7 +114,7 @@ const LoginComponent: React.FC = () => {
       </p>
       <p>
         Don't have an account?{' '}
-        <a onClick={handleCreateAccount}>Create a free account</a>
+        <a onClick={handleCreateAccount}>Create an account</a>
       </p>
     </div>
   );
