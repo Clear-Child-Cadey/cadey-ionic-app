@@ -97,10 +97,6 @@ const RouterTabs: React.FC = () => {
     return !!state?.authStatus?.userData?.cadeyUser?.cadeyUserId;
   });
 
-  if (aUserHasBeenReturned && isExpired) {
-    return <ExpiredUser />;
-  }
-
   const emailVerified = useSelector((state: RootState) => {
     return state.authStatus.emailVerified;
   });
@@ -172,8 +168,10 @@ const RouterTabs: React.FC = () => {
       {/* Initialize OneSignal and listen for OneSignal callbacks */}
       {window.cordova && <OneSignalInitializer />}
 
+      {aUserHasBeenReturned && isExpired && <ExpiredUser />}
+
       {/* If the tab bar is not visible, the user is in the welcome sequence and should not see tabs */}
-      {!isTabBarVisible && (
+      {!isTabBarVisible && !isExpired && (
         <IonRouterOutlet>
           <Switch>
             {/* If the user is in the welcome sequence, show the welcome page */}
@@ -188,13 +186,7 @@ const RouterTabs: React.FC = () => {
             <Route
               exact
               path='/App/Welcome/Path'
-              component={
-                cadeyUser?.authStatus &&
-                cadeyUser?.authStatus >= 1 &&
-                AppMeta.enforceTrialUser
-                  ? ExpiredUser
-                  : WelcomePathSelect
-              }
+              component={WelcomePathSelect}
             />
             <Route
               exact
@@ -225,6 +217,7 @@ const RouterTabs: React.FC = () => {
       )}
 
       {isTabBarVisible &&
+        !isExpired &&
         (AppMeta.forceEmailVerification && !emailVerified ? (
           <VerificationPage />
         ) : (
