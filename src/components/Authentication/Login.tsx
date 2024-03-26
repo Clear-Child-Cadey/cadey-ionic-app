@@ -51,7 +51,6 @@ const LoginComponent: React.FC = () => {
 
       // Check for onboarding quiz
       // requestQuiz();
-      console.log('this is supposed to be running');
       requestQuiz();
     } catch (e) {
       console.error(e);

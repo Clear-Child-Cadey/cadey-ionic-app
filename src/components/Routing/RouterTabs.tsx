@@ -94,7 +94,7 @@ const RouterTabs: React.FC = () => {
   });
 
   const aUserHasBeenReturned = useSelector((state: RootState) => {
-    return !!state?.authStatus?.userData?.cadeyUser?.cadeyUserId;
+    return state?.authStatus?.userData?.cadeyUser !== null;
   });
 
   const emailVerified = useSelector((state: RootState) => {
@@ -104,12 +104,6 @@ const RouterTabs: React.FC = () => {
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
-
-  const cadeyUser = useSelector(
-    (state: RootState) => state?.authStatus?.userData?.cadeyUser,
-  );
-
-  // Check email address is verified
 
   // Tab bar visibility
   const { isTabBarVisible, setIsTabBarVisible } = useTabContext();
@@ -159,7 +153,6 @@ const RouterTabs: React.FC = () => {
     // You might need more sophisticated logic depending on your routes
     return location.pathname.startsWith(tabPath);
   };
-
   return (
     <>
       {/* Listen for App URLs */}
