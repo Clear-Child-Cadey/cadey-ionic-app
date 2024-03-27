@@ -63,7 +63,9 @@ const VerificationPage: React.FC = () => {
       <IonContent fullscreen className='page'>
         <div className='email-verification-message'>
           <h2>Great! Now, check your email on this device</h2>
-          <p>{AppMeta.emailVerificationMessage}</p>
+          {AppMeta.emailVerificationMessage && (
+            <p>{AppMeta.emailVerificationMessage}</p>
+          )}
           <IonButton disabled={disabled} onClick={resendEmail}>
             {disabled
               ? `Please wait ${countdown} to request a resend`
