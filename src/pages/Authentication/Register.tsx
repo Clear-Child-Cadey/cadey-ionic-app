@@ -21,25 +21,33 @@ import RegistrationComponent from '../../components/Authentication/Register';
 
 import AppMeta from '../../variables/AppMeta';
 import VerificationPage from '../../components/VerificationMessage';
+import { trileanResolve } from '../../types/Trilean';
 
 const RegistrationPage = () => {
   const authLoading = useSelector(
     (state: RootState) => state.authStatus.authLoading,
   );
 
-  const [loginState, setLoginState] = useState<string>('email'); // 'email' or 'password'
-  const [messages, setMessages] = useState<string[]>(['']);
+  const aUserHasBeenReturned = useSelector((state: RootState) => {
+    return state?.authStatus?.userData?.cadeyUser !== null;
+  });
 
-  const getValues = (loginStatus: string, messages: string[]) => {
+  const emailVerified = useSelector((state: RootState) => {
+    return state.authStatus.emailVerified;
+  });
+
+  const [loginState, setLoginState] = useState<string>('email'); // 'email' or 'password'
+
+  const getValues = (loginStatus: string) => {
     setLoginState(loginStatus);
-    setMessages(messages);
   };
 
   if (
     AppMeta.forceEmailVerification &&
-    messages.includes(AppMeta.emailVerificationMessage)
+    !trileanResolve(emailVerified) &&
+    aUserHasBeenReturned
   ) {
-    return <VerificationPage isAfterSignup={true} />;
+    return <VerificationPage />;
   }
 
   return (

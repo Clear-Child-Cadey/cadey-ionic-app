@@ -71,27 +71,31 @@ const RouterTabs: React.FC = () => {
     );
   });
 
-  const isExpired = useSelector((state: RootState) => {
-    // reference from Ron's code
-    // regstatus
-    //
-    //     0 = Registered
-    //     1 = NotFound
-    //     2 = FoundNotRegistered
-    //
-    // authstatus
-    //
-    //     0 = Successful
-    //     1 = FailedExpired
-    //     2 = FailedNotActive
-    //     3 = FailedNotRegistered
-    //
-
-    const authStatus = state?.authStatus?.userData?.cadeyUser?.authStatus;
-    // not sure what to do with regstatus...
-    const regStatus = state?.authStatus?.userData?.cadeyUser?.regStatus;
-    return !!authStatus && authStatus >= 1;
+  const authStatus = useSelector((state: RootState) => {
+    return state?.authStatus?.userData?.cadeyUser?.authStatus;
   });
+
+  // reference from Ron's code
+  // regstatus
+  //
+  //     0 = Registered
+  //     1 = NotFound
+  //     2 = FoundNotRegistered
+  //
+  // authstatus
+  //
+  //     0 = Successful
+  //     1 = FailedExpired
+  //     2 = FailedNotActive
+  //     3 = FailedNotRegistered
+  //
+  const [isExpired, setIsExpired] = useState<boolean>(false);
+
+  useEffect(() => {
+    // const regStatus = state?.authStatus?.userData?.cadeyUser?.regStatus;
+    // not sure what to do with regstatus...
+    setIsExpired(!!authStatus && authStatus >= 1);
+  }, [authStatus]);
 
   const aUserHasBeenReturned = useSelector((state: RootState) => {
     return state?.authStatus?.userData?.cadeyUser !== null;
@@ -211,7 +215,7 @@ const RouterTabs: React.FC = () => {
 
       {isTabBarVisible &&
         !isExpired &&
-        (AppMeta.forceEmailVerification && !emailVerified ? (
+        (AppMeta.forceEmailVerification && !trileanResolve(emailVerified) ? (
           <VerificationPage />
         ) : (
           // If the tab bar is visible, show the tabs

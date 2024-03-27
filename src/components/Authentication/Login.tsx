@@ -32,7 +32,6 @@ const LoginComponent: React.FC = () => {
     clientContext: 3,
     entityType: 0,
     entityId: 0,
-    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
 
   const {
@@ -50,7 +49,6 @@ const LoginComponent: React.FC = () => {
       await signInWithEmailAndPasswordDecorated(email, password);
 
       // Check for onboarding quiz
-      // requestQuiz();
       requestQuiz();
     } catch (e) {
       console.error(e);
