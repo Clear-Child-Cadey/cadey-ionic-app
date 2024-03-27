@@ -11,14 +11,8 @@ import AppMeta from '../variables/AppMeta';
 import { getAuth, sendEmailVerification } from 'firebase/auth';
 import { useHistory } from 'react-router';
 
-interface Props {
-  isAfterSignup?: boolean;
-}
-
-const VerificationPage: React.FC<Props> = ({
-  isAfterSignup = false,
-}: Props) => {
-  const [disabled, setDisabled] = useState(isAfterSignup);
+const VerificationPage: React.FC = () => {
+  const [disabled, setDisabled] = useState(true);
   const [countdown, setCountdown] = useState(60);
   const history = useHistory();
   const auth = getAuth();
@@ -72,7 +66,7 @@ const VerificationPage: React.FC<Props> = ({
           <p>{AppMeta.emailVerificationMessage}</p>
           <IonButton disabled={disabled} onClick={resendEmail}>
             {disabled
-              ? `Please wait ${countdown} seconds to request a resend`
+              ? `Please wait ${countdown} to request a resend`
               : 'Resend Email'}
           </IonButton>
         </div>
