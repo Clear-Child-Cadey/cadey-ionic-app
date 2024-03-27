@@ -26,8 +26,7 @@ const AppMeta = {
     '/App/Authentication',
     '/App/Welcome',
   ],
-  emailVerificationMessage:
-    'You need to verify your email address. On this device, click on the link we just emailed you. The subject line of the email is "Verify your email for CadeyLite." This process helps keep your account secure.',
+  emailVerificationMessage: '',
 };
 
 export default AppMeta;
