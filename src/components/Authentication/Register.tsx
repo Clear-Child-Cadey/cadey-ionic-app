@@ -153,7 +153,7 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
         )}
         {loginState === 'password' && (
           <>
-            <label>Password</label>
+            <label>Create your password here.</label>
             <input
               required
               type='password'
