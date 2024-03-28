@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'; // Used for generating unique ids
 
 const getDeviceId = () => {
-  const key = 'cadey_user_device_id_latest';
+  const key = 'device_id_cadey';
   let cadeyUserDeviceId = localStorage.getItem(key);
   if (!cadeyUserDeviceId) {
     cadeyUserDeviceId = uuidv4(); // Generate a new unique id
