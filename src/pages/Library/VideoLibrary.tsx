@@ -42,12 +42,16 @@ const VideoLibraryPage: React.FC = () => {
 
   // Context variables
   // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
-  const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
+  //   const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
   const cadeyUserId = useSelector((state: RootState) =>
     state?.authStatus?.userData?.cadeyUser?.cadeyUserId
       ? state.authStatus.userData.cadeyUser.cadeyUserId
       : state.authStatus.appOpenCadeyId,
   );
+  const cadeyUserAgeGroup = useSelector(
+    (state: RootState) => state?.authStatus?.userData?.cadeyUser?.ageGroup,
+  );
+
   const { apiUrl } = useContext(ApiUrlContext);
   const {
     currentBasePage,
@@ -103,7 +107,7 @@ const VideoLibraryPage: React.FC = () => {
 
   // getUserRecommendations function
   const getUserRecommendations = async (
-    ageGroup: number,
+    ageGroup: number | undefined, //
     symptoms: Symptom[],
   ) => {
     try {
