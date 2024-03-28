@@ -10,8 +10,17 @@ import './VerificationMessage.css';
 import AppMeta from '../variables/AppMeta';
 import { getAuth, sendEmailVerification } from 'firebase/auth';
 import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 const VerificationPage: React.FC = () => {
+  const isCorporateUser = useSelector((state: RootState) => {
+    return (
+      state?.authStatus?.userData?.cadeyUser?.companyId &&
+      state.authStatus.userData.cadeyUser.companyId > 0
+    );
+  });
+
   const [disabled, setDisabled] = useState(true);
   const [countdown, setCountdown] = useState(60);
   const history = useHistory();
@@ -62,11 +71,23 @@ const VerificationPage: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen className='page'>
         <div className='email-verification-message'>
-          <h2>Great! Now, check your email on this device</h2>
-          {AppMeta.emailVerificationMessage && (
-            <p>{AppMeta.emailVerificationMessage}</p>
-          )}
-          <IonButton disabled={disabled} onClick={resendEmail}>
+          <h2>
+            {!isCorporateUser && (
+              <>
+                Great, you’re starting your 7-day free trial period. <br /> Now,
+                check your email on this device.
+              </>
+            )}
+            {isCorporateUser && (
+              <>Great! Now, check your email on this device.</>
+            )}
+          </h2>
+
+          <IonButton
+            disabled={disabled}
+            onClick={resendEmail}
+            style={{ marginTop: '2rem' }}
+          >
             {disabled
               ? `Please wait ${countdown} to request a resend`
               : 'Resend Email'}
