@@ -168,8 +168,7 @@ const VideoDetailModal: React.FC = () => {
           fetchMessages();
         }
 
-        // commenting this out, see https://react.dev/reference/react/useEffect#useeffect
-        // if (isMounted) setVideoData(data); // Update state only if component is mounted
+        setVideoData(data);
 
         // Set article IDs in state via setRelatedArticleIds
         // An article is a related media item with a mediaType of 2
