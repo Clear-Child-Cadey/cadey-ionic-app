@@ -41,11 +41,15 @@ export interface PopularSymptomVideo {
 const PopularSymptomsList: React.FC = () => {  
 
     // Get the Cadey User data from the context
-    const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
+    // const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const cadeyUserId = useSelector((state: RootState) =>
     state?.authStatus?.userData?.cadeyUser?.cadeyUserId
       ? state.authStatus.userData.cadeyUser.cadeyUserId
       : state.authStatus.appOpenCadeyId,
+  );
+
+  const cadeyUserAgeGroup = useSelector(
+    (state: RootState) => state?.authStatus?.userData?.cadeyUser?.ageGroup,
   );
     const { apiUrl } = useContext(ApiUrlContext);
 
