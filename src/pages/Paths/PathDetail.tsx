@@ -265,8 +265,7 @@ const PathDetailPage: React.FC = () => {
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'UserTap',
-      appPage:
-        currentAppPage + ' | Path ' + pathId.toString() + ' ' + pathTitle,
+      appPage: currentAppPage + ': Path ' + pathId.toString() + ' ' + pathTitle,
       detail1: currentBasePage,
       detail2:
         'Video ID: ' +
