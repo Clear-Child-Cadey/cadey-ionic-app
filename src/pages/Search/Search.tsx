@@ -45,15 +45,19 @@ interface LocationState {
 
 const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext);                               // Get the API URL from the context
-    // const { cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
+    const { cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
     const cadeyUserId = useSelector((state: RootState) =>
     state?.authStatus?.userData?.cadeyUser?.cadeyUserId
       ? state.authStatus.userData.cadeyUser.cadeyUserId
       : state.authStatus.appOpenCadeyId,
   );
-  const cadeyUserAgeGroup = useSelector(
-    (state: RootState) => state?.authStatus?.userData?.cadeyUser?.ageGroup,
-  );
+    const userAgeGroup =
+        cadeyUserAgeGroup > 0
+            ? cadeyUserAgeGroup
+            : useSelector(
+                (state: RootState) =>
+                state?.authStatus?.userData?.cadeyUser?.ageGroup,
+            );
 
     const location = useLocation();
     const history = useHistory();
@@ -100,7 +104,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             searchField.value = query;
 
             // Perform the search for the user
-            performSearch(query, cadeyUserAgeGroup);
+            performSearch(query, userAgeGroup);
         }
     }, [apiUrl, cadeyUserId]);
 
@@ -124,7 +128,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             }
 
             // Perform the search for the user
-            performSearch(searchTerm, cadeyUserAgeGroup);
+            performSearch(searchTerm, userAgeGroup);
         }
     }
 

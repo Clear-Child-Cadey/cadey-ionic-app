@@ -41,16 +41,20 @@ export interface PopularSymptomVideo {
 const PopularSymptomsList: React.FC = () => {  
 
     // Get the Cadey User data from the context
-    // const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
+    const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
     const cadeyUserId = useSelector((state: RootState) =>
     state?.authStatus?.userData?.cadeyUser?.cadeyUserId
       ? state.authStatus.userData.cadeyUser.cadeyUserId
       : state.authStatus.appOpenCadeyId,
   );
 
-  const cadeyUserAgeGroup = useSelector(
-    (state: RootState) => state?.authStatus?.userData?.cadeyUser?.ageGroup,
-  );
+    const userAgeGroup =
+    cadeyUserAgeGroup > 0
+        ? cadeyUserAgeGroup
+        : useSelector(
+            (state: RootState) =>
+            state?.authStatus?.userData?.cadeyUser?.ageGroup,
+        );
     const { apiUrl } = useContext(ApiUrlContext);
 
     // Create an empty set of PopularSeriesSymptoms to populate
@@ -113,7 +117,7 @@ const PopularSymptomsList: React.FC = () => {
         setPopularSymptomId(selectedSymptoms[0].id);
 
         // Check if the user has an age group
-        if (cadeyUserAgeGroup === 0) {
+        if (userAgeGroup === 0) {
             // Open the age group modal
             setAgeGroupModalOpen(true);
             // Return early - the callback on age group seletion will call this function again
