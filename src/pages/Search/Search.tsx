@@ -45,11 +45,14 @@ interface LocationState {
 
 const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
     const { apiUrl } = useContext(ApiUrlContext);                               // Get the API URL from the context
-    const { cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
+    // const { cadeyUserAgeGroup } = useContext(CadeyUserContext);    // Get the Cadey User ID from the context
     const cadeyUserId = useSelector((state: RootState) =>
     state?.authStatus?.userData?.cadeyUser?.cadeyUserId
       ? state.authStatus.userData.cadeyUser.cadeyUserId
       : state.authStatus.appOpenCadeyId,
+  );
+  const cadeyUserAgeGroup = useSelector(
+    (state: RootState) => state?.authStatus?.userData?.cadeyUser?.ageGroup,
   );
 
     const location = useLocation();
