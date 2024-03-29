@@ -40,6 +40,7 @@ import WelcomeAgeGroupSelect from '../../pages/Welcome/WelcomeAgeGroup';
 import WelcomePush from '../../pages/Welcome/WelcomePush';
 import LoginPage from '../../pages/Authentication/Login';
 import RegistrationPage from '../../pages/Authentication/Register';
+import RegistrationSelectPage from '../../pages/Authentication/RegisterSelect';
 import HandlerPage from '../../pages/Authentication/Handler';
 import GrandfatherPage from '../../pages/Grandfather/Grandfather';
 // Components
@@ -207,6 +208,11 @@ const RouterTabs: React.FC = () => {
               exact
               path='/App/Authentication/Register'
               component={RegistrationPage}
+            />
+            <Route
+              exact
+              path='/App/Authentication/Register-Select'
+              component={RegistrationSelectPage}
             />
 
             {/* <Route exact path='/App/Grandfather' component={GrandfatherPage} /> */}
