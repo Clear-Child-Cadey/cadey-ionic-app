@@ -41,6 +41,7 @@ import WelcomePush from '../../pages/Welcome/WelcomePush';
 import LoginPage from '../../pages/Authentication/Login';
 import RegistrationPage from '../../pages/Authentication/Register';
 import HandlerPage from '../../pages/Authentication/Handler';
+import GrandfatherPage from '../../pages/Grandfather/Grandfather';
 // Components
 import AppUrlListener from '../Routing/AppUrlListener';
 import RedirectToWeb from './RedirectToWeb';
@@ -107,6 +108,10 @@ const RouterTabs: React.FC = () => {
 
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
+
+  const grandfatherStatus = useSelector((state: RootState) => {
+    return state.authStatus.grandfatherStatus;
   });
 
   // Tab bar visibility
@@ -202,6 +207,20 @@ const RouterTabs: React.FC = () => {
               exact
               path='/App/Authentication/Register'
               component={RegistrationPage}
+            />
+
+            {/* <Route exact path='/App/Grandfather' component={GrandfatherPage} /> */}
+
+            <Route
+              exact
+              path='/App/Grandfather'
+              render={() =>
+                grandfatherStatus ? (
+                  <GrandfatherPage />
+                ) : (
+                  <Redirect to='/App/Home' />
+                )
+              }
             />
 
             {/* Miscellaneous routes */}

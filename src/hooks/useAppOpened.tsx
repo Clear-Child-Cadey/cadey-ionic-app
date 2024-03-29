@@ -4,7 +4,10 @@ import getDeviceId from '../utils/getDeviceId';
 import fetchWithTimeout from '../utils/fetchWithTimeout';
 import AppMeta from '../variables/AppMeta';
 import { useDispatch } from 'react-redux';
-import { setAppOpenCadeyId } from '../features/authLoading/slice';
+import {
+  setAppOpenCadeyId,
+  setGrandfatherStatus,
+} from '../features/authLoading/slice';
 
 const useAppOpened = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
@@ -18,9 +21,6 @@ const useAppOpened = () => {
     // Determine the platform on which the app is running
     // Prepare the body of the request
     const bodyObject = {
-      cadeyUserId: 0,
-      authId: null,
-      cadeyUserEmail: null,
       cadeyUserDeviceId,
     };
 
@@ -51,7 +51,16 @@ const useAppOpened = () => {
 
     const response = await request.json(); // Parse the response data as json
 
+    // Set the cadeyUserId in the global state
     dispatch(setAppOpenCadeyId(response.cadeyUserId));
+
+    // Determine if the company name is "Grandfather" and set the global state
+    const grandfather = response.companyName === 'Grandfather';
+    if (grandfather) {
+      dispatch(setGrandfatherStatus(true));
+    }
+
+    return { grandfather };
   };
 
   return {

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 // Commented out all non used imports, can be commented out again when used or deleted
 import { createRoot } from 'react-dom/client';
 import App from './App';
@@ -95,11 +96,16 @@ function MainComponent() {
     entityId: 0,
     shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
+  const history = useHistory();
 
   useEffect(() => {
     const asyncFunction = async () => {
       try {
-        await appOpenAction();
+        const { grandfather } = await appOpenAction();
+        if (grandfather) {
+          return history.push('/App/Grandfather');
+        }
+        // if data has a company name = "Grandfather", reroute the user to /App/Grandfather
       } catch {
         dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
       }
