@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 // Styles
 import './Grandfather.css';
+// API
+import { logUserFact } from '../../api/UserFacts';
 
 const GrandfatherPage = () => {
   const history = useHistory();
@@ -22,6 +24,18 @@ const GrandfatherPage = () => {
 
     history.push(url);
   };
+
+  useEffect(() => {
+    // Log appPageNavigation user fact
+    // I LEFT OFF HERE FRIDAY, NEED TO FINISH THIS. Notably, I need to figure out how to get the deviceId (talk to Mat) and then implement the rest
+    logUserFact({
+      deviceId: deviceId,
+      cadeyUserId: cadeyUser?.cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Welcome - Intro Screen',
+    });
+  }, []);
 
   return (
     <IonPage className='welcome grandfather'>

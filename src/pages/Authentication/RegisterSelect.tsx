@@ -38,18 +38,18 @@ const RegistrationSelectPage = () => {
               Corporate user signup
             </IonButton>
           </IonRow>
-          <IonRow className='corporate'>
-            <IonRow className='corporate-text'>
-              Otherwise start your free 7-day trial
-            </IonRow>
-            <IonRow className='continue-row'>
-              <IonButton
-                className='continue-button'
-                onClick={() => handleContinue('/App/Authentication/Register')}
-              >
-                Free trial signup
-              </IonButton>
-            </IonRow>
+        </IonRow>
+        <IonRow className='free-trial'>
+          <IonRow className='free-trial-text'>
+            Otherwise start your free 7-day trial
+          </IonRow>
+          <IonRow className='continue-row'>
+            <IonButton
+              className='continue-button'
+              onClick={() => handleContinue('/App/Authentication/Register')}
+            >
+              Free trial signup
+            </IonButton>
           </IonRow>
         </IonRow>
       </IonContent>
