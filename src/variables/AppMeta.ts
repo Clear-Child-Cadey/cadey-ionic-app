@@ -2,7 +2,13 @@
 //MG to store the variables that are used in the app
 //MG this should be refactored into env variables
 
+const PRODUCTION_API_URL = 'https://capi.clear-cade.com';
+const STAGING_API_URL = 'https://capi-stage.clear-cade.com';
+const EDGE_API_URL = 'https://capi-edge.clear-cade.com';
+const API_PATH = '/api/cadey290';
+
 const AppMeta = {
+  baseApiUrl: STAGING_API_URL + API_PATH,
   forceEmailVerification: true,
   enforceTrialUser: true,
   firestoreCollection: 'ErrorLogs2024',
