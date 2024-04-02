@@ -111,6 +111,10 @@ const RouterTabs: React.FC = () => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
 
+  const aUserExists = useSelector((state: RootState) => {
+    return state?.authStatus?.userData?.cadeyUser !== null;
+  });
+
   const grandfatherStatus = useSelector((state: RootState) => {
     return state.authStatus.grandfatherStatus;
   });
@@ -138,6 +142,7 @@ const RouterTabs: React.FC = () => {
   useEffect(() => {
     // Update the state based on the current path
     setIsWelcomeSequence(location.pathname.startsWith('/App/Welcome'));
+
     setIsTabBarVisible(
       location.pathname.includes('/App/Home') ||
         location.pathname.includes('/App/Library') ||
@@ -238,6 +243,7 @@ const RouterTabs: React.FC = () => {
 
       {isTabBarVisible &&
         !isExpired &&
+        aUserExists &&
         (AppMeta.forceEmailVerification && !trileanResolve(emailVerified) ? (
           <VerificationPage />
         ) : (
