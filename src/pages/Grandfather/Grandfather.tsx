@@ -14,26 +14,29 @@ import { RootState } from '../../store';
 // Styles
 import './Grandfather.css';
 // API
-import { logUserFact } from '../../api/UserFacts';
+import useUserFacts from '../../hooks/useUserFacts';
 
 const GrandfatherPage = () => {
   const history = useHistory();
 
+  const { logUserFact } = useUserFacts();
+
   const handleContinue = (url: string) => {
-    // Log user fact?
+    // Log userTap user fact
+    logUserFact({
+      userFactTypeName: 'UserTap',
+      appPage: 'Welcome - Grandfather Screen',
+      detail1: 'Welcome - Grandfather Screen',
+      detail2: 'Signup button',
+    });
 
     history.push(url);
   };
 
   useEffect(() => {
-    // Log appPageNavigation user fact
-    // I LEFT OFF HERE FRIDAY, NEED TO FINISH THIS. Notably, I need to figure out how to get the deviceId (talk to Mat) and then implement the rest
     logUserFact({
-      deviceId: deviceId,
-      cadeyUserId: cadeyUser?.cadeyUserId,
-      baseApiUrl: apiUrl,
       userFactTypeName: 'appPageNavigation',
-      appPage: 'Welcome - Intro Screen',
+      appPage: 'Welcome - Grandfather Screen',
     });
   }, []);
 

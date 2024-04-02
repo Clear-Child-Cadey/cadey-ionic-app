@@ -10,12 +10,13 @@ import {
   useIonToast,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Auth, applyActionCode } from 'firebase/auth';
+import presentToast from '../../utils/presentToast';
+import { RootState } from '../../store';
 
 // Styles
 import './VerifyEmailPage.css';
-
-import presentToast from '../../utils/presentToast';
 
 interface Props {
   auth: Auth;
@@ -34,6 +35,17 @@ const VerifyEmailPage: React.FC<Props> = ({
   const [disabled, setDisabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
   const [firingToast, setFiringToast] = useState(false);
+
+  const isCorporateUser = useSelector((state: RootState) => {
+    return (
+      state?.authStatus?.userData?.cadeyUser?.companyId &&
+      state.authStatus.userData.cadeyUser.companyId > 0
+    );
+  });
+
+  const isGrandfatheredUser = useSelector((state: RootState) => {
+    return state?.authStatus?.grandfatherStatus;
+  });
 
   const [present] = useIonToast();
 
@@ -58,17 +70,6 @@ const VerifyEmailPage: React.FC<Props> = ({
           setEmailVerified(true);
 
           auth.currentUser?.reload();
-          timeoutId = setTimeout(() => {
-            if (auth.currentUser && auth.currentUser.emailVerified) {
-              auth.signOut();
-              // Send the user to the home page if they are on the same device and have the same login session
-              history.push('/App/Welcome');
-              fireToast();
-            } else {
-              history.push('/App/Welcome');
-            }
-          }, 8000); //To account for the loading spinner on the previous page
-          // }
         })
         .catch((err) => {
           console.log(err.message);
@@ -113,23 +114,29 @@ const VerifyEmailPage: React.FC<Props> = ({
         <div className='verify-email-content'>
           {emailverified || auth.currentUser?.emailVerified ? (
             <>
-              <h2 className='email-heading'>
-                Your email has been succesfully verified!
-              </h2>
+              {isCorporateUser || isGrandfatheredUser ? (
+                <>
+                  <h2>Great, your email has been successfully verified.</h2>
+                </>
+              ) : (
+                <>
+                  <h2>
+                    Great, your email has been successfully verified and you are
+                    starting your 7-day trial period.
+                  </h2>
+                  <img src='assets/svgs/smile.svg' />
+                </>
+              )}
               <IonRow className='content'>
                 <IonButton
                   onClick={() => {
                     fireToast();
                     auth.signOut();
-                    history.push('/App/Welcome');
+                    history.push('/App/Authentication/Login');
                   }}
                 >
                   Take me back
                 </IonButton>
-                <p className='info-text'>
-                  If you aren't automatically redirected within the next 5
-                  seconds, please click the button
-                </p>
               </IonRow>
             </>
           ) : (
@@ -142,14 +149,14 @@ const VerifyEmailPage: React.FC<Props> = ({
               <IonRow className='content'>
                 <IonButton
                   disabled={disabled}
-                  onClick={() => history.push('/App/Welcome')}
+                  onClick={() => history.push('/App/Authentication/Login')}
                 >
-                  Take me back
+                  Log in to get started
                 </IonButton>
                 {/* update this to correct email address */}
                 <p className='info-text'>
                   If the problem presists, please contact support at{' '}
-                  <a href='mailto:support@cadey.com'>support@cadey.com</a>
+                  <a href='mailto:support@cadey.co'>support@cadey.co</a>
                 </p>
               </IonRow>
             </>

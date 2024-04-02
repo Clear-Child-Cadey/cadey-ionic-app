@@ -101,7 +101,7 @@ const LoginComponent: React.FC = () => {
         <button
           className='continue'
           type='submit'
-          disabled={!email && !password}
+          disabled={!email || !password}
         >
           Continue
         </button>

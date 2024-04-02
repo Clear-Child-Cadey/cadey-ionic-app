@@ -71,15 +71,18 @@ const VerificationPage: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen className='page'>
         <div className='email-verification-message'>
-          {!isCorporateUser && (
+          {/* Disabling the conditional content per Alex, commenting out until we test and get the green light */}
+          {/* {!isCorporateUser && (
             <>
               <h2>Great, you’re starting your 7-day free trial period. </h2>
               <h2>Now, check your email on this device.</h2>
+              <img src='assets/svgs/smile.svg' />
             </>
           )}
           {isCorporateUser && (
             <h2>Great! Now, check your email on this device.</h2>
-          )}
+          )} */}
+          <h2>Great! Now, check your email on this device.</h2>
 
           <IonButton
             disabled={disabled}

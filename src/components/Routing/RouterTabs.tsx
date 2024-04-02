@@ -215,8 +215,6 @@ const RouterTabs: React.FC = () => {
               component={RegistrationSelectPage}
             />
 
-            {/* <Route exact path='/App/Grandfather' component={GrandfatherPage} /> */}
-
             <Route
               exact
               path='/App/Grandfather'

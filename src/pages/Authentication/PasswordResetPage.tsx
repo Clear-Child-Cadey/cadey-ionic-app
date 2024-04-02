@@ -41,14 +41,13 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
       setTimeout(() => {
         if (auth.currentUser) {
           // Send the user to the home page if they are on the same device and have the same login session
-          history.push('/App/Welcome');
+          history.push('/App/Authentication/Login');
           auth.signOut();
         } else {
-          history.push('/App/Welcome');
+          history.push('/App/Authentication/Login');
         }
       }, 3000);
       // Optionally, navigate to the login screen or elsewhere as needed
-      // navigation.navigate('LoginScreen');
     } catch (error) {
       setError('Failed to reset password. Please try again.'); //Figure out a way to be more explicit
     }

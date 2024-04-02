@@ -12,14 +12,21 @@ const useUserFacts = () => {
     'Content-Type': 'application/json',
   };
 
-  const logUserFact = async (facts: LogUserFactOptions) => {
-    const cadeyUserId = useSelector(
-      (state: RootState) => state?.authStatus?.userData?.cadeyUser?.cadeyUserId,
-    );
+  // Check if the
 
-    facts.baseApiUrl = AppMeta.baseApiUrl;
+  const cadeyUserId: number | 'pending' = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
+
+  const logUserFact = async (facts: LogUserFactOptions) => {
+    if (cadeyUserId === 'pending') {
+      throw new Error('Cadey User ID is pending');
+    }
+
     facts.deviceId = getDeviceId();
-    facts.cadeyUserId = cadeyUserId;
+    facts.userId = cadeyUserId;
 
     const requestOptions = {
       method: 'POST',
@@ -29,7 +36,7 @@ const useUserFacts = () => {
 
     try {
       let response;
-      const url = `${facts.baseApiUrl}/userfact`;
+      const url = `${AppMeta.baseApiUrl}/userfact`;
 
       try {
         response = await fetchWithTimeout(url, requestOptions, {

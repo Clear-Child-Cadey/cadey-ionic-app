@@ -1,6 +1,6 @@
 interface LogUserFactOptions {
   deviceId?: string;
-  cadeyUserId?: number;
+  userId?: number;
   baseApiUrl?: string;
   userFactTypeName: string;
   appPage: string;

@@ -101,8 +101,8 @@ function MainComponent() {
   useEffect(() => {
     const asyncFunction = async () => {
       try {
-        const { grandfather } = await appOpenAction();
-        if (grandfather) {
+        const { grandfatherSignup } = await appOpenAction();
+        if (grandfatherSignup) {
           return history.push('/App/Grandfather');
         }
         // if data has a company name = "Grandfather", reroute the user to /App/Grandfather
