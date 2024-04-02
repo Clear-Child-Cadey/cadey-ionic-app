@@ -58,6 +58,8 @@ const useAppOpened = () => {
     // If so, set the global state
     const grandfatherSignup =
       response.companyName === 'Grandfather' && response.authId === null;
+    console.log('grandfatherSignup', grandfatherSignup);
+    console.log('response', response);
     if (grandfatherSignup) {
       dispatch(setGrandfatherStatus(true));
     }

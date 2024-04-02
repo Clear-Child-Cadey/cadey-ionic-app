@@ -135,7 +135,7 @@ const VerifyEmailPage: React.FC<Props> = ({
                     history.push('/App/Authentication/Login');
                   }}
                 >
-                  Take me back
+                  Log in to get started
                 </IonButton>
               </IonRow>
             </>
@@ -153,7 +153,6 @@ const VerifyEmailPage: React.FC<Props> = ({
                 >
                   Log in to get started
                 </IonButton>
-                {/* update this to correct email address */}
                 <p className='info-text'>
                   If the problem presists, please contact support at{' '}
                   <a href='mailto:support@cadey.co'>support@cadey.co</a>
