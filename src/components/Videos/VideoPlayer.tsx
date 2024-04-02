@@ -76,8 +76,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const player = useRef<Player | null>(null);
 
   const checkQuizModalStatus = () => {
-    console.log('isQuizModalOpen check:', isQuizModalOpen);
-    return isQuizModalOpen;
+    console.log('quizModalOpenRx check:', quizModalOpenRx);
+    return quizModalOpenRx;
   };
 
   useEffect(() => {
@@ -88,11 +88,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       player.current.on('loaded', () => {
         handleVideoReady();
 
-        console.log('isQuizModalOpen:', isQuizModalOpen);
-
         const currentQuizModalStatus = checkQuizModalStatus();
-
-        console.log('currentQuizModalStatus:', currentQuizModalStatus);
 
         if (!currentQuizModalStatus) {
           player.current?.play(); // Explicitly play the video once it is loaded
