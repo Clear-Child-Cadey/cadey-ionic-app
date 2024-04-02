@@ -13,6 +13,7 @@ import { useModalContext } from '../../context/ModalContext';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
+import { check } from 'prettier';
 
 interface VideoPlayerProps {
   videoId: string;
@@ -74,6 +75,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const player = useRef<Player | null>(null);
 
+  const checkQuizModalStatus = () => {
+    console.log('isQuizModalOpen check:', isQuizModalOpen);
+    return isQuizModalOpen;
+  };
+
   useEffect(() => {
     if (playerRef.current && !player.current) {
       // Initialize the player only once
@@ -82,15 +88,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       player.current.on('loaded', () => {
         handleVideoReady();
 
-        useEffect(() => {
-          // Get the latest value of isQuizModalOpen
-          // This fixes the issue where the video would re-start while the quiz modal is open
-          // I don't know why, it must force-update the context or something
-          // We need to refactor this to use Redux
-          console.log('Latest value of isQuizModalOpen:', isQuizModalOpen);
-        }, [isQuizModalOpen]);
+        console.log('isQuizModalOpen:', isQuizModalOpen);
 
-        if (!isQuizModalOpen) {
+        const currentQuizModalStatus = checkQuizModalStatus();
+
+        console.log('currentQuizModalStatus:', currentQuizModalStatus);
+
+        if (!currentQuizModalStatus) {
           player.current?.play(); // Explicitly play the video once it is loaded
         }
       });
