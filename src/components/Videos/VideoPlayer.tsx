@@ -43,6 +43,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       ? state.authStatus.userData.cadeyUser.cadeyUserId
       : state.authStatus.appOpenCadeyId,
   );
+  const quizModalOpenRx = useSelector(
+    (state: RootState) => state.video.quizModalOpen,
+  );
+
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   // const userFactUrl = `${apiUrl}/userfact`; not being used currently
 
@@ -77,6 +81,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       player.current.on('loaded', () => {
         handleVideoReady();
+
+        useEffect(() => {
+          // Get the latest value of isQuizModalOpen
+          // This fixes the issue where the video would re-start while the quiz modal is open
+          // I don't know why, it must force-update the context or something
+          // We need to refactor this to use Redux
+          console.log('Latest value of isQuizModalOpen:', isQuizModalOpen);
+        }, [isQuizModalOpen]);
 
         if (!isQuizModalOpen) {
           player.current?.play(); // Explicitly play the video once it is loaded

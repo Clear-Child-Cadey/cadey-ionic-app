@@ -2,11 +2,13 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import httpErrorReducer from './features/httpError/slice';
 import authStatusReducer from './features/authLoading/slice';
 import deviceIdStatusReducer from './features/deviceId/slice';
+import videoReducer from './features/video/slice';
 
 const rootReducer = combineReducers({
   httpError: httpErrorReducer,
   authStatus: authStatusReducer,
   deviceIdStatus: deviceIdStatusReducer,
+  video: videoReducer,
 });
 
 const store = configureStore({

@@ -179,7 +179,6 @@ const HomePage: React.FC<{
 
   // Show the modal if a vimeoId is passed in via query string
   useEffect(() => {
-    console.log('vimeoIdFromUrl: ', vimeoIdFromUrl);
     if (vimeoIdFromUrl) {
       setCurrentVimeoId(vimeoIdFromUrl);
       setVideoModalOpen(true);

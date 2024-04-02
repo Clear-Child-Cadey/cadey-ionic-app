@@ -19,12 +19,13 @@ import { useAppPage } from '../../context/AppPageContext';
 import OneSignal from 'onesignal-cordova-plugin';
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
 import { logUserFact } from '../../api/UserFacts';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-// Icons
+
+import { setQuizModalOpen as setQuizModalOpenRx } from '../../features/video/slice';
 
 const WelcomePush: React.FC = () => {
-  // const { cadeyUserId } = React.useContext(CadeyUserContext);
+  const dispatch = useDispatch();
 
   const cadeyUserId = useSelector((state: RootState) =>
     state?.authStatus?.userData?.cadeyUser?.cadeyUserId
@@ -111,6 +112,8 @@ const WelcomePush: React.FC = () => {
 
     // Proceed to open the quiz modal regardless of the push permission state
     setQuizModalOpen(true);
+    dispatch(setQuizModalOpenRx(true));
+    console.log('Setting quiz modal open to true 3');
   };
 
   return (

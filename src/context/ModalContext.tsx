@@ -1,8 +1,8 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
-import { QuizModalData } from "../components/Modals/QuizModal/QuizModal";
+import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { QuizModalData } from '../components/Modals/QuizModal/QuizModal';
 // Interfaces
-import { PopularSymptomVideo } from "../components/SymptomsList/PopularSymptomsList";
-import { GenericModalData } from "../components/Modals/GenericModal";
+import { PopularSymptomVideo } from '../components/SymptomsList/PopularSymptomsList';
+import { GenericModalData } from '../components/Modals/GenericModal';
 
 interface ModalContextProps {
   genericModalData: GenericModalData | undefined;
@@ -18,7 +18,9 @@ interface ModalContextProps {
   setQuizModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   quizModalData: QuizModalData | null;
   setQuizModalData: React.Dispatch<React.SetStateAction<QuizModalData | null>>;
-  setGenericModalData: React.Dispatch<React.SetStateAction<GenericModalData | undefined>>;
+  setGenericModalData: React.Dispatch<
+    React.SetStateAction<GenericModalData | undefined>
+  >;
   currentArticleId: number | null;
   setCurrentArticleId: React.Dispatch<React.SetStateAction<number | null>>;
   currentVimeoId: string | null;
@@ -72,7 +74,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   );
   const [currentArticleId, setCurrentArticleId] = useState<number | null>(null);
   const [currentVimeoId, setCurrentVimeoId] = useState<string | null>(null);
-  const [currentVideoType, setCurrentVideoType] = useState<string>("");
+  const [currentVideoType, setCurrentVideoType] = useState<string>('');
   const [popularSymptomId, setPopularSymptomId] = useState<number | null>(null);
   const [isPopularSymptomVideoModalOpen, setIsPopularSymptomVideoModalOpen] =
     useState<boolean>(false);
@@ -134,7 +136,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 function useModalContext() {
   const context = useContext(ModalContext);
   if (!context)
-    throw new Error("useModalContext must be used within a ModalProvider");
+    throw new Error('useModalContext must be used within a ModalProvider');
   return context;
 }
 

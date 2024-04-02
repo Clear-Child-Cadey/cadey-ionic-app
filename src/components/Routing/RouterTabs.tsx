@@ -148,15 +148,6 @@ const RouterTabs: React.FC = () => {
         location.pathname.includes('/App/Library') ||
         location.pathname.includes('/App/Paths'),
     );
-
-    console.log('isTabBarVisible', isTabBarVisible);
-    console.log('isExpired', isExpired);
-    console.log(
-      'AppMeta.forceEmailVerification',
-      AppMeta.forceEmailVerification,
-    );
-    console.log('emailVerified', emailVerified);
-    console.log('Grandfather status', grandfatherStatus);
   }, [location]);
 
   const handleTabClick = async (tabName: string, route: string) => {

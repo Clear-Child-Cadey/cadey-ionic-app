@@ -3,10 +3,11 @@ import { useModalContext } from '../context/ModalContext';
 import { useTabContext } from '../context/TabContext';
 import { getQuiz } from '../api/Quiz';
 import AppMeta from '../variables/AppMeta';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import React from 'react';
 import ApiUrlContext from '../context/ApiUrlContext';
+import { setQuizModalOpen as setQuizModalOpenRx } from '../features/video/slice';
 
 interface Props {
   clientContext: number; //Where the user is in the app: 1 = VideoDetail, 2 = appopened, 3 = Onboarding sequence
@@ -21,6 +22,7 @@ const useRequestQuiz = ({
   entityId,
   shouldHaveEmailVerified = false,
 }: Props) => {
+  const dispatch = useDispatch();
   const { setQuizModalData, setQuizModalOpen } = useModalContext();
   const { setIsTabBarVisible } = useTabContext();
   const history = useHistory();
@@ -61,6 +63,7 @@ const useRequestQuiz = ({
         if (isVideoModal) {
           //set quiz modal open
           setQuizModalOpen(true);
+          dispatch(setQuizModalOpenRx(true));
         } else {
           // Hide the tab bar
           setIsTabBarVisible(false);
