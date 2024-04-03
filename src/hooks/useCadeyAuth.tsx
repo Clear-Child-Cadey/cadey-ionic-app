@@ -57,6 +57,7 @@ const useCadeyAuth = () => {
         if (!currentUser.isAnonymous) {
           // Handle logged in user
           try {
+            debugger;
             const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
             dispatch(setCadeyUser(cadeyUser));
             dispatch(setCadeyResolved(true));
@@ -162,6 +163,7 @@ const useCadeyAuth = () => {
         email,
         password,
       );
+      debugger;
       const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
       dispatch(setCadeyUser(cadeyUser));
       dispatch(setCadeyResolved(true));
@@ -218,7 +220,7 @@ const useCadeyAuth = () => {
 
   const handleCadeyLoginAndReturnUser = async (
     firebaseUser: User,
-    cadeyUserId = 0,
+    authenticatedAuthId?: string,
   ) => {
     const url = `${apiUrl}/userauth`;
     let response;
@@ -235,7 +237,10 @@ const useCadeyAuth = () => {
           },
           body: JSON.stringify({
             cadeyUserEmail: firebaseUser.email,
-            authId: firebaseUser.uid,
+            // authId: firebaseUser.uid, // This is the anonymous user ID
+            authId: authenticatedAuthId
+              ? authenticatedAuthId
+              : firebaseUser.uid, //Pass in the authenticated firebase ID, fallback to the anonymous ID if not explicitly passed
             cadeyUserDeviceId,
             cadeyUserId,
           }),

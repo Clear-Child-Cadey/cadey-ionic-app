@@ -220,17 +220,7 @@ const RouterTabs: React.FC = () => {
               component={RegistrationSelectPage}
             />
 
-            <Route
-              exact
-              path='/App/Grandfather'
-              render={() =>
-                grandfatherStatus ? (
-                  <GrandfatherPage />
-                ) : (
-                  <Redirect to='/App/Home' />
-                )
-              }
-            />
+            <Route exact path='/App/Grandfather' component={GrandfatherPage} />
 
             {/* Miscellaneous routes */}
             <Route exact path='/App/Admin' component={AdminPage} />
