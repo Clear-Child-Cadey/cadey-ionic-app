@@ -10,7 +10,7 @@ interface AuthStatusState {
     cadeyUser: CadeyUserModel;
     firebaseUser: FirebaseUserModel;
   };
-  appOpenCadeyId: 'pending' | number;
+  appOpenCadeyId: number;
   isAnonymous: Trilean;
   emailVerified: Trilean;
   grandfatherStatus: boolean;
@@ -24,7 +24,7 @@ const initialState: AuthStatusState = {
     firebaseUser: null,
   },
   isAnonymous: 'pending',
-  appOpenCadeyId: 'pending',
+  appOpenCadeyId: 0,
   emailVerified: 'pending',
   grandfatherStatus: false,
 };

@@ -14,15 +14,15 @@ const useUserFacts = () => {
 
   // Check if the
 
-  const cadeyUserId: number | 'pending' = useSelector((state: RootState) =>
+  const cadeyUserId: number = useSelector((state: RootState) =>
     state?.authStatus?.userData?.cadeyUser?.cadeyUserId
       ? state.authStatus.userData.cadeyUser.cadeyUserId
       : state.authStatus.appOpenCadeyId,
   );
 
   const logUserFact = async (facts: LogUserFactOptions) => {
-    if (cadeyUserId === 'pending') {
-      throw new Error('Cadey User ID is pending');
+    if (cadeyUserId === 0) {
+      throw new Error('Cadey User ID is 0');
     }
 
     facts.deviceId = getDeviceId();

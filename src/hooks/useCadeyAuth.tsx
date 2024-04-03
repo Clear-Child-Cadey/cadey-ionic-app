@@ -57,7 +57,6 @@ const useCadeyAuth = () => {
         if (!currentUser.isAnonymous) {
           // Handle logged in user
           try {
-            debugger;
             const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
             dispatch(setCadeyUser(cadeyUser));
             dispatch(setCadeyResolved(true));
@@ -163,7 +162,6 @@ const useCadeyAuth = () => {
         email,
         password,
       );
-      debugger;
       const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
       dispatch(setCadeyUser(cadeyUser));
       dispatch(setCadeyResolved(true));
