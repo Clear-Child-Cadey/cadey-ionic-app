@@ -104,7 +104,10 @@ const RouterTabs: React.FC = () => {
   });
 
   const emailVerified = useSelector((state: RootState) => {
-    return state.authStatus.emailVerified;
+    return (
+      state.authStatus?.emailVerified ||
+      state.authStatus?.userData?.firebaseUser?.emailVerified
+    );
   });
 
   const cadeyUserId = useSelector((state: RootState) => {

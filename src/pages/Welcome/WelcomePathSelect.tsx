@@ -36,9 +36,11 @@ import { trileanResolve } from '../../types/Trilean';
 
 const WelcomePathSelect: React.FC = () => {
   const emailVerified = useSelector((state: RootState) => {
-    return state.authStatus.emailVerified;
+    return (
+      state.authStatus?.emailVerified ||
+      state.authStatus?.userData?.firebaseUser?.emailVerified
+    );
   });
-
   // Get the Cadey User data from the context
   const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
   const cadeyUserId = useSelector((state: RootState) =>

@@ -33,7 +33,10 @@ const RegistrationPage = () => {
   });
 
   const emailVerified = useSelector((state: RootState) => {
-    return state.authStatus.emailVerified;
+    return (
+      state.authStatus?.emailVerified ||
+      state.authStatus?.userData?.firebaseUser?.emailVerified
+    );
   });
 
   const [loginState, setLoginState] = useState<string>('email'); // 'email' or 'password'

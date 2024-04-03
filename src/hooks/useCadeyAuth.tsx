@@ -45,11 +45,16 @@ const useCadeyAuth = () => {
 
   const { apiUrl } = React.useContext(ApiUrlContext);
 
+  const [bypassOnAuthStateChange, setBypassOnAuthStateChange] = useState(false);
+
   useEffect(() => {
     // This effect replaces the waitForAuthStateChange mechanism
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (countRef.current > 1) return;
-      countRef.current++;
+      debugger;
+      if (bypassOnAuthStateChange) {
+        console.log('Currently registering');
+        return;
+      }
       if (currentUser) {
         // Dispatch relevant actions for current user
         dispatch(setIsAnonymous(currentUser.isAnonymous));
@@ -127,9 +132,14 @@ const useCadeyAuth = () => {
     });
   };
 
+  const runAfterRequest = () => {
+    setBypassOnAuthStateChange(false);
+  };
+
   const runBeforeRequest = async () => {
     setErrors(initialErrorsState);
     setMessages(initialMessagesState);
+    setBypassOnAuthStateChange(true);
   };
 
   // Subscribe to auth state changes
@@ -149,6 +159,8 @@ const useCadeyAuth = () => {
         throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
     // Implicit return null if try/catch doesn't return anything.
     // This line is not strictly necessary due to function's return type, but added for clarity.
@@ -176,6 +188,8 @@ const useCadeyAuth = () => {
         throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
   }
 
@@ -203,6 +217,8 @@ const useCadeyAuth = () => {
         throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
   };
 
@@ -218,6 +234,8 @@ const useCadeyAuth = () => {
         throw e;
       }
       throw e;
+    } finally {
+      runAfterRequest();
     }
   };
 
@@ -227,7 +245,7 @@ const useCadeyAuth = () => {
   ) => {
     const url = `${apiUrl}/userauth`;
     let response;
-    const cadeyUserDeviceId = await getDeviceId();
+    const cadeyUserDeviceId = getDeviceId();
     try {
       response = await fetchWithTimeout(
         url,
@@ -250,8 +268,11 @@ const useCadeyAuth = () => {
         },
         { requestName: 'postUserAuth' },
       );
+      debugger;
     } catch (error) {
       throw new Error(`HTTP error! status: ${error}`);
+    } finally {
+      runAfterRequest();
     }
 
     if (!response.ok) {
@@ -260,6 +281,8 @@ const useCadeyAuth = () => {
 
     const cadeyUserLocal = await response.json();
     dispatch(setCadeyUser(cadeyUserLocal));
+    dispatch(setFirebaseUser(firebaseUser));
+
     return cadeyUserLocal;
   };
 
@@ -290,6 +313,8 @@ const useCadeyAuth = () => {
       );
     } catch (error) {
       throw new Error(`HTTP error! status: ${error}`);
+    } finally {
+      runAfterRequest();
     }
 
     if (!response.ok) {

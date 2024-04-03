@@ -39,7 +39,10 @@ const useRequestQuiz = ({
   const emailVerified =
     shouldHaveEmailVerified && AppMeta.forceEmailVerification
       ? useSelector((state: RootState) => {
-          return state.authStatus.emailVerified;
+          return (
+            state.authStatus?.emailVerified ||
+            state.authStatus?.userData?.firebaseUser?.emailVerified
+          );
         })
       : true;
 
