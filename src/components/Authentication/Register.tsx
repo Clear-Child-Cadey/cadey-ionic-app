@@ -52,7 +52,7 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
 
     // REDO THIS TO MAKE SENSE FOR REGISTRATION ONCE WE HAVE WORKING ENDPOINTS
     // Handle email submission with the API
-    await postUserAuth(apiUrl, email);
+    // await postUserAuth(apiUrl, email);
     // console.log('userAuthResponse: ', userAuthResponse);
     // if (userAuthResponse.cadeyUserId > 0) {
     //   // User exists

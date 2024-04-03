@@ -31,6 +31,7 @@ import { setHttpErrorModalData } from '../features/httpError/slice';
 import getDeviceId from '../utils/getDeviceId';
 
 const useCadeyAuth = () => {
+  const countRef = React.useRef(0);
   const dispatch = useDispatch();
   const history = useHistory();
   const cadeyUserId = useSelector(
@@ -47,19 +48,21 @@ const useCadeyAuth = () => {
   useEffect(() => {
     // This effect replaces the waitForAuthStateChange mechanism
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (countRef.current > 1) return;
+      countRef.current++;
       if (currentUser) {
         // Dispatch relevant actions for current user
         dispatch(setIsAnonymous(currentUser.isAnonymous));
         dispatch(setFirebaseUser(currentUser));
         dispatch(setFirebaseResolved(true));
         dispatch(setEmailVerified(currentUser.emailVerified));
-
         if (!currentUser.isAnonymous) {
           // Handle logged in user
           try {
             const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
             dispatch(setCadeyUser(cadeyUser));
             dispatch(setCadeyResolved(true));
+            unsubscribe();
           } catch (error) {
             console.error('Error handling Cadey login:', error);
             setErrors([...errors, error.message]);
@@ -69,6 +72,7 @@ const useCadeyAuth = () => {
           // Handle anonymous user
           dispatch(setCadeyResolved(true));
           dispatch(setCadeyUser(null));
+          unsubscribe();
         }
       } else {
         // Handle no user signed in
@@ -82,6 +86,7 @@ const useCadeyAuth = () => {
           dispatch(setCadeyResolved(true));
           dispatch(setCadeyUser(null));
           dispatch(setFirebaseUser(currentUser));
+          unsubscribe();
           // Optionally set the anonymous user, depending on your app logic.
           // Depending on your implementation, you might want to setUser here as well.
         } catch (error) {
