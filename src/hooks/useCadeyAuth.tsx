@@ -50,7 +50,6 @@ const useCadeyAuth = () => {
   useEffect(() => {
     // This effect replaces the waitForAuthStateChange mechanism
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      debugger;
       if (bypassOnAuthStateChange) {
         console.log('Currently registering');
         return;
@@ -268,7 +267,6 @@ const useCadeyAuth = () => {
         },
         { requestName: 'postUserAuth' },
       );
-      debugger;
     } catch (error) {
       throw new Error(`HTTP error! status: ${error}`);
     } finally {

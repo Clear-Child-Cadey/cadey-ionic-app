@@ -100,7 +100,7 @@ const VerifyEmailPage: React.FC<Props> = ({
   }, [disabled, countdown]);
 
   if (loading) {
-    return <IonLoading isOpen={true} message={'Loading...'} />;
+    return <IonLoading isOpen={loading} message={'Loading...'} />;
   }
 
   return (
@@ -131,8 +131,10 @@ const VerifyEmailPage: React.FC<Props> = ({
                 <IonButton
                   onClick={() => {
                     fireToast();
-                    auth.signOut();
-                    history.push('/App/Authentication/Login');
+                    auth.signOut().then(() => {
+                      // history.push('/App/Authentication/Login');
+                      window.location.href = '/App/Authentication/Login';
+                    });
                   }}
                 >
                   Log in to get started

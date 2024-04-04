@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { IonReactRouter } from '@ionic/react-router';
-import { IonApp } from '@ionic/react';
+import { IonApp, IonContent, IonLoading, IonPage } from '@ionic/react';
 // Contexts
 // import DeviceIdContext from './context/DeviceIdContext';
 import { ApiUrlProvider } from './context/ApiUrlContext';
@@ -139,29 +139,33 @@ function MainComponent() {
   if (!userResolved) {
     // return early so other parts of the app don't start calling for data out of turn. Ommitted a loader here as it's super quick and causes a loading flash
     return (
-      <CadeyUserContext.Provider
-        value={{
-          cadeyUserId,
-          cadeyUserAgeGroup,
-          setCadeyUserAgeGroup,
-          minimumSupportedVersion,
-          oneSignalId,
-        }}
-      >
-        <UnreadContext.Provider
-          value={{
-            unreadMessagesCount,
-            setUnreadMessagesCount,
-            unreadGoals,
-            setUnreadGoals,
-          }}
-        >
-          <HttpErrorModal />
-          <LoadingStateProvider>
-            <p>Loading!</p>
-          </LoadingStateProvider>
-        </UnreadContext.Provider>
-      </CadeyUserContext.Provider>
+      <IonPage>
+        <IonContent>
+          <CadeyUserContext.Provider
+            value={{
+              cadeyUserId,
+              cadeyUserAgeGroup,
+              setCadeyUserAgeGroup,
+              minimumSupportedVersion,
+              oneSignalId,
+            }}
+          >
+            <UnreadContext.Provider
+              value={{
+                unreadMessagesCount,
+                setUnreadMessagesCount,
+                unreadGoals,
+                setUnreadGoals,
+              }}
+            >
+              <HttpErrorModal />
+              <LoadingStateProvider>
+                <IonLoading isOpen={true} message={'Loading...'} />;
+              </LoadingStateProvider>
+            </UnreadContext.Provider>
+          </CadeyUserContext.Provider>
+        </IonContent>
+      </IonPage>
     );
   }
 
