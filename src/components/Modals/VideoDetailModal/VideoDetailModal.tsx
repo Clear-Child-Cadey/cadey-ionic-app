@@ -242,7 +242,8 @@ const VideoDetailModal: React.FC = () => {
     setSource('Video Detail');
     setCurrentVideoType('relatedVideos');
     setCurrentVimeoId(videoId);
-    requestQuiz();
+    // Commented out since videos are playing behind the quiz. Need to fix that bug and then uncomment this code.
+    // requestQuiz();
   };
 
   function handleClose() {
@@ -257,7 +258,8 @@ const VideoDetailModal: React.FC = () => {
     }
     setVideoModalOpen(false);
 
-    requestQuiz();
+    // Commented out since videos are playing behind the quiz. Need to fix that bug and then uncomment this code.
+    // requestQuiz();
   }
 
   return (

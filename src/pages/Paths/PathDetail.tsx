@@ -258,7 +258,8 @@ const PathDetailPage: React.FC = () => {
 
   const handlePathEntityClick = async (entity: PathEntity) => {
     // Get a quiz
-    requestQuiz();
+    // Commented out since videos are playing behind the quiz. Need to fix that bug and then uncomment this code.
+    // requestQuiz();
 
     // Log a UserTap user fact
     logUserFact({
@@ -295,8 +296,8 @@ const PathDetailPage: React.FC = () => {
   // Define the function that should be called when a video ends
   const handleVideoEnd = async () => {
     // Get a quiz
-    // await getQuizBasedOnPath();
-    requestQuiz();
+    // Commented out since videos are playing behind the quiz. Need to fix that bug and then uncomment this code.
+    // requestQuiz();
 
     // Increment the playlist position
     const newPosition = pathPlaylistPosition + 1;

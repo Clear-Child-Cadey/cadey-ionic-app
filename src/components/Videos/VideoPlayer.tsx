@@ -155,7 +155,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (isPopularSymptomVideoModalOpen) {
       return;
     }
-    requestQuiz();
+    // Commenting out for now - videos are not being paused for quizzes. Need to fix that bug and then uncomment this code.
+    // requestQuiz();
   };
 
   const onEnded = async () => {
