@@ -226,7 +226,9 @@ const useCadeyAuth = () => {
     runBeforeRequest();
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessageDecorated('Password reset email sent!');
+      setMessageDecorated(
+        'Password reset email sent! If you do not receive a password reset email, please create an account or check your spam folder.',
+      );
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
