@@ -69,7 +69,7 @@ const useCadeyAuth = () => {
             unsubscribe();
           } catch (error) {
             console.error('Error handling Cadey login:', error);
-            setErrors([...errors, error.message]);
+            setErrors([...errors, error.message]); // Should probably refactor into global state, and then clear errors when things complete / next thing starts
             // Handle any additional error state updates or dispatches here
           }
         } else {
@@ -178,6 +178,9 @@ const useCadeyAuth = () => {
         email,
         password,
       );
+      // We need to set firebaseUser here.
+      // dispatch(setFirebaseUser(currentUser));
+
       const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
       dispatch(setCadeyUser(cadeyUser));
       dispatch(setCadeyResolved(true));
@@ -228,7 +231,7 @@ const useCadeyAuth = () => {
       await sendPasswordResetEmail(auth, email);
       setMessageDecorated(
         'Password reset email sent! If you do not receive a password reset email, please create an account or check your spam folder.',
-      );
+      ); // Move this copy to appMeta later
     } catch (e) {
       if (e instanceof Error) {
         setErrorDecorated(e);
@@ -242,7 +245,7 @@ const useCadeyAuth = () => {
 
   const handleCadeyLoginAndReturnUser = async (
     firebaseUser: User,
-    authenticatedAuthId?: string,
+    authenticatedAuthId?: string, // This can be removed, it's never used
   ) => {
     const url = `${apiUrl}/userauth`;
     let response;
@@ -260,7 +263,7 @@ const useCadeyAuth = () => {
           body: JSON.stringify({
             cadeyUserEmail: firebaseUser.email,
             // authId: firebaseUser.uid, // This is the anonymous user ID
-            authId: authenticatedAuthId
+            authId: authenticatedAuthId // authenticatedAuthId is never passed in, so this is always the firebaseUser.uid. Can remove.
               ? authenticatedAuthId
               : firebaseUser.uid, //Pass in the authenticated firebase ID, fallback to the anonymous ID if not explicitly passed
             cadeyUserDeviceId,
@@ -281,7 +284,7 @@ const useCadeyAuth = () => {
 
     const cadeyUserLocal = await response.json();
     dispatch(setCadeyUser(cadeyUserLocal));
-    dispatch(setFirebaseUser(firebaseUser));
+    dispatch(setFirebaseUser(firebaseUser)); // Move this to line 182?
 
     return cadeyUserLocal;
   };
@@ -327,11 +330,11 @@ const useCadeyAuth = () => {
   };
 
   return {
-    errors,
+    errors, // Remove this later, shouldn't be exposed as it's state-based
     signInWithEmailAndPasswordDecorated,
     sendPasswordResetEmailDecorated,
     createUserWithEmailAndPasswordDecorated,
-    messages,
+    messages, // Remove this later, shouldn't be exposed as it's state-based. Need to refactor to global state if we ever use this in multiple places.
     resetErrors: () => setErrors([]),
     setErrorDecorated,
   };
