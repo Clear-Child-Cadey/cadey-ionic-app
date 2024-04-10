@@ -5,9 +5,9 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import React from "react";
-import { useModalContext } from "../../context/ModalContext";
+} from '@ionic/react';
+import React from 'react';
+import { useModalContext } from '../../context/ModalContext';
 
 export interface GenericModalData {
   title: string;
@@ -26,9 +26,9 @@ const GenericModal: React.FC<GenericModalData | {}> = () => {
           <IonTitle>{title}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent className='ion-padding'>
         <div>{body}</div>
-        <IonButton expand="full" onClick={() => buttonAction && buttonAction()}>
+        <IonButton expand='full' onClick={() => buttonAction && buttonAction()}>
           {buttonText}
         </IonButton>
       </IonContent>

@@ -1,14 +1,14 @@
-import { 
-    IonModal, 
-    IonButton, 
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonRow,
-    IonText,
-    IonIcon,
-    IonPage,
+import {
+  IonModal,
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonRow,
+  IonText,
+  IonIcon,
+  IonPage,
 } from '@ionic/react';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -23,89 +23,96 @@ import { postCadeyUserAgeGroup } from '../../api/AgeGroup';
 import { logUserFact } from '../../api/UserFacts';
 // Icons
 import { chevronForwardOutline } from 'ionicons/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const WelcomeAgeGroupSelect: React.FC = () => {
-    const { setCadeyUserAgeGroup } = React.useContext(CadeyUserContext);
-    const { cadeyUserId } = React.useContext(CadeyUserContext);
-    const { apiUrl } = React.useContext(ApiUrlContext);
-    const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
+  const { setCadeyUserAgeGroup } = React.useContext(CadeyUserContext);
+  // const { cadeyUserId } = React.useContext(CadeyUserContext);
+  const { apiUrl } = React.useContext(ApiUrlContext);
+  const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
-    const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
+  const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
 
-    const history = useHistory();
+  const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
 
-    // When the component loads
-    useEffect(() => {
+  const history = useHistory();
 
-        setCurrentAppPage("Welcome - Age Select");
-        setCurrentBasePage("Welcome - Age Select");
+  // When the component loads
+  useEffect(() => {
+    setCurrentAppPage('Welcome - Age Select');
+    setCurrentBasePage('Welcome - Age Select');
 
-        // appPageNavigation user fact
-        logUserFact({
-            cadeyUserId: cadeyUserId,
-            baseApiUrl: apiUrl,
-            userFactTypeName: 'appPageNavigation',
-            appPage: 'Welcome - Age Select',
-        });
-    }, [apiUrl]);
+    // appPageNavigation user fact
+    logUserFact({
+      cadeyUserId: cadeyUserId,
+      baseApiUrl: apiUrl,
+      userFactTypeName: 'appPageNavigation',
+      appPage: 'Welcome - Age Select',
+    });
+  }, [apiUrl]);
 
-    const handleAgeSelection = async (ageGroup: number) => {
-        // Set the age group in the user context
-        setCadeyUserAgeGroup(ageGroup);
+  const handleAgeSelection = async (ageGroup: number) => {
+    // Set the age group in the user context
+    setCadeyUserAgeGroup(ageGroup);
 
-        try {
-            // Record an age group for the user
-            await postCadeyUserAgeGroup(apiUrl, cadeyUserId, ageGroup.toString());
-        } catch (error) {
-            console.error('Exception when calling postCadeyUserAgeGroup: ', error);
-        }
-        
-        // Route the user to the next page
-        history.push('/App/Welcome/Push');
+    try {
+      // Record an age group for the user
+      await postCadeyUserAgeGroup(apiUrl, cadeyUserId, ageGroup.toString());
+    } catch (error) {
+      console.error('Exception when calling postCadeyUserAgeGroup: ', error);
     }
 
-    return (
-        <IonPage className="welcome-age-group" >
-            <IonHeader class="header">
-                <IonToolbar className="header-toolbar">
-                    <h2>How old is your child?</h2>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent fullscreen>
-                <IonRow className="age-group-container">
-                    <IonRow className="age-buttons-row">
-                        <IonButton 
-                            className={`age-group-button ${selectedAgeGroup === 1 ? "selected" : ""}`}
-                            onClick={() => setSelectedAgeGroup(1)}
-                        >
-                            0-4
-                        </IonButton>
-                        <IonButton 
-                            className={`age-group-button ${selectedAgeGroup === 2 ? "selected" : ""}`}
-                            onClick={() => setSelectedAgeGroup(2)}
-                        >
-                            5-11
-                        </IonButton>
-                        <IonButton 
-                            className={`age-group-button ${selectedAgeGroup === 3 ? "selected" : ""}`}
-                            onClick={() => setSelectedAgeGroup(3)}
-                        >
-                            12+
-                        </IonButton>
-                    </IonRow>
-                    <IonRow className="continue-row">
-                        <IonButton 
-                            className="continue-button" 
-                            disabled={selectedAgeGroup === 0}
-                            onClick={() => handleAgeSelection(selectedAgeGroup)}
-                        >
-                            Next
-                        </IonButton>
-                    </IonRow>
-                </IonRow>
-            </IonContent>
-        </IonPage>
-    );
+    // Route the user to the next page
+    history.push('/App/Welcome/Push');
+  };
+
+  return (
+    <IonPage className='welcome-age-group'>
+      <IonHeader class='header'>
+        <IonToolbar className='header-toolbar'>
+          <h2>How old is your child?</h2>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen>
+        <IonRow className='age-group-container'>
+          <IonRow className='age-buttons-row'>
+            <IonButton
+              className={`age-group-button ${selectedAgeGroup === 1 ? 'selected' : ''}`}
+              onClick={() => setSelectedAgeGroup(1)}
+            >
+              0-4
+            </IonButton>
+            <IonButton
+              className={`age-group-button ${selectedAgeGroup === 2 ? 'selected' : ''}`}
+              onClick={() => setSelectedAgeGroup(2)}
+            >
+              5-11
+            </IonButton>
+            <IonButton
+              className={`age-group-button ${selectedAgeGroup === 3 ? 'selected' : ''}`}
+              onClick={() => setSelectedAgeGroup(3)}
+            >
+              12+
+            </IonButton>
+          </IonRow>
+          <IonRow className='continue-row'>
+            <IonButton
+              className='continue-button'
+              disabled={selectedAgeGroup === 0}
+              onClick={() => handleAgeSelection(selectedAgeGroup)}
+            >
+              Next
+            </IonButton>
+          </IonRow>
+        </IonRow>
+      </IonContent>
+    </IonPage>
+  );
 };
 
 export default WelcomeAgeGroupSelect;

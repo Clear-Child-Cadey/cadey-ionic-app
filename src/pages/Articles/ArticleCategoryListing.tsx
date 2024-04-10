@@ -19,10 +19,18 @@ import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useAppPage } from '../../context/AppPageContext';
 import { WP_Category } from '../../api/WordPress/GetCategories';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const ArticleCategoryListingPage: React.FC = () => {
 
-    const { cadeyUserId } = React.useContext(CadeyUserContext);
+    // const { cadeyUserId } = React.useContext(CadeyUserContext);
+
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = React.useContext(ApiUrlContext);
     const { currentBasePage, setCurrentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
     const [articleCategories, setArticleCategories] = useState<WP_Category[]>([]);

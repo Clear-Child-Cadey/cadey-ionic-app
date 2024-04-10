@@ -1,0 +1,14 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# Top-most EditorConfig file
+root = true
+
+# Set default indentation to 2 spaces
+[*]
+indent_style = space
+indent_size = 2
+
+# Set tab width to 2 spaces
+[*.md]
+indent_style = space
+indent_size = 2

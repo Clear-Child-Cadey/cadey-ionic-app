@@ -1,42 +1,47 @@
 .welcome .tab-bar {
-    display: none;
+  display: none;
 }
 
 .welcome {
-    --ion-background-color: #E5E5E5;
+  --ion-background-color: #e5e5e5;
 }
 
 .logo {
-    width: 160px;
-    margin: 0 auto 30px;
+  width: 160px;
+  margin: 0 auto 30px;
 }
 
 .welcome-content {
-    /* Vertically center the content in the modal */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* Ballpark height percentage less the rough percent of the welcome-image height. Ideally would be perfectly vertically centered */
-    height: 68%;
+  /* Vertically center the content in the modal */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Ballpark height percentage less the rough percent of the welcome-image height. Ideally would be perfectly vertically centered */
+  height: 68%;
+}
+
+.welcome-content .continue-row {
+  flex-direction: column;
 }
 
 .welcome-text {
-    font-family: Judson;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal; 
-    margin: 0 auto;
-    max-width: 275px;
-    text-align: center;
-    margin-bottom: 40px;
-    color: #4C616F;
+  font-family: Judson;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 auto;
+  max-width: 275px;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #4c616f;
 }
 
 .welcome .continue-button {
-    width: 200px;
-    --border-radius: 100px;
+  width: 200px;
+  --border-radius: 100px;
+  margin: 0 auto 15px;
 }
 
 /* Position the welcome image at the bottom of the modal */

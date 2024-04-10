@@ -1,57 +1,56 @@
-import React, { useState, useEffect, useContext } from "react";
-import { IonApp, setupIonicReact } from "@ionic/react";
-import { useHistory } from 'react-router-dom';
-import semver from "semver";
+import React, { useState, useEffect, useContext } from 'react';
+import { setupIonicReact } from '@ionic/react';
+import semver from 'semver';
 // Components
-import { SplashScreen } from "@capacitor/splash-screen";
-import RouterTabs from "./components/Routing/RouterTabs";
+import { SplashScreen } from '@capacitor/splash-screen';
 // Modals
 import AppUpdateModal from './components/Modals/AppUpdateModal';
 import VideoDetailModal from './components/Modals/VideoDetailModal/VideoDetailModal';
 import ArticleDetailModal from './components/Modals/ArticleDetailModal/ArticleDetailModal';
 import QuizModal from './components/Modals/QuizModal/QuizModal';
-import WelcomeModal from './pages/Welcome/Welcome';
 // Contexts
-import { CadeyUserContext } from "./main";
-import { useModalContext } from "./context/ModalContext";
-import ApiUrlContext from "./context/ApiUrlContext";
-import { useAppPage } from "./context/AppPageContext";
-import { useTabContext } from './context/TabContext';
+import { CadeyUserContext } from './main';
+import { useModalContext } from './context/ModalContext';
+import ApiUrlContext from './context/ApiUrlContext';
 // Variables
-import { AppVersion } from "./variables/AppVersion";
+import { AppVersion } from './variables/AppVersion';
 // API
-import { setExternalUserId } from "./api/OneSignal/SetExternalUserId";
-import { logUserFact } from "./api/UserFacts";
-import PopularSymptomVideoDetailModal from "./components/Modals/VideoDetailModal/PopularSymptomVideoDetailModal";
-import GenericModal from "./components/Modals/GenericModal";
-import { getQuiz } from './api/Quiz';
-// Pages
-import WelcomePage from './pages/Welcome/Welcome';
+import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
+import { logUserFact } from './api/UserFacts';
+import GenericModal from './components/Modals/GenericModal';
+
+// Redux
+import { useSelector } from 'react-redux';
+import { RootState } from './store';
+import useRequestQuiz from './hooks/useRequestQuiz';
+import AppMeta from './variables/AppMeta';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const { cadeyUserId, minimumSupportedVersion, oneSignalId } =
-    useContext(CadeyUserContext);
+  const cadeyUser = useSelector(
+    (state: RootState) => state.authStatus.userData.cadeyUser,
+  );
+  const deviceId = useSelector(
+    (state: RootState) => state.deviceIdStatus.deviceId,
+  );
+  const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
   const { apiUrl } = React.useContext(ApiUrlContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
-  const { currentBasePage, currentAppPage } = useAppPage();
-  const history = useHistory();
-  const [checkForWelcome, setCheckForWelcome] = useState(false);
-  const [showWelcomePage, setShowWelcomePage] = useState(false);
-  const { setIsTabBarVisible } = useTabContext();
+  const { requestQuiz } = useRequestQuiz({
+    clientContext: 3,
+    entityType: 0,
+    entityId: 0,
+    shouldHaveEmailVerified: AppMeta.forceEmailVerification,
+  });
 
   const {
     isVideoModalOpen,
     isArticleDetailModalOpen,
-    isQuizModalOpen,
-    quizModalData,
-    setQuizModalData,
+    // setQuizModalData,
     currentVimeoId,
     currentArticleId,
-    isPopularSymptomVideoModalOpen,
-    popularSymptomVideo,
   } = useModalContext();
 
   const getStoreLink = () => {
@@ -60,11 +59,11 @@ const App: React.FC = () => {
 
     if (/android/i.test(userAgent)) {
       url =
-        "https://play.google.com/store/apps/details?id=co.cadey.liteapp&hl=en_US&gl=US";
+        'https://play.google.com/store/apps/details?id=co.cadey.liteapp&hl=en_US&gl=US';
     } else if (/iPad|iPhone|iPod/.test(userAgent)) {
-      url = "https://apps.apple.com/app/cadeylite/id6449231819";
+      url = 'https://apps.apple.com/app/cadeylite/id6449231819';
     } else {
-      url = "https://cadey.co/app"; // fallback for desktop browsers and other devices
+      url = 'https://cadey.co/app'; // fallback for desktop browsers and other devices
     }
 
     return url;
@@ -80,47 +79,25 @@ const App: React.FC = () => {
 
   // Route the user to the welcome page if they haven't completed the welcome sequence
   useEffect(() => {
-    const requestQuiz = async () => {
-      if (!checkForWelcome) {
-        const quizResponse = await getQuiz(
-          apiUrl,
-          Number(cadeyUserId),
-          3, // Client Context: Where the user is in the app (3 = Onboarding sequence)
-          0, // Entity Type (1 = video)
-          0  // Entity IDs (The ID of the video)
-        );
-
-        setCheckForWelcome(true); // Prevents re-fetching the quiz
-
-        // If the user has not completed the welcome sequence, show the welcome page
-        if (quizResponse.question !== null && quizResponse.question.id > 0) {
-          // Set the quiz data
-          setQuizModalData(quizResponse);
-          
-          // Hide the tab bar
-          setIsTabBarVisible(false);
-
-          // Route the user to the welcome page
-          history.push('/App/Welcome');
-        } else {
-          // Show the tab bar
-          setIsTabBarVisible(true);
-        }
-      }
+    if (!cadeyUser?.cadeyUserId) {
+      return;
     }
 
     requestQuiz();
-  }, [cadeyUserId, apiUrl]);
+  }, [cadeyUser]);
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
-    if (semver.lt(AppVersion, minimumSupportedVersion)) {
+    if (semver.lt(AppVersion, minimumSupportedVersion || '1.0.0')) {
       SplashScreen.hide(); // Hide the splash screen
       setShowUpgradeModal(true);
     }
   }, [minimumSupportedVersion, AppVersion]);
 
   useEffect(() => {
+    if (!cadeyUser?.cadeyUserId) {
+      return;
+    }
     if (!isVideoModalOpen && !videoModalEverOpened) {
       // Modal closed, hasn't ever been opened
       // Currently, do nothing in this case
@@ -131,26 +108,27 @@ const App: React.FC = () => {
       // Modal closed, but has been opened before
       onVideoDetailPageClosed();
     }
-  }, [isVideoModalOpen]);
+  }, [isVideoModalOpen, cadeyUser]);
 
   const onVideoDetailPageClosed = async () => {
     const response = await logUserFact({
-      cadeyUserId: cadeyUserId,
+      deviceId: deviceId,
+      cadeyUserId: cadeyUser.cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: "VideoDetailPageClosed",
-      appPage: "Video Detail",
+      userFactTypeName: 'VideoDetailPageClosed',
+      appPage: 'Video Detail',
     });
-  }
+  };
 
   return (
-    <IonApp>
-
+    <>
       {/* Show a modal if the user needs to update their app*/}
+
       <AppUpdateModal
         isOpen={showUpgradeModal}
-        title="Update Required"
-        body="You need to update the app to the latest version to continue using it."
-        buttonText="Upgrade"
+        title='Update Required'
+        body='You need to update the app to the latest version to continue using it.'
+        buttonText='Upgrade'
         buttonUrl={getStoreLink()}
       />
 
@@ -158,25 +136,14 @@ const App: React.FC = () => {
       <QuizModal />
 
       {/* Show a video modal if context dictates */}
-      {isVideoModalOpen && currentVimeoId && (
-        <VideoDetailModal />
-      )}
-      
+      {isVideoModalOpen && currentVimeoId && <VideoDetailModal />}
+
       {/* Show an article modal if context dictates */}
       {isArticleDetailModalOpen && currentArticleId && <ArticleDetailModal />}
 
-
-
-      {/* Show a quiz modal if context dictates */}
-      <QuizModal />
-
-      {/* Show a Welcome modal if context dictates */}
-      <WelcomeModal />
+      {/* Show a generic modal if context dictates */}
       <GenericModal />
-
-      {/* Router Tabs */}
-      <RouterTabs />
-    </IonApp>
+    </>
   );
 };
 

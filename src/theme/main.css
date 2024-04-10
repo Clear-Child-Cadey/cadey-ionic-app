@@ -4,20 +4,20 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #51ADEF;
-	--ion-color-primary-rgb: 81,173,239;
-	--ion-color-primary-contrast: #fff;
-	--ion-color-primary-contrast-rgb: 255,255,255;
-	--ion-color-primary-shade: #4798d2;
-	--ion-color-primary-tint: #62b5f1;
+  --ion-color-primary: #51adef;
+  --ion-color-primary-rgb: 81, 173, 239;
+  --ion-color-primary-contrast: #fff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #4798d2;
+  --ion-color-primary-tint: #62b5f1;
 
   /** secondary **/
   --ion-color-secondary: #fff;
-	--ion-color-secondary-rgb: 255,255,255;
-	--ion-color-secondary-contrast: #51ADEF;
-	--ion-color-secondary-contrast-rgb: 81,173,239;
-	--ion-color-secondary-shade: #e0e0e0;
-	--ion-color-secondary-tint: #ffffff;
+  --ion-color-secondary-rgb: 255, 255, 255;
+  --ion-color-secondary-contrast: #51adef;
+  --ion-color-secondary-contrast-rgb: 81, 173, 239;
+  --ion-color-secondary-shade: #e0e0e0;
+  --ion-color-secondary-tint: #ffffff;
 
   /** tertiary **/
   --ion-color-tertiary: #5260ff;
@@ -68,27 +68,27 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-medium-tint: #9d9fa6;
 
   /** light **/
-	--ion-color-light: #fff;
-	--ion-color-light-rgb: 255,255,255;
-	--ion-color-light-contrast: #7A716C;
-	--ion-color-light-contrast-rgb: 0,0,0;
-	--ion-color-light-shade: #e0e0e0;
-	--ion-color-light-tint: #ffffff;
+  --ion-color-light: #fff;
+  --ion-color-light-rgb: 255, 255, 255;
+  --ion-color-light-contrast: #7a716c;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #e0e0e0;
+  --ion-color-light-tint: #ffffff;
 
   /** background **/
-  --ion-background-color: #F9F6EF;
+  --ion-background-color: #f9f6ef;
 }
 
 body {
   /** background **/
-  --ion-background-color: #F9F6EF;
+  --ion-background-color: #f9f6ef;
 }
 
 /* Main app theme styles */
 
 ion-toolbar {
-  --background: #F9F6EF;
-  --border-color: #A29C98;
+  --background: #f9f6ef;
+  --border-color: #a29c98;
 }
 
 ion-title {
@@ -97,7 +97,7 @@ ion-title {
   color: #564941;
   line-height: 32px;
   letter-spacing: -0.5px;
-  padding-bottom: 0px
+  padding-bottom: 0px;
 }
 
 ion-text {
@@ -105,7 +105,7 @@ ion-text {
   font-weight: 400;
   font-size: 18px;
   line-height: 21px;
-  color: #958D89;
+  color: #958d89;
 }
 
 ion-button {
@@ -118,7 +118,7 @@ ion-button {
 
 /* Style the tap bar (Start Over, Next, etc.) */
 .container {
-  padding-bottom: 60px;  /* Adding padding to ensure the content isn't hidden by the buttons */
+  padding-bottom: 60px; /* Adding padding to ensure the content isn't hidden by the buttons */
 }
 
 /* Add padding below the Android header, since it always uses the condensed header */
@@ -135,9 +135,9 @@ ion-button {
   left: 0;
   right: 0;
   padding: 10px;
-  background-color: #F9F6EF;
+  background-color: #f9f6ef;
   z-index: 1000;
-  border-top: 1px solid #EDE7DA;
+  border-top: 1px solid #ede7da;
 }
 
 .bottom-row .button {
@@ -152,7 +152,7 @@ ion-button {
   font-size: 14px;
   --border-style: solid;
   --border-width: 1px;
-  --border-color: #EDE7DA;
+  --border-color: #ede7da;
   --border-radius: 100px;
   --box-shadow: none;
 }

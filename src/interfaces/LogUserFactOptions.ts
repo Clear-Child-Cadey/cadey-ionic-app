@@ -1,0 +1,18 @@
+interface LogUserFactOptions {
+  deviceId?: string;
+  userId?: number;
+  baseApiUrl?: string;
+  userFactTypeName: string;
+  appPage: string;
+  detail1?: string;
+  detail2?: string;
+  detail3?: string;
+  detail4?: string;
+  detail5?: string;
+  detail6?: string;
+  detail7?: string;
+  detail8?: string;
+  detail9?: string;
+}
+
+export default LogUserFactOptions;

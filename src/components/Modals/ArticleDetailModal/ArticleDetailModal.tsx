@@ -19,6 +19,8 @@ import ApiUrlContext from '../../../context/ApiUrlContext';
 import { useLoadingState } from '../../../context/LoadingStateContext';
 import { useModalContext } from '../../../context/ModalContext';
 import { useAppPage } from '../../../context/AppPageContext';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 // Setup the interface
 interface ArticleDetailProps {
@@ -41,7 +43,13 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
 
     const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
-    const { cadeyUserId } = React.useContext(CadeyUserContext);
+    // const { cadeyUserId } = React.useContext(CadeyUserContext);
+
+    const cadeyUserId = useSelector((state: RootState) =>
+    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
+      ? state.authStatus.userData.cadeyUser.cadeyUserId
+      : state.authStatus.appOpenCadeyId,
+  );
     const { apiUrl } = React.useContext(ApiUrlContext);
     const userFactUrl = `${apiUrl}/userfact`;
 

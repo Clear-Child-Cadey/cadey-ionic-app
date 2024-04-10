@@ -1,0 +1,22 @@
+.grandfather h2 {
+  font-family: Judson;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 auto;
+  max-width: 290px;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #4c616f;
+}
+
+.grandfather .grandfather-text {
+  color: #384f5f;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 auto 40px;
+  max-width: 290px;
+  text-align: center;
+}

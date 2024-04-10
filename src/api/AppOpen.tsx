@@ -13,50 +13,50 @@ if (!cadeyUserDeviceId) {
 
 // Define a function to fetch application data
 export const getAppData = async (
-    setCadeyUserId: any,
-    setCadeyUserAgeGroup: any,
-    setMinimumSupportedVersion: any, 
-    setOneSignalId: any,
-    apiUrl: any,
+  setCadeyUserId: any,
+  setCadeyUserAgeGroup: any,
+  setMinimumSupportedVersion: any,
+  setOneSignalId: any,
+  apiUrl: any,
 ) => {
-  
-    // Define the url for the request
-    const url = `${apiUrl}/appopened`;
+  // Define the url for the request
+  const url = `${apiUrl}/appopened`;
 
-    // Determine the platform on which the app is running
-    let devicePlatform;
-    if (isPlatform('ios')) {
-      devicePlatform = 'iOS';
-    } else if (isPlatform('android')) {
-      devicePlatform = 'Android';
-    } else {
-      devicePlatform = 'Web';
-    }
+  // Determine the platform on which the app is running
+  let devicePlatform;
+  if (isPlatform('ios')) {
+    devicePlatform = 'iOS';
+  } else if (isPlatform('android')) {
+    devicePlatform = 'Android';
+  } else {
+    devicePlatform = 'Web';
+  }
 
-    // Prepare the body of the request
-    const bodyObject = {
-      cadeyUserId: 0,
-      cadeyUserDeviceId: cadeyUserDeviceId,
-      cadeyMinimumSupportedAppVersion: "",
-      cadeyLatestAppVersion: "",
-      cadeyDevicePlatform: devicePlatform
-    };
+  // Prepare the body of the request
+  const bodyObject = {
+    cadeyUserId: 0,
+    cadeyUserDeviceId: cadeyUserDeviceId,
+    cadeyMinimumSupportedAppVersion: '',
+    cadeyLatestAppVersion: '',
+    cadeyDevicePlatform: devicePlatform,
+  };
 
   let response;
 
   try {
-    response = await fetchWithTimeout(url, 
+    response = await fetchWithTimeout(
+      url,
       {
-          method: 'POST',
-          cache: 'no-cache',
-          headers: { 
-            'accept': 'text/plain', 
-            'apiKey': 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(bodyObject)
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+          accept: 'text/plain',
+          apiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyObject),
       },
-      { requestName: 'appOpen' }
+      { requestName: 'appOpen' },
     );
 
     const data = await response.json(); // Parse the response data as json
