@@ -58,6 +58,11 @@ import { logUserFact } from '../../api/UserFacts';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import {
+  setRoute,
+  setVideoId,
+  setArticleId,
+} from '../../features/deepLinks/slice';
 import { trileanResolve } from '../../types/Trilean';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import AppMeta from '../../variables/AppMeta';
@@ -65,6 +70,10 @@ import VerificationPage from '../VerificationMessage';
 import ExpiredUser from '../Authentication/ExpiredUser';
 
 const RouterTabs: React.FC = () => {
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
+
   const userLoggedIn = useSelector((state: RootState) => {
     return (
       state.authStatus.userData.firebaseUser !== null &&
@@ -127,8 +136,6 @@ const RouterTabs: React.FC = () => {
 
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const { currentAppPage } = useAppPage();
-  const location = useLocation();
-  const history = useHistory();
   const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
 
   useEffect(() => {
@@ -137,6 +144,8 @@ const RouterTabs: React.FC = () => {
       !AppMeta.nonLoggedInUsersAllowedPaths.includes(location.pathname) &&
       !AppMeta.forceEmailVerification
     ) {
+      // Capture the current path so we can redirect the user back to it after they log in
+
       history.push('/App/Welcome');
     }
   }, [userLoggedIn, location, AppMeta]);
@@ -152,6 +161,23 @@ const RouterTabs: React.FC = () => {
         location.pathname.includes('/App/Paths'),
     );
   }, [location]);
+
+  useEffect(() => {
+    // This effect runs when the location changes
+    const queryParams = new URLSearchParams(location.search);
+    const videoId = queryParams.get('video');
+    const articleId = queryParams.get('article');
+
+    console.log('videoId:', videoId);
+    console.log('articleId:', articleId);
+
+    if (videoId || articleId) {
+      // Dispatch Redux actions to update the state
+      dispatch(setRoute(location.pathname));
+      if (videoId) dispatch(setVideoId(videoId));
+      if (articleId) dispatch(setArticleId(articleId));
+    }
+  }, [location, dispatch]); // Depend on location and dispatch to re-run this effect
 
   const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
@@ -230,6 +256,10 @@ const RouterTabs: React.FC = () => {
 
             {/* Route for handler to handle all deep links */}
             <Route exact path='/App/Authentication' component={HandlerPage} />
+
+            <Route exact path='/App/Home'>
+              <Redirect to='/App/Authentication/Login' />
+            </Route>
           </Switch>
         </IonRouterOutlet>
       )}
@@ -267,11 +297,7 @@ const RouterTabs: React.FC = () => {
                 <Route exact path='/'>
                   <Redirect to='/App/Home' />
                 </Route>
-                <Route
-                  exact
-                  path='/App/Home/Messages'
-                  component={MessagesPage}
-                />
+                <Route path='/App/Home/Messages' component={MessagesPage} />
 
                 {/* Library routes */}
                 <Route exact path='/App/Library' component={LibraryPage} />

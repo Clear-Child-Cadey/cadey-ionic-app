@@ -3,12 +3,14 @@ import httpErrorReducer from './features/httpError/slice';
 import authStatusReducer from './features/authLoading/slice';
 import deviceIdStatusReducer from './features/deviceId/slice';
 import videoReducer from './features/video/slice';
+import deepLinkReducer from './features/deepLinks/slice';
 
 const rootReducer = combineReducers({
   httpError: httpErrorReducer,
   authStatus: authStatusReducer,
   deviceIdStatus: deviceIdStatusReducer,
   video: videoReducer,
+  deepLink: deepLinkReducer,
 });
 
 const store = configureStore({
