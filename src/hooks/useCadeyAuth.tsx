@@ -29,11 +29,13 @@ import { RootState } from '../store';
 import { useHistory } from 'react-router';
 import { setHttpErrorModalData } from '../features/httpError/slice';
 import getDeviceId from '../utils/getDeviceId';
+import useUserFacts from './useUserFacts';
 
 const useCadeyAuth = () => {
   const countRef = React.useRef(0);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { logUserFact } = useUserFacts();
   const cadeyUserId = useSelector(
     (state: RootState) => state.authStatus.appOpenCadeyId,
   );
@@ -171,6 +173,13 @@ const useCadeyAuth = () => {
     email: string,
     password: string,
   ) {
+    // Log a Firebase authentication attempt userfact
+    logUserFact({
+      userFactTypeName: 'FirebaseAuthenticationAttempt',
+      appPage: 'Login',
+      detail1: email,
+    });
+
     await runBeforeRequest();
     try {
       const { user: currentUser } = await signInWithEmailAndPassword(
@@ -184,11 +193,33 @@ const useCadeyAuth = () => {
       const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
       dispatch(setCadeyUser(cadeyUser));
       dispatch(setCadeyResolved(true));
+
+      // Log a Firebase authentication success userfact
+      logUserFact({
+        userFactTypeName: 'FirebaseAuthenticationSuccess',
+        appPage: 'Login',
+        detail1: email,
+      });
     } catch (e) {
       if (e instanceof Error) {
+        // Log a Firebase authentication error userfact
+        logUserFact({
+          userFactTypeName: 'FirebaseAuthenticationError',
+          appPage: 'Login',
+          detail1: e.message,
+        });
+
         setErrorDecorated(e);
         throw e;
       }
+      // Log a Firebase authentication error userfact
+      logUserFact({
+        userFactTypeName: 'FirebaseAuthenticationError',
+        appPage: 'Login',
+        detail1: 'Login',
+        detail2: 'Firebase authentication error',
+        detail3: 'Unknown error',
+      });
       throw e;
     } finally {
       runAfterRequest();
@@ -199,6 +230,13 @@ const useCadeyAuth = () => {
     email: string,
     password: string,
   ) => {
+    // Log a Firebase registration attempt userfact
+    logUserFact({
+      userFactTypeName: 'FirebaseRegistrationAttempt',
+      appPage: 'Register',
+      detail1: email,
+    });
+
     runBeforeRequest();
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -213,11 +251,29 @@ const useCadeyAuth = () => {
         await sendEmailVerification(userCredential.user);
         setMessageDecorated(AppMeta.emailVerificationMessage);
       }
+      // Log a Firebase registration success userfact
+      logUserFact({
+        userFactTypeName: 'FirebaseRegistrationSuccess',
+        appPage: 'Register',
+        detail1: email,
+      });
     } catch (e) {
       if (e instanceof Error) {
+        // Log a Firebase registration error userfact
+        logUserFact({
+          userFactTypeName: 'FirebaseRegistrationError',
+          appPage: 'Register',
+          detail1: e.message,
+        });
         setErrorDecorated(e);
         throw e;
       }
+      // Log a Firebase registration error userfact
+      logUserFact({
+        userFactTypeName: 'FirebaseRegistrationError',
+        appPage: 'Register',
+        detail1: 'Unknown error',
+      });
       throw e;
     } finally {
       runAfterRequest();
