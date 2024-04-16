@@ -41,6 +41,7 @@ const useCadeyAuth = () => {
   );
   const initialErrorsState: string[] = [];
   const initialMessagesState: string[] = [];
+  const currentDeviceId = getDeviceId();
 
   const [errors, setErrors] = useState<[] | Array<string>>(initialErrorsState);
   const [messages, setMessages] = useState(initialMessagesState);
@@ -173,13 +174,6 @@ const useCadeyAuth = () => {
     email: string,
     password: string,
   ) {
-    // Log a Firebase authentication attempt userfact
-    logUserFact({
-      userFactTypeName: 'FirebaseAuthenticationAttempt',
-      appPage: 'Login',
-      detail1: email,
-    });
-
     await runBeforeRequest();
     try {
       const { user: currentUser } = await signInWithEmailAndPassword(
@@ -196,17 +190,25 @@ const useCadeyAuth = () => {
 
       // Log a Firebase authentication success userfact
       logUserFact({
-        userFactTypeName: 'FirebaseAuthenticationSuccess',
+        userFactTypeName: 'FirebaseAuthenticationAttempt',
         appPage: 'Login',
-        detail1: email,
+        detail1: email, // email
+        detail2: cadeyUser.authId, // authId
+        detail3: 'Success', // Firebase status
+        detail4: '', // Error message
+        detail5: currentDeviceId, // deviceId
       });
     } catch (e) {
       if (e instanceof Error) {
         // Log a Firebase authentication error userfact
         logUserFact({
-          userFactTypeName: 'FirebaseAuthenticationError',
+          userFactTypeName: 'FirebaseAuthenticationAttempt',
           appPage: 'Login',
-          detail1: e.message,
+          detail1: email, // email
+          detail2: '', // authId
+          detail3: 'Failure', // Firebase status
+          detail4: e.message, // Error message
+          detail5: currentDeviceId, // deviceId
         });
 
         setErrorDecorated(e);
@@ -214,11 +216,13 @@ const useCadeyAuth = () => {
       }
       // Log a Firebase authentication error userfact
       logUserFact({
-        userFactTypeName: 'FirebaseAuthenticationError',
+        userFactTypeName: 'FirebaseAuthenticationAttempt',
         appPage: 'Login',
-        detail1: 'Login',
-        detail2: 'Firebase authentication error',
-        detail3: 'Unknown error',
+        detail1: email, // email
+        detail2: '', // authId
+        detail3: 'Failure', // Firebase status
+        detail4: 'Unknown error', // Error message
+        detail5: currentDeviceId, // deviceId
       });
       throw e;
     } finally {
@@ -230,13 +234,6 @@ const useCadeyAuth = () => {
     email: string,
     password: string,
   ) => {
-    // Log a Firebase registration attempt userfact
-    logUserFact({
-      userFactTypeName: 'FirebaseRegistrationAttempt',
-      appPage: 'Register',
-      detail1: email,
-    });
-
     runBeforeRequest();
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -253,26 +250,38 @@ const useCadeyAuth = () => {
       }
       // Log a Firebase registration success userfact
       logUserFact({
-        userFactTypeName: 'FirebaseRegistrationSuccess',
+        userFactTypeName: 'FirebaseAccountCreation',
         appPage: 'Register',
         detail1: email,
+        detail2: cadeyUser.authId,
+        detail3: 'Success',
+        detail4: '',
+        detail5: currentDeviceId,
       });
     } catch (e) {
       if (e instanceof Error) {
         // Log a Firebase registration error userfact
         logUserFact({
-          userFactTypeName: 'FirebaseRegistrationError',
+          userFactTypeName: 'FirebaseAccountCreation',
           appPage: 'Register',
-          detail1: e.message,
+          detail1: email,
+          detail2: '',
+          detail3: 'Failure',
+          detail4: e.message,
+          detail5: currentDeviceId,
         });
         setErrorDecorated(e);
         throw e;
       }
       // Log a Firebase registration error userfact
       logUserFact({
-        userFactTypeName: 'FirebaseRegistrationError',
+        userFactTypeName: 'FirebaseAccountCreation',
         appPage: 'Register',
-        detail1: 'Unknown error',
+        detail1: email,
+        detail2: '',
+        detail3: 'Failure',
+        detail4: 'Unknown error',
+        detail5: currentDeviceId,
       });
       throw e;
     } finally {
