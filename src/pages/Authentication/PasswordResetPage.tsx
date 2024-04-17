@@ -71,8 +71,7 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
             <>
               <p className='success'>{success}</p>
               <p className='additional-success'>
-                Password reset successfully! Please click the link below to
-                login.
+                Please click the link below to login.
               </p>
             </>
           ) : (
