@@ -38,15 +38,18 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
       await confirmPasswordReset(auth, actionCode, newPassword);
       setSuccess('Your password has been reset successfully.');
 
-      setTimeout(() => {
-        if (auth.currentUser) {
-          // Send the user to the home page if they are on the same device and have the same login session
-          history.push('/App/Authentication/Login');
-          auth.signOut();
-        } else {
-          history.push('/App/Authentication/Login');
-        }
-      }, 3000);
+      // setTimeout(() => {
+      //   if (auth.currentUser) {
+      //     auth.signOut();
+      //     // Send the user to the home page if they are on the same device and have the same login session
+      //     console.log('User signed out');
+      //     console.log('Redirecting to login page');
+      //     history.push('/App/Authentication/Login');
+      //   } else {
+      //     console.log('Redirecting to login page');
+      //     history.push('/App/Authentication/Login');
+      //   }
+      // }, 3000);
       // Optionally, navigate to the login screen or elsewhere as needed
     } catch (error) {
       setError('Failed to reset password. Please try again.'); //Figure out a way to be more explicit
@@ -68,8 +71,8 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
             <>
               <p className='success'>{success}</p>
               <p className='additional-success'>
-                If you aren't automatically redirected within the next 5
-                seconds, please click the link below
+                Password reset successfully! Please click the link below to
+                login.
               </p>
             </>
           ) : (
