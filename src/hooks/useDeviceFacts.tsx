@@ -21,10 +21,6 @@ const useDeviceFacts = () => {
   );
 
   const logDeviceFact = async (facts: LogDeviceFactOptions) => {
-    if (cadeyUserId === 0) {
-      throw new Error('Cadey User ID is 0');
-    }
-
     facts.deviceId = getDeviceId();
     facts.userId = cadeyUserId;
 
@@ -54,7 +50,7 @@ const useDeviceFacts = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error calling userfact: ', error);
+      console.error('Error calling devicefact: ', error);
       throw error;
     }
   };
