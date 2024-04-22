@@ -52,7 +52,7 @@ const useAppOpened = () => {
     const response = await request.json(); // Parse the response data as json
 
     // Set the cadeyUserId in the global state
-    dispatch(setAppOpenCadeyId(response.cadeyUserId));
+    // dispatch(setAppOpenCadeyId(response.cadeyUserId));
 
     console.log('Cadey User ID: ', response.cadeyUserId);
 

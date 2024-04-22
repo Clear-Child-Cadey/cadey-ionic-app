@@ -29,13 +29,13 @@ import { RootState } from '../store';
 import { useHistory } from 'react-router';
 import { setHttpErrorModalData } from '../features/httpError/slice';
 import getDeviceId from '../utils/getDeviceId';
-import useUserFacts from './useUserFacts';
+import useDeviceFacts from './useDeviceFacts';
 
 const useCadeyAuth = () => {
   const countRef = React.useRef(0);
   const dispatch = useDispatch();
   const history = useHistory();
-  const { logUserFact } = useUserFacts();
+  const { logDeviceFact } = useDeviceFacts();
   const cadeyUserId = useSelector(
     (state: RootState) => state.authStatus.appOpenCadeyId,
   );
@@ -189,8 +189,8 @@ const useCadeyAuth = () => {
       dispatch(setCadeyResolved(true));
 
       // Log a Firebase authentication success userfact
-      logUserFact({
-        userFactTypeName: 'FirebaseAuthenticationAttempt',
+      logDeviceFact({
+        deviceFactTypeName: 'FirebaseAuthenticationAttempt',
         appPage: 'Login',
         detail1: email, // email
         detail2: cadeyUser.authId, // authId
@@ -201,8 +201,8 @@ const useCadeyAuth = () => {
     } catch (e) {
       if (e instanceof Error) {
         // Log a Firebase authentication error userfact
-        logUserFact({
-          userFactTypeName: 'FirebaseAuthenticationAttempt',
+        logDeviceFact({
+          deviceFactTypeName: 'FirebaseAuthenticationAttempt',
           appPage: 'Login',
           detail1: email, // email
           detail2: '', // authId
@@ -215,8 +215,8 @@ const useCadeyAuth = () => {
         throw e;
       }
       // Log a Firebase authentication error userfact
-      logUserFact({
-        userFactTypeName: 'FirebaseAuthenticationAttempt',
+      logDeviceFact({
+        deviceFactTypeName: 'FirebaseAuthenticationAttempt',
         appPage: 'Login',
         detail1: email, // email
         detail2: '', // authId
@@ -249,8 +249,8 @@ const useCadeyAuth = () => {
         setMessageDecorated(AppMeta.emailVerificationMessage);
       }
       // Log a Firebase registration success userfact
-      logUserFact({
-        userFactTypeName: 'FirebaseAccountCreation',
+      logDeviceFact({
+        deviceFactTypeName: 'FirebaseAccountCreation',
         appPage: 'Register',
         detail1: email,
         detail2: cadeyUser.authId,
@@ -261,8 +261,8 @@ const useCadeyAuth = () => {
     } catch (e) {
       if (e instanceof Error) {
         // Log a Firebase registration error userfact
-        logUserFact({
-          userFactTypeName: 'FirebaseAccountCreation',
+        logDeviceFact({
+          deviceFactTypeName: 'FirebaseAccountCreation',
           appPage: 'Register',
           detail1: email,
           detail2: '',
@@ -274,8 +274,8 @@ const useCadeyAuth = () => {
         throw e;
       }
       // Log a Firebase registration error userfact
-      logUserFact({
-        userFactTypeName: 'FirebaseAccountCreation',
+      logDeviceFact({
+        deviceFactTypeName: 'FirebaseAccountCreation',
         appPage: 'Register',
         detail1: email,
         detail2: '',
