@@ -43,11 +43,9 @@ const VideoLibraryPage: React.FC = () => {
   // Context variables
   // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
   const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const userAgeGroup =
     cadeyUserAgeGroup > 0
       ? cadeyUserAgeGroup

@@ -41,12 +41,9 @@ const LibraryPage: React.FC = () => {
 
   // Context variables
   const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
-  // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const { apiUrl } = useContext(ApiUrlContext);
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 

@@ -14,16 +14,16 @@ import { RootState } from '../../store';
 // Styles
 import './Grandfather.css';
 // API
-import useUserFacts from '../../hooks/useUserFacts';
+import useDeviceFacts from '../../hooks/useDeviceFacts';
 
 const GrandfatherPage = () => {
   const history = useHistory();
 
-  const { logUserFact } = useUserFacts();
+  const { logDeviceFact } = useDeviceFacts();
 
   const handleContinue = (url: string) => {
     // Log userTap user fact
-    logUserFact({
+    logDeviceFact({
       userFactTypeName: 'UserTap',
       appPage: 'Welcome - Grandfather Screen',
       detail1: 'Welcome - Grandfather Screen',
@@ -34,7 +34,7 @@ const GrandfatherPage = () => {
   };
 
   useEffect(() => {
-    logUserFact({
+    logDeviceFact({
       userFactTypeName: 'appPageNavigation',
       appPage: 'Welcome - Grandfather Screen',
     });

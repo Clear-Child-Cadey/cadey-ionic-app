@@ -83,11 +83,9 @@ const QuizModal: React.FC = ({}) => {
     useModalContext();
   // const { cadeyUserId } = React.useContext(CadeyUserContext);
 
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { pathId } = usePathContext();
 

@@ -27,11 +27,9 @@ import { setQuizModalOpen as setQuizModalOpenRx } from '../../features/video/sli
 const WelcomePush: React.FC = () => {
   const dispatch = useDispatch();
 
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 

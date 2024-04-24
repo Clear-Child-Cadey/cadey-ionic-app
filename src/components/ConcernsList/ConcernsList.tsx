@@ -27,12 +27,9 @@ export interface Symptom {
 // Define the ConcernsList functional component
 const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
   const { apiUrl } = React.useContext(ApiUrlContext);
-  // const { cadeyUserId, minimumSupportedVersion } = useContext(CadeyUserContext);
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const { currentAppPage } = useAppPage();
 
   const [isLoading, setIsLoading] = useState(false);

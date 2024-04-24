@@ -193,7 +193,6 @@ const useCadeyAuth = () => {
         detail2: cadeyUser.authId, // authId
         detail3: 'Success', // Firebase status
         detail4: '', // Error message
-        detail5: currentDeviceId, // deviceId
       });
     } catch (e) {
       if (e instanceof Error) {
@@ -205,7 +204,6 @@ const useCadeyAuth = () => {
           detail2: '', // authId
           detail3: 'Failure', // Firebase status
           detail4: e.message, // Error message
-          detail5: currentDeviceId, // deviceId
         });
 
         setErrorDecorated(e);
@@ -219,7 +217,6 @@ const useCadeyAuth = () => {
         detail2: '', // authId
         detail3: 'Failure', // Firebase status
         detail4: 'Unknown error', // Error message
-        detail5: currentDeviceId, // deviceId
       });
       throw e;
     } finally {
@@ -253,7 +250,6 @@ const useCadeyAuth = () => {
         detail2: cadeyUser.authId,
         detail3: 'Success',
         detail4: '',
-        detail5: currentDeviceId,
       });
     } catch (e) {
       if (e instanceof Error) {
@@ -265,7 +261,6 @@ const useCadeyAuth = () => {
           detail2: '',
           detail3: 'Failure',
           detail4: e.message,
-          detail5: currentDeviceId,
         });
         setErrorDecorated(e);
         throw e;
@@ -278,7 +273,6 @@ const useCadeyAuth = () => {
         detail2: '',
         detail3: 'Failure',
         detail4: 'Unknown error',
-        detail5: currentDeviceId,
       });
       throw e;
     } finally {

@@ -10,7 +10,6 @@ interface AuthStatusState {
     cadeyUser: CadeyUserModel;
     firebaseUser: FirebaseUserModel;
   };
-  appOpenCadeyId: number;
   isAnonymous: Trilean;
   emailVerified: Trilean;
   grandfatherStatus: boolean;
@@ -24,7 +23,6 @@ const initialState: AuthStatusState = {
     firebaseUser: null,
   },
   isAnonymous: 'pending',
-  appOpenCadeyId: 0,
   emailVerified: 'pending',
   grandfatherStatus: false,
 };
@@ -33,9 +31,6 @@ export const authStatusSlice = createSlice({
   name: 'authStatus',
   initialState,
   reducers: {
-    setAppOpenCadeyId: (state, action) => {
-      state.appOpenCadeyId = action.payload;
-    },
     setIsAnonymous: (state, action) => {
       state.isAnonymous = action.payload;
     },
@@ -67,7 +62,6 @@ export const {
   setCadeyUser,
   setFirebaseUser,
   setIsAnonymous,
-  setAppOpenCadeyId,
   setEmailVerified,
   setGrandfatherStatus,
 } = authStatusSlice.actions;

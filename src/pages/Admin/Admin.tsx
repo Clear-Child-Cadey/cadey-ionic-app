@@ -34,12 +34,9 @@ import { RootState } from '../../store';
 const AdminPage: React.FC = () => {
   const { apiUrl, setApiUrl } = useContext(ApiUrlContext);
   const [pushEnabled, setPushEnabled] = useState(false);
-  // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const [oneSignalExternalId, setOneSignalExternalId] = useState<string | null>(
     null,
   );

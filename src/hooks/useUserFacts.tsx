@@ -12,13 +12,9 @@ const useUserFacts = () => {
     'Content-Type': 'application/json',
   };
 
-  // Check if the
-
-  const cadeyUserId: number = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
 
   const logUserFact = async (facts: LogUserFactOptions) => {
     if (cadeyUserId === 0) {

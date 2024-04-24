@@ -27,11 +27,9 @@ const useRequestQuiz = ({
   const { setIsTabBarVisible } = useTabContext();
   const history = useHistory();
   const { apiUrl } = React.useContext(ApiUrlContext);
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  ); // either grab the ID from cadey user, if set, otherwise, get the appOpen cadeyUserId
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
 
   const deepLinkStatus = useSelector((state: RootState) => {
     return state.deepLink;

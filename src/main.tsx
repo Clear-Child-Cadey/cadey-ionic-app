@@ -113,9 +113,9 @@ function MainComponent() {
     asyncFunction();
   }, []);
 
-  const cadeyUserId = useSelector(
-    (state: RootState) => state?.authStatus?.userData?.cadeyUser?.cadeyUserId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
 
   const userResolved = useSelector(
     (state: RootState) =>

@@ -41,22 +41,13 @@ const WelcomePathSelect: React.FC = () => {
       state.authStatus?.userData?.firebaseUser?.emailVerified
     );
   });
-  // Get the Cadey User data from the context
-  const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const { apiUrl } = useContext(ApiUrlContext);
   const { currentAppPage, setCurrentAppPage, setCurrentBasePage } =
     useAppPage();
-  const deviceId = useSelector(
-    (state: RootState) => state.deviceIdStatus.deviceId,
-  );
-  const userData = useSelector((state: RootState) => {
-    return state.authStatus.userData;
-  });
 
   // Create an empty set of PopularSeriesSymptoms to populate
   const [pathListing, setPathListing] = React.useState<PathListing>();

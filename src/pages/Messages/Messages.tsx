@@ -39,11 +39,9 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const userFactUrl = `${apiUrl}/userfact`;
   const unreadCount = useContext(UnreadCountContext); // Get the current unread count
   const [messagesLoaded, setMessagesLoaded] = useState(false); // Used to determine if the messages have been loaded yet

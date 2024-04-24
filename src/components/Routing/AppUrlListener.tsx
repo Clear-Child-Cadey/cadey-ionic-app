@@ -19,11 +19,9 @@ const AppUrlListener: React.FC<any> = () => {
   const unreadCount = useContext(UnreadCountContext); // Get the current unread count
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
 
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  ); // either grab the ID from cadey user, if set, otherwise, get the appOpen cadeyUserId
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
 
   useEffect(() => {
     // Listener for detecting URL on app open

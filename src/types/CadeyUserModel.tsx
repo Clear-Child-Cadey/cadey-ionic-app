@@ -14,6 +14,10 @@ type CadeyUserModel = {
 } | null;
 
 // Enum for authStatus
+// Successful = 0,
+// FailedExpired = 1,
+// FailedNotActive = 2,
+// FailedNotRegistered = 3,
 enum AuthStatus {
   Status0 = 0,
   Status1 = 1,
@@ -22,6 +26,9 @@ enum AuthStatus {
 }
 
 // Enum for regStatus
+// Registered = 0,
+// NotFound = 1,
+// FoundNotRegistered = 2,
 enum RegStatus {
   Status0 = 0,
   Status1 = 1,

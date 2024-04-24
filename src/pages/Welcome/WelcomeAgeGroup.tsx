@@ -32,11 +32,9 @@ const WelcomeAgeGroupSelect: React.FC = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
 
   const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
 

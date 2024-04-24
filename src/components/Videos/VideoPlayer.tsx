@@ -38,12 +38,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const mediaIdStr = String(mediaId);
 
-  // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const quizModalOpenRx = useSelector(
     (state: RootState) => state.video.quizModalOpen,
   );

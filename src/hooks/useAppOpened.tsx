@@ -4,10 +4,7 @@ import getDeviceId from '../utils/getDeviceId';
 import fetchWithTimeout from '../utils/fetchWithTimeout';
 import AppMeta from '../variables/AppMeta';
 import { useDispatch } from 'react-redux';
-import {
-  setAppOpenCadeyId,
-  setGrandfatherStatus,
-} from '../features/authLoading/slice';
+import { setGrandfatherStatus } from '../features/authLoading/slice';
 
 const useAppOpened = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
@@ -50,9 +47,6 @@ const useAppOpened = () => {
     }
 
     const response = await request.json(); // Parse the response data as json
-
-    // Set the cadeyUserId in the global state
-    // dispatch(setAppOpenCadeyId(response.cadeyUserId));
 
     // Determine if the company name is "Grandfather" and the user does not have an authId (meaning they have not registered yet)
     // If so, set the global state

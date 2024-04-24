@@ -8,7 +8,6 @@ const headers = {
 };
 
 interface LogUserFactOptions {
-  deviceId: string;
   cadeyUserId: number;
   baseApiUrl: string;
   userFactTypeName: string;
@@ -25,7 +24,6 @@ interface LogUserFactOptions {
 }
 
 export const logUserFact = async ({
-  deviceId,
   cadeyUserId,
   baseApiUrl,
   userFactTypeName,

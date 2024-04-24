@@ -30,13 +30,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 const PathListingPage: React.FC = () => {
-  // Get the Cadey User data from the context
-  // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const { apiUrl } = useContext(ApiUrlContext);
   const { currentAppPage, setCurrentAppPage } = useAppPage();
 

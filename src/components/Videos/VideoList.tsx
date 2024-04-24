@@ -32,21 +32,17 @@ interface VideoListProps {
 }
 
 const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
-  // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
+  const cadeyUserId = useSelector((state: RootState) => {
+    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+  });
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
-  const userFactUrl = `${apiUrl}/userfact`
   const [canShare, setCanShare] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
   const { currentAppPage } = useAppPage();
-  
+
   // Get all the props from the modal context
-  const { 
-    setVideoModalOpen, 
+  const {
+    setVideoModalOpen,
     setArticleDetailModalOpen,
     setCurrentVimeoId,
     setCurrentVideoType,
@@ -57,16 +53,21 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
 
   // Check if the user's device has sharing capabilities
   useEffect(() => {
-    Share.canShare().then((res: {value: boolean}) => setCanShare(res.value));
+    Share.canShare().then((res: { value: boolean }) => setCanShare(res.value));
   }, []);
 
   // Function to copy the shareable link to clipboard
-  const handleShare = async (event: React.MouseEvent, sourceId: string, mediaId: string, videoType: string) => {
+  const handleShare = async (
+    event: React.MouseEvent,
+    sourceId: string,
+    mediaId: string,
+    videoType: string,
+  ) => {
     // Log a user fact that the user tapped on Share
-    logUserFact ({
+    logUserFact({
       cadeyUserId: cadeyUserId,
       baseApiUrl: apiUrl,
-      userFactTypeName: "MediaShared",
+      userFactTypeName: 'MediaShared',
       appPage: currentAppPage,
       detail1: mediaId,
       detail2: videoType,
@@ -76,36 +77,51 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
     await Share.share({
       url: `https://vimeo.com/${sourceId}`,
     });
-  }
+  };
 
   const handleThumbnailClick = (video: VideoItem) => {
     // Start the loader - will be dismissed in the VideoPlayer component when the video is ready
-    dispatch({ type: 'SET_LOADING', payload: { key: 'videoDetail', value: true } });
+    dispatch({
+      type: 'SET_LOADING',
+      payload: { key: 'videoDetail', value: true },
+    });
     setSelectedVideo(video);
     setCurrentVimeoId(video.sourceId);
     setCurrentVideoType(video.videoType);
     setArticleDetailModalOpen(false);
     setVideoModalOpen(true);
-  }
+  };
 
   return (
-    <div className={`video-list ${listType === 'full' ? 'full' : ''} ${listType === 'horizontal' ? 'horizontal' : ''}`}>
+    <div
+      className={`video-list ${listType === 'full' ? 'full' : ''} ${listType === 'horizontal' ? 'horizontal' : ''}`}
+    >
       {videos.map((video) => (
-        <div className="video-item" key={video.sourceId}>
-          <div className="video-thumb-play-container">
-            <img 
+        <div className='video-item' key={video.sourceId}>
+          <div className='video-thumb-play-container'>
+            <img
               src={video.thumbnail}
-              alt={video.title} 
-              onClick={() => handleThumbnailClick(video)} 
+              alt={video.title}
+              onClick={() => handleThumbnailClick(video)}
             />
-            <IonIcon icon={playCircleOutline} className="play-icon" />
+            <IonIcon icon={playCircleOutline} className='play-icon' />
           </div>
-          <div className="tag-share">
-            <p>Video</p>  
+          <div className='tag-share'>
+            <p>Video</p>
             {canShare && (
-              <div className="share" onClick={(event) => handleShare(event, video.sourceId, video.mediaId, video.videoType)}>
+              <div
+                className='share'
+                onClick={(event) =>
+                  handleShare(
+                    event,
+                    video.sourceId,
+                    video.mediaId,
+                    video.videoType,
+                  )
+                }
+              >
                 <p>Share </p>
-                <div className="share-button">
+                <div className='share-button'>
                   <IonIcon icon={arrowRedoOutline} />
                 </div>
               </div>

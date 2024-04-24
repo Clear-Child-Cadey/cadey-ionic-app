@@ -4,26 +4,17 @@ import { useHistory } from 'react-router-dom';
 // CSS
 import './Welcome.css';
 // Contexts
-import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
-// API
-import { logUserFact } from '../../api/UserFacts';
 // Redux
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import ExpiredUser from '../../components/Authentication/ExpiredUser';
+import useDeviceFacts from '../../hooks/useDeviceFacts';
+import getDeviceId from '../../utils/getDeviceId';
 
 const WelcomePage: React.FC = () => {
-  // const { cadeyUserId } = React.useContext(CadeyUserContext);
-  const cadeyUserId = useSelector((state: RootState) =>
-    state?.authStatus?.userData?.cadeyUser?.cadeyUserId
-      ? state.authStatus.userData.cadeyUser.cadeyUserId
-      : state.authStatus.appOpenCadeyId,
-  );
   const { apiUrl } = React.useContext(ApiUrlContext);
-  const deviceId = useSelector((state: RootState) => {
-    return state.deviceIdStatus.deviceId;
-  });
+  const { logDeviceFact } = useDeviceFacts();
+  const deviceId = getDeviceId();
 
   const cadeyUser = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser;
@@ -37,8 +28,8 @@ const WelcomePage: React.FC = () => {
       return;
     }
     // appPageNavigation user fact
-    logUserFact({
-      cadeyUserId: cadeyUser?.cadeyUserId,
+    logDeviceFact({
+      deviceId: deviceId,
       baseApiUrl: apiUrl,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Welcome - Intro Screen',
