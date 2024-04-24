@@ -2,7 +2,7 @@ interface LogDeviceFactOptions {
   deviceId?: string;
   userId?: number;
   baseApiUrl?: string;
-  deviceFactTypeName: string;
+  userFactTypeName: string;
   appPage: string;
   detail1?: string;
   detail2?: string;

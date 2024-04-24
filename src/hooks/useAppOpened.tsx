@@ -54,8 +54,6 @@ const useAppOpened = () => {
     // Set the cadeyUserId in the global state
     // dispatch(setAppOpenCadeyId(response.cadeyUserId));
 
-    console.log('Cadey User ID: ', response.cadeyUserId);
-
     // Determine if the company name is "Grandfather" and the user does not have an authId (meaning they have not registered yet)
     // If so, set the global state
     const grandfatherSignup =

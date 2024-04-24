@@ -36,9 +36,6 @@ const useCadeyAuth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { logDeviceFact } = useDeviceFacts();
-  const cadeyUserId = useSelector(
-    (state: RootState) => state.authStatus.appOpenCadeyId,
-  );
   const initialErrorsState: string[] = [];
   const initialMessagesState: string[] = [];
   const currentDeviceId = getDeviceId();
@@ -190,7 +187,7 @@ const useCadeyAuth = () => {
 
       // Log a Firebase authentication success userfact
       logDeviceFact({
-        deviceFactTypeName: 'FirebaseAuthenticationAttempt',
+        userFactTypeName: 'FirebaseAuthenticationAttempt',
         appPage: 'Login',
         detail1: email, // email
         detail2: cadeyUser.authId, // authId
@@ -202,7 +199,7 @@ const useCadeyAuth = () => {
       if (e instanceof Error) {
         // Log a Firebase authentication error userfact
         logDeviceFact({
-          deviceFactTypeName: 'FirebaseAuthenticationAttempt',
+          userFactTypeName: 'FirebaseAuthenticationAttempt',
           appPage: 'Login',
           detail1: email, // email
           detail2: '', // authId
@@ -216,7 +213,7 @@ const useCadeyAuth = () => {
       }
       // Log a Firebase authentication error userfact
       logDeviceFact({
-        deviceFactTypeName: 'FirebaseAuthenticationAttempt',
+        userFactTypeName: 'FirebaseAuthenticationAttempt',
         appPage: 'Login',
         detail1: email, // email
         detail2: '', // authId
@@ -250,7 +247,7 @@ const useCadeyAuth = () => {
       }
       // Log a Firebase registration success userfact
       logDeviceFact({
-        deviceFactTypeName: 'FirebaseAccountCreation',
+        userFactTypeName: 'FirebaseAccountCreation',
         appPage: 'Register',
         detail1: email,
         detail2: cadeyUser.authId,
@@ -262,7 +259,7 @@ const useCadeyAuth = () => {
       if (e instanceof Error) {
         // Log a Firebase registration error userfact
         logDeviceFact({
-          deviceFactTypeName: 'FirebaseAccountCreation',
+          userFactTypeName: 'FirebaseAccountCreation',
           appPage: 'Register',
           detail1: email,
           detail2: '',
@@ -275,7 +272,7 @@ const useCadeyAuth = () => {
       }
       // Log a Firebase registration error userfact
       logDeviceFact({
-        deviceFactTypeName: 'FirebaseAccountCreation',
+        userFactTypeName: 'FirebaseAccountCreation',
         appPage: 'Register',
         detail1: email,
         detail2: '',
@@ -332,7 +329,6 @@ const useCadeyAuth = () => {
               ? authenticatedAuthId
               : firebaseUser.uid, //Pass in the authenticated firebase ID, fallback to the anonymous ID if not explicitly passed
             cadeyUserDeviceId,
-            cadeyUserId,
           }),
         },
         { requestName: 'postUserAuth' },
@@ -374,7 +370,6 @@ const useCadeyAuth = () => {
             cadeyUserEmail: firebaseUser.email,
             authId: firebaseUser.uid,
             cadeyUserDeviceId,
-            cadeyUserId,
           }),
         },
         { requestName: 'postUserAuth' },
