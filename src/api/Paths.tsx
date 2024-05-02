@@ -1,4 +1,5 @@
-import fetchWithTimeout from '../utils/fetchWithTimeout';
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
 
 export interface PathListing {
   userId: number;
@@ -33,32 +34,17 @@ export interface PathEntity {
   isCurrent: boolean;
 }
 
-let response;
+export const getPathListing = async (cadeyUserId: number) => {
+  const url = `${AppMeta.baseApiUrl}/paths/${cadeyUserId}`;
 
-export const getPathListing = async (apiUrl: string, cadeyUserId: number) => {
-  const url = `${apiUrl}/paths/${cadeyUserId}`;
+  const response = await axios.get(url, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-  try {
-    response = await fetchWithTimeout(
-      url,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'text/plain',
-          apiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        },
-      },
-      { cadeyUserId, requestName: 'getPathListing' },
-    );
-  } catch (error) {
-    throw new Error(`HTTP error! status: ${error}`);
-  }
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const data = await response.json();
+  const data = await response.data;
 
   // Map data to the Path Listing interface
   const pathListing: PathListing = {
@@ -76,34 +62,17 @@ export const getPathListing = async (apiUrl: string, cadeyUserId: number) => {
   return pathListing;
 };
 
-export const getPathDetail = async (
-  apiUrl: string,
-  cadeyUserId: number,
-  pathId: number,
-) => {
-  const url = `${apiUrl}/pathdetail/${cadeyUserId}/${pathId}`;
+export const getPathDetail = async (cadeyUserId: number, pathId: number) => {
+  const url = `${AppMeta.baseApiUrl}/pathdetail/${cadeyUserId}/${pathId}`;
 
-  try {
-    response = await fetchWithTimeout(
-      url,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'text/plain',
-          apiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-        },
-      },
-      { cadeyUserId, requestName: 'getPathDetail' },
-    );
-  } catch (error) {
-    throw new Error(`HTTP error! status: ${error}`);
-  }
+  const response = await axios.get(url, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const data = await response.json();
+  const data = await response.data;
 
   // Map data to the Path Detail interface
   const pathDetail: PathDetail = {
@@ -127,39 +96,24 @@ export const getPathDetail = async (
 };
 
 export const postPathSelect = async (
-  apiUrl: string,
   cadeyUserId: number,
   appPage: string,
   pathId: number,
   pathName: string,
 ) => {
-  const url = `${apiUrl}/pathselect/${cadeyUserId}`;
+  const url = `${AppMeta.baseApiUrl}/pathselect/${cadeyUserId}`;
+  const bodyObject = {
+    appPage: appPage,
+    pathId: pathId,
+    pathName: pathName,
+  };
 
-  try {
-    response = await fetchWithTimeout(
-      url,
-      {
-        method: 'POST',
-        headers: {
-          accept: 'text/plain',
-          apiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          appPage: appPage,
-          pathId: pathId,
-          pathName: pathName,
-        }),
-      },
-      { cadeyUserId, requestName: 'postPathSelect' },
-    );
-  } catch (error) {
-    throw new Error(`HTTP error! status: ${error}`);
-  }
+  const response = await axios.post(url, bodyObject, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return await response.json();
+  return await response.data;
 };

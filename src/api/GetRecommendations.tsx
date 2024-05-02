@@ -1,35 +1,25 @@
-import fetchWithTimeout from "../utils/fetchWithTimeout";
+import { useSelector } from 'react-redux';
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
+import { RootState } from '../store';
 
 export const getRecommendations = async (
-    apiUrl: string,
-    cadeyUserId: string,
-    ageGroup: number,
-    symptoms: any[]
+  // apiUrl: string,
+  cadeyUserId: string,
+  ageGroup: number,
+  symptoms: any[],
 ) => {
-    let response;
-    const url = `${apiUrl}/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map(symptom => symptom.id).join('&symptomIds=')}`;
+  // const cadeyUserId = useSelector((state: RootState) => {
+  //   return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
+  // });
+  const url = `${AppMeta.baseApiUrl}/getrecommendations?cadeyUserId=${cadeyUserId}&ageGroup=${ageGroup}&symptomIds=${symptoms.map((symptom) => symptom.id).join('&symptomIds=')}`;
 
-    try {
-        response = await fetchWithTimeout(
-          url,
-          {
-            method: "GET",
-            headers: {
-              accept: "text/plain",
-              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
-            },
-          },
-          { cadeyUserId, requestName: "getRecommendations" },
-        );
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-    
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  const response = await axios.get(url, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-    const data = await response.json();
-
-    return data;
+  return await response.data;
 };

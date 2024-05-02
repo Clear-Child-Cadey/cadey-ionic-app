@@ -47,8 +47,7 @@ const ArticleCategoryListingPage: React.FC = () => {
     setCurrentBasePage('Article Categories');
     setCurrentAppPage('Article Categories');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Article Categories',
     });
@@ -81,8 +80,7 @@ const ArticleCategoryListingPage: React.FC = () => {
 
   const handleBack = (route: string) => {
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,

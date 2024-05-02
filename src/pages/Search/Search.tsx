@@ -79,10 +79,8 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
   useEffect(() => {
     setCurrentBasePage('Search');
     setCurrentAppPage('Search');
-    console.log('Logging user fact for appPageNavigation');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Search',
     });
@@ -150,12 +148,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     // Get new results
     try {
-      const response = await postUserSearch(
-        apiUrl,
-        cadeyUserId,
-        searchTerm,
-        ageGroup,
-      );
+      const response = await postUserSearch(cadeyUserId, searchTerm, ageGroup);
       setSearchResults(response);
       if (response.articleIds.length > 0) {
         setArticleResults(await getArticlesByIds(response.articleIds));
@@ -179,8 +172,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
   const handleBack = (route: string) => {
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,

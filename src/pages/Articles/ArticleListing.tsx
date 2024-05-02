@@ -61,8 +61,7 @@ const ArticlesPage: React.FC = () => {
         setCurrentAppPage('Article Listing (' + tempCategoryName + ')');
 
         logUserFact({
-          cadeyUserId: cadeyUserId,
-          baseApiUrl: apiUrl,
+          cadeyUserId: cadeyUserId || 0,
           userFactTypeName: 'appPageNavigation',
           appPage: 'Article Listing',
           detail1: categoryId.toString(),
@@ -93,8 +92,7 @@ const ArticlesPage: React.FC = () => {
 
   const handleBack = (route: string) => {
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,

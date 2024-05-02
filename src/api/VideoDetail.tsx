@@ -1,28 +1,15 @@
-import fetchWithTimeout from "../utils/fetchWithTimeout";
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
 
-export const getVideoDetailData = async (apiUrl: string, cadeyUserId: string, vimeoId: string) => {
-    let response;
-    const url = `${apiUrl}/videodetails/${vimeoId}`;
+export const getVideoDetailData = async (vimeoId: string) => {
+  const url = `${AppMeta.baseApiUrl}/videodetails/${vimeoId}`;
 
-    try {
-        response = await fetchWithTimeout(
-          url,
-          {
-            method: "GET",
-            headers: {
-              accept: "text/plain",
-              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
-            },
-          },
-          { cadeyUserId, requestName: "getVideoDetailData" },
-        );
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-    
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  const response = await axios.get(url, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-    return await response.json();
+  return await response.data;
 };

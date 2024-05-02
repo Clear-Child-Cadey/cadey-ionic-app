@@ -44,32 +44,25 @@ const WelcomePush: React.FC = () => {
 
     // appPageNavigation user fact
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Welcome - Push Optin',
     });
   }, [apiUrl]);
 
   const requestNotificationPermission = () => {
-    console.log('Processing notification permission request');
     return new Promise((resolve) => {
       OneSignal.getDeviceState((deviceState) => {
         const hasPermission = deviceState.hasNotificationPermission;
-        console.log('Device state: ', deviceState);
         if (hasPermission) {
           // User has already granted permission
           resolve(true);
-          console.log('Notification permission already granted.');
         } else {
-          console.log('Notification permission not granted. Prompting user.');
           // Request permission from the user
           OneSignal.promptForPushNotificationsWithUserResponse((accepted) => {
             if (accepted) {
-              console.log('Notification permission granted.');
               resolve(true);
             } else {
-              console.log('Notification permission not granted.');
               resolve(false);
             }
           });
@@ -81,24 +74,18 @@ const WelcomePush: React.FC = () => {
   const handlePushSelection = async (optin: boolean) => {
     // Log a user fact
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: 'Welcome - Push Optin',
       detail1: 'Welcome - Push Optin',
       detail2: optin ? 'Optin Button' : 'Optout Button',
     });
 
-    console.log('Starting push selection. Optin: ', optin);
-
     if (optin) {
       // User opted in, request push notification permission (if we're on a device)
 
-      console.log('Checking for cordova');
-
       if (window.cordova) {
         try {
-          console.log('Requesting notification permission');
           await requestNotificationPermission();
           // Permission granted or already had permission
         } catch (error) {
@@ -111,7 +98,6 @@ const WelcomePush: React.FC = () => {
     // Proceed to open the quiz modal regardless of the push permission state
     setQuizModalOpen(true);
     dispatch(setQuizModalOpenRx(true));
-    console.log('Setting quiz modal open to true 3');
   };
 
   return (

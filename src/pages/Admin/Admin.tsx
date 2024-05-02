@@ -53,8 +53,7 @@ const AdminPage: React.FC = () => {
     setCurrentBasePage('Admin');
     setCurrentAppPage('Admin');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Admin',
     });

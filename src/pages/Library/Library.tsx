@@ -3,28 +3,18 @@ import {
   IonContent,
   IonHeader,
   IonPage,
-  IonTitle,
   IonToolbar,
-  IonProgressBar,
-  IonIcon,
   IonSearchbar,
   IonRow,
-  IonButton,
 } from '@ionic/react';
-// Icons
-import { checkmarkOutline } from 'ionicons/icons';
 // CSS
 import './Library.css';
-// Components
-import { Symptom } from '../../components/ConcernsList/ConcernsList';
 // Contexts
 import UnreadContext from '../../context/UnreadContext';
-import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useAppPage } from '../../context/AppPageContext';
 // API
 import { logUserFact } from '../../api/UserFacts';
-import { getRecommendations } from '../../api/GetRecommendations';
 // Routing
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -42,7 +32,7 @@ const LibraryPage: React.FC = () => {
   // Context variables
   const { unreadGoals, setUnreadGoals } = useContext(UnreadContext);
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
   const { apiUrl } = useContext(ApiUrlContext);
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
@@ -56,8 +46,7 @@ const LibraryPage: React.FC = () => {
     setCurrentBasePage('Library');
     setCurrentAppPage('Library');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Library',
     });

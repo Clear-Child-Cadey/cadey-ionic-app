@@ -1,43 +1,49 @@
-const API_URL = 'https://cadey.co/wp-json/wp/v2';
+import axios from '../../config/AxiosConfig';
 
 export interface WP_Category {
-    id: number;
-    name: string;
-    slug: string;
-    count: number;
-    parent: number;
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
+  parent: number;
 }
 
+const API_URL = 'https://cadey.co/wp-json/wp/v2';
+
 export const getCategories = async (): Promise<WP_Category[]> => {
-    try {
-        let categories: WP_Category[] = [];
-        // WordPress only returns 10 results by default, so we need to loop through all pages
-        // Set values to 1 and override them later
-        let page = 1;
-        let totalPages = 1;
+  try {
+    let categories: WP_Category[] = [];
+    // WordPress only returns 10 results by default, so we need to loop through all pages
+    // Set values to 1 and override them later
+    let page = 1;
+    let totalPages = 1;
 
-        // Request categories until we get through all the pages
-        do {
-            // Request 100 results per page to reduce the number of requests
-            const response = await fetch(`${API_URL}/categories?per_page=100&page=${page}`);
-            
-            // Update total pages only on the first request
-            if (page === 1) {
-                totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1', 10);
-            }
+    // Request categories until we get through all the pages
+    do {
+      // Request 100 results per page to reduce the number of requests
+      const response = await axios.get(
+        `${API_URL}/categories?per_page=100&page=${page}`,
+      );
 
-            const data: WP_Category[] = await response.json();
-            categories = categories.concat(data);
+      // Update total pages only on the first request
+      if (page === 1) {
+        totalPages = parseInt(response.headers['x-wp-totalpages'] || '1', 10);
+      }
 
-            page += 1;
-        } while (page <= totalPages);
+      const data: WP_Category[] = await response.data;
+      categories = categories.concat(data);
 
-        // We only want the top-level parent categories, and want to omit the "Uncategorized" category
-        categories = categories.filter(category => category.parent === 0 && category.name !== "Uncategorized");
+      page += 1;
+    } while (page <= totalPages);
 
-        return categories;
-    } catch (error) {
-        console.error("Error fetching categories:", error);
-        throw error;
-    }
+    // We only want the top-level parent categories, and want to omit the "Uncategorized" category
+    categories = categories.filter(
+      (category) => category.parent === 0 && category.name !== 'Uncategorized',
+    );
+
+    return categories;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
 };

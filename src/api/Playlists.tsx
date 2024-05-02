@@ -1,80 +1,50 @@
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
-import { Symptom } from "../components/ConcernsList/ConcernsList";
-import { PopularSymptomSeries, PopularSymptomVideo } from "../components/SymptomsList/PopularSymptomsList";
-import fetchWithTimeout from "../utils/fetchWithTimeout";
+import { Symptom } from '../components/ConcernsList/ConcernsList';
+import { PopularSymptomVideo } from '../components/SymptomsList/PopularSymptomsList';
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
 
-let response;
+export const getPopularSeriesSymptoms = async (apiUrl: string) => {
+  const url = `${apiUrl}/popularseriessymptoms/`;
 
-export const getPopularSeriesSymptoms = async (apiUrl: string, cadeyUserId: string) => {
-    const url = `${apiUrl}/popularseriessymptoms/`;
+  const response = await axios.get(url, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-    try {
-        response = await fetchWithTimeout(
-          url,
-          {
-            method: "GET",
-            headers: {
-              accept: "text/plain",
-              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
-            },
-          },
-          { cadeyUserId, requestName: "getPopularSeriesSymptoms" },
-        );
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-    
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  const data = await response.data;
 
-    const data = await response.json();
-
-    // Return data mapped to the Symptom interface
-    return data.map((series: Symptom) => ({
-        id: series.id,
-        name: series.name,
-    }));
+  // Return data mapped to the Symptom interface
+  return data.map((series: Symptom) => ({
+    id: series.id,
+    name: series.name,
+  }));
 };
 
-export const getPopularSeries = async (apiUrl: string, cadeyUserId: string, symptom: number) => {
-    const url = `${apiUrl}/popularseries/${symptom}`;
+export const getPopularSeries = async (apiUrl: string, symptom: number) => {
+  const url = `${apiUrl}/popularseries/${symptom}`;
 
-    try {
-        response = await fetchWithTimeout(
-          url,
-          {
-            method: "GET",
-            headers: {
-              accept: "text/plain",
-              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
-            },
-          },
-          { cadeyUserId, requestName: "getPopularSeries" },
-        );
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-    
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  const response = await axios.get(url, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-    const data = await response.json();
+  const data = await response.data;
 
-    // Return data mapped to the PopularSymptomSeries interface
-    const popularSeries = {
-        symptomId: data.symptomId,
-        symptomName: data.symptomName,
-        items: data.items.map((item: PopularSymptomVideo) => ({
-            entityId: item.entityId,
-            entityType: item.entityType,
-            entityTitle: item.entityTitle,
-            vimeoSourceId: item.vimeoSourceId,
-            vimeoThumbnail: item.vimeoThumbnail,
-        })),
-    };
-    return popularSeries;
+  // Return data mapped to the PopularSymptomSeries interface
+  const popularSeries = {
+    symptomId: data.symptomId,
+    symptomName: data.symptomName,
+    items: data.items.map((item: PopularSymptomVideo) => ({
+      entityId: item.entityId,
+      entityType: item.entityType,
+      entityTitle: item.entityTitle,
+      vimeoSourceId: item.vimeoSourceId,
+      vimeoThumbnail: item.vimeoThumbnail,
+    })),
+  };
+  return popularSeries;
 };
-
-

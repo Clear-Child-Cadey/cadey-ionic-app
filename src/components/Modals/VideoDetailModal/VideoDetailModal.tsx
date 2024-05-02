@@ -59,7 +59,7 @@ const VideoDetailModal: React.FC = () => {
   const { currentBasePage, currentAppPage, setCurrentAppPage } = useAppPage();
 
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
 
   const { apiUrl } = useContext(ApiUrlContext);
@@ -136,11 +136,7 @@ const VideoDetailModal: React.FC = () => {
       if (!currentVimeoId) return; // Early return if no vimeoId is present
 
       try {
-        const data = await getVideoDetailData(
-          apiUrl,
-          cadeyUserId,
-          currentVimeoId,
-        );
+        const data = await getVideoDetailData(currentVimeoId);
 
         // Ensure relatedMedia is always an array
         if (data && data.relatedMedia && !Array.isArray(data.relatedMedia)) {
@@ -151,8 +147,7 @@ const VideoDetailModal: React.FC = () => {
           if (currentVimeoId === location.search.split('video=')[1]) {
             // Log user fact that the user clicked on a push notification
             logUserFact({
-              cadeyUserId: cadeyUserId,
-              baseApiUrl: apiUrl,
+              cadeyUserId: cadeyUserId || 0,
               userFactTypeName: 'FeaturedVideoNotificationClicked',
               appPage: currentAppPage,
               detail1: String(data.mediaId),
@@ -187,8 +182,7 @@ const VideoDetailModal: React.FC = () => {
     if (isVideoModalOpen) {
       setCurrentAppPage('Video Detail');
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'appPageNavigation',
         appPage: 'Video Detail',
       });
@@ -205,7 +199,7 @@ const VideoDetailModal: React.FC = () => {
   const fetchMessages = async () => {
     try {
       // Getting messages
-      const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+      const data: Message[] = await getUserMessages(cadeyUserId);
       const unread = data.filter((data) => !data.isRead).length;
       unreadCount.setUnreadMessagesCount?.(unread);
     } catch (error) {
@@ -221,8 +215,7 @@ const VideoDetailModal: React.FC = () => {
   ) => {
     // Log a user fact that the user tapped on Share
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'MediaShared',
       appPage: source,
       detail1: mediaId,
@@ -247,8 +240,7 @@ const VideoDetailModal: React.FC = () => {
     if (!isArticleDetailModalOpen) {
       setCurrentAppPage(currentBasePage);
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'appPageNavigation',
         appPage: currentBasePage,
       });

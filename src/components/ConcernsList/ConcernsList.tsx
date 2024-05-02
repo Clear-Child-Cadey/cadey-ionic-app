@@ -1,11 +1,9 @@
 // Import our dependencies & styles
-import React, { useState, useEffect, useContext } from 'react';
-import { IonButton, IonGrid, IonRow, IonCol, IonText } from '@ionic/react';
+import React, { useState, useEffect } from 'react';
+import { IonGrid, IonRow, IonText } from '@ionic/react';
 import './ConcernsList.css';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Contexts
-import ApiUrlContext from '../../context/ApiUrlContext';
-import { CadeyUserContext } from '../../main';
 import { useAppPage } from '../../context/AppPageContext';
 // API
 import { logUserFact } from '../../api/UserFacts';
@@ -26,7 +24,6 @@ export interface Symptom {
 
 // Define the ConcernsList functional component
 const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
-  const { apiUrl } = React.useContext(ApiUrlContext);
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
@@ -39,7 +36,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
   useEffect(() => {
     const fetchConcerns = async () => {
       setIsLoading(true); // Start the loader
-      const response = await getConcerns(apiUrl, cadeyUserId);
+      const response = await getConcerns();
       setConcernsList(response);
       setIsLoading(false); // Stop the loader after data has been fetched
       SplashScreen.hide(); // Hide the splash screen after data has been fetched
@@ -68,8 +65,7 @@ const ConcernsList: React.FC<ConcernsListProps> = ({ onNext }) => {
     symptoms: Symptom[];
   }) => {
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'ConcernChosen',
       appPage: currentAppPage,
       detail1: choice.concernId.toString(),

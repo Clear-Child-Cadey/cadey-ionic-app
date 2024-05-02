@@ -50,7 +50,7 @@ const PathListingPage: React.FC = () => {
     const getPaths = async () => {
       try {
         // Get the path listing from the API and set it to state
-        setPathListing(await getPathListing(apiUrl, Number(cadeyUserId)));
+        setPathListing(await getPathListing(Number(cadeyUserId)));
       } catch (error) {
         console.error('Error getting path listing:', error);
         // Handle the error here, e.g. show an error message to the user
@@ -65,8 +65,7 @@ const PathListingPage: React.FC = () => {
 
     // Log a user fact that the user navigated to the popular symptom video detail page
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Path Listing',
     });
@@ -80,13 +79,7 @@ const PathListingPage: React.FC = () => {
 
   const handlePathSelection = async (path: Path) => {
     setPathId(path.id);
-    postPathSelect(
-      apiUrl,
-      Number(cadeyUserId),
-      currentAppPage,
-      path.id,
-      path.pathName,
-    );
+    postPathSelect(Number(cadeyUserId), currentAppPage, path.id, path.pathName);
     history.push('/App/Paths/PathDetail?id=' + path.id);
   };
 

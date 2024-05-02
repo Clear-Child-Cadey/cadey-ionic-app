@@ -198,7 +198,6 @@ const QuizModal: React.FC = ({}) => {
     try {
       const quizSubmissionResponse: QuizSubmissionResponse =
         await postQuizResponse(
-          apiUrl, // API URL
           Number(cadeyUserId), // Cadey User ID
           quizModalData!.quizRequest.clientContext, // Client Context: Where the user is in the app (1 = VideoDetail)
           quizModalData!.quizRequest.entityId, // Entity ID (The ID of the video)

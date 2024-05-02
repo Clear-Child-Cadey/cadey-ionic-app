@@ -51,10 +51,7 @@ const AppUrlListener: React.FC<any> = () => {
         const fetchMessages = async () => {
           try {
             // Getting messages
-            const data: Message[] = await getUserMessages(
-              apiUrl,
-              Number(cadeyUserId),
-            );
+            const data: Message[] = await getUserMessages(Number(cadeyUserId));
             const unread = data.filter((data) => !data.isRead).length;
             unreadCount.setUnreadMessagesCount?.(unread);
           } catch (error) {

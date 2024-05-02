@@ -168,9 +168,6 @@ const RouterTabs: React.FC = () => {
     const videoId = queryParams.get('video');
     const articleId = queryParams.get('article');
 
-    console.log('videoId:', videoId);
-    console.log('articleId:', articleId);
-
     if (videoId || articleId) {
       // Dispatch Redux actions to update the state
       dispatch(setRoute(location.pathname));
@@ -182,8 +179,7 @@ const RouterTabs: React.FC = () => {
   const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'TapBarNavClick',
       appPage: currentAppPage,
       detail1: tabName,
@@ -197,6 +193,7 @@ const RouterTabs: React.FC = () => {
     // You might need more sophisticated logic depending on your routes
     return location.pathname.startsWith(tabPath);
   };
+
   return (
     <>
       {/* Listen for App URLs */}

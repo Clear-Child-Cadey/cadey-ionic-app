@@ -155,8 +155,7 @@ const HomePage: React.FC<{
     setCurrentBasePage('Home'); // Set the current base page
     setCurrentAppPage('Home'); // Set the current app page
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Home',
     });
@@ -192,8 +191,7 @@ const HomePage: React.FC<{
   const handleButtonClick = (route: string, entity: string) => () => {
     // Log user fact that the user clicked on the button
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,

@@ -9,10 +9,12 @@ const API_PATH = '/api/cadey290';
 
 const AppMeta = {
   baseApiUrl: PRODUCTION_API_URL + API_PATH,
+  // baseApiUrl: STAGING_API_URL + API_PATH,
   forceEmailVerification: true,
   enforceTrialUser: true,
   firestoreCollection: 'ErrorLogs2024',
   cadeyApiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
+  slowRequestThreshold: 5000, // milliseconds
   fetchTimeout: -1,
   httpErrorModalData: {
     title: 'Error',

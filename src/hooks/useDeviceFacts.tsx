@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import LogDeviceFactOptions from '../interfaces/LogDeviceFactOptions';
-import fetchWithTimeout from '../utils/fetchWithTimeout';
 import getDeviceId from '../utils/getDeviceId';
-import AppMeta from '../variables/AppMeta';
 import { RootState } from '../store';
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
 
 const useDeviceFacts = () => {
   const headers = {
@@ -11,44 +11,21 @@ const useDeviceFacts = () => {
     apiKey: AppMeta.cadeyApiKey,
     'Content-Type': 'application/json',
   };
+  const url = `${AppMeta.baseApiUrl}/devicefact`;
 
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
 
   const logDeviceFact = async (facts: LogDeviceFactOptions) => {
     facts.deviceId = getDeviceId();
     facts.userId = cadeyUserId;
 
-    const requestOptions = {
-      method: 'POST',
+    const response = await axios.post(url, facts, {
       headers: headers,
-      body: JSON.stringify(facts),
-    };
+    });
 
-    try {
-      let response;
-      const url = `${AppMeta.baseApiUrl}/devicefact`;
-
-      try {
-        response = await fetchWithTimeout(url, requestOptions, {
-          cadeyUserId,
-          requestName: 'postDeviceFact',
-        });
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error calling devicefact: ', error);
-      throw error;
-    }
+    return await response.data;
   };
 
   return {

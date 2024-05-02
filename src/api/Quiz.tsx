@@ -1,11 +1,8 @@
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 import { QuizResponse } from '../components/Modals/QuizModal/QuizModal';
-import fetchWithTimeout from '../utils/fetchWithTimeout';
-
-let response;
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
 
 export const getQuiz = async (
-  apiUrl: string,
   cadeyUserId: number,
   clientContext: number, // Where the user is in the app
   // 1 = VideoDetail
@@ -13,40 +10,26 @@ export const getQuiz = async (
   entityType: number, // 1 = video, 2 = article
   entityId: number, // The ID of the video or article
 ) => {
-  const url = `${apiUrl}/quiz`;
+  const url = `${AppMeta.baseApiUrl}/quiz`;
+  const bodyObject = {
+    cadeyUserId: cadeyUserId,
+    clientContext: clientContext,
+    entityType: entityType,
+    entityId: entityId,
+  };
 
-  try {
-    response = await fetchWithTimeout(
-      url,
-      {
-        method: 'POST',
-        headers: {
-          accept: 'text/plain',
-          apiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cadeyUserId: cadeyUserId,
-          clientContext: clientContext,
-          entityType: entityType,
-          entityId: entityId,
-        }),
-      },
-      { cadeyUserId, requestName: 'getQuiz' },
-    );
-  } catch (error) {
-    throw new Error(`HTTP error! status: ${error}`);
-  }
+  const response = await axios.post(url, bodyObject, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+      'Content-Type': 'application/json',
+    },
+  });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return await response.json();
+  return await response.data;
 };
 
 export const postQuizResponse = async (
-  apiUrl: string,
   cadeyUserId: number,
   clientContext: number,
   entityId: number,
@@ -57,42 +40,29 @@ export const postQuizResponse = async (
   quizWasCancelled: boolean,
   responses: QuizResponse[],
 ) => {
-  const url = `${apiUrl}/quizquestionresponse`;
+  const url = `${AppMeta.baseApiUrl}/quizquestionresponse`;
+  const bodyObject = {
+    quizRequest: {
+      cadeyUserId: cadeyUserId,
+      clientContext: clientContext,
+      entityType: entityType,
+      entityId: entityId,
+    },
+    cadeyUserId: cadeyUserId,
+    quizId: quizId,
+    questionId: questionId,
+    questionWasSkipped: questionWasSkipped,
+    quizWasCancelled: quizWasCancelled,
+    responses: responses,
+  };
 
-  try {
-    response = await fetchWithTimeout(
-      url,
-      {
-        method: 'POST',
-        headers: {
-          accept: 'text/plain',
-          apiKey: 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          quizRequest: {
-            cadeyUserId: cadeyUserId,
-            clientContext: clientContext,
-            entityType: entityType,
-            entityId: entityId,
-          },
-          cadeyUserId: cadeyUserId,
-          quizId: quizId,
-          questionId: questionId,
-          questionWasSkipped: questionWasSkipped,
-          quizWasCancelled: quizWasCancelled,
-          responses: responses,
-        }),
-      },
-      { cadeyUserId, requestName: 'postQuizResponse' },
-    );
-  } catch (error) {
-    throw new Error(`HTTP error! status: ${error}`);
-  }
+  const response = await axios.post(url, bodyObject, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+      'Content-Type': 'application/json',
+    },
+  });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return await response.json();
+  return await response.data;
 };

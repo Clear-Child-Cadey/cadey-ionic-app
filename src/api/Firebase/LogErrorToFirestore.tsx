@@ -1,8 +1,8 @@
-import { getAuth } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
-import { firebaseApp, firestore } from "./InitializeFirebase";
-import { loggingEnabled } from "../../variables/Logging";
-import AppMeta from "../../variables/AppMeta";
+import { getAuth } from 'firebase/auth';
+import { addDoc, collection } from 'firebase/firestore';
+import { firebaseApp, firestore } from './InitializeFirebase';
+import { loggingEnabled } from '../../variables/Logging';
+import AppMeta from '../../variables/AppMeta';
 
 export const logErrorToFirestore = async (errorDetails: any) => {
   if (loggingEnabled) {
@@ -11,14 +11,14 @@ export const logErrorToFirestore = async (errorDetails: any) => {
     try {
       await addDoc(collection(firestore, AppMeta.firestoreCollection), {
         ...errorDetails,
-        firebaseUser: user ? user.uid : "anonymous",
+        firebaseUser: user ? user.uid : 'anonymous',
         timestamp: new Date().toISOString(),
       });
-      console.log("Error logged to Firestore");
+      console.log('Error logged to Firestore');
     } catch (error) {
-      console.error("Error logging to Firestore:", error);
+      console.error('Error logging to Firestore:', error);
     }
   } else {
-    console.log("Logging is disabled");
+    console.log('Logging is disabled');
   }
 };

@@ -17,7 +17,6 @@ import './ArticleDetailModal.css';
 // API
 import { logUserFact } from '../../../api/UserFacts';
 // Contexts
-import { CadeyUserContext } from '../../../main';
 import ApiUrlContext from '../../../context/ApiUrlContext';
 import { useLoadingState } from '../../../context/LoadingStateContext';
 import { useModalContext } from '../../../context/ModalContext';
@@ -25,10 +24,7 @@ import { useAppPage } from '../../../context/AppPageContext';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 
-// Setup the interface
-interface ArticleDetailProps {}
-
-const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
+const ArticleDetailModal: React.FC = () => {
   const [article, setArticle] = useState<WP_ArticleDetail | null>(null);
   const { state: loadingState, dispatch } = useLoadingState();
   // Get all the props from the modal context
@@ -49,16 +45,13 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
-  const { apiUrl } = React.useContext(ApiUrlContext);
-  const userFactUrl = `${apiUrl}/userfact`;
 
   useEffect(() => {
     // Log user fact that the user opened an article
     if (isVideoModalOpen && currentArticleId) {
       // Set the video detail as the source if the video detail modal was open
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'OpenedArticle',
         appPage: 'Video Detail',
         detail1: currentArticleId.toString(),
@@ -66,8 +59,7 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
     } else if (currentArticleId) {
       // Otherwise use the document title as the source
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'OpenedArticle',
         appPage: currentAppPage,
         detail1: currentArticleId.toString(),
@@ -116,8 +108,7 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
     if (isArticleDetailModalOpen && currentArticleId) {
       setCurrentAppPage('Article Detail');
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'appPageNavigation',
         appPage: 'Article Detail',
       });
@@ -152,8 +143,7 @@ const ArticleDetailModal: React.FC<ArticleDetailProps> = () => {
   function handleClose() {
     setCurrentAppPage(currentBasePage);
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: currentBasePage,
     });

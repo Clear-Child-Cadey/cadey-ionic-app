@@ -73,7 +73,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const player = useRef<Player | null>(null);
 
   const checkQuizModalStatus = () => {
-    console.log('quizModalOpenRx check:', quizModalOpenRx);
     return quizModalOpenRx;
   };
 
@@ -138,8 +137,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const onPlay = () => {
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'StartedMedia',
       appPage: source,
       detail1: mediaIdStr,
@@ -158,8 +156,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const onEnded = async () => {
     await logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'FinishedMedia',
       appPage: source,
       detail1: mediaIdStr,
@@ -186,8 +183,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (videoProgress >= 1 && !logged100) {
       setLogged100(true);
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'InProgressMedia',
         appPage: source,
         detail1: mediaIdStr,
@@ -197,8 +193,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     } else if (videoProgress >= 0.75 && !logged75) {
       setLogged75(true);
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'InProgressMedia',
         appPage: source,
         detail1: mediaIdStr,
@@ -208,8 +203,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     } else if (videoProgress >= 0.5 && !logged50) {
       setLogged50(true);
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'InProgressMedia',
         appPage: source,
         detail1: mediaIdStr,
@@ -219,8 +213,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     } else if (videoProgress >= 0.25 && !logged25) {
       setLogged25(true);
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'InProgressMedia',
         appPage: source,
         detail1: mediaIdStr,

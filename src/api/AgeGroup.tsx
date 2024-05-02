@@ -1,34 +1,25 @@
-import fetchWithTimeout from "../utils/fetchWithTimeout";
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
+import getDeviceId from '../utils/getDeviceId';
 
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
+export const postCadeyUserAgeGroup = async (
+  cadeyUserId: string,
+  ageGroup: string,
+) => {
+  const url = `${AppMeta.baseApiUrl}/ageGroup/${cadeyUserId}/${ageGroup}`;
 
-export const postCadeyUserAgeGroup = async (apiUrl: string, cadeyUserId: string, ageGroup: string) => {
-    let response;
-    const url = `${apiUrl}/ageGroup/${cadeyUserId}/${ageGroup}`;
+  const cadeyUserDeviceId = getDeviceId();
+  const bodyObject = {
+    cadeyUserDeviceId,
+    cadeyUserId,
+  };
 
-    try {
-        response = await fetchWithTimeout(
-          url,
-          {
-            method: "POST",
-            headers: {
-              accept: "text/plain",
-              apiKey: "XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck",
-            },
-          },
-          { cadeyUserId, requestName: "postCadeyUserAgeGroup" },
-        );
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-    
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  const response = await axios.post(url, bodyObject, {
+    headers: {
+      accept: 'text/plain',
+      apiKey: AppMeta.cadeyApiKey,
+    },
+  });
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response;
-}
+  return await response;
+};

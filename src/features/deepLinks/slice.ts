@@ -18,15 +18,12 @@ export const deepLinkSlice = createSlice({
   reducers: {
     setRoute: (state, action) => {
       state.route = action.payload;
-      console.log('Route:', action.payload);
     },
     setVideoId: (state, action) => {
       state.videoId = action.payload;
-      console.log('Video ID:', action.payload);
     },
     setArticleId: (state, action) => {
       state.articleId = action.payload;
-      console.log('Article ID:', action.payload);
     },
   },
 });

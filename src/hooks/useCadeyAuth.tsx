@@ -31,6 +31,8 @@ import { setHttpErrorModalData } from '../features/httpError/slice';
 import getDeviceId from '../utils/getDeviceId';
 import useDeviceFacts from './useDeviceFacts';
 
+import axios from '../config/AxiosConfig';
+
 const useCadeyAuth = () => {
   const countRef = React.useRef(0);
   const dispatch = useDispatch();
@@ -51,7 +53,6 @@ const useCadeyAuth = () => {
     // This effect replaces the waitForAuthStateChange mechanism
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (bypassOnAuthStateChange) {
-        console.log('Currently registering');
         return;
       }
       if (currentUser) {
@@ -84,7 +85,6 @@ const useCadeyAuth = () => {
         dispatch(setFirebaseResolved(false));
         try {
           currentUser = await signInAnonymouslyDecorated();
-          console.log('Signed in anonymously');
 
           dispatch(setIsAnonymous(true));
           dispatch(setCadeyResolved(true));
@@ -147,7 +147,7 @@ const useCadeyAuth = () => {
 
     try {
       const result = await signInAnonymously(auth);
-      console.log('Signed in anonymously');
+
       // Assuming 'signInAnonymously' returns a 'UserCredential' object.
       // Extract the user from the result, if available.
       const currentUser = result.user || null; // Adjust based on actual structure if needed.
@@ -304,40 +304,28 @@ const useCadeyAuth = () => {
     authenticatedAuthId?: string, // This can be removed, it's never used
   ) => {
     const url = `${apiUrl}/userauth`;
-    let response;
-    const cadeyUserDeviceId = getDeviceId();
-    try {
-      response = await fetchWithTimeout(
-        url,
-        {
-          method: 'POST',
-          headers: {
-            accept: 'text/plain',
-            apiKey: AppMeta.cadeyApiKey,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            cadeyUserEmail: firebaseUser.email,
-            // authId: firebaseUser.uid, // This is the anonymous user ID
-            authId: authenticatedAuthId // authenticatedAuthId is never passed in, so this is always the firebaseUser.uid. Can remove.
-              ? authenticatedAuthId
-              : firebaseUser.uid, //Pass in the authenticated firebase ID, fallback to the anonymous ID if not explicitly passed
-            cadeyUserDeviceId,
-          }),
-        },
-        { requestName: 'postUserAuth' },
-      );
-    } catch (error) {
-      throw new Error(`HTTP error! status: ${error}`);
-    } finally {
-      runAfterRequest();
-    }
+    const cadeyUserDeviceId = await getDeviceId();
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    const bodyObject = {
+      cadeyUserEmail: firebaseUser.email,
+      // authId: firebaseUser.uid, // This is the anonymous user ID
+      authId: authenticatedAuthId // authenticatedAuthId is never passed in, so this is always the firebaseUser.uid. Can remove.
+        ? authenticatedAuthId
+        : firebaseUser.uid, //Pass in the authenticated firebase ID, fallback to the anonymous ID if not explicitly passed
+      cadeyUserDeviceId,
+    };
 
-    const cadeyUserLocal = await response.json();
+    const response = await axios.post(url, bodyObject, {
+      headers: {
+        accept: 'text/plain',
+        apiKey: AppMeta.cadeyApiKey,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    runAfterRequest();
+
+    const cadeyUserLocal = await response.data;
     dispatch(setCadeyUser(cadeyUserLocal));
     dispatch(setFirebaseUser(firebaseUser)); // Move this to line 182?
 
@@ -346,39 +334,24 @@ const useCadeyAuth = () => {
 
   const handleCadeyRegistrationUser = async (firebaseUser: User) => {
     const url = `${apiUrl}/userreg`;
-
-    let response;
     const cadeyUserDeviceId = await getDeviceId();
+    const bodyObject = {
+      cadeyUserEmail: firebaseUser.email,
+      authId: firebaseUser.uid,
+      cadeyUserDeviceId,
+    };
 
-    try {
-      response = await fetchWithTimeout(
-        url,
-        {
-          method: 'POST',
-          headers: {
-            accept: 'text/plain',
-            apiKey: AppMeta.cadeyApiKey,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            cadeyUserEmail: firebaseUser.email,
-            authId: firebaseUser.uid,
-            cadeyUserDeviceId,
-          }),
-        },
-        { requestName: 'postUserAuth' },
-      );
-    } catch (error) {
-      throw new Error(`HTTP error! status: ${error}`);
-    } finally {
-      runAfterRequest();
-    }
+    const response = await axios.post(url, bodyObject, {
+      headers: {
+        accept: 'text/plain',
+        apiKey: AppMeta.cadeyApiKey,
+        'Content-Type': 'application/json',
+      },
+    });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    runAfterRequest();
 
-    const cadeyUserLocal = await response.json();
+    const cadeyUserLocal = await response.data;
     dispatch(setCadeyUser(cadeyUserLocal));
     return cadeyUserLocal;
   };

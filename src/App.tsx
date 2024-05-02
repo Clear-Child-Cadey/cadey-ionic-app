@@ -112,9 +112,7 @@ const App: React.FC = () => {
 
   const onVideoDetailPageClosed = async () => {
     const response = await logUserFact({
-      deviceId: deviceId,
-      cadeyUserId: cadeyUser.cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUser?.cadeyUserId || 0,
       userFactTypeName: 'VideoDetailPageClosed',
       appPage: 'Video Detail',
     });

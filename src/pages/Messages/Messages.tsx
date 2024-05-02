@@ -40,7 +40,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   // const { cadeyUserId } = useContext(CadeyUserContext); // Get the Cadey User ID from the context
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
   const userFactUrl = `${apiUrl}/userfact`;
   const unreadCount = useContext(UnreadCountContext); // Get the current unread count
@@ -57,13 +57,12 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
   // On component mount & isVideoModalOpen change
   useEffect(() => {
-    console.log('MessagesPage useEffect');
     const fetchMessages = async () => {
       try {
         // Start the loader
         setIsLoading(true);
         // Getting messages
-        const data: Message[] = await getUserMessages(apiUrl, cadeyUserId);
+        const data: Message[] = await getUserMessages(cadeyUserId);
         setMessages(data);
         const unread = data.filter((data) => !data.isRead).length;
         unreadCount.setUnreadMessagesCount?.(unread);
@@ -79,8 +78,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       setCurrentBasePage('Messages');
       setCurrentAppPage('Messages');
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'appPageNavigation',
         appPage: 'Messages',
       });
@@ -91,8 +89,7 @@ const MessagesPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
   const handleMessageClick = (mediaId: string, mediaSourceId: string) => {
     // Log a user fact that the user clicked a message from the messages page
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'MessageClickedOnMessagesPage',
       appPage: currentAppPage,
       detail1: mediaId,

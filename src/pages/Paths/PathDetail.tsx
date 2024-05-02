@@ -58,7 +58,7 @@ const PathDetailPage: React.FC = () => {
     setCurrentAppPage,
   } = useAppPage();
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
   const { apiUrl } = useContext(ApiUrlContext);
   const { setIsTabBarVisible } = useTabContext();
@@ -173,8 +173,7 @@ const PathDetailPage: React.FC = () => {
 
     // Log a user fact that the user navigated to the popular symptom video detail page
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Path Detail',
       detail1: 'Path ID: ' + pathId,
@@ -208,7 +207,6 @@ const PathDetailPage: React.FC = () => {
   const getPathVideoData = async (pathId: number) => {
     // Get the popular symptom playlist from the API
     const pathSeries: PathDetail = await getPathDetail(
-      apiUrl,
       Number(cadeyUserId),
       pathId,
     );
@@ -240,8 +238,7 @@ const PathDetailPage: React.FC = () => {
   ) => {
     // Log a user fact that the user tapped on Share
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'MediaShared',
       appPage: source,
       detail1: mediaId,
@@ -260,8 +257,7 @@ const PathDetailPage: React.FC = () => {
 
     // Log a UserTap user fact
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage + ': Path ' + pathId.toString() + ' ' + pathTitle,
       detail1: currentBasePage,
@@ -311,8 +307,7 @@ const PathDetailPage: React.FC = () => {
   const handle75PercentProgress = () => {
     // Log a user fact that the user watched 75% of the video
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'PathEntityCompleted',
       appPage: 'Path Detail',
       detail1: pathId.toString(),
@@ -329,8 +324,7 @@ const PathDetailPage: React.FC = () => {
   const handleBack = (route: string) => {
     // Log user fact that the user clicked on the button
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,

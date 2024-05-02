@@ -45,7 +45,7 @@ const PopularSymptomsList: React.FC = () => {
   // Get the Cadey User data from the context
   const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
 
   const userAgeGroup =
@@ -65,9 +65,7 @@ const PopularSymptomsList: React.FC = () => {
   // When the component loads
   useEffect(() => {
     const getSymptoms = async () => {
-      setPopularSeriesSymptoms(
-        await getPopularSeriesSymptoms(apiUrl, cadeyUserId),
-      );
+      setPopularSeriesSymptoms(await getPopularSeriesSymptoms(apiUrl));
     };
 
     // Get popular symptoms from the API
@@ -133,7 +131,6 @@ const PopularSymptomsList: React.FC = () => {
     // Get the popular symptom playlist from the API
     const popularSeries = await getPopularSeries(
       apiUrl,
-      cadeyUserId,
       selectedSymptoms[0].id,
     );
 

@@ -33,7 +33,7 @@ const WelcomeAgeGroupSelect: React.FC = () => {
   const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
 
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
 
   const [selectedAgeGroup, setSelectedAgeGroup] = React.useState<number>(0);
@@ -47,8 +47,7 @@ const WelcomeAgeGroupSelect: React.FC = () => {
 
     // appPageNavigation user fact
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Welcome - Age Select',
     });
@@ -60,7 +59,7 @@ const WelcomeAgeGroupSelect: React.FC = () => {
 
     try {
       // Record an age group for the user
-      await postCadeyUserAgeGroup(apiUrl, cadeyUserId, ageGroup.toString());
+      await postCadeyUserAgeGroup(cadeyUserId.toString(), ageGroup.toString());
     } catch (error) {
       console.error('Exception when calling postCadeyUserAgeGroup: ', error);
     }

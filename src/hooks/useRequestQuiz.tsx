@@ -53,7 +53,6 @@ const useRequestQuiz = ({
   const requestQuiz = async () => {
     if (emailVerified) {
       const quizResponse = await getQuiz(
-        apiUrl,
         Number(cadeyUserId),
         clientContext,
         entityType, // Entity Type (1 = video)
@@ -82,7 +81,6 @@ const useRequestQuiz = ({
         // Show the tab bar and redirect to the home page
         setIsTabBarVisible(true);
 
-        console.log('deepLinkStatus', deepLinkStatus);
         // Check if there is a video or article ID from a deep link. If so, append to the Home route
         if (videoId != '') {
           history.push(`/App/Home?video=${videoId}`);

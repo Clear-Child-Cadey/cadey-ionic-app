@@ -44,7 +44,7 @@ const VideoLibraryPage: React.FC = () => {
   // const { cadeyUserId, cadeyUserAgeGroup } = useContext(CadeyUserContext);
   const { cadeyUserAgeGroup } = useContext(CadeyUserContext);
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
   const userAgeGroup =
     cadeyUserAgeGroup > 0
@@ -52,7 +52,7 @@ const VideoLibraryPage: React.FC = () => {
       : useSelector(
           (state: RootState) =>
             state?.authStatus?.userData?.cadeyUser?.ageGroup,
-        );
+        ) || 0;
 
   const { apiUrl } = useContext(ApiUrlContext);
   const {
@@ -71,8 +71,7 @@ const VideoLibraryPage: React.FC = () => {
     setCurrentBasePage('Concerns');
     setCurrentAppPage('Concerns');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Concerns',
     });
@@ -88,8 +87,7 @@ const VideoLibraryPage: React.FC = () => {
     setCurrentBasePage('Symptoms');
     setCurrentAppPage('Symptoms');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Symptoms',
     });
@@ -109,13 +107,12 @@ const VideoLibraryPage: React.FC = () => {
 
   // getUserRecommendations function
   const getUserRecommendations = async (
-    ageGroup: number | undefined, //
+    ageGroup: number, //
     symptoms: Symptom[],
   ) => {
     try {
       const data = await getRecommendations(
-        apiUrl,
-        cadeyUserId,
+        cadeyUserId.toString(),
         ageGroup,
         symptoms,
       );
@@ -137,8 +134,7 @@ const VideoLibraryPage: React.FC = () => {
     setCurrentBasePage('Recommendations');
     setCurrentAppPage('Recommendations');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Recommendations',
     });
@@ -157,8 +153,7 @@ const VideoLibraryPage: React.FC = () => {
     setCurrentBasePage('Concerns');
     setCurrentAppPage('Concerns');
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Concerns',
     });
@@ -166,8 +161,7 @@ const VideoLibraryPage: React.FC = () => {
 
   const handleBack = (route: string) => {
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,

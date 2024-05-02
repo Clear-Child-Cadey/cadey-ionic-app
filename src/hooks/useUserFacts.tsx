@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import LogUserFactOptions from '../interfaces/LogUserFactOptions';
-import fetchWithTimeout from '../utils/fetchWithTimeout';
 import getDeviceId from '../utils/getDeviceId';
-import AppMeta from '../variables/AppMeta';
 import { RootState } from '../store';
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
 
 const useUserFacts = () => {
   const headers = {
@@ -16,6 +16,8 @@ const useUserFacts = () => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
 
+  const url = `${AppMeta.baseApiUrl}/userfact`;
+
   const logUserFact = async (facts: LogUserFactOptions) => {
     if (cadeyUserId === 0) {
       throw new Error('Cadey User ID is 0');
@@ -24,35 +26,11 @@ const useUserFacts = () => {
     facts.deviceId = getDeviceId();
     facts.userId = cadeyUserId;
 
-    const requestOptions = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(facts),
-    };
+    const response = await axios.post(url, facts, {
+      headers,
+    });
 
-    try {
-      let response;
-      const url = `${AppMeta.baseApiUrl}/userfact`;
-
-      try {
-        response = await fetchWithTimeout(url, requestOptions, {
-          cadeyUserId,
-          requestName: 'postUserFact',
-        });
-      } catch (error) {
-        throw new Error(`HTTP error! status: ${error}`);
-      }
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error calling userfact: ', error);
-      throw error;
-    }
+    return await response.data;
   };
 
   return {

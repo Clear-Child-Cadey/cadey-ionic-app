@@ -4,7 +4,6 @@ import { Share } from '@capacitor/share';
 import { IonIcon } from '@ionic/react';
 import { arrowRedoOutline, playCircleOutline } from 'ionicons/icons';
 // Contexts
-import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useModalContext } from '../../context/ModalContext';
@@ -35,7 +34,6 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
-  const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const [canShare, setCanShare] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
   const { currentAppPage } = useAppPage();
@@ -65,8 +63,7 @@ const VideoList: React.FC<VideoListProps> = ({ videos, listType }) => {
   ) => {
     // Log a user fact that the user tapped on Share
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'MediaShared',
       appPage: currentAppPage,
       detail1: mediaId,

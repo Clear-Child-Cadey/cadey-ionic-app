@@ -59,8 +59,7 @@ const ArticleDetailPage: React.FC = () => {
         setArticle(detail);
         // Log a user fact
         logUserFact({
-          cadeyUserId: cadeyUserId,
-          baseApiUrl: apiUrl,
+          cadeyUserId: cadeyUserId || 0,
           userFactTypeName: 'OpenedArticle',
           appPage: 'Article Detail',
           detail1: articleId.toString(),
@@ -68,8 +67,7 @@ const ArticleDetailPage: React.FC = () => {
         });
 
         logUserFact({
-          cadeyUserId: cadeyUserId,
-          baseApiUrl: apiUrl,
+          cadeyUserId: cadeyUserId || 0,
           userFactTypeName: 'appPageNavigation',
           appPage: 'Article Detail',
           detail1: articleId.toString(),
@@ -116,8 +114,7 @@ const ArticleDetailPage: React.FC = () => {
 
   const handleBack = (route: string) => {
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,

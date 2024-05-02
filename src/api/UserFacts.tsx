@@ -1,15 +1,14 @@
-import fetchWithTimeout from '../utils/fetchWithTimeout';
+import axios from '../config/AxiosConfig';
+import AppMeta from '../variables/AppMeta';
 
-const API_KEY = 'XPRt31RRnMb7QNqyC5JfTZjAUTtWFkYU5zKYJ3Ck';
 const headers = {
   accept: 'text/plain',
-  apiKey: API_KEY,
+  apiKey: AppMeta.cadeyApiKey,
   'Content-Type': 'application/json',
 };
 
 interface LogUserFactOptions {
   cadeyUserId: number;
-  baseApiUrl: string;
   userFactTypeName: string;
   appPage: string;
   detail1?: string;
@@ -25,7 +24,6 @@ interface LogUserFactOptions {
 
 export const logUserFact = async ({
   cadeyUserId,
-  baseApiUrl,
   userFactTypeName,
   appPage,
   detail1 = '',
@@ -38,46 +36,25 @@ export const logUserFact = async ({
   detail8 = '',
   detail9 = '',
 }: LogUserFactOptions) => {
-  const requestOptions = {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify({
-      userid: cadeyUserId,
-      userFactTypeName: userFactTypeName,
-      appPage: appPage,
-      detail1,
-      detail2,
-      detail3,
-      detail4,
-      detail5,
-      detail6,
-      detail7,
-      detail8,
-      detail9,
-    }),
+  const url = `${AppMeta.baseApiUrl}/userfact`;
+  const bodyObject = {
+    userid: cadeyUserId,
+    userFactTypeName: userFactTypeName,
+    appPage: appPage,
+    detail1,
+    detail2,
+    detail3,
+    detail4,
+    detail5,
+    detail6,
+    detail7,
+    detail8,
+    detail9,
   };
 
-  try {
-    let response;
-    const url = `${baseApiUrl}/userfact`;
+  const response = await axios.post(url, bodyObject, {
+    headers,
+  });
 
-    try {
-      response = await fetchWithTimeout(url, requestOptions, {
-        cadeyUserId,
-        requestName: 'postUserFact',
-      });
-    } catch (error) {
-      throw new Error(`HTTP error! status: ${error}`);
-    }
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error calling userfact: ', error);
-    throw error;
-  }
+  return await response.data;
 };

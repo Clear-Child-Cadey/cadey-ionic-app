@@ -136,8 +136,7 @@ const PopularSymptomVideoDetailModal: React.FC = () => {
     if (isPopularSymptomVideoModalOpen) {
       setCurrentAppPage('Popular Symptom Video Detail');
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'appPageNavigation',
         appPage: 'Popular Symptom Video Detail',
         detail1: 'Symptom ID: ' + popularSymptomId,
@@ -194,8 +193,7 @@ const PopularSymptomVideoDetailModal: React.FC = () => {
   ) => {
     // Log a user fact that the user tapped on Share
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'MediaShared',
       appPage: source,
       detail1: mediaId,
@@ -247,8 +245,7 @@ const PopularSymptomVideoDetailModal: React.FC = () => {
     if (!isArticleDetailModalOpen) {
       setCurrentAppPage(currentBasePage);
       logUserFact({
-        cadeyUserId: cadeyUserId,
-        baseApiUrl: apiUrl,
+        cadeyUserId: cadeyUserId || 0,
         userFactTypeName: 'appPageNavigation',
         appPage: currentBasePage,
       });

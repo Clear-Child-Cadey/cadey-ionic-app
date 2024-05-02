@@ -1,25 +1,18 @@
 import React, { useContext, useEffect } from 'react';
 import {
-  IonItem,
   IonLabel,
-  IonText,
-  IonRow,
   IonLoading,
-  IonIcon,
   IonHeader,
   IonToolbar,
   IonContent,
   IonPage,
 } from '@ionic/react';
 // Icons
-import { play, happyOutline } from 'ionicons/icons';
 import './WelcomePathSelect.css';
 import { useHistory } from 'react-router-dom';
 // Interfaces
 import { PathListing, Path } from '../../api/Paths';
 // Contexts
-import { useLoadingState } from '../../context/LoadingStateContext';
-import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { usePathContext } from '../../context/PathContext';
 import { useAppPage } from '../../context/AppPageContext';
@@ -38,12 +31,13 @@ const WelcomePathSelect: React.FC = () => {
   const emailVerified = useSelector((state: RootState) => {
     return (
       state.authStatus?.emailVerified ||
-      state.authStatus?.userData?.firebaseUser?.emailVerified
+      state.authStatus?.userData?.firebaseUser?.emailVerified ||
+      false
     );
   });
 
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
   const { apiUrl } = useContext(ApiUrlContext);
   const { currentAppPage, setCurrentAppPage, setCurrentBasePage } =
@@ -62,10 +56,7 @@ const WelcomePathSelect: React.FC = () => {
   useEffect(() => {
     const getPaths = async () => {
       // Get the path listing from the API and set it to state
-      const pathListingLocal = await getPathListing(
-        apiUrl,
-        Number(cadeyUserId),
-      );
+      const pathListingLocal = await getPathListing(Number(cadeyUserId));
       setIsLoading(() => true);
 
       setPathListing(pathListingLocal);
@@ -79,8 +70,7 @@ const WelcomePathSelect: React.FC = () => {
 
     // appPageNavigation user fact
     logUserFact({
-      cadeyUserId: cadeyUserId,
-      baseApiUrl: apiUrl,
+      cadeyUserId: cadeyUserId || 0,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Welcome - Path Select',
     });
@@ -93,13 +83,7 @@ const WelcomePathSelect: React.FC = () => {
 
   const handlePathSelection = async (path: Path) => {
     setPathId(path.id);
-    postPathSelect(
-      apiUrl,
-      Number(cadeyUserId),
-      currentAppPage,
-      path.id,
-      path.pathName,
-    );
+    postPathSelect(Number(cadeyUserId), currentAppPage, path.id, path.pathName);
     history.push('/App/Welcome/AgeGroup');
   };
 
