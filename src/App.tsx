@@ -73,6 +73,7 @@ const App: React.FC = () => {
   if (window.cordova) {
     // Set the external user ID for OneSignal
     setExternalUserId(oneSignalId.toString());
+    setExternalUserId('S2435');
   } else {
     // Don't interact with OneSignal (which relies on Cordova)
   }

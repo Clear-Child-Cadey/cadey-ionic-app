@@ -12,6 +12,7 @@ import {
   IonText,
   IonIcon,
   IonBadge,
+  IonItem,
 } from '@ionic/react';
 
 // Icons
@@ -202,6 +203,45 @@ const HomePage: React.FC<{
     history.push('/App' + route);
   };
 
+  const sendNotification = () => {
+    // if (!oneSignalExternalId) {
+    //   alert('OneSignal ID is unknown. Cannot send notification.');
+    //   return;
+    // }
+
+    const notification = {
+      app_id: '9e338438-0d42-44e8-b8f4-3ae40f3665e0', // Replace "YOUR_APP_ID" with your actual OneSignal App ID
+      contents: { en: 'Testing 123' },
+      headings: { en: 'Hello world!' },
+      // include_external_user_ids: ['S2435'],
+      include_aliases: { external_id: ['S2435'] },
+      target_channel: 'push',
+      app_url: 'https://cadey.co/app',
+    };
+
+    fetch('https://onesignal.com/api/v1/notifications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic MDJiNzZlNmYtMzRiNy00ZGY1LTg1NTUtMjQxM2I0YTc2ZTRl', // Replace "YOUR_REST_API_KEY" with your actual OneSignal REST API key
+      },
+      body: JSON.stringify(notification),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.errors) {
+          console.error('Failed to send notification:', data.errors);
+          alert('Failed to send notification: ' + data.errors);
+        } else {
+          alert('Notification sent successfully!');
+        }
+      })
+      .catch((error) => {
+        console.error('Error sending notification:', error);
+        alert('Failed to send notification.');
+      });
+  };
+
   return (
     <IonPage className='home'>
       <IonHeader class='header'>
@@ -306,6 +346,11 @@ const HomePage: React.FC<{
             </IonRow>
           )}
         </IonRow>
+        <IonItem>
+          <IonButton expand='block' onClick={sendNotification}>
+            Send Notification
+          </IonButton>
+        </IonItem>
       </IonContent>
     </IonPage>
   );
