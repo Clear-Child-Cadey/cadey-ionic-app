@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { Auth, confirmPasswordReset } from 'firebase/auth';
+import { Auth, confirmPasswordReset, AuthError } from 'firebase/auth';
 // CSS
 import './PasswordResetPage.css'; // Adjust the path as necessary
 import {
@@ -10,6 +10,8 @@ import {
   IonPage,
   IonToolbar,
 } from '@ionic/react';
+import useDeviceFacts from '../../hooks/useDeviceFacts';
+import getDeviceId from '../../utils/getDeviceId';
 
 interface Props {
   auth: Auth;
@@ -22,6 +24,8 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const history = useHistory();
+  const { logDeviceFact } = useDeviceFacts();
+  const deviceId = getDeviceId();
 
   const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
@@ -37,22 +41,37 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
     try {
       await confirmPasswordReset(auth, actionCode, newPassword);
       setSuccess('Your password has been reset successfully.');
+      logDeviceFact({
+        userFactTypeName: 'PasswordResetAttempt',
+        appPage: 'Password Reset',
+        detail1: 'Success', // Firebase status
+      });
 
-      // setTimeout(() => {
-      //   if (auth.currentUser) {
-      //     auth.signOut();
-      //     // Send the user to the home page if they are on the same device and have the same login session
-      //     console.log('User signed out');
-      //     console.log('Redirecting to login page');
-      //     history.push('/App/Authentication/Login');
-      //   } else {
-      //     console.log('Redirecting to login page');
-      //     history.push('/App/Authentication/Login');
-      //   }
-      // }, 3000);
       // Optionally, navigate to the login screen or elsewhere as needed
     } catch (error) {
-      setError('Failed to reset password. Please try again.'); //Figure out a way to be more explicit
+      if ((error as AuthError).code) {
+        // Assuming `error` is of type `AuthError` which includes a `code` property
+        const errorCode = (error as AuthError).code;
+        const errorMessage = (error as AuthError).message;
+
+        setError(`Failed to reset password: ${errorMessage}`);
+        logDeviceFact({
+          userFactTypeName: 'PasswordResetAttempt',
+          appPage: 'Password Reset',
+          detail1: 'Error',
+          detail2: errorCode, // Using the error code from Firebase error
+          detail3: errorMessage, // Using the error message from Firebase error
+        });
+      } else {
+        // Handle unexpected errors that don't match the Firebase error structure
+        setError('Failed to reset password. Please try again.');
+        logDeviceFact({
+          userFactTypeName: 'PasswordResetAttempt',
+          appPage: 'Password Reset',
+          detail1: 'Error',
+          detail2: 'Unknown error',
+        });
+      }
     }
   };
 

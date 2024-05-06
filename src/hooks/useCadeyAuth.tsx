@@ -9,6 +9,7 @@ import {
   sendPasswordResetEmail,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  AuthError,
 } from 'firebase/auth';
 import { auth } from '../api/Firebase/InitializeFirebase';
 // Redux
@@ -32,6 +33,7 @@ import getDeviceId from '../utils/getDeviceId';
 import useDeviceFacts from './useDeviceFacts';
 
 import axios from '../config/AxiosConfig';
+import { setExternalUserId } from '../api/OneSignal/SetExternalUserId';
 
 const useCadeyAuth = () => {
   const countRef = React.useRef(0);
@@ -288,7 +290,34 @@ const useCadeyAuth = () => {
       setMessageDecorated(
         'Password reset email sent! If you do not receive a password reset email, please create an account or check your spam folder.',
       ); // Move this copy to appMeta later
+      logDeviceFact({
+        userFactTypeName: 'PasswordResetRequest',
+        appPage: 'Login',
+        detail1: 'Success',
+      });
     } catch (e) {
+      if ((e as AuthError).code) {
+        // Assuming `error` is of type `AuthError` which includes a `code` property
+        const errorCode = (e as AuthError).code;
+        const errorMessage = (e as AuthError).message;
+
+        logDeviceFact({
+          userFactTypeName: 'PasswordResetRequest',
+          appPage: 'Login',
+          detail1: 'Error',
+          detail2: errorCode, // Using the error code from Firebase error
+          detail3: errorMessage, // Using the error message from Firebase error
+        });
+      } else {
+        // Handle unexpected errors that don't match the Firebase error structure
+        logDeviceFact({
+          userFactTypeName: 'PasswordResetRequest',
+          appPage: 'Login',
+          detail1: 'Error',
+          detail2: 'Unknown error',
+        });
+      }
+
       if (e instanceof Error) {
         setErrorDecorated(e);
         throw e;
@@ -328,6 +357,13 @@ const useCadeyAuth = () => {
     const cadeyUserLocal = await response.data;
     dispatch(setCadeyUser(cadeyUserLocal));
     dispatch(setFirebaseUser(firebaseUser)); // Move this to line 182?
+
+    // Set the external user ID for OneSignal on mobile
+    if (window.cordova) {
+      setExternalUserId(cadeyUserLocal.oneSignalId);
+    } else {
+      // Don't interact with OneSignal (which relies on Cordova)
+    }
 
     return cadeyUserLocal;
   };

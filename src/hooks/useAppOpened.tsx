@@ -5,6 +5,7 @@ import AppMeta from '../variables/AppMeta';
 import { useDispatch } from 'react-redux';
 import { setGrandfatherStatus } from '../features/authLoading/slice';
 import axios from '../config/AxiosConfig';
+import { Capacitor } from '@capacitor/core';
 
 const useAppOpened = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
@@ -13,9 +14,11 @@ const useAppOpened = () => {
   const appOpenAction = async () => {
     const url = `${apiUrl}/cadeyappopened`;
     const cadeyUserDeviceId = await getDeviceId();
+    const devicePlatform = Capacitor.getPlatform(); // 'android', 'ios', or 'web'
 
     const bodyObject = {
       cadeyUserDeviceId,
+      cadeyDevicePlatform: devicePlatform,
     };
 
     try {

@@ -159,9 +159,9 @@ function MainComponent() {
               }}
             >
               <HttpErrorModal />
-              <LoadingStateProvider>
+              {/* <LoadingStateProvider>
                 <IonLoading isOpen={true} message={'Loading...'} />;
-              </LoadingStateProvider>
+              </LoadingStateProvider> */}
             </UnreadContext.Provider>
           </CadeyUserContext.Provider>
         </IonContent>

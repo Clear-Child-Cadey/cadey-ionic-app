@@ -69,15 +69,6 @@ const App: React.FC = () => {
     return url;
   };
 
-  // Check if the app is running in a browser or on a device
-  if (window.cordova) {
-    // Set the external user ID for OneSignal
-    setExternalUserId(oneSignalId.toString());
-    setExternalUserId('S2435');
-  } else {
-    // Don't interact with OneSignal (which relies on Cordova)
-  }
-
   // Route the user to the welcome page if they haven't completed the welcome sequence
   useEffect(() => {
     if (!cadeyUser?.cadeyUserId) {

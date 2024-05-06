@@ -4,26 +4,21 @@ import {
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonContent,
   IonRow,
-  IonLoading,
-  IonButton,
   IonText,
   IonIcon,
   IonBadge,
-  IonItem,
 } from '@ionic/react';
 
 // Icons
-import { chevronForwardOutline, home } from 'ionicons/icons';
+import { chevronForwardOutline } from 'ionicons/icons';
 import { SplashScreen } from '@capacitor/splash-screen';
 // Routing
 import { useHistory } from 'react-router-dom';
 // Contexts
 import { useModalContext } from '../../context/ModalContext';
 import { useAppPage } from '../../context/AppPageContext';
-import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import UnreadContext from '../../context/UnreadContext';
 // Components
@@ -31,7 +26,6 @@ import VideoList from '../../components/Videos/VideoList';
 // API
 import getHomeData from '../../api/HomeData';
 import { logUserFact } from '../../api/UserFacts';
-import { logErrorToFirestore } from '../../api/Firebase/LogErrorToFirestore';
 // Variables
 import { tracingEnabled } from '../../variables/Logging';
 // Firebase
@@ -42,7 +36,6 @@ import { HomeData } from '../../api/HomeData';
 import { useDispatch, useSelector } from 'react-redux';
 import { setHttpErrorModalData } from '../../features/httpError/slice';
 import AppMeta from '../../variables/AppMeta';
-import useCadeyAuth from '../../hooks/useCadeyAuth';
 import { RootState } from '../../store';
 
 const HomePage: React.FC<{
@@ -67,7 +60,7 @@ const HomePage: React.FC<{
   } = useAppPage();
 
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
 
   const { apiUrl } = React.useContext(ApiUrlContext);
@@ -117,7 +110,7 @@ const HomePage: React.FC<{
       }
 
       // Get the data from the API
-      homeData = await getHomeData(apiUrl, cadeyUserId);
+      homeData = await getHomeData(apiUrl, cadeyUserId.toString());
 
       setIsLoading(() => {
         return false;
@@ -156,7 +149,7 @@ const HomePage: React.FC<{
     setCurrentBasePage('Home'); // Set the current base page
     setCurrentAppPage('Home'); // Set the current app page
     logUserFact({
-      cadeyUserId: cadeyUserId || 0,
+      cadeyUserId: cadeyUserId,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Home',
     });
@@ -192,7 +185,7 @@ const HomePage: React.FC<{
   const handleButtonClick = (route: string, entity: string) => () => {
     // Log user fact that the user clicked on the button
     logUserFact({
-      cadeyUserId: cadeyUserId || 0,
+      cadeyUserId: cadeyUserId,
       userFactTypeName: 'UserTap',
       appPage: currentAppPage,
       detail1: currentBasePage,
@@ -201,45 +194,6 @@ const HomePage: React.FC<{
 
     // Navigate to the page
     history.push('/App' + route);
-  };
-
-  const sendNotification = () => {
-    // if (!oneSignalExternalId) {
-    //   alert('OneSignal ID is unknown. Cannot send notification.');
-    //   return;
-    // }
-
-    const notification = {
-      app_id: '9e338438-0d42-44e8-b8f4-3ae40f3665e0', // Replace "YOUR_APP_ID" with your actual OneSignal App ID
-      contents: { en: 'Testing 123' },
-      headings: { en: 'Hello world!' },
-      // include_external_user_ids: ['S2435'],
-      include_aliases: { external_id: ['S2435'] },
-      target_channel: 'push',
-      app_url: 'https://cadey.co/app',
-    };
-
-    fetch('https://onesignal.com/api/v1/notifications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic MDJiNzZlNmYtMzRiNy00ZGY1LTg1NTUtMjQxM2I0YTc2ZTRl', // Replace "YOUR_REST_API_KEY" with your actual OneSignal REST API key
-      },
-      body: JSON.stringify(notification),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.errors) {
-          console.error('Failed to send notification:', data.errors);
-          alert('Failed to send notification: ' + data.errors);
-        } else {
-          alert('Notification sent successfully!');
-        }
-      })
-      .catch((error) => {
-        console.error('Error sending notification:', error);
-        alert('Failed to send notification.');
-      });
   };
 
   return (
@@ -346,11 +300,6 @@ const HomePage: React.FC<{
             </IonRow>
           )}
         </IonRow>
-        <IonItem>
-          <IonButton expand='block' onClick={sendNotification}>
-            Send Notification
-          </IonButton>
-        </IonItem>
       </IonContent>
     </IonPage>
   );

@@ -8,7 +8,6 @@ import {
   browserLocalPersistence,
   getAuth,
   indexedDBLocalPersistence,
-  initializeAuth,
   setPersistence,
 } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
@@ -27,36 +26,19 @@ const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAnalytics = getAnalytics(firebaseApp);
 const firebasePerf = getPerformance(firebaseApp);
 const firestore: Firestore = getFirestore(firebaseApp);
+const auth: Auth = getAuth(firebaseApp);
 
-console.log('Initializing Firebase...');
-let auth: Auth;
-if (Capacitor.isNativePlatform()) {
-  console.log('Native platform detected.');
-  auth = initializeAuth(firebaseApp, {
-    persistence: indexedDBLocalPersistence,
-  });
-
-  try {
-    console.log('Setting indexedDBLocalPersistence for native platform...');
+try {
+  if (Capacitor.isNativePlatform()) {
+    console.log('Native platform detected.');
     setPersistence(auth, indexedDBLocalPersistence);
-    console.log('Persistence set to indexedDB successfully.');
-  } catch (error) {
-    console.error('Failed to set indexedDBLocalPersistence:', error);
-  }
-} else {
-  auth = getAuth(firebaseApp);
-
-  // Set browser local persistence for web platforms
-  try {
-    console.log('Setting browserLocalPersistence for web platform...');
+  } else {
+    console.log('Web platform detected.');
     setPersistence(auth, browserLocalPersistence);
-    console.log('Persistence set to localStorage successfully.');
-  } catch (error) {
-    console.error('Failed to set browserLocalPersistence:', error);
   }
+} catch (error) {
+  console.error('Failed to set LocalPersistence:', error);
 }
-
-setPersistence(auth, browserLocalPersistence);
 
 export { firebaseApp, firebaseAnalytics, firebasePerf, firestore, auth };
 

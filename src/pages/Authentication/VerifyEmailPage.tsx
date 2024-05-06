@@ -99,9 +99,9 @@ const VerifyEmailPage: React.FC<Props> = ({
     };
   }, [disabled, countdown]);
 
-  if (loading) {
-    return <IonLoading isOpen={loading} message={'Loading...'} />;
-  }
+  // if (loading) {
+  //   return <IonLoading isOpen={loading} message={'Loading...'} />;
+  // }
 
   return (
     <IonPage className='home'>
