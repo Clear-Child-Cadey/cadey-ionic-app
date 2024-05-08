@@ -6,9 +6,8 @@ import { Firestore, getFirestore } from 'firebase/firestore';
 import {
   Auth,
   browserLocalPersistence,
-  getAuth,
   indexedDBLocalPersistence,
-  setPersistence,
+  initializeAuth,
 } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
 
@@ -26,19 +25,13 @@ const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAnalytics = getAnalytics(firebaseApp);
 const firebasePerf = getPerformance(firebaseApp);
 const firestore: Firestore = getFirestore(firebaseApp);
-const auth: Auth = getAuth(firebaseApp);
 
-try {
-  if (Capacitor.isNativePlatform()) {
-    console.log('Native platform detected.');
-    setPersistence(auth, indexedDBLocalPersistence);
-  } else {
-    console.log('Web platform detected.');
-    setPersistence(auth, browserLocalPersistence);
-  }
-} catch (error) {
-  console.error('Failed to set LocalPersistence:', error);
-}
+// Initialize auth with specific persistence settings - this allows the user to stay logged in
+const auth = initializeAuth(firebaseApp, {
+  persistence: Capacitor.isNativePlatform()
+    ? indexedDBLocalPersistence
+    : browserLocalPersistence,
+});
 
 export { firebaseApp, firebaseAnalytics, firebasePerf, firestore, auth };
 

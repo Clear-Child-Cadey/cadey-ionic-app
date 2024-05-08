@@ -1,7 +1,5 @@
-import { useSelector } from 'react-redux';
 import axios from '../config/AxiosConfig';
 import AppMeta from '../variables/AppMeta';
-import { RootState } from '../store';
 
 export const getRecommendations = async (
   // apiUrl: string,
