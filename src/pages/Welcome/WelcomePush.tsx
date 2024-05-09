@@ -28,7 +28,7 @@ const WelcomePush: React.FC = () => {
   const dispatch = useDispatch();
 
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { setCurrentAppPage, setCurrentBasePage } = useAppPage();
@@ -44,7 +44,7 @@ const WelcomePush: React.FC = () => {
 
     // appPageNavigation user fact
     logUserFact({
-      cadeyUserId: cadeyUserId || 0,
+      cadeyUserId: cadeyUserId,
       userFactTypeName: 'appPageNavigation',
       appPage: 'Welcome - Push Optin',
     });
@@ -74,7 +74,7 @@ const WelcomePush: React.FC = () => {
   const handlePushSelection = async (optin: boolean) => {
     // Log a user fact
     logUserFact({
-      cadeyUserId: cadeyUserId || 0,
+      cadeyUserId: cadeyUserId,
       userFactTypeName: 'UserTap',
       appPage: 'Welcome - Push Optin',
       detail1: 'Welcome - Push Optin',

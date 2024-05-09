@@ -80,6 +80,7 @@ axiosInstance.interceptors.response.use(
     const errorLog = {
       message: error.message,
       status: error.response ? error.response.status : 'No response',
+      apiResponse: error.response.data,
     };
 
     logRequestDetails(errorLog, error.config.url, duration, false);
