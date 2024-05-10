@@ -5,16 +5,8 @@ import './Login.css'; // Adjust the path as necessary
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
-// API
-import { postUserAuth } from '../../api/Authentication';
-// import { getQuiz } from '../../api/Quiz';
 // Context
 import ApiUrlContext from '../../context/ApiUrlContext';
-// import { CadeyUserContext } from '../../main';
-// import { useModalContext } from '../../context/ModalContext';
-// import { useTabContext } from '../../context/TabContext';
-// import { useSelector } from 'react-redux';
-// import { RootState } from '../../store';
 import AppMeta from '../../variables/AppMeta';
 // import requestQuiz from '../../utils/Quiz';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
@@ -67,14 +59,14 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
     //       case 1:
     //         // User's trial has expired
     //         setLocalError(
-    //           'Your trial has expired. Please contact support to continue using Cadey.',
+    //           'Your trial has expired. Please contact support@cadey.co to continue using Cadey.',
     //         );
     //         console.log('User trial expired');
     //         break;
     //       case 2:
     //         // User is inactive and has no permissions
     //         setLocalError(
-    //           'Your account is inactive. Please contact support to continue using Cadey.',
+    //           'Your account is inactive. Please contact support@cadey.co to continue using Cadey.',
     //         );
     //         console.log('User is inactive');
     //         break;

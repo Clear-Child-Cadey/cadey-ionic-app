@@ -74,6 +74,7 @@ const LoginComponent: React.FC = () => {
     <div className='login-component'>
       <LoginMessages messages={messages} />
       <LoginErrors errors={errors} />
+
       {localError && <p className='error-message'>{localError}</p>}
       <form onSubmit={handleLogin}>
         <>
