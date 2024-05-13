@@ -107,10 +107,7 @@ const RouterTabs: React.FC = () => {
   const [goodUser, setGoodUser] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('regStatus:', regStatus);
-    console.log('authStatus:', authStatus);
     if (authStatus === 0 && regStatus === 0) {
-      console.log('good user');
       setGoodUser(true);
     }
   }, [regStatus, authStatus]);
@@ -144,12 +141,6 @@ const RouterTabs: React.FC = () => {
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const { currentAppPage } = useAppPage();
   const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
-
-  useEffect(() => {
-    console.log('aUserHasBeenReturned:', aUserHasBeenReturned);
-    console.log('goodUser:', goodUser);
-    console.log('isTabBarVisible:', isTabBarVisible);
-  }, [aUserHasBeenReturned, goodUser, isTabBarVisible]);
 
   useEffect(() => {
     if (

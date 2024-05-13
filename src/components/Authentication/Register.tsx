@@ -50,7 +50,6 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
       await createUserWithEmailAndPasswordDecorated(email, password);
 
       // Check for onboarding quiz
-      console.log('Requesting quiz...');
       requestQuiz();
     } catch (e) {
       setLocalError(
