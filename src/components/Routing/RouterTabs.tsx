@@ -67,7 +67,8 @@ import { trileanResolve } from '../../types/Trilean';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import AppMeta from '../../variables/AppMeta';
 import VerificationPage from '../VerificationMessage';
-import ExpiredUser from '../Authentication/ExpiredUser';
+import BadUser from '../Authentication/BadUser';
+import { auth } from '../../api/Firebase/InitializeFirebase';
 
 const RouterTabs: React.FC = () => {
   const location = useLocation();
@@ -82,6 +83,9 @@ const RouterTabs: React.FC = () => {
     );
   });
 
+  const regStatus = useSelector((state: RootState) => {
+    return state?.authStatus?.userData?.cadeyUser?.regStatus;
+  });
   const authStatus = useSelector((state: RootState) => {
     return state?.authStatus?.userData?.cadeyUser?.authStatus;
   });
@@ -99,14 +103,17 @@ const RouterTabs: React.FC = () => {
   //     1 = FailedExpired
   //     2 = FailedNotActive
   //     3 = FailedNotRegistered
-  //
-  const [isExpired, setIsExpired] = useState<boolean>(false);
+
+  const [goodUser, setGoodUser] = useState<boolean>(false);
 
   useEffect(() => {
-    // const regStatus = state?.authStatus?.userData?.cadeyUser?.regStatus;
-    // not sure what to do with regstatus...
-    setIsExpired(!!authStatus && authStatus >= 1);
-  }, [authStatus]);
+    console.log('regStatus:', regStatus);
+    console.log('authStatus:', authStatus);
+    if (authStatus === 0 && regStatus === 0) {
+      console.log('good user');
+      setGoodUser(true);
+    }
+  }, [regStatus, authStatus]);
 
   const aUserHasBeenReturned = useSelector((state: RootState) => {
     return state?.authStatus?.userData?.cadeyUser !== null;
@@ -137,6 +144,12 @@ const RouterTabs: React.FC = () => {
   const { apiUrl } = useContext(ApiUrlContext); // Get the API URL from the context
   const { currentAppPage } = useAppPage();
   const [isWelcomeSequence, setIsWelcomeSequence] = useState(false);
+
+  useEffect(() => {
+    console.log('aUserHasBeenReturned:', aUserHasBeenReturned);
+    console.log('goodUser:', goodUser);
+    console.log('isTabBarVisible:', isTabBarVisible);
+  }, [aUserHasBeenReturned, goodUser, isTabBarVisible]);
 
   useEffect(() => {
     if (
@@ -202,10 +215,13 @@ const RouterTabs: React.FC = () => {
       {/* Initialize OneSignal and listen for OneSignal callbacks */}
       {window.cordova && <OneSignalInitializer />}
 
-      {aUserHasBeenReturned && isExpired && <ExpiredUser />}
+      {/* Show the BadUser component if there's anything wrong with a user */}
+      {aUserHasBeenReturned && !goodUser && (
+        <BadUser authStatus={authStatus} regStatus={regStatus} />
+      )}
 
       {/* If the tab bar is not visible, the user is in the welcome sequence and should not see tabs */}
-      {!isTabBarVisible && !isExpired && (
+      {!isTabBarVisible && (!aUserHasBeenReturned || goodUser) && (
         <IonRouterOutlet>
           <Switch>
             {/* If the user is in the welcome sequence, show the welcome page */}
@@ -262,8 +278,8 @@ const RouterTabs: React.FC = () => {
       )}
 
       {isTabBarVisible &&
-        !isExpired &&
         aUserExists &&
+        goodUser &&
         (AppMeta.forceEmailVerification && !trileanResolve(emailVerified) ? (
           <VerificationPage />
         ) : (

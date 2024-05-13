@@ -175,14 +175,14 @@ const useCadeyAuth = () => {
   ) {
     await runBeforeRequest();
     try {
+      // Authenticate with Firebase
       const { user: currentUser } = await signInWithEmailAndPassword(
         auth,
         email,
         password,
       );
-      // We need to set firebaseUser here.
-      // dispatch(setFirebaseUser(currentUser));
 
+      // Authorize with Cadey
       const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
       dispatch(setCadeyUser(cadeyUser));
       dispatch(setCadeyResolved(true));
@@ -196,6 +196,8 @@ const useCadeyAuth = () => {
         detail3: 'Success', // Firebase status
         detail4: '', // Error message
       });
+
+      return cadeyUser; // Return cadeyUser here
     } catch (e) {
       if (e instanceof Error) {
         // Log a Firebase authentication error userfact
@@ -232,12 +234,14 @@ const useCadeyAuth = () => {
   ) => {
     runBeforeRequest();
     try {
+      // Register the user with Firebase
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
       );
 
+      // Create a Cadey user
       const cadeyUser = await handleCadeyRegistrationUser(userCredential.user);
       dispatch(setCadeyUser(cadeyUser));
       if (AppMeta.forceEmailVerification) {

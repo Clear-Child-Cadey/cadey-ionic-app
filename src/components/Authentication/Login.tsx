@@ -5,29 +5,14 @@ import './Login.css'; // Adjust the path as necessary
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
-// API
-// import { postUserAuth } from '../../api/Authentication';
-// import { getQuiz } from '../../api/Quiz';
-// Context
-// import ApiUrlContext from '../../context/ApiUrlContext';
-// // import { CadeyUserContext } from '../../main';
-// import { useModalContext } from '../../context/ModalContext';
-// import { useTabContext } from '../../context/TabContext';
-// import { useSelector } from 'react-redux';
-// import { RootState } from '../../store';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
-import AppMeta from '../../variables/AppMeta';
 
 const LoginComponent: React.FC = () => {
-  // const { apiUrl } = useContext(ApiUrlContext);
-
-  // const { setIsTabBarVisible } = useTabContext();
-  // const { setQuizModalData } = useModalContext();
-  // const [loginState, setLoginState] = useState('email'); // 'email' or 'password'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState('');
   const history = useHistory();
+
   const { requestQuiz } = useRequestQuiz({
     clientContext: 3,
     entityType: 0,
@@ -46,11 +31,23 @@ const LoginComponent: React.FC = () => {
     setLocalError(''); // Clear any existing errors
 
     try {
-      await signInWithEmailAndPasswordDecorated(email, password);
+      const signInResponse = await signInWithEmailAndPasswordDecorated(
+        email,
+        password,
+      );
 
-      // Check for onboarding quiz
-      requestQuiz();
+      if (
+        signInResponse.cadeyUserId > 0 &&
+        signInResponse.authStatus === 0 &&
+        signInResponse.regStatus === 0
+      ) {
+        console.log('Requesting quiz...');
+        requestQuiz();
+      }
     } catch (e) {
+      setLocalError(
+        'Oops! Something went wrong. Please contact us at support@cadey.co.',
+      );
       console.error(e);
     }
   };

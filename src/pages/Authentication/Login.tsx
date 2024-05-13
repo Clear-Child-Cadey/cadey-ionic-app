@@ -3,13 +3,8 @@ import {
   IonContent,
   IonHeader,
   IonPage,
-  IonTitle,
   IonToolbar,
-  IonProgressBar,
-  IonIcon,
-  IonSearchbar,
   IonRow,
-  IonButton,
 } from '@ionic/react';
 // Redux
 import { useSelector } from 'react-redux';

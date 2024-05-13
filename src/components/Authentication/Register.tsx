@@ -17,8 +17,6 @@ interface Props {
 
 const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
   const { apiUrl } = useContext(ApiUrlContext);
-  // const { setIsTabBarVisible } = useTabContext();
-  // const { setQuizModalData } = useModalContext();
   const [loginState, setLoginState] = useState('email'); // 'email' or 'password'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,53 +39,6 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
   const handleEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLocalError(''); // Clear any existing errors
-
-    // REDO THIS TO MAKE SENSE FOR REGISTRATION ONCE WE HAVE WORKING ENDPOINTS
-    // Handle email submission with the API
-    // await postUserAuth(apiUrl, email);
-    // console.log('userAuthResponse: ', userAuthResponse);
-    // if (userAuthResponse.cadeyUserId > 0) {
-    //   // User exists
-    //   if (userAuthResponse.regStatus === 0) {
-    //     // User is registered
-    //     // Create a switch based on authStatus. If 0, user is authorized. If 1, user's trial has expired. If 2, user is inactive and has no permissions.
-    //     switch (userAuthResponse.authStatus) {
-    //       case 0:
-    //         // User is authorized
-    //         setLoginState('password');
-    //         break;
-    //       case 1:
-    //         // User's trial has expired
-    //         setLocalError(
-    //           'Your trial has expired. Please contact support@cadey.co to continue using Cadey.',
-    //         );
-    //         console.log('User trial expired');
-    //         break;
-    //       case 2:
-    //         // User is inactive and has no permissions
-    //         setLocalError(
-    //           'Your account is inactive. Please contact support@cadey.co to continue using Cadey.',
-    //         );
-    //         console.log('User is inactive');
-    //         break;
-    //       default:
-    //         setLocalError('An unknown error occurred.');
-    //         console.log('Unknown error');
-    //         break;
-    //     }
-    //   } else {
-    //     // User is not registered
-    //     setLocalError('User not registered. Please create an account.');
-    //     console.log('User not registered');
-    //     return;
-    //   }
-    // } else {
-    //   // User does not exist
-    //   setLocalError('User not found. Please create an account.');
-    //   console.log('User not found');
-    //   return;
-    // }
-
     setLoginState('password');
   };
 
@@ -98,11 +49,13 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
     try {
       await createUserWithEmailAndPasswordDecorated(email, password);
 
-      // Need to handle auth here and then check for quiz.
-
       // Check for onboarding quiz
+      console.log('Requesting quiz...');
       requestQuiz();
     } catch (e) {
+      setLocalError(
+        'Oops! Something went wrong. Please contact us at support@cadey.co.',
+      );
       console.error(e);
     }
   };
