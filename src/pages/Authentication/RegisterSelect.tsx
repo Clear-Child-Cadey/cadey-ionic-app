@@ -13,14 +13,38 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 // Styles
 import './RegisterSelect.css';
+import useDeviceFacts from '../../hooks/useDeviceFacts';
+import getDeviceId from '../../utils/getDeviceId';
+import { useAppPage } from '../../context/AppPageContext';
 
 const RegistrationSelectPage = () => {
   const history = useHistory();
+  const { logDeviceFact } = useDeviceFacts();
+  const deviceId = getDeviceId();
+  const { currentBasePage } = useAppPage();
 
-  const handleContinue = (url: string) => {
-    // Log user fact?
+  const handleCorporate = () => {
+    logDeviceFact({
+      deviceId: deviceId,
+      userFactTypeName: 'UserTap',
+      appPage: 'Register Select',
+      detail1: currentBasePage,
+      detail2: 'Corporate Signup Button',
+    });
 
-    history.push(url);
+    history.push('/App/Authentication/Register');
+  };
+
+  const handleTrial = () => {
+    logDeviceFact({
+      deviceId: deviceId,
+      userFactTypeName: 'UserTap',
+      appPage: 'Register Select',
+      detail1: currentBasePage,
+      detail2: 'Free Trial Signup Button',
+    });
+
+    history.push('/App/Authentication/Register');
   };
 
   return (
@@ -33,7 +57,7 @@ const RegistrationSelectPage = () => {
           <IonRow className='continue-row'>
             <IonButton
               className='continue-button'
-              onClick={() => handleContinue('/App/Authentication/Register')}
+              onClick={() => handleCorporate('/App/Authentication/Register')}
             >
               Corporate user signup
             </IonButton>
@@ -46,7 +70,7 @@ const RegistrationSelectPage = () => {
           <IonRow className='continue-row'>
             <IonButton
               className='continue-button'
-              onClick={() => handleContinue('/App/Authentication/Register')}
+              onClick={() => handleTrial('/App/Authentication/Register')}
             >
               Free trial signup
             </IonButton>

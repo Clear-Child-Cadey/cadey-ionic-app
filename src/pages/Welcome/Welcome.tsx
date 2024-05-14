@@ -10,11 +10,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import useDeviceFacts from '../../hooks/useDeviceFacts';
 import getDeviceId from '../../utils/getDeviceId';
+import { useAppPage } from '../../context/AppPageContext';
 
 const WelcomePage: React.FC = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
   const { logDeviceFact } = useDeviceFacts();
   const deviceId = getDeviceId();
+  const { currentBasePage } = useAppPage();
 
   const cadeyUser = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser;
@@ -36,8 +38,28 @@ const WelcomePage: React.FC = () => {
     });
   }, [apiUrl, cadeyUser, cadeyUser?.cadeyUserId]);
 
-  const handleContinue = (url: string) => {
-    history.push(url);
+  const handleLogin = () => {
+    logDeviceFact({
+      deviceId: deviceId,
+      userFactTypeName: 'UserTap',
+      appPage: 'Welcome - Intro Screen',
+      detail1: currentBasePage,
+      detail2: 'Login Button',
+    });
+
+    history.push('/App/Authentication/Login');
+  };
+
+  const handleRegister = () => {
+    logDeviceFact({
+      deviceId: deviceId,
+      userFactTypeName: 'UserTap',
+      appPage: 'Welcome - Intro Screen',
+      detail1: currentBasePage,
+      detail2: 'Signup Button',
+    });
+
+    history.push('/App/Authentication/Register-Select');
   };
 
   return (
@@ -53,15 +75,13 @@ const WelcomePage: React.FC = () => {
           <IonRow className='continue-row'>
             <IonButton
               className='continue-button'
-              onClick={() => handleContinue('/App/Authentication/Login')}
+              onClick={() => handleLogin()}
             >
               Login
             </IonButton>
             <IonButton
               className='continue-button'
-              onClick={() =>
-                handleContinue('/App/Authentication/Register-Select')
-              }
+              onClick={() => handleRegister()}
             >
               Signup
             </IonButton>
