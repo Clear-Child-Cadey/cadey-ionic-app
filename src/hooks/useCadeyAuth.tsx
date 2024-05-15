@@ -213,6 +213,7 @@ const useCadeyAuth = () => {
         setErrorDecorated(e);
         throw e;
       }
+
       // Log a Firebase authentication error userfact
       logDeviceFact({
         userFactTypeName: 'FirebaseAuthenticationAttempt',

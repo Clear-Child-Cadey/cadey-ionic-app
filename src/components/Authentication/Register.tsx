@@ -52,9 +52,10 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
       // Check for onboarding quiz
       requestQuiz();
     } catch (e) {
-      setLocalError(
-        'Oops! Something went wrong. Please contact us at support@cadey.co.',
-      );
+      // Commented out because we're displaying an error message in the LoginErrors component
+      // setLocalError(
+      //   'Oops! Something went wrong. Please contact us at support@cadey.co.',
+      // );
       console.error(e);
     }
   };
@@ -80,7 +81,9 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
           resetErrors();
         }}
       />
-      {localError && <p className='error-message'>{localError}</p>}
+
+      {/* Commented out because we're displaying an error message in the LoginErrors component */}
+      {/* {localError && <p className='error-message'>{localError}</p>} */}
 
       <form onSubmit={loginState === 'email' ? handleEmail : handlePassword}>
         {loginState === 'email' && (

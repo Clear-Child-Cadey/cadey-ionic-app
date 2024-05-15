@@ -69,18 +69,16 @@ import useRequestQuiz from './hooks/useRequestQuiz';
 
 // Make sure we generate a unique ID for the device
 
-// create context for cadeyUserId and minimumSupportedVersion
+// create context for cadeyUserId
 export const CadeyUserContext = createContext<{
   cadeyUserId: number;
   cadeyUserAgeGroup: number;
   setCadeyUserAgeGroup: React.Dispatch<React.SetStateAction<number>>;
-  minimumSupportedVersion: string;
   oneSignalId: string;
 }>({
   cadeyUserId: 0,
   cadeyUserAgeGroup: 0,
   setCadeyUserAgeGroup: () => {},
-  minimumSupportedVersion: '',
   oneSignalId: '',
 });
 
@@ -105,7 +103,6 @@ function MainComponent() {
         if (grandfatherSignup) {
           return history.push('/App/Grandfather');
         }
-        // if data has a company name = "Grandfather", reroute the user to /App/Grandfather
       } catch {
         dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
       }
@@ -124,7 +121,6 @@ function MainComponent() {
   );
 
   const [cadeyUserAgeGroup, setCadeyUserAgeGroup] = useState(0);
-  const [minimumSupportedVersion, setMinimumSupportedVersion] = useState('');
   const [oneSignalId, setOneSignalId] = useState('');
 
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
@@ -146,7 +142,6 @@ function MainComponent() {
               cadeyUserId,
               cadeyUserAgeGroup,
               setCadeyUserAgeGroup,
-              minimumSupportedVersion,
               oneSignalId,
             }}
           >
@@ -175,7 +170,6 @@ function MainComponent() {
         cadeyUserId,
         cadeyUserAgeGroup,
         setCadeyUserAgeGroup,
-        minimumSupportedVersion,
         oneSignalId,
       }}
     >

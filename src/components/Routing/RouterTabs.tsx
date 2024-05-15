@@ -23,6 +23,7 @@ import './RouterTabs.css';
 import { HomeIcon } from '../../svgs/NavHome';
 import { PathsIcon } from '../../svgs/NavPaths';
 import { LibraryIcon } from '../../svgs/NavLibrary';
+import { personOutline } from 'ionicons/icons';
 // Pages
 import HomePage from '../../pages/Home/Home';
 import AdminPage from '../../pages/Admin/Admin';
@@ -391,6 +392,16 @@ const RouterTabs: React.FC = () => {
                 <LibraryIcon />
                 <IonLabel>Library</IonLabel>
               </IonTabButton>
+
+              {/* <IonTabButton
+                tab='Account'
+                onClick={() => handleTabClick('Account', '/App/Account')}
+                selected={isTabActive('/App/Account')}
+              >
+                <IonIcon src='/assets/icon/person-outline.svg' />
+                <IonIcon icon={personOutline} className='account-icon' />
+                <IonLabel>Account</IonLabel>
+              </IonTabButton> */}
             </IonTabBar>
           </IonTabs>
         ))}

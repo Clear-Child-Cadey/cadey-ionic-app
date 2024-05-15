@@ -5,8 +5,8 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import React from "react";
+} from '@ionic/react';
+import React from 'react';
 
 interface AppUpdateModalProps {
   isOpen: boolean;
@@ -30,11 +30,11 @@ const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
           <IonTitle>{title}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent className='ion-padding'>
         <p>{body}</p>
         <IonButton
-          expand="full"
-          onClick={() => window.open(buttonUrl, "_blank")}
+          expand='full'
+          onClick={() => window.open(buttonUrl, '_blank')}
         >
           {buttonText}
         </IonButton>

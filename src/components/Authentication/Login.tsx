@@ -6,6 +6,7 @@ import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
+import { Auth, AuthError } from 'firebase/auth';
 
 const LoginComponent: React.FC = () => {
   const [email, setEmail] = useState('');

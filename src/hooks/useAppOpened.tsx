@@ -34,6 +34,10 @@ const useAppOpened = () => {
       // Axios automatically throws an error on bad status, so no need to check response.ok
       const data = response.data; // response from Axios already parsed as JSON
 
+      // Set the minimum supported version
+      // setMinimumSupportedVersion(data.minimumSupportedVersion);
+      // console.log('Minimum supported version:', data.minimumSupportedVersion);
+
       const grandfatherSignup =
         data.companyName === 'Grandfather' && data.authId === null;
       if (grandfatherSignup) {
