@@ -10,7 +10,7 @@ const API_PATH = '/api/cadey290';
 const AppMeta = {
   // baseApiUrl: PRODUCTION_API_URL + API_PATH,
   baseApiUrl: STAGING_API_URL + API_PATH,
-  version: '3.3.1',
+  version: '3.4.0',
   forceEmailVerification: true,
   enforceTrialUser: true,
   firestoreCollection: 'ErrorLogs2024',
