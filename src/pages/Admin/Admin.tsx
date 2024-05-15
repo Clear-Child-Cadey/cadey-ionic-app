@@ -24,12 +24,11 @@ import {
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
 import { logUserFact } from '../../api/UserFacts';
 // Contexts
-import { CadeyUserContext } from '../../main';
 import { useAppPage } from '../../context/AppPageContext';
 // Variables
-import { AppVersion } from '../../variables/AppVersion';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import AppMeta from '../../variables/AppMeta';
 
 const AdminPage: React.FC = () => {
   const { apiUrl, setApiUrl } = useContext(ApiUrlContext);
@@ -129,7 +128,7 @@ const AdminPage: React.FC = () => {
           <IonItem>
             <IonLabel>Current App Version:</IonLabel>
             <IonLabel slot='end' className='ion-text-end'>
-              {AppVersion}
+              {AppMeta.version}
             </IonLabel>
           </IonItem>
           <IonItem>

@@ -33,11 +33,9 @@ const App: React.FC = () => {
     (state: RootState) => state.deviceIdStatus.deviceId,
   );
 
-  const appVersionStatus = useSelector((state: RootState) => {
-    return state.appVersion;
-  });
-
-  const { cadeyMinimumSupportedAppVersion } = appVersionStatus;
+  const cadeyMinimumSupportedAppVersion = useSelector(
+    (state: RootState) => state.appVersion.cadeyMinimumSupportedAppVersion,
+  );
 
   const { apiUrl } = React.useContext(ApiUrlContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -84,11 +82,6 @@ const App: React.FC = () => {
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
-    console.log('AppMeta.version', AppMeta.version);
-    console.log(
-      'cadeyMinimumSupportedAppVersion',
-      cadeyMinimumSupportedAppVersion,
-    );
     if (
       semver.lt(AppMeta.version, cadeyMinimumSupportedAppVersion || '1.0.0')
     ) {

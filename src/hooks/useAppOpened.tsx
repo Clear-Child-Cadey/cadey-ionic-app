@@ -12,11 +12,6 @@ import { RootState } from '../store';
 const useAppOpened = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
   const dispatch = useDispatch();
-  const appVersionStatus = useSelector((state: RootState) => {
-    return state.appVersion;
-  });
-
-  const { cadeyMinimumSupportedAppVersion } = appVersionStatus;
 
   const appOpenAction = async () => {
     const url = `${apiUrl}/cadeyappopened`;
@@ -42,10 +37,6 @@ const useAppOpened = () => {
       const data = response.data; // response from Axios already parsed as JSON
 
       // Set the minimum supported version
-      console.log(
-        'Setting minimum supported app version to',
-        data.cadeyMinimumSupportedAppVersion,
-      );
       dispatch(
         setCadeyMinimumSupportedAppVersion(
           data.cadeyMinimumSupportedAppVersion,
