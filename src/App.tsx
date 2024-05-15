@@ -12,8 +12,6 @@ import QuizModal from './components/Modals/QuizModal/QuizModal';
 import { CadeyUserContext } from './main';
 import { useModalContext } from './context/ModalContext';
 import ApiUrlContext from './context/ApiUrlContext';
-// Variables
-import { AppVersion } from './variables/AppVersion';
 // API
 import { setExternalUserId } from './api/OneSignal/SetExternalUserId';
 import { logUserFact } from './api/UserFacts';
@@ -34,7 +32,13 @@ const App: React.FC = () => {
   const deviceId = useSelector(
     (state: RootState) => state.deviceIdStatus.deviceId,
   );
-  const { minimumSupportedVersion, oneSignalId } = useContext(CadeyUserContext);
+
+  const appVersionStatus = useSelector((state: RootState) => {
+    return state.appVersion;
+  });
+
+  const { cadeyMinimumSupportedAppVersion } = appVersionStatus;
+
   const { apiUrl } = React.useContext(ApiUrlContext);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [videoModalEverOpened, setVideoModalEverOpened] = useState(false);
@@ -80,11 +84,18 @@ const App: React.FC = () => {
 
   // Show the upgrade modal if the current app version is not the latest
   useEffect(() => {
-    if (semver.lt(AppVersion, minimumSupportedVersion || '1.0.0')) {
+    console.log('AppMeta.version', AppMeta.version);
+    console.log(
+      'cadeyMinimumSupportedAppVersion',
+      cadeyMinimumSupportedAppVersion,
+    );
+    if (
+      semver.lt(AppMeta.version, cadeyMinimumSupportedAppVersion || '1.0.0')
+    ) {
       SplashScreen.hide(); // Hide the splash screen
       setShowUpgradeModal(true);
     }
-  }, [minimumSupportedVersion, AppVersion]);
+  }, [cadeyMinimumSupportedAppVersion, AppMeta.version]);
 
   useEffect(() => {
     if (!cadeyUser?.cadeyUserId) {

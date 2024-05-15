@@ -4,6 +4,7 @@ import authStatusReducer from './features/authLoading/slice';
 import deviceIdStatusReducer from './features/deviceId/slice';
 import videoReducer from './features/video/slice';
 import deepLinkReducer from './features/deepLinks/slice';
+import appVersionReducer from './features/appVersion/slice';
 
 const rootReducer = combineReducers({
   httpError: httpErrorReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   deviceIdStatus: deviceIdStatusReducer,
   video: videoReducer,
   deepLink: deepLinkReducer,
+  appVersion: appVersionReducer,
 });
 
 const store = configureStore({

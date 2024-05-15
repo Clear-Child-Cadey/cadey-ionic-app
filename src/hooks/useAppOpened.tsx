@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ApiUrlContext from '../context/ApiUrlContext';
 import getDeviceId from '../utils/getDeviceId';
 import AppMeta from '../variables/AppMeta';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setGrandfatherStatus } from '../features/authLoading/slice';
 import axios from '../config/AxiosConfig';
 import { Capacitor } from '@capacitor/core';
+import { setCadeyMinimumSupportedAppVersion } from '../features/appVersion/slice';
+import { RootState } from '../store';
 
 const useAppOpened = () => {
   const { apiUrl } = React.useContext(ApiUrlContext);
   const dispatch = useDispatch();
+  const appVersionStatus = useSelector((state: RootState) => {
+    return state.appVersion;
+  });
+
+  const { cadeyMinimumSupportedAppVersion } = appVersionStatus;
 
   const appOpenAction = async () => {
     const url = `${apiUrl}/cadeyappopened`;
@@ -35,8 +42,15 @@ const useAppOpened = () => {
       const data = response.data; // response from Axios already parsed as JSON
 
       // Set the minimum supported version
-      // setMinimumSupportedVersion(data.minimumSupportedVersion);
-      // console.log('Minimum supported version:', data.minimumSupportedVersion);
+      console.log(
+        'Setting minimum supported app version to',
+        data.cadeyMinimumSupportedAppVersion,
+      );
+      dispatch(
+        setCadeyMinimumSupportedAppVersion(
+          data.cadeyMinimumSupportedAppVersion,
+        ),
+      );
 
       const grandfatherSignup =
         data.companyName === 'Grandfather' && data.authId === null;
