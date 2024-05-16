@@ -1,26 +1,33 @@
 PODS:
-  - Capacitor (5.6.0):
+  - Capacitor (6.0.0):
     - CapacitorCordova
-  - CapacitorApp (5.0.6):
+  - CapacitorApp (6.0.0):
     - Capacitor
-  - CapacitorBrowser (5.1.0):
+  - CapacitorBrowser (6.0.0):
     - Capacitor
-  - CapacitorClipboard (5.0.6):
+  - CapacitorClipboard (6.0.0):
     - Capacitor
-  - CapacitorCordova (5.6.0)
-  - CapacitorHaptics (5.0.6):
+  - CapacitorCordova (6.0.0)
+  - CapacitorHaptics (6.0.0):
     - Capacitor
-  - CapacitorKeyboard (5.0.7):
+  - CapacitorKeyboard (6.0.0):
     - Capacitor
-  - CapacitorShare (5.0.6):
+  - CapacitorPluginGlassfy (4.0.0):
     - Capacitor
-  - CapacitorSplashScreen (5.0.6):
+    - Glassfy (= 1.4.0)
+    - GlassfyGlue (= 1.4.5)
+  - CapacitorShare (6.0.0):
     - Capacitor
-  - CapacitorStatusBar (5.0.6):
+  - CapacitorSplashScreen (6.0.0):
     - Capacitor
-  - CordovaPluginsStatic (5.6.0):
+  - CapacitorStatusBar (6.0.0):
+    - Capacitor
+  - CordovaPluginsStatic (6.0.0):
     - CapacitorCordova
     - OneSignalXCFramework (= 3.12.4)
+  - Glassfy (1.4.0)
+  - GlassfyGlue (1.4.5):
+    - Glassfy (= 1.4.0)
   - OneSignalXCFramework (3.12.4):
     - OneSignalXCFramework/OneSignalCore (= 3.12.4)
     - OneSignalXCFramework/OneSignalExtension (= 3.12.4)
@@ -40,6 +47,7 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
+  - CapacitorPluginGlassfy (from `../../node_modules/capacitor-plugin-glassfy`)
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
@@ -48,6 +56,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Glassfy
+    - GlassfyGlue
     - OneSignalXCFramework
 
 EXTERNAL SOURCES:
@@ -65,6 +75,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
+  CapacitorPluginGlassfy:
+    :path: "../../node_modules/capacitor-plugin-glassfy"
   CapacitorShare:
     :path: "../../node_modules/@capacitor/share"
   CapacitorSplashScreen:
@@ -75,19 +87,22 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: ebfc16cdb8116d04c101686b080342872da42d43
-  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
-  CapacitorBrowser: 7a0fb6a1011abfaaf2dfedfd8248f942a8eda3d6
-  CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
-  CapacitorCordova: 931b48fcdbc9bc985fc2f16cec9f77c794a27729
-  CapacitorHaptics: 1fffc1217c7e64a472d7845be50fb0c2f7d4204c
-  CapacitorKeyboard: ce5e01064cf57a2c05b32565310713b7fe6cc6f9
-  CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
-  CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
-  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
-  CordovaPluginsStatic: ceeab3b2a42288951c91ed2a360f546237a74f6e
+  Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
+  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
+  CapacitorBrowser: 7e1e2cdbb3e372f09f0bad0c4c21a6d187b679ad
+  CapacitorClipboard: 80282f684154124b9019ebf401235b70b0cf4994
+  CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorHaptics: 9ebc9363f0e9b8eb4295088a0b474530acf1859b
+  CapacitorKeyboard: deacbd09d8d1029c3681197fb05d206b721d5f73
+  CapacitorPluginGlassfy: fff3790bdd1c3b46dd15544e2792bfbe4ecf7d0d
+  CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
+  CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
+  CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
+  CordovaPluginsStatic: 6210dc519db3a49d7bf158ce0656bd239166dfd5
+  Glassfy: 6c13edc242715212cfd01a0a12c8553f2f06cfcb
+  GlassfyGlue: 828c39792238a84c07d27a71c9eb4819b0b1dfa9
   OneSignalXCFramework: 087934ab0d4d7445fcf1c015c7c782359e26c020
 
-PODFILE CHECKSUM: cd5916f174c29e8b50a43c576fdf9d3c7233fd84
+PODFILE CHECKSUM: da5e00fadc4953eee2e1e598fcee95a653984596
 
 COCOAPODS: 1.12.1
