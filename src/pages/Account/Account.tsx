@@ -9,6 +9,7 @@ import {
 } from '@ionic/react';
 // CSS
 import './Account.css';
+import { Glassfy } from 'capacitor-plugin-glassfy';
 
 const AccountPage = () => {
   const handlePurchase = () => {
