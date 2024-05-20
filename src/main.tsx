@@ -110,6 +110,7 @@ function MainComponent() {
     };
     asyncFunction();
 
+    console.log('Initializing Glassfy...');
     initializeGlassfy(); // Initialize Glassfy
   }, []);
 
