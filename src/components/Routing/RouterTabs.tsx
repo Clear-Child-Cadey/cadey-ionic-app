@@ -70,6 +70,7 @@ import AppMeta from '../../variables/AppMeta';
 import VerificationPage from '../VerificationMessage';
 import BadUser from '../Authentication/BadUser';
 import { auth } from '../../api/Firebase/InitializeFirebase';
+import AccountPage from '../../pages/Account/Account';
 
 const RouterTabs: React.FC = () => {
   const location = useLocation();
@@ -163,7 +164,8 @@ const RouterTabs: React.FC = () => {
     setIsTabBarVisible(
       location.pathname.includes('/App/Home') ||
         location.pathname.includes('/App/Library') ||
-        location.pathname.includes('/App/Paths'),
+        location.pathname.includes('/App/Paths') ||
+        location.pathname.includes('/App/Account'),
     );
   }, [location]);
 
@@ -347,6 +349,9 @@ const RouterTabs: React.FC = () => {
                   component={PathDetailPage}
                 />
 
+                {/* Account Routes */}
+                <Route exact path='/App/Account' component={AccountPage} />
+
                 {/* Miscellaneous routes */}
                 <Route exact path='/App/Admin' component={AdminPage} />
 
@@ -393,15 +398,15 @@ const RouterTabs: React.FC = () => {
                 <IonLabel>Library</IonLabel>
               </IonTabButton>
 
-              {/* <IonTabButton
+              {/* Account */}
+              <IonTabButton
                 tab='Account'
                 onClick={() => handleTabClick('Account', '/App/Account')}
                 selected={isTabActive('/App/Account')}
               >
-                <IonIcon src='/assets/icon/person-outline.svg' />
                 <IonIcon icon={personOutline} className='account-icon' />
                 <IonLabel>Account</IonLabel>
-              </IonTabButton> */}
+              </IonTabButton>
             </IonTabBar>
           </IonTabs>
         ))}

@@ -31,6 +31,12 @@ PODS:
     - OneSignalXCFramework/OneSignalOutcomes
   - OneSignalXCFramework/OneSignalOutcomes (3.12.4):
     - OneSignalXCFramework/OneSignalCore
+  - PurchasesHybridCommon (10.6.2):
+    - RevenueCat (= 4.41.2)
+  - RevenueCat (4.41.2)
+  - RevenuecatPurchasesCapacitor (7.5.10):
+    - Capacitor
+    - PurchasesHybridCommon (= 10.6.2)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -45,10 +51,13 @@ DEPENDENCIES:
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - CordovaPluginsStatic (from `../capacitor-cordova-ios-plugins`)
   - OneSignalXCFramework (< 4.0, >= 3.0.0)
+  - "RevenuecatPurchasesCapacitor (from `../../node_modules/@revenuecat/purchases-capacitor`)"
 
 SPEC REPOS:
   trunk:
     - OneSignalXCFramework
+    - PurchasesHybridCommon
+    - RevenueCat
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -73,6 +82,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CordovaPluginsStatic:
     :path: "../capacitor-cordova-ios-plugins"
+  RevenuecatPurchasesCapacitor:
+    :path: "../../node_modules/@revenuecat/purchases-capacitor"
 
 SPEC CHECKSUMS:
   Capacitor: ebfc16cdb8116d04c101686b080342872da42d43
@@ -87,7 +98,10 @@ SPEC CHECKSUMS:
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CordovaPluginsStatic: ceeab3b2a42288951c91ed2a360f546237a74f6e
   OneSignalXCFramework: 087934ab0d4d7445fcf1c015c7c782359e26c020
+  PurchasesHybridCommon: 120cdca2b40fb5947a51b75e121da4f2cde0a137
+  RevenueCat: 0250867579677899de94f96ad9be342be865560f
+  RevenuecatPurchasesCapacitor: 9e57fd36cc99e35772149b218db413f975dec924
 
-PODFILE CHECKSUM: cd5916f174c29e8b50a43c576fdf9d3c7233fd84
+PODFILE CHECKSUM: 40df767131b7dfa274fe169c7cb9cd2c25c51a8d
 
 COCOAPODS: 1.12.1
