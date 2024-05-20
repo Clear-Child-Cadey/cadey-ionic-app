@@ -10,26 +10,24 @@ import {
   IonItem,
   IonLabel,
 } from '@ionic/react';
-import {
-  Glassfy,
-  GlassfyOffering,
-  GlassfySku,
-  GlassfyPermission,
-} from 'capacitor-plugin-glassfy';
+import { Glassfy, GlassfyOffering, GlassfySku } from 'capacitor-plugin-glassfy';
 import './Account.css';
+import { checkGlassfyPermissions } from '../../api/Glassfy/Permissions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const AccountPage = () => {
   const [offerings, setOfferings] = useState<GlassfyOffering[]>([]);
   const [loading, setLoading] = useState(true);
-  const [permissions, setPermissions] = useState<GlassfyPermission[]>([]);
+  // const permissionStatus = useSelector(
+  //   (state: RootState) => state.authStatus.proAccessStatus,
+  // );
   const [permissionStatus, setPermissionStatus] = useState(false);
 
   useEffect(() => {
     const fetchOfferings = async () => {
       try {
-        console.log('Fetching offerings...');
         const result = await Glassfy.offerings();
-        console.log('Offerings:', result);
         setOfferings(result.all);
         setLoading(false);
       } catch (error) {
@@ -39,13 +37,13 @@ const AccountPage = () => {
     };
 
     fetchOfferings();
-    checkGlassfyPermissions();
+    checkGlassfyPermission();
   }, []);
 
-  const checkGlassfyPermissions = async () => {
+  const checkGlassfyPermission = async () => {
     try {
       const permissions = await Glassfy.permissions();
-      setPermissions(permissions.all);
+
       permissions.all.forEach((p) => {
         switch (p.permissionId) {
           case 'pro_features':
