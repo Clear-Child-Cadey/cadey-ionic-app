@@ -10,13 +10,15 @@ import {
   IonItem,
   IonLabel,
 } from '@ionic/react';
-import { Glassfy, GlassfyOffering, GlassfySku } from 'capacitor-plugin-glassfy';
+import {
+  Purchases,
+  PurchasesOfferings, // Types for TypeScript
+} from '@revenuecat/purchases-capacitor';
 import './Account.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 const AccountPage = () => {
-  const [offerings, setOfferings] = useState<GlassfyOffering[]>([]);
   const [loading, setLoading] = useState(true);
   // const permissionStatus = useSelector(
   //   (state: RootState) => state.authStatus.proAccessStatus,
@@ -25,52 +27,14 @@ const AccountPage = () => {
 
   useEffect(() => {
     const fetchOfferings = async () => {
-      try {
-        const result = await Glassfy.offerings();
-        setOfferings(result.all);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching offerings:', error);
-        setLoading(false);
-      }
+      console.log('Fetching offerings...');
     };
 
     fetchOfferings();
-    checkGlassfyPermission();
   }, []);
 
-  const checkGlassfyPermission = async () => {
-    try {
-      const permissions = await Glassfy.permissions();
-
-      permissions.all.forEach((p) => {
-        switch (p.permissionId) {
-          case 'pro_features':
-            if (p.isValid) {
-              setPermissionStatus(true);
-            } else {
-              console.log('Permission not valid:', p);
-            }
-            break;
-
-          default:
-            break;
-        }
-      });
-    } catch (e) {
-      console.error('Error fetching permissions:', e);
-    }
-  };
-
-  const handlePurchase = async (sku: GlassfySku) => {
-    try {
-      const transaction = await Glassfy.purchaseSku({ sku: sku });
-      console.log('Purchase successful: ', transaction);
-    } catch (error) {
-      console.error('Purchase error:', error);
-    }
-
-    checkGlassfyPermissions();
+  const handlePurchase = async () => {
+    console.log('Purchasing...');
   };
 
   const handlePause = () => {
@@ -94,32 +58,32 @@ const AccountPage = () => {
         {loading ? (
           <p>Loading offerings...</p>
         ) : (
-          <IonList>
-            {offerings.map((offering) => (
-              <IonItem key={offering.offeringId}>
-                <IonLabel>
-                  <h2>{offering.offeringId}</h2>
-                  <IonList>
-                    {offering.skus.map((sku: GlassfySku) => (
-                      <IonItem key={sku.product.identifier}>
-                        <IonLabel>
-                          <h3>{sku.product.title}</h3>
-                          <p>{sku.product.description}</p>
-                          <IonButton
-                            expand='block'
-                            onClick={() => handlePurchase(sku)}
-                          >
-                            Purchase {sku.product.title} for $
-                            {sku.product.price} per {sku.product.period}
-                          </IonButton>
-                        </IonLabel>
-                      </IonItem>
-                    ))}
-                  </IonList>
-                </IonLabel>
-              </IonItem>
-            ))}
-          </IonList>
+          // <IonList>
+          //   {offerings.map((offering) => (
+          //     <IonItem key={offering.offeringId}>
+          //       <IonLabel>
+          //         <h2>{offering.offeringId}</h2>
+          //         <IonList>
+          //           {offering.skus.map((sku: GlassfySku) => (
+          //             <IonItem key={sku.product.identifier}>
+          //               <IonLabel>
+          //                 <h3>{sku.product.title}</h3>
+          //                 <p>{sku.product.description}</p>
+          //                 <IonButton
+          //                   expand='block'
+          //                   onClick={() => handlePurchase(sku)}
+          //                 >
+          //                   Purchase {sku.product.title} for $
+          //                   {sku.product.price} per {sku.product.period}
+          //                 </IonButton>
+          //               </IonLabel>
+          //             </IonItem>
+          //           ))}
+          //         </IonList>
+          //       </IonLabel>
+          //     </IonItem>
+          //   ))}
+          // </IonList>
         )}
         <IonButton expand='block' onClick={handlePause}>
           Pause Subscription

@@ -36,6 +36,8 @@ const AppMeta = {
     '/App/Welcome',
   ],
   emailVerificationMessage: '',
+  publicAppleRevenueCatApiKey: 'appl_XgCjJkycTNHhDxDzvoLsWtdIEww',
+  publicGoogleRevenueCatApiKey: 'goog_RBSPQIotYbFSobVvLmEKcTlePEW',
 };
 
 export default AppMeta;
