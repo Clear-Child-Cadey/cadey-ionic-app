@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   WP_ArticleDetail,
   getArticleDetail,
-} from '../../api/WordPress/GetArticleDetail';
+} from '../../api/Articles/GetArticleDetail';
 import { useLocation, useHistory } from 'react-router';
 import {
   IonContent,
@@ -55,7 +55,7 @@ const ArticleDetailPage: React.FC = () => {
           payload: { key: 'articleDetail', value: true },
         });
         const detail = await getArticleDetail(articleId);
-        detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
+        detail.content = stripYouTubeEmbeds(detail.content);
         setArticle(detail);
         // Log a user fact
         logUserFact({
@@ -63,7 +63,7 @@ const ArticleDetailPage: React.FC = () => {
           userFactTypeName: 'OpenedArticle',
           appPage: 'Article Detail',
           detail1: articleId.toString(),
-          detail2: detail.title.rendered,
+          detail2: detail.title,
         });
 
         logUserFact({
@@ -71,7 +71,7 @@ const ArticleDetailPage: React.FC = () => {
           userFactTypeName: 'appPageNavigation',
           appPage: 'Article Detail',
           detail1: articleId.toString(),
-          detail2: detail.title.rendered,
+          detail2: detail.title,
         });
       } catch (error) {
         console.error('Error fetching article detail:', error);
@@ -89,7 +89,7 @@ const ArticleDetailPage: React.FC = () => {
     fetchArticleDetail();
 
     // Set the title of the page to the title of the article
-    document.title = article ? article.title.rendered : 'Article Detail';
+    document.title = article ? article.title : 'Article Detail';
   }, [articleId]);
 
   /**
@@ -140,17 +140,17 @@ const ArticleDetailPage: React.FC = () => {
         <IonRow>
           {article && (
             <div className='article-detail'>
-              <h1>{decodeHtmlEntities(article.title.rendered)}</h1>
-              {article.featured_image_url && (
+              <h1>{decodeHtmlEntities(article.title)}</h1>
+              {article.featuredImageUrl && (
                 <img
-                  src={article.featured_image_url}
-                  alt={decodeHtmlEntities(article.title.rendered)}
+                  src={article.featuredImageUrl}
+                  alt={decodeHtmlEntities(article.title)}
                   className='featured-image'
                 />
               )}
               <div
                 className='article-detail-content'
-                dangerouslySetInnerHTML={{ __html: article.content.rendered }}
+                dangerouslySetInnerHTML={{ __html: article.content }}
               ></div>
             </div>
           )}

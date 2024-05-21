@@ -29,7 +29,10 @@ import { VideoItem } from '../../components/Videos/VideoList';
 // Components
 import VideoList from '../../components/Videos/VideoList';
 import ArticleItem from '../../components/Articles/ArticleItem';
-import { WP_Article, getArticlesByIds } from '../../api/WordPress/GetArticles';
+import {
+  WP_Article,
+  getArticlesListByIds,
+} from '../../api/Articles/GetArticles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
@@ -107,7 +110,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       searchField.value = query;
 
       // Perform the search for the user
-      performSearch(query, userAgeGroup);
+      performSearch(query, userAgeGroup || 0);
     }
   }, [apiUrl, cadeyUserId]);
 
@@ -130,7 +133,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
       }
 
       // Perform the search for the user
-      performSearch(searchTerm, userAgeGroup);
+      performSearch(searchTerm, userAgeGroup || 0);
     }
   };
 
@@ -148,10 +151,14 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
 
     // Get new results
     try {
-      const response = await postUserSearch(cadeyUserId, searchTerm, ageGroup);
+      const response = await postUserSearch(
+        cadeyUserId?.toString() || '0',
+        searchTerm,
+        ageGroup,
+      );
       setSearchResults(response);
       if (response.articleIds.length > 0) {
-        setArticleResults(await getArticlesByIds(response.articleIds));
+        setArticleResults(await getArticlesListByIds(response.articleIds));
       }
 
       // Clear the search term from state
@@ -267,7 +274,7 @@ const SearchPage: React.FC<{ currentTab: string }> = ({ currentTab }) => {
             </IonText>
             <IonList>
               {articleResults.map((article) => (
-                <ArticleItem article={article} key={article.id} />
+                <ArticleItem article={article} key={article.articleId} />
               ))}
             </IonList>
           </IonRow>

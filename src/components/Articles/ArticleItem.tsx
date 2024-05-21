@@ -3,7 +3,7 @@ import { IonImg, IonIcon } from '@ionic/react';
 // CSS
 import './ArticleItem.css';
 // API & Interface
-import { WP_Article } from '../../api/WordPress/GetArticles';
+import { WP_Article } from '../../api/Articles/GetArticles';
 // Icons
 import { readerOutline } from 'ionicons/icons';
 // Contexts
@@ -32,7 +32,7 @@ const ArticleItem: React.FC<ArticleProps> = ({ article, videoId }) => {
   // Log a user fact and proceed to the next screen
   const handleArticleClick = (article: WP_Article) => {
     setSelectedArticle(article);
-    setCurrentArticleId(article.id);
+    setCurrentArticleId(article.wordPressArticleId);
     if (isVideoModalOpen) {
       // Change source to Video Detail Modal
     }
@@ -56,11 +56,11 @@ const ArticleItem: React.FC<ArticleProps> = ({ article, videoId }) => {
             onClick={() => handleArticleClick(article)}
             className='article-item'
           >
-            {article.featured_image_url && (
+            {article.wordPressArticleIcon && (
               <div className='article-image-wrapper'>
                 <IonImg
-                  src={article.featured_image_url}
-                  alt={article.title.rendered}
+                  src={article.wordPressArticleIcon}
+                  alt={article.wordPressArticleTitle}
                   className='article-image'
                 />
                 <IonIcon icon={readerOutline} className='article-icon' />
@@ -69,7 +69,7 @@ const ArticleItem: React.FC<ArticleProps> = ({ article, videoId }) => {
             <div className='article-metadata'>
               <p>Article</p>
               <h3 className='article-title'>
-                {decodeHtmlEntities(article.title.rendered)}
+                {decodeHtmlEntities(article.wordPressArticleTitle)}
               </h3>
             </div>
           </div>

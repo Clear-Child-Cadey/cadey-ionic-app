@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   WP_ArticleDetail,
   getArticleDetail,
-} from '../../../api/WordPress/GetArticleDetail';
+} from '../../../api/Articles/GetArticleDetail';
 import {
   IonContent,
   IonRow,
@@ -91,7 +91,7 @@ const ArticleDetailModal: React.FC = () => {
         });
 
         const detail = await getArticleDetail(currentArticleId);
-        detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
+        detail.content = stripYouTubeEmbeds(detail.content);
 
         if (isMounted) setArticle(detail); // Update state only if component is mounted
       } catch (error) {
@@ -173,17 +173,17 @@ const ArticleDetailModal: React.FC = () => {
         <IonRow>
           {article && (
             <div className='article-detail-modal'>
-              <h2>{decodeHtmlEntities(article.title.rendered)}</h2>
-              {article.featured_image_url && (
+              <h2>{decodeHtmlEntities(article.title)}</h2>
+              {article.featuredImageUrl && (
                 <img
-                  src={article.featured_image_url}
-                  alt={decodeHtmlEntities(article.title.rendered)}
+                  src={article.featuredImageUrl}
+                  alt={decodeHtmlEntities(article.title)}
                   className='featured-image'
                 />
               )}
               <div
                 className='article-detail-content'
-                dangerouslySetInnerHTML={{ __html: article.content.rendered }}
+                dangerouslySetInnerHTML={{ __html: article.content }}
               ></div>
             </div>
           )}

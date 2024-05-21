@@ -32,14 +32,11 @@ import ArticleItem from '../../Articles/ArticleItem';
 import { Message } from '../../../pages/Messages/Messages';
 import {
   WP_Article,
-  getArticlesByIds,
-} from '../../../api/WordPress/GetArticles';
+  getArticlesListByIds,
+} from '../../../api/Articles/GetArticles';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import useRequestQuiz from '../../../hooks/useRequestQuiz';
-
-//Wasn't being used so I commented it out
-// interface VideoDetailModalProps {}
 
 const VideoDetailModal: React.FC = () => {
   // Get all the props from the modal context
@@ -172,7 +169,7 @@ const VideoDetailModal: React.FC = () => {
 
         // If any articles were returned, set them in state
         if (articleIds.length > 0) {
-          setRelatedArticles(await getArticlesByIds(articleIds));
+          setRelatedArticles(await getArticlesListByIds(articleIds));
         }
       } catch (error) {
         console.error('Error fetching video details:', error);
@@ -352,7 +349,8 @@ const VideoDetailModal: React.FC = () => {
                           <ArticleItem
                             article={
                               relatedArticles.find(
-                                (article) => article.id === item.mediaId,
+                                (article) =>
+                                  article.wordPressArticleId === item.mediaId,
                               )!
                             }
                             videoId={videoData.mediaId}

@@ -1,27 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import {
-  WP_ArticleDetail,
-  getArticleDetail,
-} from '../../api/WordPress/GetArticleDetail';
-import {
   IonContent,
   IonRow,
   IonPage,
   IonHeader,
   IonToolbar,
-  IonTitle,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 // CSS
 import './ArticleCategoryListing.css';
 // API
 import { logUserFact } from '../../api/UserFacts';
-import { getCategories } from '../../api/WordPress/GetCategories';
+import { getCategories } from '../../api/Articles/GetCategories';
 // Contexts
-import { CadeyUserContext } from '../../main';
 import ApiUrlContext from '../../context/ApiUrlContext';
 import { useAppPage } from '../../context/AppPageContext';
-import { WP_Category } from '../../api/WordPress/GetCategories';
+import { WP_Category } from '../../api/Articles/GetCategories';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
@@ -57,6 +51,7 @@ const ArticleCategoryListingPage: React.FC = () => {
       try {
         const categories: WP_Category[] = await getCategories();
         setArticleCategories(categories);
+        console.log('Article categories:', categories);
       } catch (error) {
         console.error('Error fetching article categories:', error);
       }
@@ -65,17 +60,13 @@ const ArticleCategoryListingPage: React.FC = () => {
     fetchArticleCategories();
   }, []);
 
-  const handleCategorySelection = (categoryId: number) => {
-    // Log user fact that the user clicked on the tap bar
-    // logUserFact({
-    //     cadeyUserId: cadeyUserId,
-    //     baseApiUrl: apiUrl,
-    //     userFactTypeName: 'ArticleCategorySelection',
-    //     appPage: currentAppPage,
-    //     detail1: categoryId.toString(),
-    // });
-
-    history.push(`/App/Library/Articles/Category?id=${categoryId}`);
+  const handleCategorySelection = (
+    categoryId: number,
+    categoryName: string,
+  ) => {
+    history.push(
+      `/App/Library/Articles/Category?id=${categoryId}&categoryName=${categoryName}`,
+    );
   };
 
   const handleBack = (route: string) => {
@@ -108,7 +99,9 @@ const ArticleCategoryListingPage: React.FC = () => {
                 <div
                   className='article-category'
                   key={category.id}
-                  onClick={() => handleCategorySelection(category.id)}
+                  onClick={() =>
+                    handleCategorySelection(category.wordPressId, category.name)
+                  }
                 >
                   <h2>{category.name}</h2>
                   <span className='arrow'>&gt;</span>
