@@ -70,7 +70,7 @@ import AppMeta from '../../variables/AppMeta';
 import VerificationPage from '../VerificationMessage';
 import BadUser from '../Authentication/BadUser';
 import { auth } from '../../api/Firebase/InitializeFirebase';
-// import AccountPage from '../../pages/Account/Account';
+import AccountPage from '../../pages/Account/Account';
 
 const RouterTabs: React.FC = () => {
   const location = useLocation();
@@ -350,7 +350,7 @@ const RouterTabs: React.FC = () => {
                 />
 
                 {/* Account Routes */}
-                {/* <Route exact path='/App/Account' component={AccountPage} /> */}
+                <Route exact path='/App/Account' component={AccountPage} />
 
                 {/* Miscellaneous routes */}
                 <Route exact path='/App/Admin' component={AdminPage} />
@@ -375,7 +375,7 @@ const RouterTabs: React.FC = () => {
                 selected={isTabActive('/App/Home')}
               >
                 <HomeIcon />
-                <IonLabel>Home</IonLabel>
+                <IonLabel className='tab-bar-label'>Home</IonLabel>
               </IonTabButton>
 
               {/* Paths */}
@@ -385,7 +385,7 @@ const RouterTabs: React.FC = () => {
                 selected={isTabActive('/App/Paths')}
               >
                 <PathsIcon />
-                <IonLabel>Paths</IonLabel>
+                <IonLabel className='tab-bar-label'>Paths</IonLabel>
               </IonTabButton>
 
               {/* Library */}
@@ -395,7 +395,7 @@ const RouterTabs: React.FC = () => {
                 selected={isTabActive('/App/Library')}
               >
                 <LibraryIcon />
-                <IonLabel>Library</IonLabel>
+                <IonLabel className='tab-bar-label'>Library</IonLabel>
               </IonTabButton>
 
               {/* Account */}
@@ -404,8 +404,11 @@ const RouterTabs: React.FC = () => {
                 onClick={() => handleTabClick('Account', '/App/Account')}
                 selected={isTabActive('/App/Account')}
               >
-                <IonIcon icon={personOutline} className='account-icon' />
-                <IonLabel>Account</IonLabel>
+                <IonIcon
+                  icon={personOutline}
+                  className='account-icon tab-bar-icon'
+                />
+                <IonLabel className='tab-bar-label'>Account</IonLabel>
               </IonTabButton>
             </IonTabBar>
           </IonTabs>

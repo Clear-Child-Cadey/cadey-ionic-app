@@ -1,0 +1,15 @@
+.toggle-password {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.eye-icon {
+  font-size: 18px;
+  margin-top: 1px;
+  margin-right: 2px; /* Adjust the spacing between the icon and text as needed */
+  vertical-align: middle;
+  line-height: 1; /* Ensures the icon doesn't add extra height to the line */
+}

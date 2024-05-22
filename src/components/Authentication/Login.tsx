@@ -7,10 +7,13 @@ import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
 import { Auth, AuthError } from 'firebase/auth';
+import { IonIcon } from '@ionic/react';
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
 const LoginComponent: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState('');
   const history = useHistory();
 
@@ -88,13 +91,32 @@ const LoginComponent: React.FC = () => {
 
         <div style={{ marginTop: '1rem' }}>
           <label>Password</label>
-          <input
-            required
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder='Password'
-          />
+          <div style={{ display: 'flex' }}>
+            <input
+              required
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder='Password'
+            />
+          </div>
+          {showPassword ? (
+            <a
+              className='toggle-password off'
+              onClick={() => setShowPassword(false)}
+            >
+              <IonIcon icon={eyeOffOutline} className='eye-icon off' />
+              <span>Hide</span>
+            </a>
+          ) : (
+            <a
+              className='toggle-password on'
+              onClick={() => setShowPassword(true)}
+            >
+              <IonIcon icon={eyeOutline} className='eye-icon on' />
+              <span>Show</span>
+            </a>
+          )}
         </div>
 
         <button

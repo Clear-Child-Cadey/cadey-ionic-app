@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
 
-import './Login.css'; // Adjust the path as necessary
+import './Register.css';
 import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
@@ -10,6 +10,8 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import AppMeta from '../../variables/AppMeta';
 // import requestQuiz from '../../utils/Quiz';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
+import { eyeOff, eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { IonIcon } from '@ionic/react';
 
 interface Props {
   getValues: (loginStatus: string, messages: string[]) => void;
@@ -20,6 +22,7 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
   const [loginState, setLoginState] = useState('email'); // 'email' or 'password'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState('');
   const history = useHistory();
   const { requestQuiz } = useRequestQuiz({
@@ -101,13 +104,33 @@ const RegistrationComponent: React.FC<Props> = ({ getValues }: Props) => {
         {loginState === 'password' && (
           <>
             <label>Create your password here.</label>
-            <input
-              required
-              type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder='Password'
-            />
+
+            <div className='password-input-container'>
+              <input
+                required
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder='Password'
+              />
+              {showPassword ? (
+                <a
+                  className='toggle-password off'
+                  onClick={() => setShowPassword(false)}
+                >
+                  <IonIcon icon={eyeOffOutline} className='eye-icon off' />
+                  <span>Hide</span>
+                </a>
+              ) : (
+                <a
+                  className='toggle-password on'
+                  onClick={() => setShowPassword(true)}
+                >
+                  <IonIcon icon={eyeOutline} className='eye-icon on' />
+                  <span>Show</span>
+                </a>
+              )}
+            </div>
           </>
         )}
         <button
