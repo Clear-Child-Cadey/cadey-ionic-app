@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Purchases } from '@revenuecat/purchases-capacitor';
 // Firebase
 import {
   User,
@@ -363,9 +364,20 @@ const useCadeyAuth = () => {
     dispatch(setCadeyUser(cadeyUserLocal));
     dispatch(setFirebaseUser(firebaseUser)); // Move this to line 182?
 
-    // Set the external user ID for OneSignal on mobile
+    // Set external user IDs on mobile
     if (window.cordova) {
+      // OneSignal
       setExternalUserId(cadeyUserLocal.oneSignalId);
+
+      // RevenueCat
+      try {
+        const logInResult = await Purchases.logIn({
+          appUserID: cadeyUserLocal.oneSignalId,
+        });
+        console.log('RevenueCat logInResult:', logInResult);
+      } catch (error) {
+        // Handle error logging in
+      }
     } else {
       // Don't interact with OneSignal (which relies on Cordova)
     }

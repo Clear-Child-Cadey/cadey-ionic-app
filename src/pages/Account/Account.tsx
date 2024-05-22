@@ -12,29 +12,72 @@ import {
 } from '@ionic/react';
 import {
   Purchases,
-  PurchasesOfferings, // Types for TypeScript
+  PurchasesOfferings,
+  PurchasesPackage,
+  PURCHASES_ERROR_CODE,
 } from '@revenuecat/purchases-capacitor';
 import './Account.css';
-import { useSelector } from 'react-redux';
+import { checkEntitlementsAndUpdateUserStatus } from '../../api/RevenueCat/CheckEntitlementsAndUpdateUserStatus';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 const AccountPage = () => {
   const [loading, setLoading] = useState(true);
-  // const permissionStatus = useSelector(
-  //   (state: RootState) => state.authStatus.proAccessStatus,
-  // );
-  const [permissionStatus, setPermissionStatus] = useState(false);
+  const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
+  const dispatch = useDispatch();
+
+  const proStatus = useSelector(
+    (state: RootState) => state.authStatus.proStatus,
+  );
 
   useEffect(() => {
     const fetchOfferings = async () => {
       console.log('Fetching offerings...');
+      try {
+        const offerings = await Purchases.getOfferings();
+        if (offerings.current !== null) {
+          // Display current offering with offerings.current
+          setOfferings(offerings);
+        }
+        setLoading(false);
+      } catch (error) {
+        // Handle error
+        console.error('Error fetching offerings:', error);
+        setLoading(false);
+      }
     };
 
+    checkEntitlementsAndUpdateUserStatus(dispatch);
     fetchOfferings();
   }, []);
 
-  const handlePurchase = async () => {
-    console.log('Purchasing...');
+  useEffect(() => {
+    console.log('Offerings:', offerings);
+  }, [offerings]);
+
+  const handlePurchase = async (packageToBuy: PurchasesPackage) => {
+    console.log('Purchasing...', packageToBuy);
+    try {
+      const purchaseResult = await Purchases.purchasePackage({
+        aPackage: packageToBuy,
+      });
+      if (
+        typeof purchaseResult.customerInfo.entitlements.active['Pro'] !==
+        'undefined'
+      ) {
+        // Unlock that great "pro" content
+        console.log('Permission granted - unlock Pro!');
+        checkEntitlementsAndUpdateUserStatus(dispatch);
+      }
+    } catch (error: any) {
+      if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+        // Purchase cancelled
+        console.log('Purchase cancelled');
+      } else {
+        // Error making purchase
+        console.error('Error making purchase:', error);
+      }
+    }
   };
 
   const handlePause = () => {
@@ -55,36 +98,23 @@ const AccountPage = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className='ion-padding'>
-        {/* {loading ? (
+        {loading ? (
           <p>Loading offerings...</p>
         ) : (
           <IonList>
-            {offerings.map((offering) => (
-              <IonItem key={offering.offeringId}>
+            {offerings?.current?.availablePackages.map((pkg) => (
+              <IonItem key={pkg.identifier}>
                 <IonLabel>
-                  <h2>{offering.offeringId}</h2>
-                  <IonList>
-                    {offering.skus.map((sku: GlassfySku) => (
-                      <IonItem key={sku.product.identifier}>
-                        <IonLabel>
-                          <h3>{sku.product.title}</h3>
-                          <p>{sku.product.description}</p>
-                          <IonButton
-                            expand='block'
-                            onClick={() => handlePurchase(sku)}
-                          >
-                            Purchase {sku.product.title} for $
-                            {sku.product.price} per {sku.product.period}
-                          </IonButton>
-                        </IonLabel>
-                      </IonItem>
-                    ))}
-                  </IonList>
+                  <h2>{pkg.product.title}</h2>
+                  <p>{pkg.product.description}</p>
+                  <IonButton expand='block' onClick={() => handlePurchase(pkg)}>
+                    Purchase {pkg.product.title} for {pkg.product.priceString}
+                  </IonButton>
                 </IonLabel>
               </IonItem>
             ))}
           </IonList>
-        )} */}
+        )}
         <IonButton expand='block' onClick={handlePause}>
           Pause Subscription
         </IonButton>
@@ -92,12 +122,16 @@ const AccountPage = () => {
           Cancel Subscription
         </IonButton>
         <div>
-          {permissionStatus ? (
+          {proStatus ? (
             <p>You have permission to access premium content</p>
           ) : (
             <p>You do not have permission to access premium content</p>
           )}
         </div>
+        {/* Add a button that takes me to the "/App/ProOnly" route */}
+        <IonButton routerLink='/App/ProOnly' expand='block'>
+          Go to Pro Only
+        </IonButton>
       </IonContent>
     </IonPage>
   );

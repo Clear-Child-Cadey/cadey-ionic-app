@@ -66,6 +66,7 @@ import useAppOpened from './hooks/useAppOpened';
 import { setHttpErrorModalData } from './features/httpError/slice';
 import AppMeta from './variables/AppMeta';
 import useRequestQuiz from './hooks/useRequestQuiz';
+import { initializeRevenueCat } from './api/RevenueCat/InitializeRevenueCat';
 
 // Make sure we generate a unique ID for the device
 
@@ -108,6 +109,8 @@ function MainComponent() {
       }
     };
     asyncFunction();
+
+    initializeRevenueCat();
   }, []);
 
   const cadeyUserId = useSelector((state: RootState) => {

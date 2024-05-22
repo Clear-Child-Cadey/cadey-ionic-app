@@ -13,6 +13,7 @@ interface AuthStatusState {
   isAnonymous: Trilean;
   emailVerified: Trilean;
   grandfatherStatus: boolean;
+  proStatus: boolean;
 }
 
 const initialState: AuthStatusState = {
@@ -25,6 +26,7 @@ const initialState: AuthStatusState = {
   isAnonymous: 'pending',
   emailVerified: 'pending',
   grandfatherStatus: false,
+  proStatus: false,
 };
 
 export const authStatusSlice = createSlice({
@@ -52,6 +54,9 @@ export const authStatusSlice = createSlice({
     setGrandfatherStatus: (state, action) => {
       state.grandfatherStatus = action.payload;
     },
+    setProStatus: (state, action) => {
+      state.proStatus = action.payload;
+    },
   },
 });
 
@@ -64,6 +69,7 @@ export const {
   setIsAnonymous,
   setEmailVerified,
   setGrandfatherStatus,
+  setProStatus,
 } = authStatusSlice.actions;
 
 // Export the reducer
