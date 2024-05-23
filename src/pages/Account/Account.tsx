@@ -17,13 +17,14 @@ import {
   PURCHASES_ERROR_CODE,
 } from '@revenuecat/purchases-capacitor';
 import './Account.css';
-import { checkEntitlementsAndUpdateUserStatus } from '../../api/RevenueCat/CheckEntitlementsAndUpdateUserStatus';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import useProAccessCheck from '../../hooks/useProAccessCheck';
 
 const AccountPage = () => {
   const [loading, setLoading] = useState(true);
   const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
+  const { proAccessCheck } = useProAccessCheck();
   const dispatch = useDispatch();
 
   const proStatus = useSelector(
@@ -47,7 +48,7 @@ const AccountPage = () => {
       }
     };
 
-    checkEntitlementsAndUpdateUserStatus(dispatch);
+    proAccessCheck();
     fetchOfferings();
   }, []);
 
@@ -67,7 +68,7 @@ const AccountPage = () => {
       ) {
         // Unlock that great "pro" content
         console.log('Permission granted - unlock Pro!');
-        checkEntitlementsAndUpdateUserStatus(dispatch);
+        proAccessCheck();
       }
     } catch (error: any) {
       if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {

@@ -24,7 +24,6 @@ import {
 } from '../features/authLoading/slice';
 // API
 import ApiUrlContext from '../context/ApiUrlContext';
-import fetchWithTimeout from '../utils/fetchWithTimeout';
 import FirebaseUserModel from '../types/FirebaseUserModel';
 import AppMeta from '../variables/AppMeta';
 import { RootState } from '../store';
@@ -37,13 +36,10 @@ import axios from '../config/AxiosConfig';
 import { setExternalUserId } from '../api/OneSignal/SetExternalUserId';
 
 const useCadeyAuth = () => {
-  const countRef = React.useRef(0);
   const dispatch = useDispatch();
-  const history = useHistory();
   const { logDeviceFact } = useDeviceFacts();
   const initialErrorsState: string[] = [];
   const initialMessagesState: string[] = [];
-  const currentDeviceId = getDeviceId();
 
   const [errors, setErrors] = useState<[] | Array<string>>(initialErrorsState);
   const [messages, setMessages] = useState(initialMessagesState);
@@ -52,63 +48,69 @@ const useCadeyAuth = () => {
 
   const [bypassOnAuthStateChange, setBypassOnAuthStateChange] = useState(false);
 
-  useEffect(() => {
-    // This effect replaces the waitForAuthStateChange mechanism
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (bypassOnAuthStateChange) {
-        return;
-      }
-      if (currentUser) {
-        // Dispatch relevant actions for current user
-        dispatch(setIsAnonymous(currentUser.isAnonymous));
-        dispatch(setFirebaseUser(currentUser));
-        dispatch(setFirebaseResolved(true));
-        dispatch(setEmailVerified(currentUser.emailVerified));
-        if (!currentUser.isAnonymous) {
-          // Handle logged in user
-          try {
-            const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
-            dispatch(setCadeyUser(cadeyUser));
+  const authenticate = () => {
+    return new Promise<void>((resolve, reject) => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        if (bypassOnAuthStateChange) {
+          return;
+        }
+        if (currentUser) {
+          // Dispatch relevant actions for current user
+          dispatch(setIsAnonymous(currentUser.isAnonymous));
+          dispatch(setFirebaseUser(currentUser));
+          dispatch(setFirebaseResolved(true));
+          dispatch(setEmailVerified(currentUser.emailVerified));
+          if (!currentUser.isAnonymous) {
+            // Handle logged in user
+            try {
+              const cadeyUser =
+                await handleCadeyLoginAndReturnUser(currentUser);
+              console.log('Cadey user:', cadeyUser);
+              dispatch(setCadeyUser(cadeyUser));
+              dispatch(setCadeyResolved(true));
+              unsubscribe();
+              resolve();
+            } catch (error) {
+              console.error('Error handling Cadey login:', error);
+              setErrors([...errors, error.message]); // Should probably refactor into global state, and then clear errors when things complete / next thing starts
+              // Handle any additional error state updates or dispatches here
+              reject(error);
+            }
+          } else {
+            // Handle anonymous user
             dispatch(setCadeyResolved(true));
+            dispatch(setCadeyUser(null));
             unsubscribe();
-          } catch (error) {
-            console.error('Error handling Cadey login:', error);
-            setErrors([...errors, error.message]); // Should probably refactor into global state, and then clear errors when things complete / next thing starts
-            // Handle any additional error state updates or dispatches here
+            resolve();
           }
         } else {
-          // Handle anonymous user
-          dispatch(setCadeyResolved(true));
-          dispatch(setCadeyUser(null));
-          unsubscribe();
-        }
-      } else {
-        // Handle no user signed in
-        dispatch(setCadeyResolved(false));
-        dispatch(setFirebaseResolved(false));
-        try {
-          currentUser = await signInAnonymouslyDecorated();
+          // Handle no user signed in
+          dispatch(setCadeyResolved(false));
+          dispatch(setFirebaseResolved(false));
+          try {
+            currentUser = await signInAnonymouslyDecorated();
 
-          dispatch(setIsAnonymous(true));
-          dispatch(setCadeyResolved(true));
-          dispatch(setCadeyUser(null));
-          dispatch(setFirebaseUser(currentUser));
-          unsubscribe();
-          // Optionally set the anonymous user, depending on your app logic.
-          // Depending on your implementation, you might want to setUser here as well.
-        } catch (error) {
-          console.error('Error signing in anonymously:', error);
-          dispatch(
-            setHttpErrorModalData(
-              AppMeta.httpErrorModalDataFirebaseTooManyRequests,
-            ),
-          );
+            dispatch(setIsAnonymous(true));
+            dispatch(setCadeyResolved(true));
+            dispatch(setCadeyUser(null));
+            dispatch(setFirebaseUser(currentUser));
+            unsubscribe();
+            resolve();
+            // Optionally set the anonymous user, depending on your app logic.
+            // Depending on your implementation, you might want to setUser here as well.
+          } catch (error) {
+            console.error('Error signing in anonymously:', error);
+            dispatch(
+              setHttpErrorModalData(
+                AppMeta.httpErrorModalDataFirebaseTooManyRequests,
+              ),
+            );
+            reject(error);
+          }
         }
-      }
+      });
     });
-
-    return () => unsubscribe(); // Cleanup the listener on unmount
-  }, []);
+  };
 
   const setMessageDecorated = (m: string) => {
     setMessages((prevMessagesArray) => {
@@ -185,6 +187,8 @@ const useCadeyAuth = () => {
 
       // Authorize with Cadey
       const cadeyUser = await handleCadeyLoginAndReturnUser(currentUser);
+
+      // Set the Cadey user in the Redux store
       dispatch(setCadeyUser(cadeyUser));
       dispatch(setCadeyResolved(true));
 
@@ -411,6 +415,7 @@ const useCadeyAuth = () => {
 
   return {
     errors, // Remove this later, shouldn't be exposed as it's state-based
+    authenticate,
     signInWithEmailAndPasswordDecorated,
     sendPasswordResetEmailDecorated,
     createUserWithEmailAndPasswordDecorated,

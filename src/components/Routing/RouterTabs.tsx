@@ -71,6 +71,7 @@ import VerificationPage from '../VerificationMessage';
 import BadUser from '../Authentication/BadUser';
 import { auth } from '../../api/Firebase/InitializeFirebase';
 import AccountPage from '../../pages/Account/Account';
+import ProtectedRoute from './ProtectedRoute';
 
 const RouterTabs: React.FC = () => {
   const location = useLocation();
@@ -307,7 +308,12 @@ const RouterTabs: React.FC = () => {
                 <Route path='/App/Home/Messages' component={MessagesPage} />
 
                 {/* Library routes */}
-                <Route exact path='/App/Library' component={LibraryPage} />
+                {/* <Route exact path='/App/Library' component={LibraryPage} /> */}
+                <ProtectedRoute
+                  exact
+                  path='/App/Library'
+                  component={LibraryPage}
+                />
                 <Route
                   exact
                   path='/App/Library/Search'

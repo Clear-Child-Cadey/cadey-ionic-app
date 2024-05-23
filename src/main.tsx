@@ -67,8 +67,8 @@ import { setHttpErrorModalData } from './features/httpError/slice';
 import AppMeta from './variables/AppMeta';
 import useRequestQuiz from './hooks/useRequestQuiz';
 import { initializeRevenueCat } from './api/RevenueCat/InitializeRevenueCat';
-
-// Make sure we generate a unique ID for the device
+import useProAccessCheck from './hooks/useProAccessCheck';
+import { constructOutline } from 'ionicons/icons';
 
 // create context for cadeyUserId
 export const CadeyUserContext = createContext<{
@@ -87,18 +87,26 @@ getDeviceId();
 
 function MainComponent() {
   const { appOpenAction } = useAppOpened();
-  useCadeyAuth();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { proAccessCheck } = useProAccessCheck();
+  const { authenticate } = useCadeyAuth();
   const { requestQuiz } = useRequestQuiz({
     clientContext: 3,
     entityType: 0,
     entityId: 0,
     shouldHaveEmailVerified: AppMeta.forceEmailVerification,
   });
-  const history = useHistory();
+  const proAccess = useSelector(
+    (state: RootState) => state.authStatus.proStatus,
+  );
+  const cadeyUser = useSelector(
+    (state: RootState) => state.authStatus.userData,
+  );
 
   useEffect(() => {
-    const asyncFunction = async () => {
+    const startup = async () => {
+      // Run app open
       try {
         const { grandfatherSignup } = await appOpenAction();
         if (grandfatherSignup) {
@@ -107,11 +115,40 @@ function MainComponent() {
       } catch {
         dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
       }
-    };
-    asyncFunction();
 
-    initializeRevenueCat();
+      // Authenticate user (returning)
+      try {
+        await authenticate();
+      } catch (e) {
+        console.error('Error during authentication:', e);
+      }
+
+      // Check if the user has access to Pro
+      try {
+        await proAccessCheck();
+      } catch (e) {
+        console.error('Error checking pro access:', e);
+      }
+
+      initializeRevenueCat();
+    };
+
+    startup();
   }, []);
+
+  useEffect(() => {
+    if (cadeyUser) {
+      console.log('We have a cadeyUser! Checking pro access...');
+      // Check if the user has access to Pro
+      proAccessCheck().catch((e) =>
+        console.error('Error checking pro access:', e),
+      );
+    }
+  }, [cadeyUser]);
+
+  useEffect(() => {
+    console.log('Pro access:', proAccess);
+  }, [proAccess]);
 
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;

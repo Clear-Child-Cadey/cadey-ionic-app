@@ -6,9 +6,10 @@ import useCadeyAuth from '../../hooks/useCadeyAuth';
 import LoginErrors from '../notices/LoginErrors';
 import LoginMessages from '../notices/LoginMessages';
 import useRequestQuiz from '../../hooks/useRequestQuiz';
-import { Auth, AuthError } from 'firebase/auth';
 import { IonIcon } from '@ionic/react';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import useProAccessCheck from '../../hooks/useProAccessCheck';
+import { useDispatch } from 'react-redux';
 
 const LoginComponent: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +17,8 @@ const LoginComponent: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState('');
   const history = useHistory();
+  const { proAccessCheck } = useProAccessCheck();
+  const dispatch = useDispatch();
 
   const { requestQuiz } = useRequestQuiz({
     clientContext: 3,
@@ -45,6 +48,9 @@ const LoginComponent: React.FC = () => {
         signInResponse.authStatus === 0 &&
         signInResponse.regStatus === 0
       ) {
+        // Check if the user has access to Pro
+        proAccessCheck();
+
         console.log('Requesting quiz...');
         requestQuiz();
       }

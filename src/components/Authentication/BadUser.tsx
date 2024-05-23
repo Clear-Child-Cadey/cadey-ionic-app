@@ -15,8 +15,6 @@ interface BadUserProps {
 }
 
 const BadUser: React.FC<BadUserProps> = ({ authStatus, regStatus }) => {
-  console.log('BadUser.tsx');
-
   const history = useHistory();
   const auth = getAuth();
 

@@ -73,7 +73,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.error('API Error:', error);
     if (requestStartedAt !== 0) {
       duration = new Date().getTime() - requestStartedAt;
     }
@@ -84,6 +83,8 @@ axiosInstance.interceptors.response.use(
     };
 
     logRequestDetails(errorLog, error.config.url, duration, false);
+    console.error('Error log:', errorLog);
+    console.error('Error url:', error.config.url);
 
     return Promise.reject(error);
   },
