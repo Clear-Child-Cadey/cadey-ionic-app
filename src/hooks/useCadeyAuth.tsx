@@ -49,6 +49,10 @@ const useCadeyAuth = () => {
   const [bypassOnAuthStateChange, setBypassOnAuthStateChange] = useState(false);
 
   const authenticate = () => {
+    // Returning Firebase users are already logged in to Firebase and then we log them in to the backend, and their user state is set
+    // Anonymous users are not logged in to the backend, but their user state is set
+    // If no Firebase user is found, the user is signed into Firebase anonymously and their user state is set
+
     return new Promise<void>((resolve, reject) => {
       const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if (bypassOnAuthStateChange) {
@@ -65,7 +69,6 @@ const useCadeyAuth = () => {
             try {
               const cadeyUser =
                 await handleCadeyLoginAndReturnUser(currentUser);
-              console.log('Cadey user:', cadeyUser);
               dispatch(setCadeyUser(cadeyUser));
               dispatch(setCadeyResolved(true));
               unsubscribe();

@@ -268,6 +268,13 @@ const RouterTabs: React.FC = () => {
             <Route exact path='/App/Home'>
               <Redirect to='/App/Authentication/Login' />
             </Route>
+            <ProtectedRoute
+              exact
+              path='/App/Library'
+              component={LibraryPage}
+              enforceLoggedIn={true}
+              enforcePro={true}
+            />
           </Switch>
         </IonRouterOutlet>
       )}
@@ -313,6 +320,8 @@ const RouterTabs: React.FC = () => {
                   exact
                   path='/App/Library'
                   component={LibraryPage}
+                  enforceLoggedIn={true}
+                  enforcePro={true}
                 />
                 <Route
                   exact

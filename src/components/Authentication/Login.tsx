@@ -51,7 +51,7 @@ const LoginComponent: React.FC = () => {
         // Check if the user has access to Pro
         proAccessCheck();
 
-        console.log('Requesting quiz...');
+        // Request a quiz
         requestQuiz();
       }
     } catch (e) {

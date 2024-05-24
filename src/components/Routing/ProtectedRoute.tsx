@@ -6,14 +6,14 @@ import { RootState } from '../../store';
 
 interface ProtectedRouteProps extends RouteProps {
   component: React.ComponentType<any>;
-  loggedin?: boolean;
-  pro?: boolean;
+  enforceLoggedIn?: boolean;
+  enforcePro?: boolean;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   component: Component,
-  loggedin = false,
-  pro = false,
+  enforceLoggedIn = false,
+  enforcePro = false,
   ...rest
 }) => {
   const isLoggedIn = useSelector(
@@ -27,15 +27,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     <Route
       {...rest}
       render={(props) => {
-        if (loggedin && !isLoggedIn) {
+        if (enforceLoggedIn && !isLoggedIn) {
           return (
             <Redirect
-              to={{ pathname: '/login', state: { from: props.location } }}
+              to={{
+                pathname: '/App/Authentication/Login',
+                state: { from: props.location },
+              }}
             />
           );
         }
 
-        if (pro && !proStatus) {
+        if (enforcePro && !proStatus) {
           return (
             <Redirect
               to={{ pathname: '/App/Account', state: { from: props.location } }}

@@ -106,7 +106,7 @@ function MainComponent() {
 
   useEffect(() => {
     const startup = async () => {
-      // Run app open
+      // Run app open and check for grandfather status
       try {
         const { grandfatherSignup } = await appOpenAction();
         if (grandfatherSignup) {
@@ -116,7 +116,10 @@ function MainComponent() {
         dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));
       }
 
-      // Authenticate user (returning)
+      // Authenticate user:
+      // Returning Firebase users are already logged in to Firebase and then we log them in to the backend, and their user state is set
+      // Anonymous users are not logged in to the backend, but their user state is set
+      // If no Firebase user is found, the user is signed into Firebase anonymously and their user state is set
       try {
         await authenticate();
       } catch (e) {
@@ -130,6 +133,7 @@ function MainComponent() {
         console.error('Error checking pro access:', e);
       }
 
+      // Initialize RevenueCat
       initializeRevenueCat();
     };
 
@@ -138,17 +142,12 @@ function MainComponent() {
 
   useEffect(() => {
     if (cadeyUser) {
-      console.log('We have a cadeyUser! Checking pro access...');
       // Check if the user has access to Pro
       proAccessCheck().catch((e) =>
         console.error('Error checking pro access:', e),
       );
     }
   }, [cadeyUser]);
-
-  useEffect(() => {
-    console.log('Pro access:', proAccess);
-  }, [proAccess]);
 
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
