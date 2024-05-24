@@ -17,7 +17,7 @@ import { PathProvider } from './context/PathContext';
 // import { useTabContext } from './context/TabContext';
 // import { useModalContext } from './context/ModalContext';
 // Components
-import RouterTabs from './components/Routing/RouterTabs';
+import Router from './components/Routing/Router';
 // Redux
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from './store';
@@ -222,7 +222,7 @@ function MainComponent() {
       >
         <HttpErrorModal />
         <LoadingStateProvider>
-          <RouterTabs />
+          <Router />
           <App />
         </LoadingStateProvider>
       </UnreadContext.Provider>

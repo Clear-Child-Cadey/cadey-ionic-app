@@ -1,19 +1,20 @@
-// ProtectedRoute.tsx
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 interface ProtectedRouteProps extends RouteProps {
-  component: React.ComponentType<any>;
+  component?: React.ComponentType<any>;
   enforceLoggedIn?: boolean;
   enforcePro?: boolean;
+  render?: (props: any) => React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   component: Component,
   enforceLoggedIn = false,
   enforcePro = false,
+  render,
   ...rest
 }) => {
   const isLoggedIn = useSelector(
@@ -46,7 +47,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           );
         }
 
-        return <Component {...props} />;
+        if (Component) {
+          return <Component {...props} />;
+        }
+
+        if (render) {
+          return render(props);
+        }
+
+        return null;
       }}
     />
   );
