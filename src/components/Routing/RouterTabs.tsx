@@ -14,8 +14,6 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
-  IonBadge,
-  IonButton,
 } from '@ionic/react';
 // CSS
 import './RouterTabs.css';
@@ -51,7 +49,6 @@ import OneSignalInitializer from '../../api/OneSignal/OneSignalInitializerCompon
 // Contexts
 import { useTabContext } from '../../context/TabContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
-import { CadeyUserContext } from '../../main';
 import { useAppPage } from '../../context/AppPageContext';
 // Interfaces
 import MessagesPage, { Message } from '../../pages/Messages/Messages';
@@ -65,11 +62,9 @@ import {
   setArticleId,
 } from '../../features/deepLinks/slice';
 import { trileanResolve } from '../../types/Trilean';
-import useCadeyAuth from '../../hooks/useCadeyAuth';
 import AppMeta from '../../variables/AppMeta';
 import VerificationPage from '../VerificationMessage';
 import BadUser from '../Authentication/BadUser';
-import { auth } from '../../api/Firebase/InitializeFirebase';
 import AccountPage from '../../pages/Account/Account';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -78,6 +73,7 @@ const RouterTabs: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  // A user is logged in if they have a non-anonymous Firebase user and a Cadey user
   const userLoggedIn = useSelector((state: RootState) => {
     return (
       state.authStatus.userData.firebaseUser !== null &&
@@ -95,27 +91,25 @@ const RouterTabs: React.FC = () => {
 
   // reference from Ron's code
   // regstatus
-  //
   //     0 = Registered
   //     1 = NotFound
   //     2 = FoundNotRegistered
-  //
   // authstatus
-  //
   //     0 = Successful
   //     1 = FailedExpired
   //     2 = FailedNotActive
   //     3 = FailedNotRegistered
 
-  const [goodUser, setGoodUser] = useState<boolean>(false);
+  // goodUser is used to:
+  //     Show the BadUser component if there's anything wrong with a user
+  const goodUser = useSelector((state: RootState) => {
+    return (
+      state?.authStatus?.userData?.cadeyUser?.regStatus === 0 &&
+      state?.authStatus?.userData?.cadeyUser?.authStatus === 0
+    );
+  });
 
-  useEffect(() => {
-    if (authStatus === 0 && regStatus === 0) {
-      setGoodUser(true);
-    }
-  }, [regStatus, authStatus]);
-
-  const aUserHasBeenReturned = useSelector((state: RootState) => {
+  const aCadeyUserHasBeenReturned = useSelector((state: RootState) => {
     return state?.authStatus?.userData?.cadeyUser !== null;
   });
 
@@ -211,12 +205,12 @@ const RouterTabs: React.FC = () => {
       {window.cordova && <OneSignalInitializer />}
 
       {/* Show the BadUser component if there's anything wrong with a user */}
-      {aUserHasBeenReturned && !goodUser && (
+      {aCadeyUserHasBeenReturned && !goodUser && (
         <BadUser authStatus={authStatus} regStatus={regStatus} />
       )}
 
-      {/* If the tab bar is not visible, the user is in the welcome sequence and should not see tabs */}
-      {!isTabBarVisible && (!aUserHasBeenReturned || goodUser) && (
+      {/* If the tab bar is not visible *and* (we do not have a user *or* we have a good user) */}
+      {!isTabBarVisible && (!aCadeyUserHasBeenReturned || goodUser) && (
         <IonRouterOutlet>
           <Switch>
             {/* If the user is in the welcome sequence, show the welcome page */}
@@ -379,53 +373,55 @@ const RouterTabs: React.FC = () => {
                 <Route component={RedirectToWeb} />
               </Switch>
             </IonRouterOutlet>
-            {/* Tab Bar */}
-            <IonTabBar
-              slot='bottom'
-              className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}
-            >
-              <IonTabButton
-                tab='Home'
-                onClick={() => handleTabClick('Home', '/App/Home')}
-                selected={isTabActive('/App/Home')}
+            {/* Tab Bar should only be visible if the flag is true */}
+            {isTabBarVisible && (
+              <IonTabBar
+                slot='bottom'
+                className={`tab-bar ${isWelcomeSequence ? 'welcome' : ''}`}
               >
-                <HomeIcon />
-                <IonLabel className='tab-bar-label'>Home</IonLabel>
-              </IonTabButton>
+                <IonTabButton
+                  tab='Home'
+                  onClick={() => handleTabClick('Home', '/App/Home')}
+                  selected={isTabActive('/App/Home')}
+                >
+                  <HomeIcon />
+                  <IonLabel className='tab-bar-label'>Home</IonLabel>
+                </IonTabButton>
 
-              {/* Paths */}
-              <IonTabButton
-                tab='Paths'
-                onClick={() => handleTabClick('Path Listing', '/App/Paths')}
-                selected={isTabActive('/App/Paths')}
-              >
-                <PathsIcon />
-                <IonLabel className='tab-bar-label'>Paths</IonLabel>
-              </IonTabButton>
+                {/* Paths */}
+                <IonTabButton
+                  tab='Paths'
+                  onClick={() => handleTabClick('Path Listing', '/App/Paths')}
+                  selected={isTabActive('/App/Paths')}
+                >
+                  <PathsIcon />
+                  <IonLabel className='tab-bar-label'>Paths</IonLabel>
+                </IonTabButton>
 
-              {/* Library */}
-              <IonTabButton
-                tab='Library'
-                onClick={() => handleTabClick('Library', '/App/Library')}
-                selected={isTabActive('/App/Library')}
-              >
-                <LibraryIcon />
-                <IonLabel className='tab-bar-label'>Library</IonLabel>
-              </IonTabButton>
+                {/* Library */}
+                <IonTabButton
+                  tab='Library'
+                  onClick={() => handleTabClick('Library', '/App/Library')}
+                  selected={isTabActive('/App/Library')}
+                >
+                  <LibraryIcon />
+                  <IonLabel className='tab-bar-label'>Library</IonLabel>
+                </IonTabButton>
 
-              {/* Account */}
-              <IonTabButton
-                tab='Account'
-                onClick={() => handleTabClick('Account', '/App/Account')}
-                selected={isTabActive('/App/Account')}
-              >
-                <IonIcon
-                  icon={personOutline}
-                  className='account-icon tab-bar-icon'
-                />
-                <IonLabel className='tab-bar-label'>Account</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
+                {/* Account */}
+                <IonTabButton
+                  tab='Account'
+                  onClick={() => handleTabClick('Account', '/App/Account')}
+                  selected={isTabActive('/App/Account')}
+                >
+                  <IonIcon
+                    icon={personOutline}
+                    className='account-icon tab-bar-icon'
+                  />
+                  <IonLabel className='tab-bar-label'>Account</IonLabel>
+                </IonTabButton>
+              </IonTabBar>
+            )}
           </IonTabs>
         ))}
     </>
