@@ -34,9 +34,11 @@ import useDeviceFacts from './useDeviceFacts';
 
 import axios from '../config/AxiosConfig';
 import { setExternalUserId } from '../api/OneSignal/SetExternalUserId';
+import { initializeRevenueCat } from '../api/RevenueCat/InitializeRevenueCat';
 
 const useCadeyAuth = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { logDeviceFact } = useDeviceFacts();
   const initialErrorsState: string[] = [];
   const initialMessagesState: string[] = [];
@@ -378,15 +380,11 @@ const useCadeyAuth = () => {
 
       // RevenueCat
       try {
-        const logInResult = await Purchases.logIn({
-          appUserID: cadeyUserLocal.oneSignalId,
-        });
-        console.log('RevenueCat logInResult:', logInResult);
+        initializeRevenueCat(cadeyUserLocal.oneSignalId);
       } catch (error) {
         // Handle error logging in
+        console.error('Error initializing RevenueCat: ', error);
       }
-    } else {
-      // Don't interact with OneSignal (which relies on Cordova)
     }
 
     return cadeyUserLocal;
@@ -416,6 +414,12 @@ const useCadeyAuth = () => {
     return cadeyUserLocal;
   };
 
+  const handleCadeyLogout = async () => {
+    auth.signOut();
+    history.push('/App/Welcome');
+    window.location.reload();
+  };
+
   return {
     errors, // Remove this later, shouldn't be exposed as it's state-based
     authenticate,
@@ -425,6 +429,7 @@ const useCadeyAuth = () => {
     messages, // Remove this later, shouldn't be exposed as it's state-based. Need to refactor to global state if we ever use this in multiple places.
     resetErrors: () => setErrors([]),
     setErrorDecorated,
+    handleCadeyLogout,
   };
 };
 

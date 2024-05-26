@@ -66,7 +66,6 @@ import useAppOpened from './hooks/useAppOpened';
 import { setHttpErrorModalData } from './features/httpError/slice';
 import AppMeta from './variables/AppMeta';
 import useRequestQuiz from './hooks/useRequestQuiz';
-import { initializeRevenueCat } from './api/RevenueCat/InitializeRevenueCat';
 import useProAccessCheck from './hooks/useProAccessCheck';
 import { constructOutline } from 'ionicons/icons';
 
@@ -132,9 +131,6 @@ function MainComponent() {
       } catch (e) {
         console.error('Error checking pro access:', e);
       }
-
-      // Initialize RevenueCat
-      initializeRevenueCat();
     };
 
     startup();
@@ -150,7 +146,7 @@ function MainComponent() {
   }, [cadeyUser]);
 
   const cadeyUserId = useSelector((state: RootState) => {
-    return state.authStatus.userData.cadeyUser?.cadeyUserId;
+    return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
 
   const userResolved = useSelector(

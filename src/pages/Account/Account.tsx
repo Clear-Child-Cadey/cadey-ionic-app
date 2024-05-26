@@ -20,12 +20,15 @@ import './Account.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import useProAccessCheck from '../../hooks/useProAccessCheck';
+import useCadeyAuth from '../../hooks/useCadeyAuth';
 
 const AccountPage = () => {
   const [loading, setLoading] = useState(true);
   const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
   const { proAccessCheck } = useProAccessCheck();
   const dispatch = useDispatch();
+
+  const { handleCadeyLogout } = useCadeyAuth();
 
   const proStatus = useSelector(
     (state: RootState) => state.authStatus.proStatus,
@@ -129,9 +132,8 @@ const AccountPage = () => {
             <p>You do not have permission to access premium content</p>
           )}
         </div>
-        {/* Add a button that takes me to the "/App/ProOnly" route */}
-        <IonButton routerLink='/App/ProOnly' expand='block'>
-          Go to Pro Only
+        <IonButton expand='block' onClick={handleCadeyLogout}>
+          Log Out
         </IonButton>
       </IonContent>
     </IonPage>

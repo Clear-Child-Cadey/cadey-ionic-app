@@ -10,6 +10,11 @@ const useProAccessCheck = () => {
   );
 
   const proAccessCheck = async () => {
+    if (currentCadeyUser == null) {
+      console.log('Cadey user not found - leaving proAccessCheck!');
+      return;
+    }
+
     if (
       currentCadeyUser != null &&
       currentCadeyUser.authStatus === 0 &&
