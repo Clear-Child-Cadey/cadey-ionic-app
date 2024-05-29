@@ -63,6 +63,7 @@ import { personOutline } from 'ionicons/icons';
 import { LibraryIcon } from '../../svgs/NavLibrary';
 import { PathsIcon } from '../../svgs/NavPaths';
 import { HomeIcon } from '../../svgs/NavHome';
+import ContactPage from '../../pages/Account/Contact';
 
 const Router: React.FC = () => {
   const location = useLocation();
@@ -324,6 +325,13 @@ const Router: React.FC = () => {
               exact
               path='/App/Account'
               component={AccountPage}
+              enforceLoggedIn={true}
+              enforcePro={true}
+            />
+            <ProtectedRoute
+              exact
+              path='/App/Account/Contact'
+              component={ContactPage}
               enforceLoggedIn={true}
               enforcePro={true}
             />
