@@ -9,6 +9,7 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonToggle,
 } from '@ionic/react';
 import {
   Purchases,
@@ -16,6 +17,7 @@ import {
   PurchasesPackage,
   PURCHASES_ERROR_CODE,
   CustomerInfo,
+  PurchasesEntitlementInfo,
 } from '@revenuecat/purchases-capacitor';
 import './Account.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,10 +28,14 @@ import { useHistory } from 'react-router';
 import useDeviceFacts from '../../hooks/useDeviceFacts';
 import useUserFacts from '../../hooks/useUserFacts';
 import { useAppPage } from '../../context/AppPageContext';
+import { setProEntitlementInfo } from '../../features/authLoading/slice';
+import OneSignal from 'onesignal-cordova-plugin';
+import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
 
 const AccountPage = () => {
   const [loading, setLoading] = useState(true);
   const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
+  const [pushEnabled, setPushEnabled] = useState(false);
   const { proAccessCheck } = useProAccessCheck();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -46,6 +52,10 @@ const AccountPage = () => {
     (state: RootState) => state.authStatus.proStatus,
   );
 
+  const proEntitlementInfo = useSelector(
+    (state: RootState) => state.authStatus.proEntitlementInfo,
+  );
+
   const { setCurrentBasePage, setCurrentAppPage } = useAppPage();
 
   useEffect(() => {
@@ -53,6 +63,7 @@ const AccountPage = () => {
       console.log('Fetching offerings...');
       try {
         const offerings = await Purchases.getOfferings();
+        console.log('Offerings:', offerings);
         if (offerings.current !== null) {
           // Display current offering with offerings.current
           setOfferings(offerings);
@@ -67,6 +78,7 @@ const AccountPage = () => {
 
     proAccessCheck();
     fetchOfferings();
+    pushNotificationCheck();
 
     document.title = 'Account'; // Set the page title
     setCurrentBasePage('Account'); // Set the current base page
@@ -77,6 +89,41 @@ const AccountPage = () => {
       appPage: 'Account',
     });
   }, []);
+
+  const pushNotificationCheck = async () => {
+    // Check if the app is running in a browser or on a device | Set the OneSignal external ID
+    if (window.cordova) {
+      OneSignal.getDeviceState((deviceState) => {
+        if (deviceState.hasNotificationPermission) {
+          if (deviceState.pushDisabled === true) {
+            setPushEnabled(false);
+          } else if (deviceState.pushDisabled === false) {
+            setPushEnabled(true);
+          }
+        }
+        console.log(deviceState);
+      });
+    }
+  };
+
+  const togglePushNotifications = () => {
+    // Check if the app is running in a browser or on a device
+    if (window.cordova) {
+      OneSignal.getDeviceState((deviceState) => {
+        if (deviceState.hasNotificationPermission) {
+          OneSignal.disablePush(pushEnabled);
+          setPushEnabled(!pushEnabled);
+          OneSignal.getDeviceState((deviceState) => {
+            console.log(deviceState);
+          });
+        } else {
+          requestNotificationPermission();
+        }
+      });
+    } else {
+      // Don't interact with OneSignal (which relies on Cordova)
+    }
+  };
 
   const handlePurchase = async (packageToBuy: PurchasesPackage) => {
     console.log('Purchasing...', packageToBuy);
@@ -174,13 +221,26 @@ const AccountPage = () => {
         <IonButton expand='block' onClick={handleContact}>
           Contact Us
         </IonButton>
-        <div>
-          {proStatus ? (
-            <p>You have permission to access premium content</p>
-          ) : (
-            <p>You do not have permission to access premium content</p>
-          )}
-        </div>
+        {proStatus ? (
+          <p>You have permission to access premium content.</p>
+        ) : (
+          <p>You do not have permission to access premium content</p>
+        )}
+        {proEntitlementInfo && (
+          <>
+            <p>Last purchased on: {proEntitlementInfo.latestPurchaseDate}</p>
+            {proEntitlementInfo.willRenew && (
+              <p>Renewal date: {proEntitlementInfo.expirationDate}</p>
+            )}
+          </>
+        )}
+        <IonItem>
+          <IonLabel>Push Notifications:</IonLabel>
+          <IonToggle
+            checked={pushEnabled}
+            onIonChange={togglePushNotifications}
+          />
+        </IonItem>
         <IonButton expand='block' onClick={handleCadeyLogout}>
           Log Out
         </IonButton>

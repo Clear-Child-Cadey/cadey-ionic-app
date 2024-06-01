@@ -47,7 +47,6 @@ const HomePage: React.FC<{
   const [completedPaths, setCompletedPaths] = useState(0);
   const [totalPaths, setTotalPaths] = useState(0);
   const [featuredVideos, setFeaturedVideos] = useState<any[]>([]);
-  const [newVideos, setNewVideos] = useState<any[]>([]);
   const [playedVideos, setPlayedVideos] = useState<any[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -120,7 +119,6 @@ const HomePage: React.FC<{
       setCompletedPaths(homeData.numCompletedPaths);
       setTotalPaths(homeData.numTotalPaths);
       setFeaturedVideos(homeData.featuredVideos);
-      setNewVideos(homeData.newVideos);
       setPlayedVideos(homeData.playedVideos);
     } catch (error) {
       dispatch(setHttpErrorModalData(AppMeta.httpErrorModalData));

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import Trilean from '../../types/Trilean';
 import FirebaseUserModel from '../../types/FirebaseUserModel';
 import CadeyUserModel from '../../types/CadeyUserModel';
+import { PurchasesEntitlementInfo } from '@revenuecat/purchases-capacitor';
 
 interface AuthStatusState {
   cadeyResolved: Trilean;
@@ -14,6 +15,7 @@ interface AuthStatusState {
   emailVerified: Trilean;
   grandfatherStatus: boolean;
   proStatus: boolean;
+  proEntitlementInfo: PurchasesEntitlementInfo | null;
 }
 
 const initialState: AuthStatusState = {
@@ -27,6 +29,7 @@ const initialState: AuthStatusState = {
   emailVerified: 'pending',
   grandfatherStatus: false,
   proStatus: false,
+  proEntitlementInfo: null,
 };
 
 export const authStatusSlice = createSlice({
@@ -57,6 +60,9 @@ export const authStatusSlice = createSlice({
     setProStatus: (state, action) => {
       state.proStatus = action.payload;
     },
+    setProEntitlementInfo: (state, action) => {
+      state.proEntitlementInfo = action.payload;
+    },
   },
 });
 
@@ -70,6 +76,7 @@ export const {
   setEmailVerified,
   setGrandfatherStatus,
   setProStatus,
+  setProEntitlementInfo,
 } = authStatusSlice.actions;
 
 // Export the reducer

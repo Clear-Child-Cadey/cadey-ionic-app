@@ -1,7 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Purchases, CustomerInfo } from '@revenuecat/purchases-capacitor';
+import {
+  Purchases,
+  CustomerInfo,
+  PurchasesEntitlementInfo,
+} from '@revenuecat/purchases-capacitor';
 import { RootState } from '../store';
-import { setProStatus } from '../features/authLoading/slice';
+import {
+  setProEntitlementInfo,
+  setProStatus,
+} from '../features/authLoading/slice';
 
 const useProAccessCheck = () => {
   const dispatch = useDispatch();
@@ -36,6 +43,13 @@ const useProAccessCheck = () => {
       if (customerInfo.entitlements.active['Pro']) {
         console.log('Permission granted! Granting pro access...');
         dispatch(setProStatus(true));
+        dispatch(
+          setProEntitlementInfo(customerInfo.entitlements.active['Pro']),
+        );
+        console.log(
+          'Pro entitlement info: ',
+          customerInfo.entitlements.active['Pro'],
+        );
       } else {
         console.log('Permission not granted - show paywall?');
         dispatch(setProStatus(false));
