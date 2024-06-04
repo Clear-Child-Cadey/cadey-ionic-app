@@ -104,6 +104,9 @@ const Router: React.FC = () => {
   const aCadeyUserHasBeenReturned = useSelector((state: RootState) => {
     return state?.authStatus?.userData?.cadeyUser !== null;
   });
+  const cadeyUser = useSelector((state: RootState) => {
+    return state?.authStatus?.userData?.cadeyUser;
+  });
   const emailVerified = useSelector((state: RootState) => {
     return (
       state.authStatus?.emailVerified ||
@@ -147,6 +150,12 @@ const Router: React.FC = () => {
     );
   }, [location, dispatch]); // Depend on location and dispatch to re-run this effect
 
+  useEffect(() => {
+    console.log('aCadeyUserHasBeenReturned: ', aCadeyUserHasBeenReturned);
+    console.log('goodUser: ', goodUser);
+    console.log('cadeyUser: ', cadeyUser);
+  }, [aCadeyUserHasBeenReturned, goodUser, cadeyUser]);
+
   const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
     logUserFact({
@@ -165,6 +174,13 @@ const Router: React.FC = () => {
     return location.pathname.startsWith(tabPath);
   };
 
+  {
+    /* Show the BadUser component if there's anything wrong with a user */
+  }
+  if (aCadeyUserHasBeenReturned && !goodUser) {
+    return <BadUser authStatus={authStatus} regStatus={regStatus} />;
+  }
+
   return (
     <>
       {/* Listen for App URLs */}
@@ -174,9 +190,10 @@ const Router: React.FC = () => {
       {window.cordova && <OneSignalInitializer />}
 
       {/* Show the BadUser component if there's anything wrong with a user */}
-      {aCadeyUserHasBeenReturned && !goodUser && (
+      {/* {aCadeyUserHasBeenReturned && !goodUser && (
         <BadUser authStatus={authStatus} regStatus={regStatus} />
-      )}
+      )} */}
+      {true && <BadUser authStatus={authStatus} regStatus={regStatus} />}
 
       {aUserExists &&
         goodUser &&
@@ -345,7 +362,7 @@ const Router: React.FC = () => {
               enforcePro={false}
             />
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
-            <Route component={RedirectToWeb} />
+            {/* <Route component={RedirectToWeb} /> */}
           </Switch>
         </IonRouterOutlet>
 

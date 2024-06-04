@@ -8,6 +8,7 @@ import {
 import './BadUser.css';
 import { getAuth } from 'firebase/auth';
 import { useHistory } from 'react-router';
+import { useEffect, useState } from 'react';
 
 interface BadUserProps {
   authStatus: number | undefined;
@@ -24,8 +25,8 @@ const BadUser: React.FC<BadUserProps> = ({ authStatus, regStatus }) => {
     window.location.reload();
   };
 
-  let header = '';
-  let message = '';
+  const [header, setHeader] = useState('');
+  const [message, setMessage] = useState('');
 
   // regstatus
   //
@@ -40,21 +41,27 @@ const BadUser: React.FC<BadUserProps> = ({ authStatus, regStatus }) => {
   //     2 = FailedNotActive
   //     3 = FailedNotRegistered
 
-  if (regStatus != 0) {
-    header = 'You are not registered';
-    message = 'Please contact your employer to register.';
-  } else {
-    if (authStatus === 1) {
-      header = 'Your trial period has expired';
-      message = 'Now, request Cadey as a benefit from your employer.';
-    } else if (authStatus === 2) {
-      header = 'Your account is not active';
-      message = 'Please contact your employer to activate your account.';
-    } else if (authStatus === 3) {
-      header = 'You are not registered';
-      message = 'Please contact your employer to register.';
+  // Update header and message based on authStatus and regStatus
+  useEffect(() => {
+    console.log('authStatus in BadUser.tsx:', authStatus);
+    console.log('regStatus in BadUser.tsx:', regStatus);
+
+    if (regStatus !== 0) {
+      setHeader('You are not registered');
+      setMessage('Please contact your employer to register.');
+    } else {
+      if (authStatus === 1) {
+        setHeader('Your trial period has expired');
+        setMessage('Now, request Cadey as a benefit from your employer.');
+      } else if (authStatus === 2) {
+        setHeader('Your account is not active');
+        setMessage('Please contact your employer to activate your account.');
+      } else if (authStatus === 3) {
+        setHeader('You are not registered');
+        setMessage('Please contact your employer to register.');
+      }
     }
-  }
+  }, [authStatus, regStatus]);
 
   return (
     <IonPage className='home'>

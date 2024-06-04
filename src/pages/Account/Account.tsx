@@ -171,7 +171,8 @@ const AccountPage = () => {
     // Ensure managementURL exists
     if (customerInfo.managementURL) {
       // Route to the customerInfo.managementURL
-      history.push(customerInfo.managementURL);
+      console.log('Redirecting to: ', customerInfo.managementURL);
+      window.location.href = customerInfo.managementURL;
     } else {
       console.error('Management URL is not available.');
     }
