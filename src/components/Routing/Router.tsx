@@ -64,6 +64,7 @@ import { LibraryIcon } from '../../svgs/NavLibrary';
 import { PathsIcon } from '../../svgs/NavPaths';
 import { HomeIcon } from '../../svgs/NavHome';
 import ContactPage from '../../pages/Account/Contact';
+import PurchaseSubPage from '../../pages/Subscriptions/PurchaseSub';
 
 const Router: React.FC = () => {
   const location = useLocation();
@@ -326,14 +327,22 @@ const Router: React.FC = () => {
               path='/App/Account'
               component={AccountPage}
               enforceLoggedIn={true}
-              enforcePro={true}
+              enforcePro={false}
             />
             <ProtectedRoute
               exact
               path='/App/Account/Contact'
               component={ContactPage}
               enforceLoggedIn={true}
-              enforcePro={true}
+              enforcePro={false}
+            />
+            {/* Subscription Routes */}
+            <ProtectedRoute
+              exact
+              path='/App/Subscription/Purchase'
+              component={PurchaseSubPage}
+              enforceLoggedIn={true}
+              enforcePro={false}
             />
             {/* Catch-all route - redirect to web (cadey.co, articles, contact us, etc) */}
             <Route component={RedirectToWeb} />

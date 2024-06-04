@@ -19,9 +19,10 @@ export const initializeRevenueCat = async (externalId: string) => {
         : AppMeta.publicGoogleRevenueCatApiKey;
     await Purchases.configure({
       apiKey: apiKey,
-      appUserID: externalId,
     });
+    await Purchases.logIn({ appUserID: externalId });
     console.log('RevenueCat initialized');
+    console.log('Purchases configuration: ', Purchases.isConfigured());
   } catch (e) {
     console.log('RevenueCat initialization error', e);
   }

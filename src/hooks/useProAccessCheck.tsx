@@ -9,6 +9,8 @@ import {
   setProEntitlementInfo,
   setProStatus,
 } from '../features/authLoading/slice';
+import { initializeRevenueCat } from '../api/RevenueCat/InitializeRevenueCat';
+import { current } from '@reduxjs/toolkit';
 
 const useProAccessCheck = () => {
   const dispatch = useDispatch();
@@ -17,6 +19,8 @@ const useProAccessCheck = () => {
   );
 
   const proAccessCheck = async () => {
+    // dispatch(setProStatus(true));
+
     if (currentCadeyUser == null) {
       console.log('Cadey user not found - leaving proAccessCheck!');
       return;
@@ -32,7 +36,19 @@ const useProAccessCheck = () => {
       return;
     }
 
+    // If RevenueCat isn't initialized, initialize it
+    if (!Purchases.isConfigured()) {
+      console.log('RevenueCat not initialized - initializing...');
+      {
+        currentCadeyUser &&
+          currentCadeyUser.oneSignalId &&
+          (await initializeRevenueCat(currentCadeyUser.oneSignalId.toString()));
+      }
+    }
+
     try {
+      console.log('Current Cadey User: ', currentCadeyUser);
+
       const response = await Purchases.getCustomerInfo();
       const customerInfo: CustomerInfo = response.customerInfo;
 

@@ -108,6 +108,7 @@ const HomePage: React.FC<{
         await getHomeDataTrace.start();
       }
 
+      console.log('Getting home data from the API...');
       // Get the data from the API
       homeData = await getHomeData(apiUrl, cadeyUserId.toString());
 
@@ -135,9 +136,10 @@ const HomePage: React.FC<{
     }
   };
 
-  // This runs on mount and every time currentTab changes or the video modal opens/closes
+  // This runs on mount and every time the video modal opens/closes
   // We want to fetch new data when the modal closes because there's a good chance we have new videos to serve
   useEffect(() => {
+    console.log('Fetching homepage data...');
     fetchData(); // Fetch the homepage data
   }, [isVideoModalOpen]);
 

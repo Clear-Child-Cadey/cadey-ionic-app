@@ -235,7 +235,10 @@ const QuizModal: React.FC = ({}) => {
     if (quizModalData?.question.quizId === 6) {
       setIsTabBarVisible(true);
 
-      history.push('/App/Paths/PathDetail?id=' + pathId);
+      // history.push('/App/Paths/PathDetail?id=' + pathId);
+      history.push(
+        '/App/Subscription/Purchase?page=pathDetail&pathId=' + pathId,
+      );
     }
 
     // Close the modal

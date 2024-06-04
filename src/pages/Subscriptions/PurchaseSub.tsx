@@ -16,31 +16,30 @@ import {
   PurchasesOfferings,
   PurchasesPackage,
   PURCHASES_ERROR_CODE,
-  CustomerInfo,
 } from '@revenuecat/purchases-capacitor';
-import './Account.css';
+import './PurchaseSub.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import useProAccessCheck from '../../hooks/useProAccessCheck';
-import useCadeyAuth from '../../hooks/useCadeyAuth';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import useDeviceFacts from '../../hooks/useDeviceFacts';
 import useUserFacts from '../../hooks/useUserFacts';
 import { useAppPage } from '../../context/AppPageContext';
-import OneSignal from 'onesignal-cordova-plugin';
-import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
 
-const AccountPage = () => {
+const PurchaseSubPage = () => {
   const [loading, setLoading] = useState(true);
   const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
-  const [pushEnabled, setPushEnabled] = useState(false);
   const { proAccessCheck } = useProAccessCheck();
   const dispatch = useDispatch();
   const history = useHistory();
   const { logDeviceFact } = useDeviceFacts();
   const { logUserFact } = useUserFacts();
 
-  const { handleCadeyLogout } = useCadeyAuth();
+  // Get the ID from the URL. The URL path will be /app/paths/PathDetail?id=123
+  const location = useLocation(); // Get the current location object
+  const searchParams = new URLSearchParams(location.search); // Create a URLSearchParams object from the search string
+  const pageOnPurchase = String(searchParams.get('page'));
+  const pathId = Number(searchParams.get('pathId')); // Get the value of the 'id' query parameter
 
   const cadeyUser = useSelector(
     (state: RootState) => state.authStatus.userData.cadeyUser,
@@ -76,51 +75,43 @@ const AccountPage = () => {
 
     proAccessCheck();
     fetchOfferings();
-    pushNotificationCheck();
 
-    document.title = 'Account'; // Set the page title
-    setCurrentBasePage('Account'); // Set the current base page
-    setCurrentAppPage('Account'); // Set the current app page
+    document.title = 'Purchase Subscription'; // Set the page title
+    setCurrentBasePage('Purchase Subscription'); // Set the current base page
+    setCurrentAppPage('Purchase Subscription'); // Set the current app page
 
     logUserFact({
       userFactTypeName: 'appPageNavigation',
-      appPage: 'Account',
+      appPage: 'Purchase Subscription',
     });
   }, []);
 
-  const pushNotificationCheck = async () => {
-    // Check if the app is running in a browser or on a device | Set the OneSignal external ID
-    if (window.cordova) {
-      OneSignal.getDeviceState((deviceState) => {
-        if (deviceState.hasNotificationPermission) {
-          if (deviceState.pushDisabled === true) {
-            setPushEnabled(false);
-          } else if (deviceState.pushDisabled === false) {
-            setPushEnabled(true);
-          }
-        }
-        console.log(deviceState);
-      });
+  useEffect(() => {
+    // Route the user to the correct location.
+    // If the incoming URL contained an ID, re-route to path detail.
+    // Otherwise, re-route to home.
+
+    if (proStatus && pageOnPurchase == 'pathDetail' && pathId) {
+      console.log('Routing to path detail');
+      history.push('/App/Paths/PathDetail?id=' + pathId);
+    } else if (proStatus) {
+      console.log('Routing home');
+      history.push('/App/Home');
     }
+  }, [proStatus]);
+
+  const handleInvalidate = async () => {
+    const invalidateResult = await Purchases.invalidateCustomerInfoCache;
+    console.log('invalidateResult: ', invalidateResult);
   };
 
-  const togglePushNotifications = () => {
-    // Check if the app is running in a browser or on a device
-    if (window.cordova) {
-      OneSignal.getDeviceState((deviceState) => {
-        if (deviceState.hasNotificationPermission) {
-          OneSignal.disablePush(pushEnabled);
-          setPushEnabled(!pushEnabled);
-          OneSignal.getDeviceState((deviceState) => {
-            console.log(deviceState);
-          });
-        } else {
-          requestNotificationPermission();
-        }
-      });
-    } else {
-      // Don't interact with OneSignal (which relies on Cordova)
-    }
+  const handleRestore = async () => {
+    const restoreResult = await Purchases.restorePurchases;
+    console.log('restoreResult: ', restoreResult);
+  };
+
+  const handleManageAccount = async () => {
+    history.push('/App/Account');
   };
 
   const handlePurchase = async (packageToBuy: PurchasesPackage) => {
@@ -151,51 +142,14 @@ const AccountPage = () => {
     }
   };
 
-  const handleManageSubscription = async () => {
-    // Logic to manage subscription
-    console.log('Manage subscription');
-
-    logDeviceFact({
-      userFactTypeName: 'UserTap',
-      appPage: 'Account',
-      detail1: 'Account',
-      detail2: 'Manage Subscription',
-    });
-
-    // Get the latest customerInfo
-    const response = await Purchases.getCustomerInfo();
-    const customerInfo: CustomerInfo = response.customerInfo;
-
-    console.log('Customer info:', customerInfo);
-
-    // Ensure managementURL exists
-    if (customerInfo.managementURL) {
-      // Route to the customerInfo.managementURL
-      history.push(customerInfo.managementURL);
-    } else {
-      console.error('Management URL is not available.');
-    }
-  };
-
-  const handleContact = () => {
-    logDeviceFact({
-      userFactTypeName: 'UserTap',
-      appPage: 'Account',
-      detail1: 'Account',
-      detail2: 'Contact Us',
-    });
-    history.push('/App/Account/Contact');
-  };
-
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Account</IonTitle>
+          <IonTitle>Purchase a Subscription</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className='ion-padding'>
-        {cadeyUser && <IonLabel>Email: {cadeyUser.cadeyUserEmail}</IonLabel>}
         {loading ? (
           <p>Loading offerings...</p>
         ) : (
@@ -213,12 +167,6 @@ const AccountPage = () => {
             ))}
           </IonList>
         )}
-        <IonButton expand='block' onClick={handleManageSubscription}>
-          Manage Subscription
-        </IonButton>
-        <IonButton expand='block' onClick={handleContact}>
-          Contact Us
-        </IonButton>
         {proStatus ? (
           <p>You have permission to access premium content.</p>
         ) : (
@@ -232,19 +180,12 @@ const AccountPage = () => {
             )}
           </>
         )}
-        <IonItem>
-          <IonLabel>Push Notifications:</IonLabel>
-          <IonToggle
-            checked={pushEnabled}
-            onIonChange={togglePushNotifications}
-          />
-        </IonItem>
-        <IonButton expand='block' onClick={handleCadeyLogout}>
-          Log Out
-        </IonButton>
+        <IonButton onClick={handleInvalidate}>Invalidate</IonButton>
+        <IonButton onClick={handleRestore}>Restore Purchases</IonButton>
+        <IonButton onClick={handleManageAccount}>Manage my Account</IonButton>
       </IonContent>
     </IonPage>
   );
 };
 
-export default AccountPage;
+export default PurchaseSubPage;

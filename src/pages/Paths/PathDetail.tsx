@@ -10,10 +10,6 @@ import {
   IonText,
   IonPage,
 } from '@ionic/react';
-//  Icons
-// import { arrowRedoOutline } from 'ionicons/icons';
-//  Contexts
-import ApiUrlContext from '../../context/ApiUrlContext';
 // import { CadeyUserContext } from '../../main';
 import { useAppPage } from '../../context/AppPageContext';
 import { usePathContext } from '../../context/PathContext';
@@ -60,7 +56,6 @@ const PathDetailPage: React.FC = () => {
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId || 0;
   });
-  const { apiUrl } = useContext(ApiUrlContext);
   const { setIsTabBarVisible } = useTabContext();
   const [canShare, setCanShare] = useState(false);
 
