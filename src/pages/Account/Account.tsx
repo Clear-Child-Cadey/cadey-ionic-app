@@ -10,6 +10,7 @@ import {
   IonItem,
   IonLabel,
   IonToggle,
+  IonText,
 } from '@ionic/react';
 import {
   Purchases,
@@ -78,7 +79,7 @@ const AccountPage = () => {
     fetchOfferings();
     pushNotificationCheck();
 
-    document.title = 'Account'; // Set the page title
+    document.title = 'Your Account'; // Set the page title
     setCurrentBasePage('Account'); // Set the current base page
     setCurrentAppPage('Account'); // Set the current app page
 
@@ -188,61 +189,74 @@ const AccountPage = () => {
     history.push('/App/Account/Contact');
   };
 
+  const handleRestore = async () => {
+    const restoreResult = await Purchases.restorePurchases;
+    console.log('restoreResult: ', restoreResult);
+  };
+
   return (
-    <IonPage>
+    <IonPage className='account-page'>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Account</IonTitle>
+          <IonTitle>Your Account</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className='ion-padding'>
-        {cadeyUser && <IonLabel>Email: {cadeyUser.cadeyUserEmail}</IonLabel>}
-        {loading ? (
-          <p>Loading offerings...</p>
-        ) : (
-          <IonList>
-            {offerings?.current?.availablePackages.map((pkg) => (
-              <IonItem key={pkg.identifier}>
-                <IonLabel>
-                  <h2>{pkg.product.title}</h2>
-                  <p>{pkg.product.description}</p>
-                  <IonButton expand='block' onClick={() => handlePurchase(pkg)}>
-                    Purchase {pkg.product.title} for {pkg.product.priceString}
-                  </IonButton>
-                </IonLabel>
-              </IonItem>
-            ))}
-          </IonList>
-        )}
-        <IonButton expand='block' onClick={handleManageSubscription}>
-          Manage Subscription
-        </IonButton>
-        <IonButton expand='block' onClick={handleContact}>
-          Contact Us
-        </IonButton>
-        {proStatus ? (
-          <p>You have permission to access premium content.</p>
-        ) : (
-          <p>You do not have permission to access premium content</p>
-        )}
-        {proEntitlementInfo && (
-          <>
-            <p>Last purchased on: {proEntitlementInfo.latestPurchaseDate}</p>
-            {proEntitlementInfo.willRenew && (
-              <p>Renewal date: {proEntitlementInfo.expirationDate}</p>
+      <IonContent className='ion-padding account-content'>
+        <div className='account-block preferences'>
+          <h3>Email</h3>
+          <p>{cadeyUser?.cadeyUserEmail}</p>
+        </div>
+        <div className='account-block'>
+          <h3>Preferences</h3>
+          <div className='account-preferences'>
+            <p>Receive push notifications</p>
+            <IonToggle
+              checked={pushEnabled}
+              onIonChange={togglePushNotifications}
+              className='push-toggle'
+            />
+          </div>
+        </div>
+        <div className='account-block subscription'>
+          <h3>Subscription</h3>
+          <div className='account-subscription'>
+            {proEntitlementInfo && proEntitlementInfo.willRenew ? (
+              <p>
+                Active, renews monthly at $9.99 on{' '}
+                {proEntitlementInfo.expirationDate}
+              </p>
+            ) : (
+              <p>
+                {' '}
+                {proEntitlementInfo?.expirationDate
+                  ? `Your subscription expires on ${proEntitlementInfo.expirationDate} and will not renew`
+                  : 'You do not have a subscription'}
+              </p>
             )}
-          </>
-        )}
-        <IonItem>
-          <IonLabel>Push Notifications:</IonLabel>
-          <IonToggle
-            checked={pushEnabled}
-            onIonChange={togglePushNotifications}
-          />
-        </IonItem>
-        <IonButton expand='block' onClick={handleCadeyLogout}>
-          Log Out
-        </IonButton>
+            <div onClick={handleManageSubscription} className='manage-button'>
+              Manage
+            </div>
+          </div>
+        </div>
+        {/* <IonButton expand='block' onClick={handleContact}>
+          Contact Us
+        </IonButton> */}
+        <div className='account-block'>
+          <h3>Have questions?</h3>
+          <p>
+            Contact us at <a href='mailto:support@cadey.co'>support@cadey.co</a>
+            .
+          </p>
+        </div>
+        <div className='account-block account-actions'>
+          <h3>Account Actions</h3>
+          <p>
+            <a onClick={handleRestore}>Restore Purchases</a>
+          </p>
+          <p>
+            <a onClick={handleCadeyLogout}>Logout</a>
+          </p>
+        </div>
       </IonContent>
     </IonPage>
   );

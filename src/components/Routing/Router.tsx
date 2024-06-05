@@ -189,12 +189,6 @@ const Router: React.FC = () => {
       {/* Initialize OneSignal and listen for OneSignal callbacks */}
       {window.cordova && <OneSignalInitializer />}
 
-      {/* Show the BadUser component if there's anything wrong with a user */}
-      {/* {aCadeyUserHasBeenReturned && !goodUser && (
-        <BadUser authStatus={authStatus} regStatus={regStatus} />
-      )} */}
-      {true && <BadUser authStatus={authStatus} regStatus={regStatus} />}
-
       {aUserExists &&
         goodUser &&
         AppMeta.forceEmailVerification &&

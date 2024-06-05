@@ -57,7 +57,7 @@ const RegistrationSelectPage = () => {
           <IonRow className='continue-row'>
             <IonButton
               className='continue-button'
-              onClick={() => handleCorporate('/App/Authentication/Register')}
+              onClick={() => handleCorporate()}
             >
               Corporate user signup
             </IonButton>
@@ -70,11 +70,12 @@ const RegistrationSelectPage = () => {
           <IonRow className='continue-row'>
             <IonButton
               className='continue-button'
-              onClick={() => handleTrial('/App/Authentication/Register')}
+              onClick={() => handleTrial()}
             >
               Free trial signup
             </IonButton>
           </IonRow>
+          <IonRow className='free-trial-text'>(After that $9.99/month)</IonRow>
         </IonRow>
       </IonContent>
     </IonPage>

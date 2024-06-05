@@ -1,0 +1,62 @@
+.account-block {
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 1px #e0e0e0 solid;
+}
+
+.account-block h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #384f5f;
+}
+
+.account-block p {
+  font-size: 14px;
+  margin: 0;
+  color: #384f5f;
+}
+
+.account-block:last-child {
+  border-bottom: none;
+}
+
+.account-actions p {
+  margin-bottom: 20px;
+}
+
+.account-preferences,
+.account-subscription {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.account-preferences p,
+.account-subscription p {
+  flex: 1;
+}
+
+.push-toggle,
+.manage-button {
+  position: absolute;
+  right: 0;
+}
+
+.push-toggle {
+  top: 0%;
+  transform: translateY(-50%);
+}
+
+.manage-button {
+  top: 0%;
+  transform: translateY(-50%);
+  height: auto; /* Ensure the button doesn't stretch */
+  border-radius: 100px;
+  padding: 8px 10px;
+  background-color: #51adef;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  /* padding: 0.5em 1em; Adjust padding as necessary */
+}
