@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  IonPage,
-  IonContent,
-  IonButton,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonToggle,
-} from '@ionic/react';
+import { IonPage, IonContent, IonButton, IonList } from '@ionic/react';
 import {
   Purchases,
   PurchasesOfferings,
@@ -27,7 +16,6 @@ import useUserFacts from '../../hooks/useUserFacts';
 import { useAppPage } from '../../context/AppPageContext';
 
 const PurchaseSubPage = () => {
-  const [loading, setLoading] = useState(true);
   const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
   const { proAccessCheck } = useProAccessCheck();
   const dispatch = useDispatch();
@@ -57,19 +45,15 @@ const PurchaseSubPage = () => {
 
   useEffect(() => {
     const fetchOfferings = async () => {
-      console.log('Fetching offerings...');
       try {
         const offerings = await Purchases.getOfferings();
-        console.log('Offerings:', offerings);
         if (offerings.current !== null) {
           // Display current offering with offerings.current
           setOfferings(offerings);
         }
-        setLoading(false);
       } catch (error) {
         // Handle error
         console.error('Error fetching offerings:', error);
-        setLoading(false);
       }
     };
 
@@ -91,7 +75,7 @@ const PurchaseSubPage = () => {
     // If the incoming URL contained an ID, re-route to path detail.
     // Otherwise, re-route to home.
 
-    if (proStatus && pageOnPurchase == 'pathDetail' && pathId) {
+    if (proStatus && pageOnPurchase === 'pathDetail' && pathId) {
       console.log('Routing to path detail');
       history.push('/App/Paths/PathDetail?id=' + pathId);
     } else if (proStatus) {
@@ -99,20 +83,6 @@ const PurchaseSubPage = () => {
       history.push('/App/Home');
     }
   }, [proStatus]);
-
-  const handleInvalidate = async () => {
-    const invalidateResult = await Purchases.invalidateCustomerInfoCache;
-    console.log('invalidateResult: ', invalidateResult);
-  };
-
-  const handleRestore = async () => {
-    const restoreResult = await Purchases.restorePurchases;
-    console.log('restoreResult: ', restoreResult);
-  };
-
-  const handleManageAccount = async () => {
-    history.push('/App/Account');
-  };
 
   const handlePurchase = async (packageToBuy: PurchasesPackage) => {
     console.log('Purchasing...', packageToBuy);
@@ -124,10 +94,10 @@ const PurchaseSubPage = () => {
         typeof purchaseResult.customerInfo.entitlements.active['Pro'] !==
         'undefined'
       ) {
-        // Unlock that great "pro" content
-        console.log('Permission granted - unlock Pro!');
-        // TODO: Log a user fact. Need details from Alex.
+        // Unlock pro content
         proAccessCheck();
+
+        // TODO: Log a user fact. Need details from Alex.
       }
     } catch (error: any) {
       if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
@@ -143,46 +113,72 @@ const PurchaseSubPage = () => {
   };
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Purchase a Subscription</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <IonPage className='purchase-subscription-page'>
       <IonContent className='ion-padding'>
-        {loading ? (
-          <p>Loading offerings...</p>
-        ) : (
+        <div className='content-wrapper'>
+          <div className='subscription-page-header'>
+            <img src='assets/svgs/checkmark-circle.svg' className='' />
+            <h2>Your account is ready</h2>
+            <h1>Unlock Cadey For Free</h1>
+          </div>
+          <div className='features-list'>
+            <div className='feature-item'>
+              <img src='assets/svgs/infinity.svg' className='feature-icon' />
+              <span>Unlimited free access for 7 days</span>
+            </div>
+            <div className='feature-item'>
+              <img src='assets/svgs/video-stack.svg' className='feature-icon' />
+              <span>
+                Learn parenting strategies in the moment with quick videos
+              </span>
+            </div>
+            <div className='feature-item'>
+              <img
+                src='assets/svgs/message-bubble.svg'
+                className='feature-icon'
+              />
+              <span>
+                Weekly webinars and live Q & A with child psychologists
+              </span>
+            </div>
+            <div className='feature-item'>
+              <img src='assets/svgs/assessments.svg' className='feature-icon' />
+              <span>Pinpoint your concern for your child with assessments</span>
+            </div>
+            <div className='feature-item'>
+              <img src='assets/svgs/laptop.svg' className='feature-icon' />
+              <span>
+                Mini-lessons for parenting issues like hyperactivity and anxiety
+              </span>
+            </div>
+          </div>
+
+          <IonList>
+            <div className='subscribe-block'>
+              <IonButton
+                expand='block'
+                className='purchase-subscription-button'
+              >
+                Try Free & Subscribe
+              </IonButton>
+              <p>Totally free for 7 days, then $9.99/month. Cancel anytime.</p>
+            </div>
+          </IonList>
+
           <IonList>
             {offerings?.current?.availablePackages.map((pkg) => (
-              <IonItem key={pkg.identifier}>
-                <IonLabel>
-                  <h2>{pkg.product.title}</h2>
-                  <p>{pkg.product.description}</p>
-                  <IonButton expand='block' onClick={() => handlePurchase(pkg)}>
-                    Purchase {pkg.product.title} for {pkg.product.priceString}
-                  </IonButton>
-                </IonLabel>
-              </IonItem>
+              <div className='subscribe-block' key={pkg.identifier}>
+                <IonButton expand='block' onClick={() => handlePurchase(pkg)}>
+                  Try Free & Subscribe
+                </IonButton>
+                <p>
+                  Totally free for 7 days, then {pkg.product.priceString}/month.
+                  Cancel anytime.
+                </p>
+              </div>
             ))}
           </IonList>
-        )}
-        {proStatus ? (
-          <p>You have permission to access premium content.</p>
-        ) : (
-          <p>You do not have permission to access premium content</p>
-        )}
-        {proEntitlementInfo && (
-          <>
-            <p>Last purchased on: {proEntitlementInfo.latestPurchaseDate}</p>
-            {proEntitlementInfo.willRenew && (
-              <p>Renewal date: {proEntitlementInfo.expirationDate}</p>
-            )}
-          </>
-        )}
-        <IonButton onClick={handleInvalidate}>Invalidate</IonButton>
-        <IonButton onClick={handleRestore}>Restore Purchases</IonButton>
-        <IonButton onClick={handleManageAccount}>Manage my Account</IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );
