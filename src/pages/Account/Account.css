@@ -38,7 +38,8 @@
 }
 
 .push-toggle,
-.manage-button {
+.manage-button,
+.purchase-button {
   position: absolute;
   right: 0;
 }
@@ -48,7 +49,8 @@
   transform: translateY(-50%);
 }
 
-.manage-button {
+.manage-button,
+.purchase-button {
   top: 0%;
   transform: translateY(-50%);
   height: auto; /* Ensure the button doesn't stretch */

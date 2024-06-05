@@ -43,7 +43,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           return (
             <Redirect
               to={{
-                pathname: '/App/Subscription/Purchase',
+                pathname: '/App/Account/Subscription/Purchase',
                 state: { from: props.location },
               }}
             />

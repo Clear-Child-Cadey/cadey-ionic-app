@@ -237,7 +237,7 @@ const QuizModal: React.FC = ({}) => {
 
       // history.push('/App/Paths/PathDetail?id=' + pathId);
       history.push(
-        '/App/Subscription/Purchase?page=pathDetail&pathId=' + pathId,
+        '/App/Account/Subscription/Purchase?page=pathDetail&pathId=' + pathId,
       );
     }
 

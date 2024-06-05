@@ -35,6 +35,7 @@ const AccountPage = () => {
   const [loading, setLoading] = useState(true);
   const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
   const [pushEnabled, setPushEnabled] = useState(false);
+  const [corporateUser, setCorporateUser] = useState(false);
   const { proAccessCheck } = useProAccessCheck();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -88,6 +89,17 @@ const AccountPage = () => {
       appPage: 'Account',
     });
   }, []);
+
+  useEffect(() => {
+    if (
+      cadeyUser != null &&
+      cadeyUser.authStatus === 0 &&
+      cadeyUser.companyName !== null
+    ) {
+      console.log('Cadey corporate user found!');
+      setCorporateUser(true);
+    }
+  }, [cadeyUser]);
 
   const pushNotificationCheck = async () => {
     // Check if the app is running in a browser or on a device | Set the OneSignal external ID
@@ -153,9 +165,6 @@ const AccountPage = () => {
   };
 
   const handleManageSubscription = async () => {
-    // Logic to manage subscription
-    console.log('Manage subscription');
-
     logDeviceFact({
       userFactTypeName: 'UserTap',
       appPage: 'Account',
@@ -167,16 +176,16 @@ const AccountPage = () => {
     const response = await Purchases.getCustomerInfo();
     const customerInfo: CustomerInfo = response.customerInfo;
 
-    console.log('Customer info:', customerInfo);
-
     // Ensure managementURL exists
     if (customerInfo.managementURL) {
-      // Route to the customerInfo.managementURL
-      console.log('Redirecting to: ', customerInfo.managementURL);
       window.location.href = customerInfo.managementURL;
     } else {
       console.error('Management URL is not available.');
     }
+  };
+
+  const handlePurchaseSubscription = async () => {
+    history.push('/App/Account/Subscription/Purchase');
   };
 
   const handleContact = () => {
@@ -220,22 +229,45 @@ const AccountPage = () => {
         <div className='account-block subscription'>
           <h3>Subscription</h3>
           <div className='account-subscription'>
-            {proEntitlementInfo && proEntitlementInfo.willRenew ? (
+            {corporateUser && <p>You have an active subscription</p>}
+
+            {!corporateUser &&
+            proEntitlementInfo &&
+            proEntitlementInfo.willRenew ? (
               <p>
                 Active, renews monthly at $9.99 on{' '}
                 {proEntitlementInfo.expirationDate}
               </p>
             ) : (
-              <p>
-                {' '}
-                {proEntitlementInfo?.expirationDate
-                  ? `Your subscription expires on ${proEntitlementInfo.expirationDate} and will not renew`
-                  : 'You do not have a subscription'}
-              </p>
+              <>
+                {!corporateUser &&
+                  (proEntitlementInfo?.expirationDate ? (
+                    <p>
+                      Your subscription expires on $
+                      {proEntitlementInfo.expirationDate} and will not renew`
+                    </p>
+                  ) : (
+                    <p>You do not have a subscription</p>
+                  ))}
+              </>
             )}
-            <div onClick={handleManageSubscription} className='manage-button'>
-              Manage
-            </div>
+
+            {!corporateUser &&
+              (proEntitlementInfo?.expirationDate ? (
+                <div
+                  onClick={handleManageSubscription}
+                  className='manage-button'
+                >
+                  Manage
+                </div>
+              ) : (
+                <div
+                  onClick={handlePurchaseSubscription}
+                  className='purchase-button'
+                >
+                  Purchase
+                </div>
+              ))}
           </div>
         </div>
         {/* <IonButton expand='block' onClick={handleContact}>

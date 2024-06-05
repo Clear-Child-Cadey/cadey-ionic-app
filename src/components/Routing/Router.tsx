@@ -350,7 +350,7 @@ const Router: React.FC = () => {
             {/* Subscription Routes */}
             <ProtectedRoute
               exact
-              path='/App/Subscription/Purchase'
+              path='/App/Account/Subscription/Purchase'
               component={PurchaseSubPage}
               enforceLoggedIn={true}
               enforcePro={false}
