@@ -114,19 +114,8 @@ const VerifyEmailPage: React.FC<Props> = ({
         <div className='verify-email-content'>
           {emailverified || auth.currentUser?.emailVerified ? (
             <>
-              {isCorporateUser || isGrandfatheredUser ? (
-                <>
-                  <h2>Great, your email has been successfully verified.</h2>
-                </>
-              ) : (
-                <>
-                  <h2>
-                    Great, your email has been successfully verified and you are
-                    starting your 7-day trial period.
-                  </h2>
-                  <img src='assets/svgs/smile.svg' />
-                </>
-              )}
+              <h2>Great! Your email has been verified. Welcome to Cadey!</h2>
+              <img src='assets/svgs/smile.svg' />
               <IonRow className='content'>
                 <IonButton
                   onClick={() => {

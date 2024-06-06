@@ -74,7 +74,7 @@ const LoginComponent: React.FC = () => {
   };
 
   const handleCreateAccount = () => {
-    history.push('/App/Authentication/Register');
+    history.push('/App/Authentication/Register-Select');
   };
 
   return (

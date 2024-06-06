@@ -9,8 +9,8 @@ export const initializeRevenueCat = async (externalId: string) => {
     return;
   }
 
-  await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Debug log level
-  // await Purchases.setLogLevel({ level: LOG_LEVEL.INFO }); // Production log level
+  // await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG }); // Debug log level
+  await Purchases.setLogLevel({ level: LOG_LEVEL.INFO }); // Production log level
   const platform = Capacitor.getPlatform();
   try {
     const apiKey =

@@ -30,6 +30,7 @@ import useUserFacts from '../../hooks/useUserFacts';
 import { useAppPage } from '../../context/AppPageContext';
 import OneSignal from 'onesignal-cordova-plugin';
 import { requestNotificationPermission } from '../../api/OneSignal/RequestPermission';
+import { format } from 'date-fns';
 
 const AccountPage = () => {
   const [loading, setLoading] = useState(true);
@@ -203,6 +204,12 @@ const AccountPage = () => {
     console.log('restoreResult: ', restoreResult);
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return format(date, 'MMMM do'); // e.g., "June 6th"
+    // return format(date, "MM/dd/yy"); // e.g., "6/6/24"
+  };
+
   return (
     <IonPage className='account-page'>
       <IonHeader>
@@ -235,8 +242,10 @@ const AccountPage = () => {
             proEntitlementInfo &&
             proEntitlementInfo.willRenew ? (
               <p>
-                Active, renews monthly at $9.99 on{' '}
-                {proEntitlementInfo.expirationDate}
+                Active, renews monthly at $9.99
+                {proEntitlementInfo.expirationDate && (
+                  <> on {formatDate(proEntitlementInfo.expirationDate)}</>
+                )}
               </p>
             ) : (
               <>
@@ -244,7 +253,8 @@ const AccountPage = () => {
                   (proEntitlementInfo?.expirationDate ? (
                     <p>
                       Your subscription expires on $
-                      {proEntitlementInfo.expirationDate} and will not renew`
+                      {formatDate(proEntitlementInfo.expirationDate)} and will
+                      not renew`
                     </p>
                   ) : (
                     <p>You do not have a subscription</p>

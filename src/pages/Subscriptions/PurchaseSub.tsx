@@ -115,7 +115,7 @@ const PurchaseSubPage = () => {
   return (
     <IonPage className='purchase-subscription-page'>
       <IonContent className='ion-padding'>
-        <div className='content-wrapper'>
+        <div className='subscription-content-wrapper'>
           <div className='subscription-page-header'>
             <img src='assets/svgs/checkmark-circle.svg' className='' />
             <h2>Your account is ready</h2>
@@ -154,21 +154,13 @@ const PurchaseSubPage = () => {
           </div>
 
           <IonList>
-            <div className='subscribe-block'>
-              <IonButton
-                expand='block'
-                className='purchase-subscription-button'
-              >
-                Try Free & Subscribe
-              </IonButton>
-              <p>Totally free for 7 days, then $9.99/month. Cancel anytime.</p>
-            </div>
-          </IonList>
-
-          <IonList>
             {offerings?.current?.availablePackages.map((pkg) => (
               <div className='subscribe-block' key={pkg.identifier}>
-                <IonButton expand='block' onClick={() => handlePurchase(pkg)}>
+                <IonButton
+                  expand='block'
+                  className='purchase-subscription-button'
+                  onClick={() => handlePurchase(pkg)}
+                >
                   Try Free & Subscribe
                 </IonButton>
                 <p>
