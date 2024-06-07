@@ -7,11 +7,13 @@ import {
   IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
   IonPage,
   IonToolbar,
 } from '@ionic/react';
 import useDeviceFacts from '../../hooks/useDeviceFacts';
 import getDeviceId from '../../utils/getDeviceId';
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
 interface Props {
   auth: Auth;
@@ -21,6 +23,7 @@ interface Props {
 const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const history = useHistory();
@@ -96,19 +99,36 @@ const PasswordResetPage: React.FC<Props> = ({ auth, actionCode }: Props) => {
           ) : (
             <>
               <input
-                type='password'
+                type={showPassword ? 'text' : 'password'}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder='New Password'
                 className='password-reset-input'
               />
               <input
-                type='password'
+                type={showPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder='Confirm New Password'
                 className='password-reset-input'
               />
+              {showPassword ? (
+                <a
+                  className='toggle-password off'
+                  onClick={() => setShowPassword(false)}
+                >
+                  <IonIcon icon={eyeOffOutline} className='eye-icon off' />
+                  <span>Hide</span>
+                </a>
+              ) : (
+                <a
+                  className='toggle-password on'
+                  onClick={() => setShowPassword(true)}
+                >
+                  <IonIcon icon={eyeOutline} className='eye-icon on' />
+                  <span>Show</span>
+                </a>
+              )}
               <IonButton onClick={handleResetPassword} className='reset-button'>
                 Reset Password
               </IonButton>

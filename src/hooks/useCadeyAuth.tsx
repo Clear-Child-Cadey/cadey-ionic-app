@@ -417,7 +417,6 @@ const useCadeyAuth = () => {
   const handleCadeyLogout = async () => {
     auth.signOut();
     history.push('/App/Welcome');
-    window.location.reload();
   };
 
   return {
