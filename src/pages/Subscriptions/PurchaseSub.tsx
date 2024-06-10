@@ -76,16 +76,13 @@ const PurchaseSubPage = () => {
     // Otherwise, re-route to home.
 
     if (proStatus && pageOnPurchase === 'pathDetail' && pathId) {
-      console.log('Routing to path detail');
       history.push('/App/Paths/PathDetail?id=' + pathId);
     } else if (proStatus) {
-      console.log('Routing home');
       history.push('/App/Home');
     }
   }, [proStatus]);
 
   const handlePurchase = async (packageToBuy: PurchasesPackage) => {
-    console.log('Purchasing...', packageToBuy);
     try {
       const purchaseResult = await Purchases.purchasePackage({
         aPackage: packageToBuy,

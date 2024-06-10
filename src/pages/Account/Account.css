@@ -37,6 +37,10 @@
   flex: 1;
 }
 
+.account-subscription p {
+  max-width: 70%;
+}
+
 .push-toggle,
 .manage-button,
 .purchase-button {

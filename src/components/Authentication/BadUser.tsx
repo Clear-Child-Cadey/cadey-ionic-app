@@ -43,9 +43,6 @@ const BadUser: React.FC<BadUserProps> = ({ authStatus, regStatus }) => {
 
   // Update header and message based on authStatus and regStatus
   useEffect(() => {
-    console.log('authStatus in BadUser.tsx:', authStatus);
-    console.log('regStatus in BadUser.tsx:', regStatus);
-
     if (regStatus !== 0) {
       setHeader('You are not registered');
       setMessage('Please contact your employer to register.');

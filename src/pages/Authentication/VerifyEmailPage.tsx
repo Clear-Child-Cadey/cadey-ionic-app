@@ -32,6 +32,7 @@ const VerifyEmailPage: React.FC<Props> = ({
 }: Props) => {
   const history = useHistory();
   const [emailverified, setEmailVerified] = useState(false);
+  const [verifyCheckComplete, setVerifyCheckComplete] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
   const [firingToast, setFiringToast] = useState(false);
@@ -63,17 +64,21 @@ const VerifyEmailPage: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    // Start a timer
+
     let timeoutId: ReturnType<typeof setTimeout>;
     if (auth && actionCode) {
       applyActionCode(auth, actionCode)
         .then(() => {
           setEmailVerified(true);
+          setVerifyCheckComplete(true);
 
           auth.currentUser?.reload();
         })
         .catch((err) => {
           console.log(err.message);
           setEmailVerified(false);
+          setVerifyCheckComplete(true);
         });
     }
     return () => {
@@ -102,6 +107,10 @@ const VerifyEmailPage: React.FC<Props> = ({
   // if (loading) {
   //   return <IonLoading isOpen={loading} message={'Loading...'} />;
   // }
+
+  if (verifyCheckComplete === false) {
+    return;
+  }
 
   return (
     <IonPage className='home'>

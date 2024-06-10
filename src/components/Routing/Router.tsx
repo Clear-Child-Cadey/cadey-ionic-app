@@ -150,12 +150,6 @@ const Router: React.FC = () => {
     );
   }, [location, dispatch]); // Depend on location and dispatch to re-run this effect
 
-  useEffect(() => {
-    console.log('aCadeyUserHasBeenReturned: ', aCadeyUserHasBeenReturned);
-    console.log('goodUser: ', goodUser);
-    console.log('cadeyUser: ', cadeyUser);
-  }, [aCadeyUserHasBeenReturned, goodUser, cadeyUser]);
-
   const handleTabClick = async (tabName: string, route: string) => {
     // Log user fact that the user clicked on the tap bar
     logUserFact({

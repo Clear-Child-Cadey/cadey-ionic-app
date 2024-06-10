@@ -51,7 +51,6 @@ const ArticleCategoryListingPage: React.FC = () => {
       try {
         const categories: WP_Category[] = await getCategories();
         setArticleCategories(categories);
-        console.log('Article categories:', categories);
       } catch (error) {
         console.error('Error fetching article categories:', error);
       }

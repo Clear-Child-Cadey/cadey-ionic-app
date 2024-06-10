@@ -61,10 +61,8 @@ const AccountPage = () => {
 
   useEffect(() => {
     const fetchOfferings = async () => {
-      console.log('Fetching offerings...');
       try {
         const offerings = await Purchases.getOfferings();
-        console.log('Offerings:', offerings);
         if (offerings.current !== null) {
           // Display current offering with offerings.current
           setOfferings(offerings);
@@ -97,7 +95,6 @@ const AccountPage = () => {
       cadeyUser.authStatus === 0 &&
       cadeyUser.companyName !== null
     ) {
-      console.log('Cadey corporate user found!');
       setCorporateUser(true);
     }
   }, [cadeyUser]);
@@ -137,34 +134,6 @@ const AccountPage = () => {
     }
   };
 
-  const handlePurchase = async (packageToBuy: PurchasesPackage) => {
-    console.log('Purchasing...', packageToBuy);
-    try {
-      const purchaseResult = await Purchases.purchasePackage({
-        aPackage: packageToBuy,
-      });
-      if (
-        typeof purchaseResult.customerInfo.entitlements.active['Pro'] !==
-        'undefined'
-      ) {
-        // Unlock that great "pro" content
-        console.log('Permission granted - unlock Pro!');
-        // TODO: Log a user fact. Need details from Alex.
-        proAccessCheck();
-      }
-    } catch (error: any) {
-      if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
-        // Purchase cancelled
-        console.log('Purchase cancelled');
-        // TODO: Log a user fact. Need details from Alex.
-      } else {
-        // Error making purchase
-        console.error('Error making purchase:', error);
-        // TODO: Log a user fact. Need details from Alex.
-      }
-    }
-  };
-
   const handleManageSubscription = async () => {
     logDeviceFact({
       userFactTypeName: 'UserTap',
@@ -200,8 +169,7 @@ const AccountPage = () => {
   };
 
   const handleRestore = async () => {
-    const restoreResult = await Purchases.restorePurchases;
-    console.log('restoreResult: ', restoreResult);
+    await Purchases.restorePurchases;
   };
 
   const formatDate = (dateString: string) => {
@@ -252,9 +220,9 @@ const AccountPage = () => {
                 {!corporateUser &&
                   (proEntitlementInfo?.expirationDate ? (
                     <p>
-                      Your subscription expires on $
+                      Your subscription expires on{' '}
                       {formatDate(proEntitlementInfo.expirationDate)} and will
-                      not renew`
+                      not renew
                     </p>
                   ) : (
                     <p>You do not have a subscription</p>
