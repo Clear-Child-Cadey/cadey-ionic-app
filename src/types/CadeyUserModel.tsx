@@ -3,7 +3,7 @@ type CadeyUserModel = {
   cadeyUserEmail: string | null;
   cadeyUserId: number; // integer($int32) is represented as number in TypeScript
   cadeyUserDeviceId: string | null;
-  cadeyUserAuthExpiration: string | null; // Assuming ISO 8601 date-time string
+  cadeyUserAuthExpiration: string | null; // NOTE: This is now returning a date arbitrarily far in the future. The app isn't using this, but the website is as of 6/11/24.
   cadeyUserIsActive: boolean;
   oneSignalId: string | null;
   ageGroup: number; // integer($int32) is represented as number in TypeScript

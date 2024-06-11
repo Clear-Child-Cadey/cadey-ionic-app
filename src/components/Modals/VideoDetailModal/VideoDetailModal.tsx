@@ -37,6 +37,7 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import useRequestQuiz from '../../../hooks/useRequestQuiz';
+import { useTabContext } from '../../../context/TabContext';
 
 const VideoDetailModal: React.FC = () => {
   // Get all the props from the modal context
@@ -60,6 +61,7 @@ const VideoDetailModal: React.FC = () => {
   });
 
   const { apiUrl } = useContext(ApiUrlContext);
+  const { setIsTabBarVisible } = useTabContext();
 
   const [canShare, setCanShare] = useState(false);
 
@@ -243,6 +245,8 @@ const VideoDetailModal: React.FC = () => {
       });
     }
     setVideoModalOpen(false);
+
+    setIsTabBarVisible(true);
 
     // Commented out since videos are playing behind the quiz. Need to fix that bug and then uncomment this code.
     // requestQuiz();

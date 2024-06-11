@@ -141,6 +141,10 @@ const Router: React.FC = () => {
       if (articleId) dispatch(setArticleId(articleId));
     }
 
+    console.log(
+      'Checking location for tab bar visibility: ',
+      location.pathname,
+    );
     // Set the tab bar visibility based on the current path
     setIsTabBarVisible(
       location.pathname.includes('/App/Home') ||
