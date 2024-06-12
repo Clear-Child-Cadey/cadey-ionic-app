@@ -1,0 +1,20 @@
+.delete-account-content h3 {
+  color: #484443;
+  font-size: 18px;
+}
+
+.delete-account-content p {
+  font-size: 14px;
+  color: #384f5f;
+}
+
+.delete-account-content .error-message {
+  color: #f00;
+}
+
+.delete-account-button,
+.do-not-delete-button {
+  --border-radius: 100px;
+  margin-bottom: 20px;
+  width: 100%;
+}

@@ -33,6 +33,7 @@ const BadUser: React.FC<BadUserProps> = ({ authStatus, regStatus }) => {
   //     0 = Registered
   //     1 = NotFound
   //     2 = FoundNotRegistered
+  //     3 = PendingDeletion
   //
   // authstatus
   //
@@ -40,10 +41,16 @@ const BadUser: React.FC<BadUserProps> = ({ authStatus, regStatus }) => {
   //     1 = FailedExpired
   //     2 = FailedNotActive
   //     3 = FailedNotRegistered
+  //     4 = PendingDeletion
 
   // Update header and message based on authStatus and regStatus
   useEffect(() => {
-    if (regStatus !== 0) {
+    if (regStatus === 3) {
+      setHeader('Pending Deletion');
+      setMessage(
+        'Your account and all related data will be deleted within the next 5 business days. We will send you an email when this process is complete.',
+      );
+    } else if (regStatus !== 0) {
       setHeader('You are not registered');
       setMessage('Please contact your employer to register.');
     } else {
@@ -75,13 +82,15 @@ const BadUser: React.FC<BadUserProps> = ({ authStatus, regStatus }) => {
             <a href='mailto:support@cadey.co'>support@cadey.co</a> for
             assistance.
           </p>
-          <IonButton
-            onClick={() =>
-              window.open('https://cadey.co/request-benefits', '_blank')
-            }
-          >
-            Request Benefits
-          </IonButton>
+          {regStatus !== 3 && (
+            <IonButton
+              onClick={() =>
+                window.open('https://cadey.co/request-benefits', '_blank')
+              }
+            >
+              Request Benefits
+            </IonButton>
+          )}
           <IonButton onClick={handleRedirect}>Sign Out</IonButton>
         </div>
       </IonContent>

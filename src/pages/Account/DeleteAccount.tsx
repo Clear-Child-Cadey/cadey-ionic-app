@@ -45,9 +45,14 @@ const DeleteAccountPage = () => {
   const handleDeleteAccount = async () => {
     if (cadeyUser) {
       try {
-        await DeleteAccount(cadeyUser?.cadeyUserId.toString());
+        // await DeleteAccount(cadeyUser?.cadeyUserId.toString());
+        await DeleteAccount('test');
+        window.location.reload();
       } catch (error) {
         console.error('Error deleting account:', error);
+        setMessage(
+          'An error occurred while requesting account deletion. Please try again later or request deletion directly by sending an email to support@cadey.co',
+        );
       }
     } else {
       console.error('No user found');
@@ -64,7 +69,7 @@ const DeleteAccountPage = () => {
           <IonTitle>Delete Account</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className='ion-padding'>
+      <IonContent className='ion-padding delete-account-content'>
         <h3>
           Your account and all your personal data will be permanently deleted
           within the next 5 business days. Once completed, you will receive a
@@ -74,12 +79,19 @@ const DeleteAccountPage = () => {
           Subscriptions are managed in your app or play store. Please cancel
           your subscription to avoid charges.
         </p>
+        {message && <p className='error-message'>{message}</p>}
         <div>
-          <IonButton onClick={handleDeleteAccount}>
-            YES, delete my account
-          </IonButton>
-          <IonButton onClick={handleDoNotDelete}>
+          <IonButton
+            onClick={handleDoNotDelete}
+            className='do-not-delete-button'
+          >
             NO, do not delete my account
+          </IonButton>
+          <IonButton
+            onClick={handleDeleteAccount}
+            className='delete-account-button'
+          >
+            YES, delete my account
           </IonButton>
         </div>
       </IonContent>
