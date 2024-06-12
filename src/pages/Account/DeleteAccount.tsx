@@ -45,8 +45,7 @@ const DeleteAccountPage = () => {
   const handleDeleteAccount = async () => {
     if (cadeyUser) {
       try {
-        // await DeleteAccount(cadeyUser?.cadeyUserId.toString());
-        await DeleteAccount('test');
+        await DeleteAccount(cadeyUser?.cadeyUserId.toString());
         window.location.reload();
       } catch (error) {
         console.error('Error deleting account:', error);
