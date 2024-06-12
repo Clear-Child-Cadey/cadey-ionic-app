@@ -178,6 +178,10 @@ const AccountPage = () => {
     // return format(date, "MM/dd/yy"); // e.g., "6/6/24"
   };
 
+  const handleDeleteAccount = async () => {
+    history.push('/App/Account/Delete');
+  };
+
   return (
     <IonPage className='account-page'>
       <IonHeader>
@@ -265,6 +269,11 @@ const AccountPage = () => {
           </p>
           <p>
             <a onClick={handleCadeyLogout}>Logout</a>
+          </p>
+          <p>
+            <a onClick={handleDeleteAccount} className='delete-account'>
+              Delete Account
+            </a>
           </p>
         </div>
       </IonContent>

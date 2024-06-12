@@ -66,3 +66,8 @@
   font-weight: 700;
   /* padding: 0.5em 1em; Adjust padding as necessary */
 }
+
+.delete-account {
+  color: #f00;
+  font-size: 12px;
+}

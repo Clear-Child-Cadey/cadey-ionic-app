@@ -65,6 +65,7 @@ import { PathsIcon } from '../../svgs/NavPaths';
 import { HomeIcon } from '../../svgs/NavHome';
 import ContactPage from '../../pages/Account/Contact';
 import PurchaseSubPage from '../../pages/Subscriptions/PurchaseSub';
+import DeleteAccountPage from '../../pages/Account/DeleteAccount';
 
 const Router: React.FC = () => {
   const location = useLocation();
@@ -87,11 +88,13 @@ const Router: React.FC = () => {
   //     0 = Registered
   //     1 = NotFound
   //     2 = FoundNotRegistered
+  //     3 = PendingDeletion
   // authstatus
   //     0 = Successful
   //     1 = FailedExpired
   //     2 = FailedNotActive
   //     3 = FailedNotRegistered
+  //     4 = PendingDeletion
 
   // goodUser is used to:
   //     Show the BadUser component if there's anything wrong with a user
@@ -150,7 +153,8 @@ const Router: React.FC = () => {
       location.pathname.includes('/App/Home') ||
         location.pathname.includes('/App/Library') ||
         location.pathname.includes('/App/Paths') ||
-        location.pathname.includes('/App/Account'),
+        location.pathname.includes('/App/Account') ||
+        location.pathname.includes('/App/Admin'),
     );
   }, [location, dispatch]); // Depend on location and dispatch to re-run this effect
 
@@ -350,6 +354,13 @@ const Router: React.FC = () => {
               exact
               path='/App/Account/Subscription/Purchase'
               component={PurchaseSubPage}
+              enforceLoggedIn={true}
+              enforcePro={false}
+            />
+            <ProtectedRoute
+              exact
+              path='/App/Account/Delete'
+              component={DeleteAccountPage}
               enforceLoggedIn={true}
               enforcePro={false}
             />
