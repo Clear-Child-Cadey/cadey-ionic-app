@@ -1,5 +1,5 @@
 #root .register-select {
-  top: 40%;
+  top: 20%;
   padding: 0 16px 0;
   display: flex;
   flex-direction: column;
@@ -16,10 +16,11 @@
   flex-direction: column;
   align-items: center;
   width: 100%; /* Full width to center content within */
-  margin-bottom: 100px; /* Space between sections */
+  margin-bottom: 50px; /* Space between sections */
 }
 
-.corporate-text {
+.corporate-text,
+.free-trial h3 {
   text-align: center;
   margin-bottom: 20px; /* Space between text and button */
   font-size: 23px;
@@ -27,9 +28,14 @@
   color: #484443;
 }
 
+.free-trial h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
 .free-trial-text {
   text-align: center;
-  margin-bottom: 20px; /* Space between text and button */
+  margin-bottom: 10px; /* Space between text and button */
   font-size: 14px;
   font-weight: 700;
   color: #7a716c;
@@ -51,4 +57,15 @@
   margin: 0 auto;
   --padding-start: 36px;
   --padding-end: 36px;
+}
+
+.support-links {
+  margin-top: 50px;
+}
+
+.support-links a {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  margin-bottom: 5px;
 }

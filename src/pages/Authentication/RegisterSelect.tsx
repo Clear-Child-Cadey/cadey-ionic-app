@@ -67,6 +67,11 @@ const RegistrationSelectPage = () => {
           <IonRow className='free-trial-text'>
             Otherwise start your free 7-day trial
           </IonRow>
+          <h3>Cadey Pro</h3>
+          <IonRow className='free-trial-text'>
+            Learn parenting strategies in the moment with quick videos, watch
+            weekly webinars, and pinpoint your concerns with assessments
+          </IonRow>
           <IonRow className='continue-row'>
             <IonButton
               className='continue-button'
@@ -76,6 +81,14 @@ const RegistrationSelectPage = () => {
             </IonButton>
           </IonRow>
           <IonRow className='free-trial-text'>(After that $9.99/month)</IonRow>
+          <div className='support-links'>
+            <a href='https://clearchildpsychology.com/TermsOfUse/'>
+              Terms of Use
+            </a>
+            <a href='https://clearchildpsychology.com/privacy/'>
+              Privacy Policy
+            </a>
+          </div>
         </IonRow>
       </IonContent>
     </IonPage>

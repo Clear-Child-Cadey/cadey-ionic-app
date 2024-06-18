@@ -268,6 +268,16 @@ const AccountPage = () => {
             <a onClick={handleRestore}>Restore Purchases</a>
           </p>
           <p>
+            <a href='https://clearchildpsychology.com/TermsOfUse/'>
+              Terms of Use
+            </a>
+          </p>
+          <p>
+            <a href='https://clearchildpsychology.com/privacy/'>
+              Privacy Policy
+            </a>
+          </p>
+          <p>
             <a onClick={handleCadeyLogout}>Logout</a>
           </p>
           <p>

@@ -4,6 +4,12 @@
   border-bottom: 1px #e0e0e0 solid;
 }
 
+.account-block:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
 .account-block h3 {
   font-size: 14px;
   font-weight: 700;
@@ -23,6 +29,10 @@
 
 .account-actions p {
   margin-bottom: 20px;
+}
+
+.account-actions a {
+  text-decoration: none;
 }
 
 .account-preferences,
