@@ -48,10 +48,19 @@ const DeleteAccountPage = () => {
         await DeleteAccount(cadeyUser?.cadeyUserId.toString());
         window.location.reload();
       } catch (error) {
-        console.error('Error deleting account:', error);
-        setMessage(
-          'An error occurred while requesting account deletion. Please try again later or request deletion directly by sending an email to support@cadey.co',
-        );
+        // If we get a 406 error, the email can't be deleted
+        // Display a popup in this case
+        console.error('Error: ', error);
+        if ((error as any).response.status === 406) {
+          setMessage(
+            'This demo account has full access and cannot be deleted. If you would like to test the account deletion functionality, please create a new account or use another existing demo account without “nodelete” in the email.',
+          );
+        } else {
+          console.error('Error deleting account: ', error);
+          setMessage(
+            'An error occurred while requesting account deletion. Please try again later or request deletion directly by sending an email to support@cadey.co',
+          );
+        }
       }
     } else {
       console.error('No user found');

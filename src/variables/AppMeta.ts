@@ -8,9 +8,9 @@ const EDGE_API_URL = 'https://capi-edge.clear-cade.com';
 const API_PATH = '/api/cadey290';
 
 const AppMeta = {
-  baseApiUrl: PRODUCTION_API_URL + API_PATH,
-  // baseApiUrl: STAGING_API_URL + API_PATH,
-  version: '3.5.0',
+  // baseApiUrl: PRODUCTION_API_URL + API_PATH,
+  baseApiUrl: STAGING_API_URL + API_PATH,
+  version: '3.5.1',
   forceEmailVerification: true,
   enforceTrialUser: true,
   firestoreCollection: 'ErrorLogs2024',
