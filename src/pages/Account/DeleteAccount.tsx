@@ -44,6 +44,12 @@ const DeleteAccountPage = () => {
 
   const handleDeleteAccount = async () => {
     if (cadeyUser) {
+      logUserFact({
+        userFactTypeName: 'UserTap',
+        appPage: 'Delete Account',
+        detail1: 'Delete Account',
+        detail2: 'YES, delete my account',
+      });
       try {
         await DeleteAccount(cadeyUser?.cadeyUserId.toString());
         window.location.reload();

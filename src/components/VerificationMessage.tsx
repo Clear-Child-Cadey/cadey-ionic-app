@@ -22,7 +22,7 @@ const VerificationPage: React.FC = () => {
   });
 
   const [disabled, setDisabled] = useState(true);
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(0);
   const history = useHistory();
   const auth = getAuth();
 

@@ -135,7 +135,7 @@ const AccountPage = () => {
   };
 
   const handleManageSubscription = async () => {
-    logDeviceFact({
+    logUserFact({
       userFactTypeName: 'UserTap',
       appPage: 'Account',
       detail1: 'Account',

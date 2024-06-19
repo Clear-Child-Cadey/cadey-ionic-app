@@ -94,17 +94,36 @@ const PurchaseSubPage = () => {
         // Unlock pro content
         proAccessCheck();
 
-        // TODO: Log a user fact. Need details from Alex.
+        logUserFact({
+          userFactTypeName: 'UserTap',
+          appPage: 'Purchase Subscription',
+          detail1: 'Purchase Subscription',
+          detail2: 'Try Free & Subscribe',
+          detail3: 'Success',
+        });
       }
     } catch (error: any) {
       if (error.code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
         // Purchase cancelled
         console.log('Purchase cancelled');
-        // TODO: Log a user fact. Need details from Alex.
+        logUserFact({
+          userFactTypeName: 'UserTap',
+          appPage: 'Purchase Subscription',
+          detail1: 'Purchase Subscription',
+          detail2: 'Try Free & Subscribe',
+          detail3: 'Purchase cancelled',
+        });
       } else {
         // Error making purchase
         console.error('Error making purchase:', error);
-        // TODO: Log a user fact. Need details from Alex.
+        logUserFact({
+          userFactTypeName: 'UserTap',
+          appPage: 'Purchase Subscription',
+          detail1: 'Purchase Subscription',
+          detail2: 'Try Free & Subscribe',
+          detail3: 'Error making purchase',
+          detail4: error.toString(),
+        });
       }
     }
   };
