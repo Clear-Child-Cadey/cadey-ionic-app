@@ -51,6 +51,10 @@ const useRequestQuiz = ({
       : true;
 
   const requestQuiz = async () => {
+    if (!cadeyUserId || cadeyUserId === 0) {
+      return;
+    }
+
     if (emailVerified) {
       const quizResponse = await getQuiz(
         Number(cadeyUserId),
