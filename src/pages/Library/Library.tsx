@@ -138,6 +138,16 @@ const LibraryPage: React.FC = () => {
                 </p>
               </div>
             </div>
+            <div
+              className='library-button'
+              onClick={() => handleButtonClick('/Library/Blog')}
+            >
+              <img src='assets/svgs/icn-articles.svg' className='' />
+              <div className='library-button-text'>
+                <h3>Blog</h3>
+                <p>Blog placeholder text lorem ipsum dolor sit amet</p>
+              </div>
+            </div>
           </div>
         </IonRow>
       </IonContent>

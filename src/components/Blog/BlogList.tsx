@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import {
-  getArticlesListByCategory,
-  WP_Article,
-} from '../../api/Articles/GetArticles';
 import { IonList, IonItem, IonLabel, IonThumbnail, IonImg } from '@ionic/react';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';
 // CSS
-import './ArticlesList.css';
-import { WP_Blog } from '../../api/WordPress/GetArticles';
+import './BlogList.css';
+import {
+  WP_Blog,
+  getBlogPostsByCategory,
+} from '../../api/WordPress/GetArticles';
 
 // Setup the interface
-interface ArticlesListProps {
+interface BlogListProps {
   categoryId: number;
-  onSelectArticle: (article: WP_Article) => void;
+  onSelectArticle: (article: WP_Blog) => void;
 }
 
-const ArticlesList: React.FC<ArticlesListProps> = ({
-  categoryId,
-  onSelectArticle,
-}) => {
-  const [articles, setArticles] = useState<WP_Article[]>([]);
+const BlogList: React.FC<BlogListProps> = ({ categoryId, onSelectArticle }) => {
+  const [articles, setArticles] = useState<WP_Blog[]>([]);
   // Load the loading state from the context
   const { state: loadingState, dispatch } = useLoadingState();
 
@@ -32,7 +28,8 @@ const ArticlesList: React.FC<ArticlesListProps> = ({
           type: 'SET_LOADING',
           payload: { key: 'articleDetail', value: true },
         });
-        const fetchedArticles = await getArticlesListByCategory(categoryId);
+        const fetchedArticles = await getBlogPostsByCategory(categoryId);
+        console.log('fetchedArticles: ', fetchedArticles);
         setArticles(fetchedArticles);
       } catch (error) {
         console.error('Error fetching articles:', error);
@@ -48,7 +45,7 @@ const ArticlesList: React.FC<ArticlesListProps> = ({
   }, [categoryId]);
 
   // Log a user fact and proceed to the next screen
-  const handleOnClick = (article: WP_Article) => {
+  const handleOnClick = (article: WP_Blog) => {
     // TODO: Log user fact
     onSelectArticle(article);
   };
@@ -62,17 +59,8 @@ const ArticlesList: React.FC<ArticlesListProps> = ({
     <IonList className='article-listing'>
       {articles.map((article, index) => (
         <IonItem key={index} onClick={() => handleOnClick(article)}>
-          {article.wordPressArticleIcon && (
-            <IonThumbnail slot='start'>
-              <IonImg
-                src={article.wordPressArticleIcon}
-                alt={article.wordPressArticleTitle}
-                className='thumb-image'
-              />
-            </IonThumbnail>
-          )}
           <IonLabel>
-            <h2>{article.wordPressArticleTitle}</h2>
+            <h2>{article.title.replace(/&amp;/g, '&')}</h2>
             {/* <p>{stripHtml(article.excerpt.rendered)}</p> */}
           </IonLabel>
         </IonItem>
@@ -81,4 +69,4 @@ const ArticlesList: React.FC<ArticlesListProps> = ({
   );
 };
 
-export default ArticlesList;
+export default BlogList;

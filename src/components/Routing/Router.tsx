@@ -26,6 +26,9 @@ import PathDetailPage from '../../pages/Paths/PathDetail';
 import ArticleCategoryListingPage from '../../pages/Articles/ArticleCategoryListing';
 import ArticlesPage from '../../pages/Articles/ArticleListing';
 import ArticleDetailPage from '../../pages/Articles/ArticleDetail';
+import BlogCategoryListingPage from '../../pages/Blog/BlogCategoryListing';
+import BlogPage from '../../pages/Blog/BlogListing';
+import BlogDetailPage from '../../pages/Blog/BlogDetail';
 import VideoLibraryPage from '../../pages/Library/VideoLibrary';
 import WelcomePage from '../../pages/Welcome/Welcome';
 import WelcomePathSelect from '../../pages/Welcome/WelcomePathSelect';
@@ -49,6 +52,7 @@ import {
   setRoute,
   setVideoId,
   setArticleId,
+  setBlogId,
 } from '../../features/deepLinks/slice';
 import { trileanResolve } from '../../types/Trilean';
 import AppMeta from '../../variables/AppMeta';
@@ -136,18 +140,16 @@ const Router: React.FC = () => {
     const queryParams = new URLSearchParams(location.search);
     const videoId = queryParams.get('video');
     const articleId = queryParams.get('article');
+    const blogId = queryParams.get('blog');
 
-    if (videoId || articleId) {
+    if (videoId || articleId || blogId) {
       // Dispatch Redux actions to update the state
       dispatch(setRoute(location.pathname));
       if (videoId) dispatch(setVideoId(videoId));
       if (articleId) dispatch(setArticleId(articleId));
+      if (blogId) dispatch(setBlogId(blogId));
     }
 
-    console.log(
-      'Checking location for tab bar visibility: ',
-      location.pathname,
-    );
     // Set the tab bar visibility based on the current path
     setIsTabBarVisible(
       location.pathname.includes('/App/Home') ||
@@ -306,6 +308,27 @@ const Router: React.FC = () => {
               exact
               path='/App/Library/Articles/Article'
               component={ArticleDetailPage}
+              enforceLoggedIn={true}
+              enforcePro={true}
+            />
+            <ProtectedRoute
+              exact
+              path='/App/Library/Blog'
+              component={BlogCategoryListingPage}
+              enforceLoggedIn={true}
+              enforcePro={true}
+            />
+            <ProtectedRoute
+              exact
+              path='/App/Library/Blog/Category'
+              component={BlogPage}
+              enforceLoggedIn={true}
+              enforcePro={true}
+            />
+            <ProtectedRoute
+              exact
+              path='/App/Library/Blog/Article'
+              component={BlogDetailPage}
               enforceLoggedIn={true}
               enforcePro={true}
             />
