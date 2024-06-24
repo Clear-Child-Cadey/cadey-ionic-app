@@ -10,8 +10,8 @@ const API_PATH = '/api/cadey290';
 // const API_PATH = '/api/cadeydata'; // Base API Version
 
 // Change this to STAGING_API_URL or EDGE_API_URL to test against those environments
-// const API_FULL_PATH = `${PRODUCTION_API_URL}${API_PATH}`;
-const API_FULL_PATH = `${STAGING_API_URL}${API_PATH}`;
+const API_FULL_PATH = `${PRODUCTION_API_URL}${API_PATH}`;
+// const API_FULL_PATH = `${STAGING_API_URL}${API_PATH}`;
 
 type ApiUrlContextType = {
   apiUrl: string;
