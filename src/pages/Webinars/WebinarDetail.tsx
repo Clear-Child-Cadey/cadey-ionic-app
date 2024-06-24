@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { getArticleDetail } from '../../api/Articles/GetArticleDetail';
 import { useLocation, useHistory } from 'react-router';
 import {
   IonContent,
@@ -10,29 +9,26 @@ import {
   IonTitle,
 } from '@ionic/react';
 // CSS
-import './BlogDetail.css';
+import './WebinarDetail.css';
 // API
 import { logUserFact } from '../../api/UserFacts';
 // Contexts
-import { CadeyUserContext } from '../../main';
-import ApiUrlContext from '../../context/ApiUrlContext';
 import { useLoadingState } from '../../context/LoadingStateContext';
 import { useAppPage } from '../../context/AppPageContext';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import {
   WP_WebinarDetail,
-  getBlogById,
+  getWebinarById,
 } from '../../api/WordPress/GetArticleDetail';
 
-const BlogDetailPage: React.FC = () => {
+const WebinarDetailPage: React.FC = () => {
   const [article, setArticle] = useState<WP_WebinarDetail | null>(null);
   const { state: loadingState, dispatch } = useLoadingState();
 
   const cadeyUserId = useSelector((state: RootState) => {
     return state.authStatus.userData.cadeyUser?.cadeyUserId;
   });
-  const { apiUrl } = React.useContext(ApiUrlContext);
 
   const {
     currentBasePage,
@@ -49,20 +45,20 @@ const BlogDetailPage: React.FC = () => {
 
   // Fetch the article detail when the component loads or the articleId changes
   useEffect(() => {
-    const fetchArticleDetail = async () => {
+    const fetchWebinarDetail = async () => {
       try {
         dispatch({
           type: 'SET_LOADING',
-          payload: { key: 'articleDetail', value: true },
+          payload: { key: 'webinarDetail', value: true },
         });
-        const detail = await getBlogById(articleId);
+        const detail = await getWebinarById(articleId);
         detail.content.rendered = stripYouTubeEmbeds(detail.content.rendered);
         setArticle(detail);
         // Log a user fact
         logUserFact({
           cadeyUserId: cadeyUserId || 0,
           userFactTypeName: 'OpenedArticle',
-          appPage: 'Article Detail',
+          appPage: 'Webinar Detail',
           detail1: articleId.toString(),
           detail2: detail.title.rendered,
         });
@@ -70,7 +66,7 @@ const BlogDetailPage: React.FC = () => {
         logUserFact({
           cadeyUserId: cadeyUserId || 0,
           userFactTypeName: 'appPageNavigation',
-          appPage: 'Article Detail',
+          appPage: 'Webinar Detail',
           detail1: articleId.toString(),
           detail2: detail.title.rendered,
         });
@@ -79,18 +75,18 @@ const BlogDetailPage: React.FC = () => {
       } finally {
         dispatch({
           type: 'SET_LOADING',
-          payload: { key: 'articleDetail', value: false },
+          payload: { key: 'webinarDetail', value: false },
         });
       }
     };
 
-    setCurrentBasePage('Article Detail');
-    setCurrentAppPage('Article Detail');
+    setCurrentBasePage('Webinar Detail');
+    setCurrentAppPage('Webinar Detail');
 
-    fetchArticleDetail();
+    fetchWebinarDetail();
 
     // Set the title of the page to the title of the article
-    document.title = article ? article.title.rendered : 'Article Detail';
+    document.title = article ? article.title.rendered : 'Webinar Detail';
   }, [articleId]);
 
   /**
@@ -131,9 +127,9 @@ const BlogDetailPage: React.FC = () => {
         <IonToolbar className='header-toolbar'>
           <a
             className='back-link'
-            onClick={() => handleBack('/App/Library/Blog')}
+            onClick={() => handleBack('/App/Library/Webinars')}
           >
-            Blog
+            Webinars
           </a>
         </IonToolbar>
       </IonHeader>
@@ -141,7 +137,7 @@ const BlogDetailPage: React.FC = () => {
         <IonRow>
           {article && (
             <div className='article-detail'>
-              <h1>{decodeHtmlEntities(article.title.rendered)}</h1>
+              <h1>{decodeHtmlEntities(article.title.rendered)} TEST</h1>
               {article.featured_image_url && (
                 <img
                   src={article.featured_image_url}
@@ -161,4 +157,4 @@ const BlogDetailPage: React.FC = () => {
   );
 };
 
-export default BlogDetailPage;
+export default WebinarDetailPage;

@@ -11,7 +11,7 @@ import {
 // Interfaces
 import { WP_Webinar } from '../../api/WordPress/GetArticles';
 // CSS
-import './BlogListing.css';
+import './WebinarListing.css';
 // Contexts
 import { useAppPage } from '../../context/AppPageContext';
 import ApiUrlContext from '../../context/ApiUrlContext';
@@ -19,9 +19,9 @@ import ApiUrlContext from '../../context/ApiUrlContext';
 import { logUserFact } from '../../api/UserFacts';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import BlogList from '../../components/Blog/BlogList';
+import WebinarList from '../../components/Webinars/WebinarList';
 
-const BlogPage: React.FC = () => {
+const WebinarPage: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const {
@@ -43,23 +43,23 @@ const BlogPage: React.FC = () => {
 
   useEffect(() => {
     try {
-      setCurrentBasePage('Blog Listing (' + categoryName + ')');
-      setCurrentAppPage('Blog Listing (' + categoryName + ')');
+      setCurrentBasePage('Webinar Listing');
+      setCurrentAppPage('Webinar Listing');
 
       logUserFact({
         cadeyUserId: cadeyUserId,
         userFactTypeName: 'appPageNavigation',
-        appPage: 'Blog Listing',
+        appPage: 'Webinar Listing',
         detail1: categoryId.toString(),
         detail2: categoryName,
       });
     } catch (error) {
-      console.error('Error loading Blog Listing page:', error);
+      console.error('Error loading Webinar Listing page:', error);
     }
   }, []);
 
-  const handleArticleSelection = (blog: WP_Webinar) => {
-    history.push(`/App/Library/Blog/Article?id=${blog.id}`);
+  const handleArticleSelection = (webinar: WP_Webinar) => {
+    history.push(`/App/Library/Webinars/Article?id=${webinar.id}`);
   };
 
   const handleBack = (route: string) => {
@@ -78,18 +78,15 @@ const BlogPage: React.FC = () => {
     <IonPage className='article-listing'>
       <IonHeader class='header'>
         <IonToolbar className='header-toolbar'>
-          <a
-            className='back-link'
-            onClick={() => handleBack('/App/Library/Blog')}
-          >
+          <a className='back-link' onClick={() => handleBack('/App/Library/')}>
             Library
           </a>
-          <h2>{categoryName} Posts</h2>
+          <h2>Webinars</h2>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonRow>
-          <BlogList
+          <WebinarList
             categoryId={categoryId}
             onSelectArticle={handleArticleSelection}
           />
@@ -99,4 +96,4 @@ const BlogPage: React.FC = () => {
   );
 };
 
-export default BlogPage;
+export default WebinarPage;

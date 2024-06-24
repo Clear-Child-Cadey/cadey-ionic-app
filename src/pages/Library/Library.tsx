@@ -140,12 +140,22 @@ const LibraryPage: React.FC = () => {
             </div>
             <div
               className='library-button'
+              onClick={() => handleButtonClick('/Library/Webinars')}
+            >
+              <img src='assets/svgs/icn-video.svg' className='' />
+              <div className='library-button-text'>
+                <h3>Webinars</h3>
+                <p>Learn about popular topics with psychologists.</p>
+              </div>
+            </div>
+            <div
+              className='library-button'
               onClick={() => handleButtonClick('/Library/Blog')}
             >
               <img src='assets/svgs/icn-articles.svg' className='' />
               <div className='library-button-text'>
                 <h3>Blog</h3>
-                <p>Blog placeholder text lorem ipsum dolor sit amet</p>
+                <p>Stay up-to-date with the latest in psychology research.</p>
               </div>
             </div>
           </div>

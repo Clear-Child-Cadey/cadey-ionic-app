@@ -8,7 +8,6 @@ import { IonList, IonItem, IonLabel, IonThumbnail, IonImg } from '@ionic/react';
 import { useLoadingState } from '../../context/LoadingStateContext';
 // CSS
 import './ArticlesList.css';
-import { WP_Blog } from '../../api/WordPress/GetArticles';
 
 // Setup the interface
 interface ArticlesListProps {

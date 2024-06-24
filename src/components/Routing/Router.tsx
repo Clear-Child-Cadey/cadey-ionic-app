@@ -70,6 +70,8 @@ import { HomeIcon } from '../../svgs/NavHome';
 import ContactPage from '../../pages/Account/Contact';
 import PurchaseSubPage from '../../pages/Subscriptions/PurchaseSub';
 import DeleteAccountPage from '../../pages/Account/DeleteAccount';
+import WebinarDetailPage from '../../pages/Webinars/WebinarDetail';
+import WebinarPage from '../../pages/Webinars/WebinarListing';
 
 const Router: React.FC = () => {
   const location = useLocation();
@@ -329,6 +331,20 @@ const Router: React.FC = () => {
               exact
               path='/App/Library/Blog/Article'
               component={BlogDetailPage}
+              enforceLoggedIn={true}
+              enforcePro={true}
+            />
+            <ProtectedRoute
+              exact
+              path='/App/Library/Webinars'
+              component={WebinarPage}
+              enforceLoggedIn={true}
+              enforcePro={true}
+            />
+            <ProtectedRoute
+              exact
+              path='/App/Library/Webinars/Article'
+              component={WebinarDetailPage}
               enforceLoggedIn={true}
               enforcePro={true}
             />

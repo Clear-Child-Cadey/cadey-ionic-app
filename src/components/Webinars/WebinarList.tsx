@@ -3,19 +3,16 @@ import { IonList, IonItem, IonLabel, IonThumbnail, IonImg } from '@ionic/react';
 // Contexts
 import { useLoadingState } from '../../context/LoadingStateContext';
 // CSS
-import './BlogList.css';
-import {
-  getBlogPostsByMemberTag,
-  WP_Webinar,
-} from '../../api/WordPress/GetArticles';
+import './WebinarList.css';
+import { WP_Webinar, getAllWebinars } from '../../api/WordPress/GetArticles';
 
 // Setup the interface
-interface BlogListProps {
+interface WebinarListProps {
   categoryId: number;
   onSelectArticle: (article: WP_Webinar) => void;
 }
 
-const BlogList: React.FC<BlogListProps> = ({ categoryId, onSelectArticle }) => {
+const WebinarList: React.FC<WebinarListProps> = ({ onSelectArticle }) => {
   const [articles, setArticles] = useState<WP_Webinar[]>([]);
   // Load the loading state from the context
   const { state: loadingState, dispatch } = useLoadingState();
@@ -28,7 +25,7 @@ const BlogList: React.FC<BlogListProps> = ({ categoryId, onSelectArticle }) => {
           type: 'SET_LOADING',
           payload: { key: 'articleDetail', value: true },
         });
-        const fetchedArticles = await getBlogPostsByMemberTag(categoryId);
+        const fetchedArticles = await getAllWebinars();
         setArticles(fetchedArticles);
       } catch (error) {
         console.error('Error fetching articles:', error);
@@ -41,7 +38,7 @@ const BlogList: React.FC<BlogListProps> = ({ categoryId, onSelectArticle }) => {
     };
 
     fetchArticles();
-  }, [categoryId]);
+  }, []);
 
   // Log a user fact and proceed to the next screen
   const handleOnClick = (article: WP_Webinar) => {
@@ -77,4 +74,4 @@ const BlogList: React.FC<BlogListProps> = ({ categoryId, onSelectArticle }) => {
   );
 };
 
-export default BlogList;
+export default WebinarList;

@@ -1,32 +1,28 @@
 import axios from '../../config/AxiosConfig';
 
-export interface WP_Blog {
+export interface WP_Webinar {
   id: number;
   title: string;
-  // featured_image_url: string;
+  featured_image_url: string;
 }
 
 const API_URL = 'https://cadey.co/wp-json/wp/v2';
 
-// https://cadey.co/wp-admin/term.php?taxonomy=member-tag&tag_ID=181&post_type=post
+export const getBlogPostsByIds = async (
+  ids: number[],
+): Promise<WP_Webinar[]> => {
+  // Convert the array of IDs into a comma-separated string
+  const idsString = ids.join(',');
+  const getBlogPostsUrl = `${API_URL}/blog?include=${idsString}&_embed`;
 
-export const getBlogPostsByCategory = async (
-  categoryId: number,
-): Promise<WP_Blog[]> => {
-  // const url = `${API_URL}/member-tag?categories=${categoryId}&_embed&per_page=100`;
-  const url = `${API_URL}/member-tag?tag-id=${categoryId}&_embed&per_page=100`;
-  const response = await axios.get(url);
-
+  const response = await axios.get(getBlogPostsUrl);
   const fetchedDataArray = await response.data;
 
-  // Map the fetched data to match the WP_Blog interface
-  // id: number;
-  // title: { rendered: string };
-  // featured_image_url: string;
-  const blogPostsArray: WP_Blog[] = fetchedDataArray.map(
+  // Map the fetched data to match the WP_Article interface
+  const blogPostsArray: WP_Webinar[] = fetchedDataArray.map(
     (blogPostData: any) => ({
       id: blogPostData.id,
-      title: blogPostData.name,
+      title: blogPostData.title,
       // featured_image_url: blogPostData._embedded['wp:featuredmedia']
       //   ? blogPostData._embedded['wp:featuredmedia'][0].source_url
       //   : '', // Check if wp:featuredmedia exists first
@@ -36,40 +32,38 @@ export const getBlogPostsByCategory = async (
   return blogPostsArray;
 };
 
-export const getBlogById = async (id: number): Promise<WP_Blog> => {
-  const url = `${API_URL}/blog?include=${id}&_embed`;
+export const getAllWebinars = async (): Promise<WP_Webinar[]> => {
+  // const url = `${API_URL}/member-tag?categories=${categoryId}&_embed&per_page=100`;
+  const url = `${API_URL}/webinar?_embed&per_page=100`;
   const response = await axios.get(url);
 
   const fetchedDataArray = await response.data;
 
-  // Map the fetched data to match the WP_Article interface
-  const blogPost: WP_Blog = fetchedDataArray.map((blogPostData: any) => ({
-    id: blogPostData.id,
-    title: blogPostData.title,
-    // featured_image_url: blogPostData._embedded['wp:featuredmedia']
-    //   ? blogPostData._embedded['wp:featuredmedia'][0].source_url
-    //   : '', // Check if wp:featuredmedia exists first
-  }));
+  const WebinarsArray: WP_Webinar[] = fetchedDataArray.map(
+    (webinarsData: any) => ({
+      id: webinarsData.id,
+      title: webinarsData.title.rendered,
+      featured_image_url: webinarsData.yoast_head_json.og_image[0].url,
+    }),
+  );
 
-  return blogPost;
+  return WebinarsArray;
 };
 
-export const getBlogPostsByIds = async (ids: number[]): Promise<WP_Blog[]> => {
-  // Convert the array of IDs into a comma-separated string
-  const idsString = ids.join(',');
-  const getBlogPostsUrl = `${API_URL}/blog?include=${idsString}&_embed`;
+export const getBlogPostsByMemberTag = async (
+  memberTagId: number,
+): Promise<WP_Webinar[]> => {
+  // const url = `${API_URL}/member-tag?categories=${categoryId}&_embed&per_page=100`;
+  const url = `${API_URL}/posts?member-tag=${memberTagId}&_embed&per_page=100`;
+  const response = await axios.get(url);
 
-  const response = await axios.get(getBlogPostsUrl);
   const fetchedDataArray = await response.data;
 
-  // Map the fetched data to match the WP_Article interface
-  const blogPostsArray: WP_Blog[] = fetchedDataArray.map(
+  const blogPostsArray: WP_Webinar[] = fetchedDataArray.map(
     (blogPostData: any) => ({
       id: blogPostData.id,
-      title: blogPostData.title,
-      // featured_image_url: blogPostData._embedded['wp:featuredmedia']
-      //   ? blogPostData._embedded['wp:featuredmedia'][0].source_url
-      //   : '', // Check if wp:featuredmedia exists first
+      title: blogPostData.title.rendered,
+      featured_image_url: blogPostData.yoast_head_json.og_image[0].url,
     }),
   );
 
