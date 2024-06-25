@@ -137,7 +137,7 @@ const WebinarDetailPage: React.FC = () => {
         <IonRow>
           {article && (
             <div className='article-detail'>
-              <h1>{decodeHtmlEntities(article.title.rendered)} TEST</h1>
+              <h1>{decodeHtmlEntities(article.title.rendered)}</h1>
               {article.featured_image_url && (
                 <img
                   src={article.featured_image_url}

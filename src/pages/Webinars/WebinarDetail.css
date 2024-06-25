@@ -6,3 +6,13 @@
   width: 100%;
   height: 100%;
 }
+
+.article-detail-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.article-detail-content .wp-block-image {
+  margin: 0;
+}
