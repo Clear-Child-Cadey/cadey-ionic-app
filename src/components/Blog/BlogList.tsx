@@ -61,7 +61,7 @@ const BlogList: React.FC<BlogListProps> = ({ categoryId, onSelectArticle }) => {
           {article.featured_image_url && (
             <IonThumbnail slot='start'>
               <IonImg
-                src={article.featured_image_url}
+                src={article.featured_image_url.replace('http://', 'https://')}
                 alt={article.title}
                 className='thumb-image'
               />
