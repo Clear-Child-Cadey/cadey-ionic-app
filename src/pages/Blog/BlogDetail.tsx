@@ -144,7 +144,10 @@ const BlogDetailPage: React.FC = () => {
               <h1>{decodeHtmlEntities(article.title.rendered)}</h1>
               {article.featured_image_url && (
                 <img
-                  src={article.featured_image_url}
+                  src={article.featured_image_url.replace(
+                    'http://',
+                    'https://',
+                  )}
                   alt={decodeHtmlEntities(article.title.rendered)}
                   className='featured-image'
                 />
